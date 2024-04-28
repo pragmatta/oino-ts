@@ -1,0 +1,23 @@
+{
+  "name": "oino-ts",
+  "version": "0.0.1",
+  "description": "OINO TS",
+  "main": "./src/OINOTypes.ts",
+  "scripts": {
+    "build:js": "tsc -p tsconfig.js.json && tsc -p ../bunsqlite/tsconfig.js.json && tsc -p ../postgresql/tsconfig.js.json",
+    "build:types": "tsc -p tsconfig.types.json && tsc -p ../bunsqlite/tsconfig.types.json && tsc -p ../postgresql/tsconfig.types.json",
+    "build:docs": "bunx typedoc",
+    "build:all": "bun run build:js && bun run build:types && bun run build:docs"
+  },
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "@types/node": "^20.12.7",
+    "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "typedoc": "^0.25.13",
+    "@types/bun": "^1.1.4",
+    "@types/pg": "^8.11.5"
+  }
+}

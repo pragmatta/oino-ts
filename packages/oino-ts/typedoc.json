@@ -1,0 +1,11 @@
+{
+    "name": "OINO TS",
+    "entryPoints": ["../bunsqlite/*.ts", "../postgresql/*.ts", "./src/*.ts"],
+    "entryPointStrategy": "resolve",
+    "sortEntryPoints": true,
+    "skipErrorChecking": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "out": "../../docs",
+    "exclude": ["**/node_modules/**", "**/*.test.ts"]
+}

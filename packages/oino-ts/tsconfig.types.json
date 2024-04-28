@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base",
+  "compilerOptions": {
+
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./types",
+    "paths": {
+      "oino-ts": ["./src"]
+    }
+
+  }, 
+  "exclude": [
+    "node_modules",
+    "types",
+    "lib",
+    "dist",
+    "docs",
+    "src/*.test.ts"
+  ]
+}

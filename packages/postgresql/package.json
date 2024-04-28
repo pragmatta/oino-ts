@@ -1,0 +1,15 @@
+{
+  "name": "@oino-ts/postgresql",
+  "version": "0.0.1",
+  "description": "OINO TS Postgresql package",
+  "main": "OINODbPostgresql.ts",
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "oino-ts": "^0.0.1",
+    "@types/node": "^20.12.7",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+  }
+}

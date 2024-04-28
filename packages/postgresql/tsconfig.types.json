@@ -1,0 +1,21 @@
+{
+  "extends": "../oino-ts/tsconfig.base",
+  "compilerOptions": {
+
+    "outDir": "./types",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "paths": {
+      "oino-ts": ["../oino-ts/"],
+      "@types/node": ["../oino-ts/node_modules/@types/node/"],
+      "buffer": ["../oino-ts/node_modules/@types/node/buffer.d.ts"],
+      "pg": ["../oino-ts/node_modules/@types/pg/"]
+    }
+
+  }, 
+  "include": ["./OINODbPostgresql.ts"],
+  "exclude": [
+    "../oino-ts/src/*.ts",
+    "../oino-ts/src/utils/*.ts"
+  ]
+}
