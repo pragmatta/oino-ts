@@ -9,3 +9,7 @@ packages/core/package-lock.json
 /packages/core/types
 /packages/postgresql/lib
 /packages/postgresql/types
+packages/postgresql/OINODbPostgresql.js
+packages/postgresql/OINODbPostgresql.d.ts
+packages/bunsqlite/OINODbBunSqlite.js
+packages/bunsqlite/OINODbBunSqlite.d.ts

@@ -11,5 +11,10 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
-  }
+  },
+  "files": [
+    "OINODbPostgresql.ts",
+    "OINODbPostgresql.js",
+    "OINODbPostgresql.d.ts"
+  ]
 }
