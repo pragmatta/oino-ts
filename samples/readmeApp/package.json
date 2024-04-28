@@ -1,12 +1,12 @@
 {
   "name": "OinoReadmeApp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "app": "bun run ./readme.ts"
   },
   "dependencies": {
-	  "@oino-ts/core":"latest",
-	  "@oino-ts/bunsqlite":"latest"
+    "@oino-ts/core": "latest",
+    "@oino-ts/bunsqlite": "latest"
   },
   "module": "readme.ts"
 }

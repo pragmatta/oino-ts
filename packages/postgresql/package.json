@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/postgresql",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "OINO TS package for using Postgresql databases.",
   "main": "OINODbPostgresql.ts",
   "author": "Matias Kiviniemi (pragmatta)",
@@ -10,12 +10,11 @@
     "url": "https://github.com/pragmatta/oino-ts.git"
   },
   "dependencies": {
-    "@oino-ts/core": "^0.0.1",
+    "@oino-ts/core": "^0.0.2",
     "@types/node": "^20.12.7",
     "pg": "^8.11.3"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "files": [
     "OINODbPostgresql.ts",
     "OINODbPostgresql.js",
