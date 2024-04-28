@@ -22,7 +22,7 @@
  ```
  
  ### Register database and logger
- Register your database implementation and logger (see [`OINOConsoleLog`](https://pragmatta.github.io/oino-ts/classes/oino_ts_src_OINOTypes.OINOConsoleLog.html) how to implement your own)
+ Register your database implementation and logger (see [`OINOConsoleLog`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOTypes.OINOConsoleLog.html) how to implement your own)
 
  ```
  OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
@@ -30,13 +30,13 @@
  ```
 
  ### Create a database
- Creating a database connection [`OINODb`](https://pragmatta.github.io/oino-ts/classes/oino_ts_src_OINODb.OINODb.html) is done by passing [`OINODbParams`](https://pragmatta.github.io/oino-ts/types/oino_ts_src_OINOTypes.OINODbParams.html) to the factory method. For [`OINODbBunSqlite`](https://pragmatta.github.io/oino-ts/classes/bunsqlite_OINODbBunSqlite.OINODbBunSqlite.html) that means a file url for the database file, for others network host, port, credentials etc.
+ Creating a database connection [`OINODb`](https://pragmatta.github.io/oino-ts/classes/core_src_OINODb.OINODb.html) is done by passing [`OINODbParams`](https://pragmatta.github.io/oino-ts/types/oino_ts_src_OINOTypes.OINODbParams.html) to the factory method. For [`OINODbBunSqlite`](https://pragmatta.github.io/oino-ts/classes/bunsqlite_OINODbBunSqlite.OINODbBunSqlite.html) that means a file url for the database file, for others network host, port, credentials etc.
  ```
  const db:OINODb = await OINOFactory.createDb( { type: "OINODbBunSqlite", url: "file://../localDb/northwind.sqlite" } )
  ```
 
  ### Create an API
- From a database you can create an [`OINOApi`](https://pragmatta.github.io/oino-ts/classes/oino_ts_src_OINOApi.OINOApi.html) by passing [`OINOApiParams`](https://pragmatta.github.io/oino-ts/types/oino_ts_src_OINOTypes.OINOApiParams.html) with table name and preferences to the factory method.
+ From a database you can create an [`OINOApi`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOApi.OINOApi.html) by passing [`OINOApiParams`](https://pragmatta.github.io/oino-ts/types/oino_ts_src_OINOTypes.OINOApiParams.html) with table name and preferences to the factory method.
  ```
  const api_employees:OINOApi = await OINOFactory.createApi(db, { tableName: "Employees", excludeFields:["BirthDate"] })
  ```
@@ -49,7 +49,7 @@
  ```
 
  ### Write results back to HTTP Response
- The results for a GET request will contain [`OINOModelSet`](https://pragmatta.github.io/oino-ts/classes/oino_ts_src_OINOModelSet.OINOModelSet.html) data that can be written out as JSON or CSV as needed. For other requests result is just success or error with messages.
+ The results for a GET request will contain [`OINOModelSet`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOModelSet.OINOModelSet.html) data that can be written out as JSON or CSV as needed. For other requests result is just success or error with messages.
  ```
  return new Response(result.modelset.writeString(OINOContentType.json))
  ```
@@ -118,7 +118,7 @@
  To support tables with multipart primary keys OINO generates a composite key `_OINOID_` that is included in the result and can be used as the REST ID. For example in the example above table `OrderDetails` has two primary keys `OrderID` and `ProductID` making the `_OINOID_` of form `11077:99`. 
 
  ## Power Of SQL
- Since OINO controls the SQL, WHERE-conditions can be defined through [`OINOFilter`](https://pragmatta.github.io/oino-ts/classes/oino_ts_src_OINOFilter.OINOFilter.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
+ Since OINO controls the SQL, WHERE-conditions can be defined through [`OINOFilter`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOFilter.OINOFilter.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
 
  ## Swagger Support
  Swagger is great as long as the definitions are updated and with OINO you can automatically get a Swagger definition including a data model schema.
@@ -165,7 +165,7 @@
  One core idea is to be efficient in not making unnecessary copies of the data and minimizing garbage collection debt. This can be taken further by implementing streaming, allowing large dataset to be written to HTTP response as SQL result rows are received.
 
  ### HTMX utils
- OINO is well suited to be used as almost complete backend for HTMX and this can be further helped with efficient utilities to map [`OINOModelSet`](https://pragmatta.github.io/oino-ts/classes/oino_ts_src_OINOModelSet.OINOModelSet.html) to HTMX template.
+ OINO is well suited to be used as almost complete backend for HTMX and this can be further helped with efficient utilities to map [`OINOModelSet`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOModelSet.OINOModelSet.html) to HTMX template.
  
  ### SQL generation callbacks
  It would be useful to allow developer to validate / override SQL generation to cover cases OINO does not support or even workaround issues.
