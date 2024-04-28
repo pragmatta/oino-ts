@@ -6,7 +6,7 @@
     "emitDeclarationOnly": true,
     "outDir": "./types",
     "paths": {
-      "oino-ts": ["./src"]
+      "@oino-ts/core": ["./src"]
     }
 
   }, 

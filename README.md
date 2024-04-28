@@ -10,14 +10,14 @@
  # GETTING STARTED
  
  ### Setup
- Install the `oino-ts` npm package and necessary database packages and import them in your code.
+ Install the `@oino-ts/core` npm package and necessary database packages and import them in your code.
  ```
- bun install oino-ts
+ bun install @oino-ts/core
  bun install @oino-ts/bunsqlite
  ```
  
  ```
- import { OINODb, OINOApi, OINOFactory } from "oino-ts";
+ import { OINODb, OINOApi, OINOFactory } from "@oino-ts/core";
  import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
  ```
  

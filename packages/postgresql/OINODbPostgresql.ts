@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOApiParams, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "oino-ts";
+import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOApiParams, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "@oino-ts/core";
 
 import { Pool, QueryResult } from "pg";
 

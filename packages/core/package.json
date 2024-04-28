@@ -1,7 +1,7 @@
 {
-  "name": "oino-ts",
+  "name": "@oino-ts/core",
   "version": "0.0.1",
-  "description": "OINO TS",
+  "description": "OINO TS library package for publishing an SQL database table as a REST API.",
   "main": "./src/OINOTypes.ts",
   "scripts": {
     "build:js": "tsc -p tsconfig.js.json && tsc -p ../bunsqlite/tsconfig.js.json && tsc -p ../postgresql/tsconfig.js.json",

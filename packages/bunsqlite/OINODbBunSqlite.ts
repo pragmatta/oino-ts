@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINOMemoryDataSet, OINODataCell, OINOLog, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr } from "oino-ts";
+import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINOMemoryDataSet, OINODataCell, OINOLog, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr } from "@oino-ts/core";
 
 import { Database as BunSqliteDb } from "bun:sqlite";
 

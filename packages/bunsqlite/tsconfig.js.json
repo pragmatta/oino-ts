@@ -1,20 +1,20 @@
 {
-  "extends": "../oino-ts/tsconfig.base",
+  "extends": "../core/tsconfig.base",
   "compilerOptions": {
 
     "outDir": "./lib",
     "declaration": false,
     "paths": {
-      "oino-ts": ["../oino-ts/"],
-      "@types/node": ["../oino-ts/node_modules/@types/node/"],
-      "buffer": ["../oino-ts/node_modules/@types/node/buffer.d.ts"],
-      "bun:sqlite": ["../oino-ts/node_modules/@types/bun"]
+      "@oino-ts/core": ["../core/"],
+      "@types/node": ["../core/node_modules/@types/node/"],
+      "buffer": ["../core/node_modules/@types/node/buffer.d.ts"],
+      "bun:sqlite": ["../core/node_modules/@types/bun"]
     }
 
   }, 
   "include": ["./OINODbBunSqlite.ts"],
   "exclude": [
-    "../oino-ts/src/*.ts",
-    "../oino-ts/src/utils/*.ts"
+    "../core/src/*.ts",
+    "../core/src/utils/*.ts"
   ]
 }

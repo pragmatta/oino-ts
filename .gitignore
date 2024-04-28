@@ -3,9 +3,9 @@
 bun.lockb
 /packages/bunsqlite/lib
 /packages/bunsqlite/types
-/packages/oino-ts/lib
-/packages/oino-ts/node_modules
-packages/oino-ts/package-lock.json
-/packages/oino-ts/types
+/packages/core/lib
+/packages/core/node_modules
+packages/core/package-lock.json
+/packages/core/types
 /packages/postgresql/lib
 /packages/postgresql/types
