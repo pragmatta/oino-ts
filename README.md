@@ -53,9 +53,10 @@
  ```
  return new Response(result.modelset.writeString(OINOContentType.json))
  ```
-
+ 
+ 
  # FEATURES
-
+ 
  ## RESTfull
  OINO maps HTTP methods GET/POST/PUT/DELETE to SQL operations SELECT/INSERT/UPDATE/DELETE. The GET/POST requests can be made without URL ID to get all rows or insert new ones and others target a single row using URL ID. 
  
@@ -100,7 +101,7 @@
  SQL:
  DELETE FROM [OrderDetails] WHERE ("OrderID"=11077 AND "ProductID"=99);
  ```
-
+  
  ## JSON/CSV Serialization
  OINO handles serialization of data to JSON and back based on the data model. It knows what columns exist, what is their data type and how to convert each to JSON/CSV and back. This allows also partial data to be sent, i.e. you can send only columns that are updated or even send extra columns and have them ignored.
 
@@ -185,16 +186,19 @@
  ## Typescript / Javascript architecture
  Typescript building with different targets and module-systemts and a ton of configuration is a complex domain and something I have little experience un so help in fixing problems and how thing ought to be done is appreciated.
  
+ # LINKS
+ - [Github repository](https://github.com/pragmatta/oino-ts)
+ - [NPM repository](https://www.npmjs.com/org/oino-ts) 
+
  
-# ACKNOWLEDGEMENTS
-
-## Libraries
-OINO uses following open source libraries and npm packages and I would like to thank everyone for their contributions:
-- Postgresql support by [node-postgres package](https://www.npmjs.com/package/pg)
-
-## Bun
-OINO has been developed using the Bun runtime, not because of the speed improvements but for the first class Typescript support and integrated developper experience. Kudos on the bun team for making Typescript work more exiting again.
-
-## SQL Scripts
-The SQL scripts for creating the sample Northwind database are based on [Google Code archive](https://code.google.com/archive/p/northwindextended/downloads) and have been further customized to ensure they would have identical data (in the scope of the automated testing).
+ # ACKNOWLEDGEMENTS
+ 
+ ## Libraries
+ OINO uses following open source libraries and npm packages and I would like to thank everyone for their contributions:
+ - Postgresql support by [node-postgres package](https://www.npmjs.com/package/pg)
+ ## Bun
+ OINO has been developed using the Bun runtime, not because of the speed improvements but for the first class Typescript support and integrated developper experience. Kudos on the bun team for making Typescript work more exiting again.
+ 
+ ## SQL Scripts
+ The SQL scripts for creating the sample Northwind database are based on [Google Code archive](https://code.google.com/archive/p/northwindextended/downloads) and have been further customized to ensure they would have identical data (in the scope of the automated testing).
 
