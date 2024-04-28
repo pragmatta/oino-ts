@@ -5,6 +5,10 @@
   "main": "OINODbBunSqlite.ts",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
   "dependencies": {
     "@oino-ts/core": "^0.0.1",
     "@types/node": "^20.12.7",

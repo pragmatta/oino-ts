@@ -11,6 +11,10 @@
   },
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
   "dependencies": {
     "@types/node": "^20.12.7",
     "pg": "^8.11.5"
