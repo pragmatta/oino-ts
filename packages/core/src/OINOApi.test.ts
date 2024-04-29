@@ -139,7 +139,7 @@ OINOBenchmark.reset()
 
 const dbs:OINODbParams[] = [
     { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite" }, 
-    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: "OINODbPostgresqlPass" } 
+    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: Bun.env.OINO_POSTGRESQL_TOKEN } 
 ]
 
 const apis:OINOTestApiParams[] = [
