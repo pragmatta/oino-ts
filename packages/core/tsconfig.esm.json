@@ -1,9 +1,11 @@
 {
-  "extends": "./tsconfig.base",
+  "extends": "./tsconfig.core",
   "compilerOptions": {
 
     "declaration": false,
-    "outDir": "./lib",
+    "outDir": "./dist/esm",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "paths": {
       "@oino-ts/core": ["./src"]
     }
@@ -13,6 +15,7 @@
     "node_modules",
     "types",
     "lib",
+    "dist",
     "docs",
     "src/*.test.ts"
   ]

@@ -1,23 +1,33 @@
 {
   "name": "@oino-ts/postgresql",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "OINO TS package for using Postgresql databases.",
-  "main": "OINODbPostgresql.ts",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/pragmatta/oino-ts.git"
   },
+  "keywords": [
+    "sql",
+    "database",
+    "rest-api",
+    "typescript",
+    "library"
+  ],
+  "main": "./OINODbPostgresql.cjs",
+  "module": "./OINODbPostgresql.mjs",
+  "types": "./OINODbPostgresql.d.ts",
   "dependencies": {
-    "@oino-ts/core": "^0.0.2",
+    "@oino-ts/core": "^0.0.3",
     "@types/node": "^20.12.7",
     "pg": "^8.11.3"
   },
   "devDependencies": {},
   "files": [
     "OINODbPostgresql.ts",
-    "OINODbPostgresql.js",
+    "OINODbPostgresql.cjs",
+    "OINODbPostgresql.mjs",
     "OINODbPostgresql.d.ts"
   ]
 }

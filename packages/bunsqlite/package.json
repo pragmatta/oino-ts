@@ -1,24 +1,33 @@
 {
   "name": "@oino-ts/bunsqlite",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "OINO TS package for using Bun Sqlite databases.",
-  "main": "OINODbBunSqlite.ts",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/pragmatta/oino-ts.git"
   },
+  "keywords": [
+    "sql",
+    "database",
+    "rest-api",
+    "typescript",
+    "library"
+  ],
+  "main": "./OINODbBunSqlite.cjs",
+  "module": "./OINODbBunSqlite.mjs",
+  "types": "./OINODbBunSqlite.d.ts",
   "dependencies": {
-    "@oino-ts/core": "^0.0.2",
+    "@oino-ts/core": "^0.0.3",
     "@types/node": "^20.12.7",
     "bun-types": "^1.1.4"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "files": [
     "OINODbBunSqlite.ts",
-    "OINODbBunSqlite.js",
+    "OINODbBunSqlite.cjs",
+    "OINODbBunSqlite.mjs",
     "OINODbBunSqlite.d.ts"
   ]
 }

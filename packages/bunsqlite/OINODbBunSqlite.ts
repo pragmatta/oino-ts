@@ -174,12 +174,12 @@ export class OINODbBunSqlite extends OINODb {
                             api.datamodel.addField(new OINONumberDataField(this, field_name, sql_type, field_params ))
 
                         } else if ((sql_type == "BLOB") ) {
-                            api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_length, field_params))
+                            api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length))
                         } else if ((sql_type == "TEXT")) {
-                            api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_length, field_params))
+                            api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length))
                         } else if ((sql_type == "DATETIME") || (sql_type == "DATE")) {
                             if (api.params.useDatesAsString) {
-                                api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, 0, field_params))
+                                api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                             } else {
                                 api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
                             }

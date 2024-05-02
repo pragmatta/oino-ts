@@ -1,0 +1,10 @@
+{
+    "extends": "../core/tsconfig.package",
+    "compilerOptions": {
+        "declaration": false,
+        "outDir": "./dist/esm",
+        "module": "ESNext",
+        "moduleResolution": "Bundler"
+    }, 
+    "include": ["./OINODbPostgresql.ts"]
+}

@@ -2,13 +2,13 @@
   "extends": "./tsconfig.core",
   "compilerOptions": {
 
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "./dist/types",
+    "declaration": false,
+    "outDir": "./dist/cjs",
+    "module": "CommonJS",
     "paths": {
       "@oino-ts/core": ["./src"]
     }
-
+    
   }, 
   "exclude": [
     "node_modules",

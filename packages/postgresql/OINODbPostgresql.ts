@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOApiParams, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "@oino-ts/core";
 
 import { Pool, QueryResult } from "pg";
 
@@ -231,16 +231,16 @@ WHERE table_name = `
 
                 } else if ((sql_type == "date")) {
                     if (api.params.useDatesAsString) {
-                        api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, 0, field_params))
+                        api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                     } else {
                         api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
                     }
 
                 } else if ((sql_type == "character") || (sql_type == "character varying") || (sql_type == "varchar") || (sql_type == "text")) {
-                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_length, field_params))
+                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length))
 
                 } else if ((sql_type == "bytea")) {
-                    api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_length, field_params))
+                    api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length))
 
                 } else {
                     OINOLog.warning("OINODbPostgresql.initializeApiDatamodel: unrecognized field type", {field:row})
