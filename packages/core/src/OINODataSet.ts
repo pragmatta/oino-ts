@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataRow, OINO_ERROR_PREFIX, OINO_EMPTY_ROW } from './OINOTypes';
+import { OINODataRow, OINO_ERROR_PREFIX, OINO_EMPTY_ROW } from "./index.js";
 
 /**
  * Base class for SQL results that can be asynchronously iterated (but 

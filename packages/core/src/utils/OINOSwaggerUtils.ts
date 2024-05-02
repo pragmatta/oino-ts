@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINODataField, OINOLog } from "../OINOTypes";
+import { OINOApi, OINODataField, OINOLog } from "../index.js";
 
 
 /**

@@ -4,8 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOStr } from './OINOTypes'
-import { OINODataField, OINODataModel, OINO_ERROR_PREFIX } from './OINOTypes'
+import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX } from "./index.js"
 
 /**
  * Supported logical conjunctions in filter predicates.

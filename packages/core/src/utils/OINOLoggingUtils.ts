@@ -4,10 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOLogConstructor } from "../OINOTypes"
-
-/** Logging levels */
-export enum OINOLogLevel { debug=0, info=1, warn=2, error=3 }
+import { OINOLogConstructor, OINOLogLevel } from "../index.js";
 
 /**
  * Abstract base class for logging implementations supporting 

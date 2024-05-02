@@ -4,9 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOFilter } from "./OINOFilter";
-
-import { OINODb, OINODataSet, OINODataModel, OINOValues, OINODataField, OINOApiParams, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINOModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams } from "./OINOTypes"
+import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOFilter, OINODataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINOModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams } from "./index.js"
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 

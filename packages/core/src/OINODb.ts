@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbParams, OINOApi, OINODataCell, OINODataSet } from './OINOTypes'
+import { OINODbParams, OINOApi, OINODataCell, OINODataSet } from "./index.js"
 
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data 

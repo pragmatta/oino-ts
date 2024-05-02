@@ -6,12 +6,12 @@
 
 import { expect, test } from "bun:test";
 
-import { OINOApi, OINOApiParams, OINOContentType, OINODataRow, OINODataField, OINOStringDataField, OINODb, OINOFactory, OINODbParams, OINOLogLevel, OINOLog, OINOMemoryDataSet, OINOModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINOFilter } from "./OINOTypes";
+import { OINOApi, OINOApiParams, OINOContentType, OINODataRow, OINODataField, OINOStringDataField, OINODb, OINOFactory, OINODbParams, OINOLogLevel, OINOLog, OINOMemoryDataSet, OINOModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINOFilter } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/postgresql"
 
-OINOLog.registerLogger("OINOConsoleLog", OINOConsoleLog)
+OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
 OINOFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
 OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 
@@ -133,7 +133,7 @@ type OINOTestApiParams = {
     putRow: OINODataRow
 }
 
-OINOLog.setLogLevel(OINOLogLevel.error)
+// OINOLog.setLogLevel(OINOLogLevel.debug)
 OINOBenchmark.setEnabled(["doRequest"])
 OINOBenchmark.reset()
 

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOLog } from "../OINOTypes"
+import { OINOLog } from "../index.js"
 
 /**
  * Static class for benchmarking functions.
