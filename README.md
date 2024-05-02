@@ -22,21 +22,21 @@
  ```
  
  ### Register database and logger
- Register your database implementation and logger (see [`OINOConsoleLog`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOTypes.OINOConsoleLog.html) how to implement your own)
+ Register your database implementation and logger (see [`OINOConsoleLog`](https://pragmatta.github.io/oino-ts/classes/core_src.OINOConsoleLog.html) how to implement your own)
 
  ```
+ OINOLog.setLogger(new OINOConsoleLog())
  OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
- OINOLog.registerLogger("OINOConsoleLog", OINOConsoleLog)
  ```
 
  ### Create a database
- Creating a database connection [`OINODb`](https://pragmatta.github.io/oino-ts/classes/core_src_OINODb.OINODb.html) is done by passing [`OINODbParams`](https://pragmatta.github.io/oino-ts/types/oino_ts_src_OINOTypes.OINODbParams.html) to the factory method. For [`OINODbBunSqlite`](https://pragmatta.github.io/oino-ts/classes/bunsqlite_OINODbBunSqlite.OINODbBunSqlite.html) that means a file url for the database file, for others network host, port, credentials etc.
+ Creating a database connection [`OINODb`](https://pragmatta.github.io/oino-ts/classes/core_src_OINODb.OINODb.html) is done by passing [`OINODbParams`](https://pragmatta.github.io/oino-ts/types/core_src.OINODbParams.html) to the factory method. For [`OINODbBunSqlite`](https://pragmatta.github.io/oino-ts/classes/bunsqlite_OINODbBunSqlite.OINODbBunSqlite.html) that means a file url for the database file, for others network host, port, credentials etc.
  ```
  const db:OINODb = await OINOFactory.createDb( { type: "OINODbBunSqlite", url: "file://../localDb/northwind.sqlite" } )
  ```
 
  ### Create an API
- From a database you can create an [`OINOApi`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOApi.OINOApi.html) by passing [`OINOApiParams`](https://pragmatta.github.io/oino-ts/types/oino_ts_src_OINOTypes.OINOApiParams.html) with table name and preferences to the factory method.
+ From a database you can create an [`OINOApi`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOApi.OINOApi.html) by passing [`OINOApiParams`](https://pragmatta.github.io/oino-ts/types/core_src.OINOApiParams.html) with table name and preferences to the factory method.
  ```
  const api_employees:OINOApi = await OINOFactory.createApi(db, { tableName: "Employees", excludeFields:["BirthDate"] })
  ```
@@ -129,6 +129,10 @@
  }
  ```
  ![Swagger definition with a data model schema](img/readme-swagger.png)
+
+ ## Node support
+ OINO is developped Typescript first but compiles to standard CommonJS and the NPM packages should work on either ESM / CommonJS. Checkout sample apps `readmeApp` (ESM) and `nodeApp` (CommonJS).
+
 
  # STATUS
  OINO is currently a hobby project which should and should considered in alpha status. That also means compatibility breaking changes can be made without prior notice when architectual issues are discovered.
