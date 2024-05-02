@@ -3,8 +3,7 @@ import { OINODb, OINOApi, OINOFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OI
 import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
 
 OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
-OINOLog.registerLogger("OINOConsoleLog", OINOConsoleLog)
-OINOLog.setLogLevel(OINOLogLevel.debug)
+OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug))
 
 const db:OINODb = await OINOFactory.createDb( { type: "OINODbBunSqlite", url: "file://./northwind.sqlite" } )
 const apis:Record<string, OINOApi> = {

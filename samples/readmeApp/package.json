@@ -2,7 +2,7 @@
   "name": "OinoReadmeApp",
   "version": "0.0.2",
   "scripts": {
-    "app": "bun run ./readme.ts"
+    "app": "bun run ./readmeApp.ts"
   },
   "dependencies": {
     "@oino-ts/core": "latest",
