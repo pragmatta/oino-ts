@@ -13,3 +13,6 @@ packages/postgresql/OINODbPostgresql.js
 packages/postgresql/OINODbPostgresql.d.ts
 packages/bunsqlite/OINODbBunSqlite.js
 packages/bunsqlite/OINODbBunSqlite.d.ts
+/packages/bunsqlite/dist
+/packages/core/dist
+/packages/postgresql/dist
