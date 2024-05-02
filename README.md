@@ -148,10 +148,7 @@
 
  ### Security review
  Handling of SQL-injection attacks needs a thorough review, what are the relevant attack vectors are for OINO and what protections are still needed.
-
- ### Javascript support
- Currently OINO is developped as a Typescript project in Bun but the expectation is make it Javasript / Node compatible.
-
+ 
  ## Roadmap
  Things that need to happen in some order before beta-status are at least following:
  
