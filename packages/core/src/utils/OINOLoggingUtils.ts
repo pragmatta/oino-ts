@@ -12,52 +12,61 @@ import { OINOLogConstructor, OINOLogLevel } from "../index.js";
  * - setting level of logs outputted
  *
  */
+
 export abstract class OINOLog {
-    constructor () {
+    protected static _instance:OINOLog
 
-    }
-
-    private static _logLevel:OINOLogLevel = OINOLogLevel.warn
-    private static _instance:OINOLog
-    private static _loggerRegistry:Record<string, OINOLogConstructor> = {}
+    protected _logLevel:OINOLogLevel = OINOLogLevel.warn
 
     /**
-     * Register a logging implementation.
+     * Abstract logging method to implement the actual logging operation.
+     * 
+     * @param logLevel level of the log events
      *
      */
-    static registerLogger(logName:string, logClass: OINOLogConstructor):void {
-        this._loggerRegistry[logName] = logClass
-        if (this._instance === undefined) {
-            this.setLogger(logName, this._logLevel)
-        }
+    constructor (logLevel:OINOLogLevel = OINOLogLevel.warn) {
+        // console.log("OINOLog.constructor: logLevel=" + logLevel)
+        this._logLevel = logLevel
     }
+
+
+    /**
+     * Abstract logging method to implement the actual logging operation.
+     * 
+     * @param levelStr level string of the log event
+     * @param message message of the log event
+     * @param data structured data associated with the log event
+     *
+     */
+    protected abstract _writeLog(levelStr:string, message:string, data?:any):void
 
     /**
      * Abstract logging method to implement the actual logging operation.
      * 
      * @param level level of the log event
+     * @param levelStr level string of the log event
      * @param message message of the log event
      * @param data structured data associated with the log event
      *
      */
-    protected abstract _log(level:string, message:string, data?:any):void
+    protected static _log(level:OINOLogLevel, levelStr:string, message:string, data?:any):void {
+        // console.log("_log: level=" + level + ", levelStr=" + levelStr + ", message=" + message + ", data=" + data)
+        if ((OINOLog._instance) && (OINOLog._instance._logLevel <= level)) {
+            OINOLog._instance?._writeLog(levelStr, message, data)
+        }
+    }
 
     /**
      * Set active logger and log level.
      * 
-     * @param loggerClass name of the logging implementation
-     * @param logLevel log level to use
+     * @param logger logger instance
      *
      */
-    static setLogger(loggerClass:string, logLevel:OINOLogLevel) {
-        let logger_type = this._loggerRegistry[loggerClass]
-        if (logger_type) {
-            this._instance = new logger_type()
-        } else {
-            throw new Error("Unsupported database type: " + loggerClass)
+    static setLogger(logger: OINOLog) {
+        // console.log("setLogger: " + log)
+        if (logger) {
+            OINOLog._instance = logger
         }
-
-        this._logLevel = logLevel
     }
 
     /**
@@ -67,7 +76,9 @@ export abstract class OINOLog {
      * 
      */
     static setLogLevel(logLevel:OINOLogLevel) {
-        this._logLevel = logLevel
+        if (OINOLog._instance) {
+            OINOLog._instance._logLevel = logLevel
+        }
     }
 
     /**
@@ -78,9 +89,7 @@ export abstract class OINOLog {
      *
      */
     static error(message:string, data?:any) {
-        if ((this._instance) && (this._logLevel <= OINOLogLevel.error)) {
-            this._instance?._log("ERROR", message, data)
-        }
+        OINOLog._log(OINOLogLevel.error, "ERROR", message, data)
     }
 
     /**
@@ -91,9 +100,7 @@ export abstract class OINOLog {
      *
      */
     static warning(message:string, data?:any) {
-        if ((this._instance) && (this._logLevel <= OINOLogLevel.warn)) {
-            this._instance._log("WARN", message, data)
-        }
+        OINOLog._log(OINOLogLevel.warn, "WARN", message, data)
     }
 
     /**
@@ -104,9 +111,7 @@ export abstract class OINOLog {
      *
      */
     static info(message:string, data?:any) {
-        if ((this._instance) && (this._logLevel <= OINOLogLevel.info)) {
-            this._instance._log("INFO", message, data)
-        }
+        OINOLog._log(OINOLogLevel.info, "INFO", message, data)
     }
 
     /**
@@ -117,9 +122,7 @@ export abstract class OINOLog {
      *
      */
     static debug(message:string, data?:any) {
-        if ((this._instance) && (this._logLevel <= OINOLogLevel.debug)) {
-            this._instance._log("DEBUG", message, data)
-        }
+        OINOLog._log(OINOLogLevel.debug, "DEBUG", message, data)
     }
 }
 
@@ -128,11 +131,11 @@ export abstract class OINOLog {
  *
  */
 export class OINOConsoleLog extends OINOLog {
-    constructor () {
-        super()
+    constructor (logLevel:OINOLogLevel = OINOLogLevel.warn) {
+        super(logLevel)
     }
 
-    protected _log(level:string, message:string, data?:any):void {
+    protected _writeLog(level:string, message:string, data?:any):void {
         let log:string = "OINOLog " + level + ": " + message
         if (data) {
             log += " " + JSON.stringify(data)
@@ -140,4 +143,3 @@ export class OINOConsoleLog extends OINOLog {
         console.log(log)
     }
 }
-
