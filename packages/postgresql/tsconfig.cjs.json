@@ -1,9 +1,0 @@
-{
-  "extends": "../core/tsconfig.package",
-  "compilerOptions": {
-    "declaration": false,
-    "outDir": "./dist/cjs",
-    "module": "CommonJS"
-  }, 
-  "include": ["./OINODbPostgresql.ts"]
-}

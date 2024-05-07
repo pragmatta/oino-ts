@@ -13,21 +13,23 @@
     "database",
     "rest-api",
     "typescript",
-    "library"
+    "library",
+    "sqlite"
   ],
-  "main": "./OINODbBunSqlite.cjs",
-  "module": "./OINODbBunSqlite.mjs",
-  "types": "./OINODbBunSqlite.d.ts",
+  "main": "./dist/cjs/OINODbBunSqlite.js",
+  "module": "./dist/esm/OINODbBunSqlite.js",
+  "types": "./dist/types/OINODbBunSqlite.d.ts",
   "dependencies": {
-    "@oino-ts/core": "^0.0.3",
-    "@types/node": "^20.12.7",
-    "bun-types": "^1.1.4"
+    "@oino-ts/core": "^0.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/bun": "latest"
+  },
   "files": [
     "OINODbBunSqlite.ts",
-    "OINODbBunSqlite.cjs",
-    "OINODbBunSqlite.mjs",
-    "OINODbBunSqlite.d.ts"
+    "dist/cjs/OINODbBunSqlite.js",
+    "dist/esm/OINODbBunSqlite.js",
+    "dist/types/OINODbBunSqlite.d.ts"
   ]
 }

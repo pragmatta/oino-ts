@@ -1,9 +1,0 @@
-{
-  "extends": "../core/tsconfig.package",
-  "compilerOptions": {
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "./dist/types"
-  }, 
-  "include": ["./OINODbPostgresql.ts"]
-}

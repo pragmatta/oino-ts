@@ -1,0 +1,16 @@
+{
+  "name": "oino-ts",
+  "bin": {
+    "tsc": "./core/node_modules/.bin/tsc.cmd"
+  },
+  "scripts": {
+    "build:js": "npx tsc -p ./tsconfig.cjs.json && npx tsc -p ./tsconfig.esm.json",
+    "build:types": "npx tsc -p ./tsconfig.types.json",
+    "build:docs": "bunx typedoc --options ./typedoc.json",
+    "build:all": "bun run build:js && bun run build:types && bun run build:docs",
+    "version:patch": "npm version patch && npm --prefix ../bunsqlite version patch && npm --prefix ../postgresql version patch && npm --prefix ../mariadb version patch",
+    "package:cleanup": "./cleanup_packages.cmd",
+    "package:update": "./update_packages.cmd",
+    "package:all": "bun run package:cleanup && bun run build:all && bun run package:update"    
+  }
+}

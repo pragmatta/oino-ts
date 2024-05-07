@@ -18,20 +18,11 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/tyoes/index.d.ts",
-  "scripts": {
-    "build:js": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json && tsc -p ../bunsqlite/tsconfig.cjs.json  && tsc -p ../bunsqlite/tsconfig.esm.json && tsc -p ../postgresql/tsconfig.cjs.json && tsc -p ../postgresql/tsconfig.esm.json",
-    "build:types": "tsc -p tsconfig.types.json && tsc -p ../bunsqlite/tsconfig.types.json && tsc -p ../postgresql/tsconfig.types.json",
-    "build:docs": "bunx typedoc",
-    "build:all": "bun run build:js && bun run build:types && bun run build:docs",
-    "version:patch": "npm version patch && npm --prefix ../bunsqlite version patch && npm --prefix ../postgresql version patch"
-  },
   "dependencies": {
-    "@types/node": "^20.12.7",
-    "pg": "^8.11.5"
+    "@types/node": "^20.12.7"
   },
   "devDependencies": {
     "typedoc": "^0.25.13",
-    "@types/bun": "^1.1.4",
-    "@types/pg": "^8.11.5"
+    "@types/bun": "latest"
   }
 }

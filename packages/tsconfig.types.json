@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.core",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "./_dist/types"
+  }
+}
