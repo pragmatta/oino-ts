@@ -94,7 +94,7 @@ ALTER TABLE public.customers OWNER TO postgres;
 --
 
 CREATE TABLE employees (
-    "EmployeeID" smallint NOT NULL,
+    "EmployeeID" serial NOT NULL,
     "LastName" character varying(20) NOT NULL,
     "FirstName" character varying(10) NOT NULL,
     "Title" character varying(30),

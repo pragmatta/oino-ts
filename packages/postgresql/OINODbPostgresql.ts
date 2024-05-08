@@ -68,7 +68,8 @@ export class OINODbPostgresql extends OINODb {
     col.is_nullable, 
     pk.primary_key,
     col.numeric_precision,
-    col.numeric_scale
+    col.numeric_scale,
+    col.column_default
 FROM information_schema.columns col
 LEFT JOIN LATERAL
 	(select kcu.column_name, 'YES' as primary_key
@@ -225,9 +226,11 @@ WHERE table_name = `
             const field_length:number = this._parseFieldLength(row[2])
             const numeric_precision:number = row[5] || 0
             const numeric_scale:number = row[6] || 0
+            const default_val:string = row[7] || ""
             const field_params:OINODataFieldParams = {
                 isPrimaryKey: row[4] == "YES",
-                isNotNull: row[3] == "NO"
+                isNotNull: row[3] == "NO",
+                isAutoInc: default_val.startsWith("nextval(")
             }            
             if ((!api.params.excludeFieldPrefix || !field_name.startsWith(api.params.excludeFieldPrefix)) && (!api.params.excludeFields || (api.params.excludeFields.indexOf(field_name) < 0))) {
                 // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })

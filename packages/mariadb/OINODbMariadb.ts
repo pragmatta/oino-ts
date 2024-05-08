@@ -244,8 +244,10 @@ export class OINODbMariadb extends OINODb {
             const sql_type:string = field_matches[1] || ""
             const field_length1:number = this._parseFieldLength(field_matches[3] || "0")
             const field_length2:number = this._parseFieldLength(field_matches[4] || "0")
+            const extra:string = row[5] || ""
             const field_params:OINODataFieldParams = {
                 isPrimaryKey: row[3] == "PRI",
+                isAutoInc: extra.indexOf('auto_increment') >= 0,
                 isNotNull: row[2] == "NO"
             }            
             if (((api.params.excludeFieldPrefix) && field_name.startsWith(api.params.excludeFieldPrefix)) || ((api.params.excludeFields) && (api.params.excludeFields.indexOf(field_name) < 0))) {

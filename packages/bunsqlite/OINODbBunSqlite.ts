@@ -37,6 +37,7 @@ export class OINODbBunSqlite extends OINODb {
     private _parseDbFieldParams(fieldStr:string): OINODataFieldParams {
         const result:OINODataFieldParams = {
             isPrimaryKey: fieldStr.indexOf("PRIMARY KEY") >= 0,
+            isAutoInc: fieldStr.indexOf("AUTOINCREMENT") >= 0,
             isNotNull: fieldStr.indexOf("NOT NULL") >= 0
         }
         // OINOLog.debug("OINODbBunSqlite._parseDbFieldParams", {fieldStr:fieldStr, result:result})

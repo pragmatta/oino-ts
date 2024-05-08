@@ -63,6 +63,9 @@ export class OINODataField {
         if (this.fieldParams.isPrimaryKey) {
             params += "PK ";
         }
+        if (this.fieldParams.isAutoInc) {
+            params += "AUTOINC ";
+        }
         if (this.fieldParams.isNotNull) {
             params += "NOTNUL ";
         }

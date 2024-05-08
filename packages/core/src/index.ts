@@ -42,6 +42,7 @@ export type OINODbParams = {
 /** Field parameters in database */
 export type OINODataFieldParams = {
     isPrimaryKey: Boolean
+    isAutoInc: Boolean
     isNotNull: Boolean
 }
 
