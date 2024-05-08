@@ -251,7 +251,8 @@ WHERE table_name = `
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1))
 
                 } else {
-                    OINOLog.warning("OINODbPostgresql.initializeApiDatamodel: unrecognized field type", {field:row})
+                    OINOLog.info("OINODbPostgresql.initializeApiDatamodel: unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
+                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }   
             }
             res.next()

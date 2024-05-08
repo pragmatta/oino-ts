@@ -69,13 +69,12 @@ export class OINODbMariadb extends OINODb {
     private static _fieldLengthRegex = /([^\(\)]+)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
     private static _tableSchemaSql:string = `SHOW COLUMNS from ` 
     
-    // private _client:Client
     private _pool:mariadb.Pool
 
     constructor(params:OINODbParams) {
         super(params)
 
-        OINOLog.debug("OINODbMariadb.constructor", {params:params})
+        // OINOLog.debug("OINODbMariadb.constructor", {params:params})
         if (this._params.type !== "OINODbMariadb") {
             throw new Error(OINO_ERROR_PREFIX + "Not OINODbMariadb-type: " + this._params.type)
         } 
@@ -134,7 +133,7 @@ export class OINODbMariadb extends OINODb {
         
         } catch (err) {
             const msg_parts = err.message.split(') ')
-            OINOLog.error("OINODbMariadb._exec exception", {connection: msg_parts[0].substring(1), message:msg_parts[1]}) // print connection info just to log so tests don't break on runtime output
+            // OINOLog.debug("OINODbMariadb._exec exception", {connection: msg_parts[0].substring(1), message:msg_parts[1]}) // print connection info just to log so tests don't break on runtime output
             throw new Error(msg_parts[1]);
         } finally {
             if (connection) {
@@ -194,7 +193,7 @@ export class OINODbMariadb extends OINODb {
     async connect(): Promise<boolean> {
         try {
             // make sure that any items are correctly URL encoded in the connection string
-            OINOLog.debug("OINODbMariadb.connect")
+            // OINOLog.debug("OINODbMariadb.connect")
             await this._pool.on
             // await this._client.connect()
             return Promise.resolve(true)
@@ -241,7 +240,7 @@ export class OINODbMariadb extends OINODb {
             // OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { description:row })
             const field_name:string = row[0]?.toString() || ""
             const field_matches = OINODbMariadb._fieldLengthRegex.exec(row[1]?.toString() || "") || []
-            OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { field_matches:field_matches })
+            // OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { field_matches:field_matches })
             const sql_type:string = field_matches[1] || ""
             const field_length1:number = this._parseFieldLength(field_matches[3] || "0")
             const field_length2:number = this._parseFieldLength(field_matches[4] || "0")
@@ -273,7 +272,8 @@ export class OINODbMariadb extends OINODb {
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1 + field_length2 + 1))
 
                 } else {
-                    OINOLog.warning("OINODbMariadb.initializeApiDatamodel: unrecognized field type", {field:row})
+                    OINOLog.info("OINODbMariadb.initializeApiDatamodel: unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length1:field_length1, field_length2:field_length2, field_params:field_params })
+                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }   
             }
             res.next()

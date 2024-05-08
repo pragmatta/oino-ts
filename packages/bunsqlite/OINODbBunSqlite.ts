@@ -189,7 +189,8 @@ export class OINODbBunSqlite extends OINODb {
                                 api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
                             }
                         } else {
-                            OINOLog.warning("OINODbBunSqlite.initializeApiDatamodel: unrecognized field type", {sql_type:sql_type})
+                            OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
+                            api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                         }
                     }
                 }
