@@ -13,8 +13,8 @@ const EMPTY_ROW:string[] = []
 class OINOPostgresqlData extends OINODataSet {
     private _rows:OINODataRow[]
     
-    constructor(data: unknown, errors:string[]=[]) {
-        super(data, errors)
+    constructor(data: unknown, messages:string[]=[]) {
+        super(data, messages)
 
         if ((data != null) && !(Array.isArray(data))) {
             throw new Error(OINO_ERROR_PREFIX + "Invalid Posgresql data type!") // TODO: maybe check all rows
@@ -62,11 +62,13 @@ export class OINODbPostgresql extends OINODb {
     
     private static table_schema_sql:string =
 `SELECT 
-	col.column_name, 
-	col.data_type, 
-	col.character_maximum_length, 
-	col.is_nullable, 
-	pk.primary_key
+    col.column_name, 
+    col.data_type, 
+    col.character_maximum_length, 
+    col.is_nullable, 
+    pk.primary_key,
+    col.numeric_precision,
+    col.numeric_scale
 FROM information_schema.columns col
 LEFT JOIN LATERAL
 	(select kcu.column_name, 'YES' as primary_key
@@ -87,7 +89,7 @@ WHERE table_name = `
     constructor(params:OINODbParams) {
         super(params)
 
-        OINOLog.debug("OINODbPostgresql.constructor", {params:params})
+        // OINOLog.debug("OINODbPostgresql.constructor", {params:params})
         if (this._params.type !== "OINODbPostgresql") {
             throw new Error(OINO_ERROR_PREFIX + "Not OINODbPostgresql-type: " + this._params.type)
         } 
@@ -173,7 +175,7 @@ WHERE table_name = `
     async connect(): Promise<boolean> {
         try {
             // make sure that any items are correctly URL encoded in the connection string
-            OINOLog.debug("OINODbPostgresql.connect")
+            // OINOLog.debug("OINODbPostgresql.connect")
             // await this._pool.connect()
             // await this._client.connect()
             return Promise.resolve(true)
@@ -192,7 +194,7 @@ WHERE table_name = `
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], ["OINODbPostgresql.sqlSelect exception in _db.query: " + e.message])
+            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + "OINODbPostgresql.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.end("sqlSelect")
         return result
@@ -206,7 +208,7 @@ WHERE table_name = `
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], ["OINODbPostgresql.sqlExec exception in _db.exec: " + e.message])
+            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + "OINODbPostgresql.sqlExec exception in _db.exec: " + e.message])
         }
         OINOBenchmark.end("sqlExec")
         return result
@@ -215,11 +217,14 @@ WHERE table_name = `
     async initializeApiDatamodel(api:OINOApi): Promise<void> {
         
         const res:OINODataSet = await this.sqlSelect(OINODbPostgresql.table_schema_sql + "'" + api.params.tableName.toLowerCase() + "';")
+        // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: table description ", {res: res })
         while (!res.isEof()) {
             const row:OINODataRow = res.getRow()
             const field_name:string = row[0]?.toString() || ""
             const sql_type:string = row[1]?.toString() || ""
             const field_length:number = this._parseFieldLength(row[2])
+            const numeric_precision:number = row[5] || 0
+            const numeric_scale:number = row[6] || 0
             const field_params:OINODataFieldParams = {
                 isPrimaryKey: row[4] == "YES",
                 isNotNull: row[3] == "NO"
@@ -241,6 +246,9 @@ WHERE table_name = `
 
                 } else if ((sql_type == "bytea")) {
                     api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length))
+
+                } else if ((sql_type == "decimal") || (sql_type == "numeric")) {
+                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1))
 
                 } else {
                     OINOLog.warning("OINODbPostgresql.initializeApiDatamodel: unrecognized field type", {field:row})

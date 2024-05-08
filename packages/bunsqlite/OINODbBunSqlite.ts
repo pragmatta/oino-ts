@@ -9,8 +9,8 @@ import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOSt
 import { Database as BunSqliteDb } from "bun:sqlite";
 
 class OINOBunSqliteDataset extends OINOMemoryDataSet {
-    constructor(data: unknown, errors:string[]=[]) {
-        super(data, errors)
+    constructor(data: unknown, messages:string[]=[]) {
+        super(data, messages)
     }
 }
 
@@ -169,20 +169,27 @@ export class OINODbBunSqlite extends OINODb {
                     const sql_type:string = field_match[2]
                     const field_length:number = parseInt(field_match[4]) || 0
                     // OINOLog.debug("OINODbBunSqlite.initializeApiDatamodel: field regex matches", { api.params: api.params, field_name:field_name })
-                    if ((!api.params.excludeFieldPrefix || !field_name.startsWith(api.params.excludeFieldPrefix)) && (!api.params.excludeFields || (api.params.excludeFields.indexOf(field_name) < 0))) {
+                    if (((api.params.excludeFieldPrefix) && field_name.startsWith(api.params.excludeFieldPrefix)) || ((api.params.excludeFields) && (api.params.excludeFields.indexOf(field_name) < 0))) {
+                        OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
+
+                    } else {
                         if ((sql_type == "INTEGER") || (sql_type == "REAL") || (sql_type == "DOUBLE") || (sql_type == "NUMERIC") || (sql_type == "DECIMAL")) {
                             api.datamodel.addField(new OINONumberDataField(this, field_name, sql_type, field_params ))
 
                         } else if ((sql_type == "BLOB") ) {
                             api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length))
+
                         } else if ((sql_type == "TEXT")) {
                             api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length))
+
                         } else if ((sql_type == "DATETIME") || (sql_type == "DATE")) {
                             if (api.params.useDatesAsString) {
                                 api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                             } else {
                                 api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
                             }
+                        } else {
+                            OINOLog.warning("OINODbBunSqlite.initializeApiDatamodel: unrecognized field type", {sql_type:sql_type})
                         }
                     }
                 }
