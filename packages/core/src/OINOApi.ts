@@ -132,9 +132,8 @@ export class OINOApi {
         let field:OINODataField
         for (let i=0; i<this.datamodel.fields.length; i++) {
             field = this.datamodel.fields[i]
-            const val:OINODataCell = row[i]
             // OINOLog.debug("OINOApi.validateHttpValues", {field:field})
-            // OINOLog.debug("OINOApi.validateHttpValues", {field_params:field.fieldParams})
+            const val:OINODataCell = row[i]
             // OINOLog.debug("OINOApi.validateHttpValues", {val:val})
             if ((val === null) && ((field.fieldParams.isNotNull)||(field.fieldParams.isPrimaryKey))) { // null is a valid SQL value except if it's not allowed
                 httpResult.setError(405, "Field '" + field.name + "' is not allowed to be NULL!")
@@ -150,7 +149,7 @@ export class OINOApi {
                         if (this.params.failOnOversizedValues) {
                             httpResult.setError(405, "Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and can't be set!")
                         } else {
-                            httpResult.addWarning("Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and might get truncated.")
+                            httpResult.addWarning("Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and might truncate or fail.")
                         }
                     }
                 }
@@ -163,16 +162,16 @@ export class OINOApi {
     private async _doGet(result:OINOApiResult, id:string, params:OINORequestParams):Promise<void> {
         OINOBenchmark.start("doGet")
         const sql:string = this.datamodel.printSqlSelect(id, params)
-        OINOLog.debug("OINOApi.doGet sql", {sql:sql})
+        // OINOLog.debug("OINOApi.doGet sql", {sql:sql})
         try {
             const sql_res:OINODataSet = await this.db.sqlSelect(sql)
             // OINOLog.debug("OINOApi.doGet sql_res", {sql_res:sql_res})
-            if (sql_res.errors.length > 0) {
+            if (sql_res.hasErrors()) {
                 result.setError(500, "Errors in executing GET SQL: " + sql)
-                result.messages.push(...sql_res.errors)
             } else {
                 result.modelset = new OINOModelSet(this.datamodel, sql_res)
             }
+            result.messages.push(...sql_res.messages)
         } catch (e:any) {
             OINOLog.error("OINOApi.doGet ECXEPTION", {exception:e})
             result.setError(500, "Unhandled exception in doGet: " + e.message)
@@ -196,13 +195,13 @@ export class OINOApi {
             if (sql == "") {
                 result.setError(405, "No valid rows for POST!")
             } else {
-                OINOLog.debug("OINOApi.doPost sql", {sql:sql})
+                // OINOLog.debug("OINOApi.doPost sql", {sql:sql})
                 const sql_res:OINODataSet = await this.db.sqlExec(sql)
                 // OINOLog.debug("OINOApi.doPost sql_res", {sql_res:sql_res})
-                if (sql_res.errors.length > 0) {
+                if (sql_res.hasErrors()) {
                     result.setError(500, "Errors in executing POST SQL: " + sql)
-                    result.messages.push(...sql_res.errors)
                 }
+                result.messages.push(...sql_res.messages)
             }
         } catch (e:any) {
             OINOLog.error("OINOApi.doPost ECXEPTION", {exception:e})
@@ -217,13 +216,13 @@ export class OINOApi {
             this._validateRowValues(result, row, false)
             if (result.success) {
                 const sql:string = this.datamodel.printSqlUpdate(id, row)
-                OINOLog.debug("OINOApi.doPut sql", {sql:sql})
+                // OINOLog.debug("OINOApi.doPut sql", {sql:sql})
                 const sql_res:OINODataSet = await this.db.sqlExec(sql)
                 // OINOLog.debug("OINOApi.doPut sql_res", {sql_res:sql_res})
-                if (sql_res.errors.length > 0) {
+                if (sql_res.hasErrors()) {
                     result.setError(500, "Errors in executing PUT SQL: " + sql)
-                    result.messages.push(...sql_res.errors)
                 }
+                result.messages.push(...sql_res.messages)
             }
         } catch (e:any) {
             OINOLog.error("OINOApi.doPut ECXEPTION", {exception:e})
@@ -236,12 +235,13 @@ export class OINOApi {
         OINOBenchmark.start("doDelete")
         try {
             const sql:string = this.datamodel.printSqlDelete(id)
-            OINOLog.debug("OINOApi.doDelete sql", {sql:sql})
+            // OINOLog.debug("OINOApi.doDelete sql", {sql:sql})
             const sql_res:OINODataSet = await this.db.sqlExec(sql)
             // OINOLog.debug("OINOApi.doDelete sql_res", {sql_res:sql_res})
-            if (sql_res.errors.length > 0) {
+            if (sql_res.hasErrors()) {
                 result.setError(500, "Errors in executing DELETE SQL: " + sql)
             }
+            result.messages.push(...sql_res.messages)
         } catch (e:any) {
             OINOLog.error("OINOApi.doDelete ECXEPTION", {exception:e})
             result.setError(500, "Unhandled exception in doDelete: " + e.message)

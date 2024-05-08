@@ -33,7 +33,7 @@ export class OINOModelSet {
     constructor(datamodel: OINODataModel, dataset: OINODataSet) {
         this.datamodel = datamodel
         this.dataset = dataset
-        this.errors = this.dataset.errors
+        this.errors = this.dataset.messages
     }
 
     private _writeRowJson(row:OINODataRow):string {

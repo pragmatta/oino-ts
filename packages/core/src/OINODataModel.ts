@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams } from "./index.js";
+import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog } from "./index.js";
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -31,7 +31,7 @@ export class OINODataModel {
         this.api = api
         this.fields = []
 
-        // OINOLog_debug("OINODatasetModel (" + tableName + "):\n" + this._printTableDebug("\n"))
+        // OINOLog_debug("OINODataModel (" + tableName + "):\n" + this._printTableDebug("\n"))
     }
     /**
      * Initialize datamodel from SQL schema.
@@ -77,7 +77,7 @@ export class OINODataModel {
         for (let i=0; i< this.fields.length; i++) {
             const f = this.fields[i]
             const val = row[i];
-            // OINOLog_debug("OINODatasetModel._printSqlUpdateValues", {field:f.name, primary_key:f.fieldParams.isPrimaryKey, val:val})
+            // OINOLog_debug("OINODataModel._printSqlUpdateValues", {field:f.name, primary_key:f.fieldParams.isPrimaryKey, val:val})
             if ((!f.fieldParams.isPrimaryKey) && (val !== undefined))  {
                 if (result != "") {
                     result += ",";
@@ -125,6 +125,7 @@ export class OINODataModel {
      *
      */
     findFieldByName(name:string):OINODataField|null {
+        // OINOLog.debug("OINODataModel.findFieldByName", {_columnLookup:this._columnLookup})
         const i:number = this._columnLookup[name]
         if (i >= 0) {
             return this.fields[i]
@@ -189,7 +190,7 @@ export class OINODataModel {
     printSqlSelect(id: string, params:OINORequestParams): string {
         let result:string = "SELECT " + this._printSqlColumnNames() + " FROM " + this.api.db.printSqlTablename(this.api.params.tableName);
         const filter_sql = params.filter?.toSql(this) || ""
-        // OINOLog_debug("OINODatasetModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql})
+        // OINOLog_debug("OINODataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql})
         if ((id != "") && (filter_sql != ""))  {
             result = result + " WHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql + ";";
         } else if (id != "") {

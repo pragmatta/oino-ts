@@ -18,18 +18,18 @@ export abstract class OINODataSet {
     private _data: unknown;
 
     /** Error messages */
-    readonly errors: string[];
+    readonly messages: string[];
 
     /**
      * Constructor for `OINODataSet`.
      *
      * @param data internal database specific data type (constructor will throw if invalid)
-     * @param errors error messages from SQL-query
+     * @param messages error messages from SQL-query
      * 
      */
-    constructor(data: unknown, errors: string[] = []) {
+    constructor(data: unknown, messages: string[] = []) {
         this._data = data;
-        this.errors = errors;
+        this.messages = messages;
     }
 
     /**
@@ -55,6 +55,19 @@ export abstract class OINODataSet {
      *
      */
     abstract getRow(): OINODataRow;
+
+    /**
+     * Checks if the messages contain errors.
+     * 
+     */
+    hasErrors(): boolean {
+        for (let i=0; i<this.messages.length; i++) {
+            if (this.messages[i].startsWith(OINO_ERROR_PREFIX)) {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 /**

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX } from "./index.js"
+import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX, OINOLog } from "./index.js"
 
 /**
  * Supported logical conjunctions in filter predicates.
@@ -107,7 +107,7 @@ export class OINOFilter {
      *
      */
     toSql(dataModel:OINODataModel):string {
-        // OINOLog_debug("OINOFilter.toSql", {_leftSide:this._leftSide, _operator:this._operator, _rightSide:this._rightSide})
+        // OINOLog.debug("OINOFilter.toSql", {_leftSide:this._leftSide, _operator:this._operator, _rightSide:this._rightSide})
         if (this.isEmpty()) {
             return ""
         }
@@ -129,7 +129,7 @@ export class OINOFilter {
                 result += this._rightSide
             }
         }
-        // OINOLog_debug("OINOFilter.toSql", {result:result})
+        // OINOLog.debug("OINOFilter.toSql", {result:result})
         return "(" + result + ")"
     }
 }

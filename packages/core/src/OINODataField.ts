@@ -97,7 +97,7 @@ export class OINODataField {
         if ((sqlVal === null) || (sqlVal === undefined))  {
             return "null";
         } else {
-            return JSON.stringify(sqlVal.toString());
+            return JSON.stringify(sqlVal.toString().replaceAll("\n", "\\n").replaceAll("\r", "\\r").replaceAll("\t", "\\t"));
         }
     }
 
@@ -208,7 +208,7 @@ export class OINOStringDataField extends OINODataField {
      *
      */
     constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODataFieldParams, maxLength: number) {
-        super(db, name, "number", sqlType, fieldParams, maxLength)
+        super(db, name, "string", sqlType, fieldParams, maxLength)
     }
 
 }

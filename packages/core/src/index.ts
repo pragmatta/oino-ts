@@ -75,6 +75,7 @@ export type OINODataCell = string | bigint | number | boolean | Date | Uint8Arra
 export type OINODataRow = Array<OINODataCell>
 /** Empty row instance */
 export const OINO_EMPTY_ROW:OINODataRow = []
+export const OINO_EMPTY_ROWS:OINODataRow[] = [OINO_EMPTY_ROW]
 
 /** Key-value collection */
 export type OINOValues = Record<string, string>

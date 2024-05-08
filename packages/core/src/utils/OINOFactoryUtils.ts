@@ -92,7 +92,7 @@ export class OINOFactory {
      *
      */
     static registerDb(dbName:string, dbTypeClass: OINODbConstructor):void {
-        OINOLog.debug("OINOFactory.registerDb", {dbType:dbName})
+        // OINOLog.debug("OINOFactory.registerDb", {dbType:dbName})
         this._dbRegistry[dbName] = dbTypeClass
 
     }
