@@ -47,8 +47,8 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
         expect((await api.doRequest("GET", "", "", {})).modelset?.writeString()).toMatchSnapshot("GET JSON")
     })
     
-    test(target_db + target_table + target_group + " select *, CSV", async () => {
-        expect((await api.doRequest("GET", "", "", {})).modelset?.writeString(OINOContentType.csv)).toMatchSnapshot("GET JSON")
+    test(target_db + target_table + target_group + " select *", async () => {
+        expect((await api.doRequest("GET", "", "", {})).modelset?.writeString(OINOContentType.csv)).toMatchSnapshot("GET CSV")
     })
 
 
@@ -135,7 +135,7 @@ type OINOTestApiParams = {
     putRow: OINODataRow
 }
 
-OINOLog.setLogLevel(OINOLogLevel.debug)
+// OINOLog.setLogLevel(OINOLogLevel.debug)
 OINOBenchmark.setEnabled(["doRequest"])
 OINOBenchmark.reset()
 
@@ -171,9 +171,34 @@ const apis:OINOTestApiParams[] = [
         putRow: [99, "LastName2", "FirstName2", "Title2", "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("OINO2"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
     }
 ]
-
 for (let db of dbs) {
     for (let api of apis) {
         await OINOTestApi(db, api)
+    }
+}
+
+const snapshot_file = Bun.file("./node_modules/@oino-ts/core/src/__snapshots__/OINOApi.test.ts.snap")
+await Bun.write("./node_modules/@oino-ts/core/src/__snapshots__/OINOApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+const snapshots = require("./__snapshots__/OINOApi.test.ts.snap.js")
+
+const crosscheck_tests:string[] = [
+    "[HTTP GET] select *: GET JSON 1",
+    "[HTTP POST] insert: GET JSON 1",
+    "[HTTP POST] insert: GET CSV 1",
+    "[HTTP PUT] update CSV: GET JSON 1",
+    "[HTTP PUT] update CSV: GET CSV 1",
+    "[HTTP PUT] update: GET JSON 1"
+]
+
+for (let i=0; i<dbs.length-1; i++) {
+    const db1:string = dbs[i].type
+    const db2:string = dbs[i+1].type
+    for (let api of apis) {
+        const table_name = api.apiParams.tableName
+        for (let test_name of crosscheck_tests) {
+            test("cross check {" + db1 + "} and {" + db2 + "} table {" + table_name + "} snapshots on {" + test_name + "}", () => {
+                expect(snapshots["[" + db1 + "][" + table_name + "]" + test_name]).toMatch(snapshots["[" + db2 + "][" + table_name + "]" + test_name])
+            })
+        }        
     }
 }
