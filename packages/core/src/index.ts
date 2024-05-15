@@ -19,10 +19,17 @@ export { OINOStr } from "./utils/OINOStrUtils.js"
 
 /** API parameters */
 export type OINOApiParams = {
-    tableName: string
+    /** Name of the database table */
+    tableName: string 
+    /** Reject values that exceed field max length (behaviour on such is platform dependent) */
     failOnOversizedValues?: Boolean
+    /** Reject updates that contain values for autoinc-type fields */
+    failOnAutoincUpdates?: Boolean
+    /** Treat date type fields as just strings and use the native formatting instead of the ISO 8601 format */
     useDatesAsString?: Boolean
+    /** Exclude all fields with this prefix from the API */
     excludeFieldPrefix?:string
+    /** Exclude given fields from the API */
     excludeFields?:string[]
 }
 
@@ -31,18 +38,27 @@ export type OINODbConstructor = new (dbParams:OINODbParams) => OINODb
 
 /** Database parameters */
 export type OINODbParams = {
+    /** Name of the database class (e.g. OINODbPostgresql)  */
     type: string
+    /** Connection URL, either file://-path or an IP-address or an HTTP-url */
     url: string
+    /** Name of the database */
     database?: string 
+    /** TCP port of the database */
     port?: number
+    /** Username used to authenticate */
     user?: string
+    /** Password used to authenticate */
     password?: string
 }
 
 /** Field parameters in database */
 export type OINODataFieldParams = {
+    /** Is the field a primary key */
     isPrimaryKey: Boolean
+    /** Is the field an auto inc type */
     isAutoInc: Boolean
+    /** Is the field allowed to have null values */
     isNotNull: Boolean
 }
 

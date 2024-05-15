@@ -224,9 +224,9 @@ WHERE table_name = `
             const field_name:string = row[0]?.toString() || ""
             const sql_type:string = row[1]?.toString() || ""
             const field_length:number = this._parseFieldLength(row[2])
-            const numeric_precision:number = row[5] || 0
-            const numeric_scale:number = row[6] || 0
-            const default_val:string = row[7] || ""
+            const numeric_precision:number = this._parseFieldLength(row[5])
+            const numeric_scale:number = this._parseFieldLength(row[6])
+            const default_val:string = row[7]?.toString() || ""
             const field_params:OINODataFieldParams = {
                 isPrimaryKey: row[4] == "YES",
                 isNotNull: row[3] == "NO",

@@ -141,6 +141,9 @@ export class OINOApi {
             } else if ((val === undefined) && (field.fieldParams.isPrimaryKey) && (requirePrimaryKey)) { 
                 httpResult.setError(405, "Primary key '" + field.name + "' is missing from the data!")
 
+            } else if ((val !== undefined) && (field.fieldParams.isAutoInc) && (this.params.failOnAutoincUpdates)) { 
+                httpResult.setError(405, "Autoinc field '" + field.name + "' can't be updated!")
+
             } else {
                 if ((field instanceof OINOStringDataField) && ((field.maxLength > 0))){
                     const str_val = val?.toString() || ""

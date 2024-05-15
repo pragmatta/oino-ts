@@ -15,13 +15,10 @@ class OINOMariadbData extends OINODataSet {
         super(data, messages)
 
         if (data == null) {
-            this.messages.push(OINO_INFO_PREFIX + "SQL returned empty result")
+            this.messages.push(OINO_INFO_PREFIX + "SQL result is empty")
 
         } else if (Array.isArray(data)) {
             this._rows = data as OINODataRow[]
-
-        } else if (data.affectedRows != null) {
-            this.messages.push(OINO_INFO_PREFIX + "SQL affected rows " + data.affectedRows)
 
         }
         // OINOLog.debug("OINOMariadbData.constructor", {_rows:this._rows})
@@ -132,7 +129,7 @@ export class OINODbMariadb extends OINODb {
             return Promise.resolve(result)
         
         } catch (err) {
-            const msg_parts = err.message.split(') ')
+            const msg_parts = (err as Error).message.split(') ')
             // OINOLog.debug("OINODbMariadb._exec exception", {connection: msg_parts[0].substring(1), message:msg_parts[1]}) // print connection info just to log so tests don't break on runtime output
             throw new Error(msg_parts[1]);
         } finally {
@@ -244,7 +241,7 @@ export class OINODbMariadb extends OINODb {
             const sql_type:string = field_matches[1] || ""
             const field_length1:number = this._parseFieldLength(field_matches[3] || "0")
             const field_length2:number = this._parseFieldLength(field_matches[4] || "0")
-            const extra:string = row[5] || ""
+            const extra:string = row[5]?.toString() || ""
             const field_params:OINODataFieldParams = {
                 isPrimaryKey: row[3] == "PRI",
                 isAutoInc: extra.indexOf('auto_increment') >= 0,
