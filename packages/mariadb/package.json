@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/mariadb",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "OINO TS package for using Mariadb databases.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
