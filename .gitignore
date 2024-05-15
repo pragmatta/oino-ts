@@ -16,3 +16,11 @@ packages/bunsqlite/OINODbBunSqlite.d.ts
 /packages/bunsqlite/dist
 /packages/core/dist
 /packages/postgresql/dist
+/packages/mysql/node_modules
+/packages/mysql/dist
+/packages/_dist
+packages/update_packages.cmd
+packages/cleanup_packages.cmd
+/packages/bunsqlite/node_modules
+/packages/postgresql/node_modules
+/packages/mariadb/node_modules
