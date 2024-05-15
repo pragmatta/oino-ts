@@ -111,9 +111,9 @@
  OINO functions as a database abstraction, providing a consistent interface for working with different databases. It abstracts out different conventions in connecting, making queries and formatting data.
 
  Currently supported databases:
- - Bun Sqlite
- - Postgresql 
-
+ - Bun Sqlite through Bun native implementation
+ - Postgresql through [pg](https://www.npmjs.com/package/pg)-package
+ - Mariadb / Mysql-support through [mariadb](https://www.npmjs.com/package/mariadb)-package
 
  ## Complex Keys
  To support tables with multipart primary keys OINO generates a composite key `_OINOID_` that is included in the result and can be used as the REST ID. For example in the example above table `OrderDetails` has two primary keys `OrderID` and `ProductID` making the `_OINOID_` of form `11077:99`. 
@@ -142,9 +142,6 @@
 
  ### Realistic app
  There needs to be a realistic app built on top of OINO to get a better grasp of the edge cases.
-
- ### MySql-support
- Making sure the abstraction is solid requires adding support for another database.
 
  ### Security review
  Handling of SQL-injection attacks needs a thorough review, what are the relevant attack vectors are for OINO and what protections are still needed.
@@ -195,8 +192,10 @@
  # ACKNOWLEDGEMENTS
  
  ## Libraries
- OINO uses following open source libraries and npm packages and I would like to thank everyone for their contributions:
+ OINO uses the following open source libraries and npm packages and I would like to thank everyone for their contributions:
  - Postgresql support by [node-postgres package](https://www.npmjs.com/package/pg)
+ - Mariadb / Mysql-support by [mariadb package](https://www.npmjs.com/package/mariadb)
+
  ## Bun
  OINO has been developed using the Bun runtime, not because of the speed improvements but for the first class Typescript support and integrated developper experience. Kudos on the bun team for making Typescript work more exiting again.
  
