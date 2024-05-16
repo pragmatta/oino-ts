@@ -24,3 +24,4 @@ packages/cleanup_packages.cmd
 /packages/bunsqlite/node_modules
 /packages/postgresql/node_modules
 /packages/mariadb/node_modules
+/packages/mariadb/dist
