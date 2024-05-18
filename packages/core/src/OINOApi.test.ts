@@ -12,6 +12,8 @@ import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/postgresql"
 import { OINODbMariadb } from "@oino-ts/mariadb"
 
+Math.random()
+
 OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
 OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 OINOFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
@@ -82,17 +84,38 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     OINOLog.info("HTTP PUT csv", {put_body_csv:put_body_csv})
     test(target_db + target_table + target_group + " update CSV", async () => {
         apiDataset.requestParams.contentType = OINOContentType.csv
-        expect((await api.doRequest("PUT", new_row_id, put_body_csv, apiDataset.requestParams))).toMatchSnapshot("PUT")
-        expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString()).toMatchSnapshot("GET JSON")
+        expect((await api.doRequest("PUT", new_row_id, put_body_csv, apiDataset.requestParams))).toMatchSnapshot("PUT CSV")
         expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString(OINOContentType.csv)).toMatchSnapshot("GET CSV")
         apiDataset.requestParams.contentType = undefined
     })
     
     put_dataset.first()
+    let put_body_formdata = put_modelset.writeString(OINOContentType.formdata)
+    const multipart_boundary = put_body_formdata.substring(0, put_body_formdata.indexOf('\r'))
+    put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
+    OINOLog.info("HTTP PUT FORMDATA", {put_body_formdata:put_body_formdata})
+    test(target_db + target_table + target_group + " update FORMDATA", async () => {
+        apiDataset.requestParams.contentType = OINOContentType.csv
+        expect((await api.doRequest("PUT", new_row_id, put_body_formdata, apiDataset.requestParams))).toMatchSnapshot("PUT FORMDATA")
+        expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString(OINOContentType.formdata)).toMatchSnapshot("GET FORMDATA")
+        apiDataset.requestParams.contentType = undefined
+    })
+    
+    put_dataset.first()
+    const put_body_urlencode = put_modelset.writeString(OINOContentType.urlencode)
+    OINOLog.info("HTTP PUT URLENCODE", {put_body_urlencode:put_body_urlencode})
+    test(target_db + target_table + target_group + " update URLENCODE", async () => {
+        apiDataset.requestParams.contentType = OINOContentType.urlencode
+        expect((await api.doRequest("PUT", new_row_id, put_body_urlencode, apiDataset.requestParams))).toMatchSnapshot("PUT URLENCODE")
+        expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString(OINOContentType.urlencode)).toMatchSnapshot("GET URLENCODE")
+        apiDataset.requestParams.contentType = undefined
+    })
+    
+    put_dataset.first()
     const put_body_json = put_modelset.writeString(OINOContentType.json)
-    OINOLog.info("HTTP PUT json", {put_body_json:put_body_json})
-    test(target_db + target_table + target_group + " update", async () => {
-        expect((await api.doRequest("PUT", new_row_id, put_body_json, {}))).toMatchSnapshot("PUT")
+    OINOLog.info("HTTP PUT JSON", {put_body_json:put_body_json})
+    test(target_db + target_table + target_group + " update JSON", async () => {
+        expect((await api.doRequest("PUT", new_row_id, put_body_json, {}))).toMatchSnapshot("PUT JSON")
         expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString()).toMatchSnapshot("GET JSON")
     })
 
@@ -185,8 +208,10 @@ const crosscheck_tests:string[] = [
     "[HTTP GET] select *: GET JSON 1",
     "[HTTP POST] insert: GET JSON 1",
     "[HTTP POST] insert: GET CSV 1",
-    "[HTTP PUT] update CSV: GET JSON 1",
+    "[HTTP PUT] update JSON: GET JSON 1",
     "[HTTP PUT] update CSV: GET CSV 1",
+    "[HTTP PUT] update FORMDATA: GET FORMDATA 1",
+    "[HTTP PUT] update URLENCODE: GET URLENCODE 1",
     "[HTTP PUT] update: GET JSON 1"
 ]
 
