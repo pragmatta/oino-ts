@@ -270,7 +270,7 @@ export class OINOApi {
             await this._doGet(result, id, params)
     
         } else if (method == "PUT") {
-            const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params.contentType)
+            const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params)
             if (!id) {
                 result.setError(400, "HTTP PUT method requires an URL ID for the row that is updated!")
 
@@ -287,7 +287,7 @@ export class OINOApi {
                 }             
             }
         } else if (method == "POST") {
-            const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params.contentType)
+            const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params)
             if (id) {
                 result.setError(400, "HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!")
 

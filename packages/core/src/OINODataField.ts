@@ -255,7 +255,7 @@ export class OINONumberDataField extends OINODataField {
      *
      */
     parseCell(strVal: string): OINODataCell {
-        return strVal // NOTE! it should be parsed as number but it would just get printed back to sql-string
+        return Number.parseFloat(strVal) // NOTE! important to parse non-string types without special formatting so that they can't be used to inject string data to SQL
     }
 }
 

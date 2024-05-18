@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINO_ID_FIELD } from "./index.js";
+import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINO_ID_FIELD, OINOLog, OINOBlobDataField } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -55,6 +55,20 @@ export class OINOModelSet {
         return "{" + json_row + "}"
     }
 
+    private _writeStringJson():string {
+        let result:string = ""
+        while (!this.dataset.isEof()) {
+            if (result != "") {
+                result += ",\r\n"
+            }
+            result += this._writeRowJson(this.dataset.getRow())
+            this.dataset.next()
+        }
+        result = "[\r\n" + result + "\r\n]"
+        // OINOLog_debug("OINOModelSet._writeStringJson="+result)
+        return result
+    }
+
     private _writeHeaderCsv():string {
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
@@ -86,20 +100,6 @@ export class OINOModelSet {
         return csv_row
     }
 
-    private _writeStringJson():string {
-        let result:string = ""
-        while (!this.dataset.isEof()) {
-            if (result != "") {
-                result += ",\r\n"
-            }
-            result += this._writeRowJson(this.dataset.getRow())
-            this.dataset.next()
-        }
-        result = "[\r\n" + result + "\r\n]"
-        // OINOLog_debug("OINOModelSet._writeStringJson="+result)
-        return result
-    }
-
     private _writeStringCsv():string {
         let result:string = this._writeHeaderCsv()
         while (!this.dataset.isEof()) {
@@ -113,6 +113,93 @@ export class OINOModelSet {
         return result
     }
 
+    private _writeRowFormdataParameterBlock(blockName:string, blockValue:string, multipartBoundary:string):string {
+        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"\r\n\r\n" + blockValue + "\r\n"
+    }
+
+    private _writeRowFormdataFileBlock(blockName:string, blockValue:string, multipartBoundary:string):string {
+        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"; filename=" + blockName + "\"\r\nContent-Type: application/octet-stream\r\nContent-Transfer-Encoding: BASE64\r\n\r\n" + blockValue + "\r\n"
+    }
+
+    private _writeRowFormdata(row:OINODataRow):string {
+        const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // just for test data generation and we want it to be static
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
+        let oino_id:string = ""
+        let result:string = ""
+        for (let i=0; i<fields.length; i++) {
+            
+            if (fields[i].fieldParams.isPrimaryKey) {
+                if (oino_id != "") {
+                    oino_id += ":"
+                } 
+                oino_id += encodeURI(row[i] as string)
+            }
+
+            let formdata_block:string
+            if (fields[i] instanceof OINOBlobDataField) {
+                formdata_block = this._writeRowFormdataFileBlock(fields[i].name, fields[i].printCellAsCsv(row[i]), multipart_boundary)
+
+            } else {
+                formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, fields[i].printCellAsCsv(row[i]), multipart_boundary)
+            }
+
+            
+            OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
+            result += formdata_block
+        }
+        result = this._writeRowFormdataParameterBlock(OINO_ID_FIELD, oino_id, multipart_boundary) + result
+        return result
+    }
+
+    private _writeStringFormdata():string {
+        let result:string = this._writeRowFormdata(this.dataset.getRow())
+        this.dataset.next()
+        if (!this.dataset.isEof()) {
+            OINOLog.warning("OINOModelSet._writeStringUrlencode: content type " + OINOContentType.formdata + " does not mixed part content and only first row has been written!")
+        }
+        return result
+    }
+
+
+    private _writeRowUrlencode(row:OINODataRow):string {
+        // OINOLog_debug("OINOModelSet._writeRowCsv", {row:row})
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
+        let oino_id:string = ""
+        let urlencode_row:string = ""
+        for (let i=0; i<fields.length; i++) {
+            if (fields[i].fieldParams.isPrimaryKey) {
+                if (oino_id != "") {
+                    oino_id += ":"
+                } 
+                oino_id += encodeURI(row[i] as string)
+            }
+            if (urlencode_row != "") {
+                urlencode_row += "&"
+            } 
+            urlencode_row += encodeURIComponent(fields[i].name) + "=" + encodeURIComponent(fields[i].printCellAsCsv(row[i]))
+        }
+        urlencode_row = encodeURIComponent(OINO_ID_FIELD) + "=" + encodeURIComponent(oino_id) + "&" + urlencode_row
+        // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
+        return urlencode_row
+    }
+
+    private _writeStringUrlencode():string {
+        let result:string = ""
+        let line_count = 0
+        while (!this.dataset.isEof()) {
+            result += this._writeRowUrlencode(this.dataset.getRow()) + "\r\n"
+            this.dataset.next()
+            line_count += 1
+        }
+        // OINOLog_debug("OINOModelSet._writeStringCsv="+result)
+        if (line_count > 1) {
+            OINOLog.warning("OINOModelSet._writeStringUrlencode: content type " + OINOContentType.urlencode + " does not officially support multiline content!")
+        }
+        return result
+    }
+
     /**
      * Serialize model set in the given format.
      *
@@ -121,8 +208,18 @@ export class OINOModelSet {
         let result:string = ""
         if (contentType == OINOContentType.csv) {
             result += this._writeStringCsv()
-        } else {
+
+        } else if (contentType == OINOContentType.json) {
             result += this._writeStringJson()
+            
+        } else if (contentType == OINOContentType.formdata) {
+            result += this._writeStringFormdata()
+            
+        } else if (contentType == OINOContentType.urlencode) {
+            result += this._writeStringUrlencode()
+            
+        } else {
+            OINOLog.error("OINOModelSet.writeString: content type is only for input!", {contentType:contentType})
         }
         return result
     }

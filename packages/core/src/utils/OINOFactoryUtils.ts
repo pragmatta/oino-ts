@@ -13,6 +13,76 @@ import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, O
 export class OINOFactory {
     private static _dbRegistry:Record<string, OINODbConstructor> = {}
 
+    /**
+     * Register a supported database class. Used to enable those that are installed in the factory 
+     * instead of forcing everyone to install all database libraries.
+     *
+     */
+    static registerDb(dbName:string, dbTypeClass: OINODbConstructor):void {
+        // OINOLog.debug("OINOFactory.registerDb", {dbType:dbName})
+        this._dbRegistry[dbName] = dbTypeClass
+
+    }
+
+    /**
+     * Create database from parameters from the registered classes.
+     * 
+     * @param params database connection parameters
+     */
+    static async createDb(params:OINODbParams):Promise<OINODb> {
+        let result:OINODb
+        let db_type = this._dbRegistry[params.type]
+        if (db_type) {
+            result = new db_type(params)
+        } else {
+            throw new Error("Unsupported database type: " + params.type)
+        }
+        await result.connect()
+        return result
+    }
+
+    /**
+     * Create API from parameters and calls initDatamodel on the datamodel.
+     * 
+     * @param db databased used in API
+     * @param params parameters of the API
+     */
+    static async createApi(db: OINODb, params: OINOApiParams):Promise<OINOApi> {
+        let result:OINOApi = new OINOApi(db, params)
+        await db.initializeApiDatamodel(result)
+        return result
+    }
+
+    /**
+     * Creates a key-value-collection from Javascript URL parameters.
+     *
+     * @param request HTTP Request 
+     */
+    static createParamsFromRequest(request:Request):OINORequestParams {
+        let result:OINORequestParams = {}
+        const url:URL = new URL(request.url)
+        const content_type = request.headers.get("content-type")
+        if (content_type == OINOContentType.csv) {
+            result.contentType = OINOContentType.csv
+
+        } else if (content_type == OINOContentType.urlencode) {
+            result.contentType = OINOContentType.urlencode
+
+        } else if (content_type?.startsWith(OINOContentType.formdata)) {
+            result.contentType = OINOContentType.formdata
+            result.multipartBoundary = content_type.split('boundary=')[1] || ""
+
+        } else {
+            result.contentType = OINOContentType.json
+        }
+        const filter = url.searchParams.get("filter")
+        if (filter) {
+            result.filter = new OINOFilter(filter)
+        }
+        OINOLog.debug("createParamsFromRequest", {params:result})
+        return result
+    }
+
     private static _findCsvLineEnd(csvData:string, start:number):number {
         const n:number = csvData.length
         if (start >= n) {
@@ -85,67 +155,6 @@ export class OINOFactory {
         }
         return result
     }
-
-    /**
-     * Register a supported database class. Used to enable those that are installed in the factory 
-     * instead of forcing everyone to install all database libraries.
-     *
-     */
-    static registerDb(dbName:string, dbTypeClass: OINODbConstructor):void {
-        // OINOLog.debug("OINOFactory.registerDb", {dbType:dbName})
-        this._dbRegistry[dbName] = dbTypeClass
-
-    }
-
-    /**
-     * Create database from parameters from the registered classes.
-     * 
-     * @param params database connection parameters
-     */
-    static async createDb(params:OINODbParams):Promise<OINODb> {
-        let result:OINODb
-        let db_type = this._dbRegistry[params.type]
-        if (db_type) {
-            result = new db_type(params)
-        } else {
-            throw new Error("Unsupported database type: " + params.type)
-        }
-        await result.connect()
-        return result
-    }
-
-    /**
-     * Create API from parameters and calls initDatamodel on the datamodel.
-     * 
-     * @param db databased used in API
-     * @param params parameters of the API
-     */
-    static async createApi(db: OINODb, params: OINOApiParams):Promise<OINOApi> {
-        let result:OINOApi = new OINOApi(db, params)
-        await db.initializeApiDatamodel(result)
-        return result
-    }
-
-    /**
-     * Creates a key-value-collection from Javascript URL parameters.
-     *
-     * @param url 
-     */
-    static createRequestParamsFromUrl(url:URL):OINORequestParams {
-        let result:OINORequestParams = {}
-        const content_type = url.searchParams.get("contentType")
-        if (content_type == OINOContentType.csv) {
-            result.contentType = OINOContentType.csv
-        } else {
-            result.contentType = OINOContentType.json
-        }
-        const filter = url.searchParams.get("filter")
-        if (filter) {
-            result.filter = new OINOFilter(filter)
-        }
-        return result
-    }
-
 
     private static createRowFromCsv(datamodel:OINODataModel, data:string):OINODataRow[] {
         let result:OINODataRow[] = []
@@ -239,7 +248,109 @@ export class OINOFactory {
         }
     }
 
-    /**
+    private static _findMultipartBoundary(csvData:string, multipartBoundary:string, start:number):number {
+        let n:number = csvData.indexOf(multipartBoundary, start)
+        if (n >= 0) {
+            n += multipartBoundary.length + 2
+        } else {
+            n = csvData.length
+        }
+        return n
+    }
+
+    private static _parseMultipartLine(csvData:string, start:number):string {
+        let line_end:number = csvData.indexOf('\r\n', start)
+        if (line_end >= start) {
+            return csvData.substring(start, line_end)
+        } else {
+            return ''
+        }
+    }
+
+    static _multipartHeaderRegex:RegExp = /Content-Disposition\: (form-data|file); name=\"([^\"]+)\"(; filename=.*)?/i
+
+    private static createRowFromFormdata(datamodel:OINODataModel, data:string, multipartBoundary:string):OINODataRow[] {
+        let result:OINODataRow[] = []
+        const n = data.length
+        let start:number = this._findMultipartBoundary(data, multipartBoundary, 0)
+        let end:number = this._findMultipartBoundary(data, multipartBoundary, start)
+        const row:OINODataRow = new Array(datamodel.fields.length)
+        while (end < n) {
+            OINOLog.debug("createRowFromFormdata: next block", {start:start, end:end, block:data.substring(start, end)})
+            let block_ok:boolean = true
+            let l:string = this._parseMultipartLine(data, start)
+            OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+            start += l.length+2
+            const header_matches = OINOFactory._multipartHeaderRegex.exec(l)
+            if (!header_matches) {
+                OINOLog.warning("OINOFactory.createRowFromFormdata: invalid multipart-block skipped!", {header_line:l})
+                block_ok = false
+
+            } else {
+                const field_name = header_matches[2]
+                const is_file = header_matches[3] != null
+                const field_index:number = datamodel.findFieldIndexByName(field_name)
+                OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
+                if (field_index < 0) {
+                    OINOLog.warning("OINOFactory.createRowFromFormdata: form field not found and skipped!", {field_name:field_name})
+                    block_ok = false
+    
+                } else {
+                    const field:OINODataField = datamodel.fields[field_index]
+                    l = this._parseMultipartLine(data, start)
+                    OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+                    while (l != '') {
+                        if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed')>=0)) {
+                            OINOLog.warning("OINOFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", {header_line:l})
+                        }
+                        start += l.length+2
+                        l = this._parseMultipartLine(data, start)
+                        OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+                    }
+                    start += 2
+                    if (is_file) {
+                        
+                    } else {
+                        const value = this._parseMultipartLine(data, start).trim()
+                        OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
+                        row[field_index] = field.parseCell(value)
+                    }
+                }
+            }
+            start = end
+            end = this._findMultipartBoundary(data, multipartBoundary, start)
+        }
+        OINOLog.debug("createRowFromFormdata: next row", {row:row})
+        result.push(row)
+
+        return result
+    }
+    private static createRowFromUrlencoded(datamodel:OINODataModel, data:string):OINODataRow[] {
+        OINOLog.debug("createRowFromUrlencoded: enter", {data:data})
+        let result:OINODataRow[] = []
+        const row:OINODataRow = new Array(datamodel.fields.length)
+        const data_parts:string[] = data.split('&')
+        for (let i=0; i<data_parts.length; i++) {
+            const param_parts = data_parts[i].split('=')
+            if (param_parts.length == 2) {
+                const key=decodeURIComponent(param_parts[0])
+                const value=decodeURIComponent(param_parts[1])
+                const field_index:number = datamodel.findFieldIndexByName(key)
+                if (field_index >= 0) {
+                    const field:OINODataField = datamodel.fields[field_index]
+                    row[field_index] = field.parseCell(value)
+                }
+            }
+
+            // const value = requestParams[]
+
+        }
+        OINOLog.debug("createRowFromUrlencoded: next row", {row:row})
+        result.push(row)
+        return result
+    }
+
+   /**
      * Create data rows from CSV-data based on datamodel. CSV data must have 
      * - UTF8 formatted
      * - headers as they are matched to datamodel columns
@@ -250,9 +361,16 @@ export class OINOFactory {
      * @param contenttype mime-type of the data (application/json or text/csv)
      * 
      */
-    static createRows(datamodel:OINODataModel, data:string, contenttype:string = OINOContentType.json ):OINODataRow[] {
-        if (contenttype == OINOContentType.csv) {
+    static createRows(datamodel:OINODataModel, data:string, requestParams:OINORequestParams ):OINODataRow[] {
+        if (requestParams.contentType == OINOContentType.csv) {
             return this.createRowFromCsv(datamodel, data)
+
+        } else if (requestParams.contentType == OINOContentType.formdata) {
+            return this.createRowFromFormdata(datamodel, data, requestParams.multipartBoundary || "")
+
+        } else if (requestParams.contentType == OINOContentType.urlencode) {
+            return this.createRowFromUrlencoded(datamodel, data)
+
         } else {
             return this._createRowFromJson(datamodel, data)
         }
