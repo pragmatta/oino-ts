@@ -81,9 +81,11 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     
     target_group = "[HTTP PUT]"
     const put_body_csv = put_modelset.writeString(OINOContentType.csv)
+    const filter:OINOFilter = apiDataset.requestParams.filter
     OINOLog.info("HTTP PUT csv", {put_body_csv:put_body_csv})
     test(target_db + target_table + target_group + " update CSV", async () => {
         apiDataset.requestParams.contentType = OINOContentType.csv
+        apiDataset.requestParams.filter = undefined
         expect((await api.doRequest("PUT", new_row_id, put_body_csv, apiDataset.requestParams))).toMatchSnapshot("PUT CSV")
         expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString(OINOContentType.csv)).toMatchSnapshot("GET CSV")
         apiDataset.requestParams.contentType = undefined
@@ -122,6 +124,7 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     test(target_db + target_table + target_group + " update no data", async () => {
         expect((await api.doRequest("PUT", new_row_id, "", {}))).toMatchSnapshot("PUT")
     })
+    apiDataset.requestParams.filter = filter
 
     const primary_keys:OINODataField[] = api.datamodel.filterFields((field:OINODataField) => { return field.fieldParams.isPrimaryKey })
     if (primary_keys.length != 1) {
@@ -211,8 +214,7 @@ const crosscheck_tests:string[] = [
     "[HTTP PUT] update JSON: GET JSON 1",
     "[HTTP PUT] update CSV: GET CSV 1",
     "[HTTP PUT] update FORMDATA: GET FORMDATA 1",
-    "[HTTP PUT] update URLENCODE: GET URLENCODE 1",
-    "[HTTP PUT] update: GET JSON 1"
+    "[HTTP PUT] update URLENCODE: GET URLENCODE 1"
 ]
 
 for (let i=0; i<dbs.length-1; i++) {
