@@ -280,7 +280,7 @@ CREATE TABLE [Employees]
 		ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 --
-INSERT INTO Employees VALUES(null,'Davolio','Nancy','Sales Representative','Ms.','1948-12-08T00:00:00.000Z','1992-05-01T00:00:00.000Z','507 - 20th Ave. E.\nApt. 2A','Seattle','WA','98122','USA','(206) 555-9857','5467',X'4F494E4F426C6F6231','Education includes a BA in psychology from Colorado State University in 1970.  She also completed "The Art of the Cold Call."  Nancy is a member of Toastmasters International.',2
+INSERT INTO Employees VALUES(null,'Davolio','Nancy','Sales Representative','Ms.','1948-12-08T00:00:00.000Z','1992-05-01T00:00:00.000Z','507 - 20th Ave. E. Apt. 2A','Seattle','WA','98122','USA','(206) 555-9857','5467',X'4F494E4F426C6F6231','Education includes a BA in psychology from Colorado State University in 1970.  She also completed "The Art of the Cold Call."  Nancy is a member of Toastmasters International.',2
 ,'http://accweb/emmployees/davolio.bmp');
 INSERT INTO Employees VALUES(null,'Fuller','Andrew','Vice President, Sales','Dr.','1952-02-19T00:00:00.000Z','1992-08-14T00:00:00.000Z','908 W. Capital Way','Tacoma','WA','98401','USA','(206) 555-9482','3457',X'4F494E4F426C6F6232','Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.',NULL
 ,'http://accweb/emmployees/fuller.bmp');
