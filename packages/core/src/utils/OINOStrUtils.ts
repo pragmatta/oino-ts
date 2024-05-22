@@ -1,3 +1,8 @@
+import { OINOContentType } from ".."
+
+/** Callback to filter data fields */
+export type OINOStrEncoder = (str:string) => string
+
 /**
  * Static class string utilities.
  *
@@ -80,4 +85,139 @@ export class OINOStr {
         return result
     }
 
+    /**
+     * Encode OINO serialized strings as valid JSON.
+     * 
+     * @param str string to encode
+     */
+    static encodeJSON(str:string|null|undefined, valueType:boolean = false):string {
+        if (str === undefined) { // no undefined literal in JSON
+            return "null"
+        } else if (str === null) {
+            return "null"
+        } else {
+            if (valueType) {
+                return str
+            } else {
+                return JSON.stringify(str)
+            }       
+        } 
+    }
+
+    /**
+     * Decode JSON string as OINO serialization.
+     * 
+     * @param str string to decode
+     */
+    static decodeJSON(str:string):string|null|undefined {
+        return str // JSON parsing using JS methods, no need to decode anything
+    }
+
+    /**
+     * Encode OINO serialized strings as valid CSV.
+     * 
+     * @param str string to encode
+     */
+    static encodeCSV(str:string|null|undefined):string {
+        if (str === undefined) { 
+            return ""
+        } else if (str === null) {
+            return "null"
+        } else {
+            return "\"" + str.replaceAll("\"", "\"\"") + "\"";
+        }
+    }
+
+    /**
+     * Decode CSV string as OINO serialization.
+     * 
+     * @param str string to decode
+     */
+    static decodeCSV(str:string):string|null|undefined {
+        return str.replaceAll("\"\"", "\"")
+    }
+    
+    /**
+     * Encode OINO serialized strings as valid Formdata.
+     * 
+     * @param str string to encode
+     */
+    static encodeFormdata(str:string|null|undefined):string {
+        if (str === undefined) { 
+            return ""
+        } else if (str === null) {
+            return "null"
+        } else {
+            return str + "\r\n"
+        }
+    }
+
+    /**
+     * Decode Formdata string as OINO serialization.
+     * 
+     * @param str string to decode
+     */
+    static decodeFormdata(str:string):string|null|undefined {
+        return str
+    }
+    /**
+     * Encode OINO serialized strings as valid Urlencode.
+     * 
+     * @param str string to encode
+     */
+    static encodeUrlencode(str:string|null|undefined):string {
+        if (str === undefined) { 
+            return ""
+        } else if (str === null) {
+            return "null"
+        } else {
+            return encodeURIComponent(str)
+        }
+    }
+
+    /**
+     * Decode Urlencode string as OINO serialization.
+     * 
+     * @param str string to decode
+     */
+    static decodeUrlencode(str:string):string|null|undefined {
+        return decodeURIComponent(str)
+    }
+
+    /**
+     * Decode content type formatted string as OINO serialization.
+     * 
+     * @param str string to decode
+     */
+    static decode(str:string, contentType:OINOContentType):string|null|undefined {
+        if (contentType == OINOContentType.csv) {
+            return this.decodeCSV(str)
+        } else if (contentType == OINOContentType.json) {
+            return this.decodeJSON(str)
+        } else if (contentType == OINOContentType.formdata) {
+            return this.decodeFormdata(str)
+        } else if (contentType == OINOContentType.urlencode) {
+            return this.decodeUrlencode(str)
+        } else {
+            return str
+        }
+    }
+    /**
+     * Encode OINO serialized string to the content type formatting.
+     * 
+     * @param str string to encode
+     */
+    static encode(str:string|null|undefined, contentType:OINOContentType):string {
+        if (contentType == OINOContentType.csv) {
+            return this.encodeCSV(str)
+        } else if (contentType == OINOContentType.json) {
+            return this.encodeJSON(str)
+        } else if (contentType == OINOContentType.formdata) {
+            return this.encodeFormdata(str)
+        } else if (contentType == OINOContentType.urlencode) {
+            return this.encodeUrlencode(str)
+        } else {
+            return str || ""
+        }
+    }
 }

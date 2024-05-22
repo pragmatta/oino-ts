@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -143,7 +143,7 @@ export class OINOFactory {
                     field_str = csvLine.substring(start,end)
                 }
                 if (has_escaped_quotes) {
-                    field_str = field_str.replace("\"\"", "\"")
+                    // field_str = OINOStr.decodeCSV(field_str)
                 }
                 result.push(field_str)
                 has_quotes = false
@@ -188,7 +188,7 @@ export class OINOFactory {
             for (let i=0; i<datamodel.fields.length; i++) {
                 let j:number = field_to_header_mapping[i]
                 if ((j >= 0) && (j < row_data.length)) {
-                    row[i] = datamodel.fields[i].parseCell(row_data[j])
+                    row[i] = datamodel.fields[i].deserializeCell(row_data[j], OINOContentType.csv)
                 } else {
                     row[i] = null
                 }
@@ -206,7 +206,7 @@ export class OINOFactory {
         // console.log("createRowFromJsonObj: obj=" + JSON.stringify(obj))
         const fields:OINODataField[] = datamodel.fields
         let result:OINODataRow = new Array(fields.length)
-        // console.log("createRowFromJsonObj: " + result)
+        //  console.log("createRowFromJsonObj: " + result)
         for (let i=0; i < fields.length; i++) {
             const val = obj[fields[i].name]
             // console.log("createRowFromJsonObj: key=" + fields[i].name + ", val=" + val)
@@ -219,7 +219,7 @@ export class OINOFactory {
                     result[i] = JSON.stringify(val).replaceAll("\"","\\\"")
 
                 } else {
-                    result[i] = datamodel.fields[i].parseCell(val)
+                    result[i] = datamodel.fields[i].deserializeCell(val, OINOContentType.json)
                 }
             }
             // console.log("createRowFromJsonObj: result["+i+"]=" + result[i])
@@ -313,7 +313,7 @@ export class OINOFactory {
                     } else {
                         const value = this._parseMultipartLine(data, start).trim()
                         OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
-                        row[field_index] = field.parseCell(value)
+                        row[field_index] = field.deserializeCell(value, OINOContentType.formdata)
                     }
                 }
             }
@@ -326,19 +326,19 @@ export class OINOFactory {
         return result
     }
     private static createRowFromUrlencoded(datamodel:OINODataModel, data:string):OINODataRow[] {
-        OINOLog.debug("createRowFromUrlencoded: enter", {data:data})
+        // OINOLog.debug("createRowFromUrlencoded: enter", {data:data})
         let result:OINODataRow[] = []
         const row:OINODataRow = new Array(datamodel.fields.length)
-        const data_parts:string[] = data.split('&')
+        const data_parts:string[] = data.trim().split('&')
         for (let i=0; i<data_parts.length; i++) {
             const param_parts = data_parts[i].split('=')
             if (param_parts.length == 2) {
-                const key=decodeURIComponent(param_parts[0])
-                const value=decodeURIComponent(param_parts[1])
+                const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
+                const value=param_parts[1]
                 const field_index:number = datamodel.findFieldIndexByName(key)
                 if (field_index >= 0) {
                     const field:OINODataField = datamodel.fields[field_index]
-                    row[field_index] = field.parseCell(value)
+                    row[field_index] = field.deserializeCell(value, OINOContentType.urlencode)
                 }
             }
 

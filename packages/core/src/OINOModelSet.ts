@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINO_ID_FIELD, OINOLog, OINOBlobDataField } from "./index.js";
+import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINO_ID_FIELD, OINOLog, OINOBlobDataField, OINOStr } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -37,6 +37,7 @@ export class OINOModelSet {
     }
 
     private _writeRowJson(row:OINODataRow):string {
+        // console.log("OINOModelSet._writeRowJson: row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
         let oino_id:string = ""
@@ -48,9 +49,9 @@ export class OINOModelSet {
                 } 
                 oino_id += encodeURI(row[i] as string)
             }
-            json_row += ",\"" + fields[i].name + "\":" + fields[i].printCellAsJson(row[i])
+            json_row += "," + OINOStr.encode(fields[i].name, OINOContentType.json) + ":" + fields[i].serializeCell(row[i], OINOContentType.json)
         }
-        json_row = "\"" + OINO_ID_FIELD + "\":\"" + oino_id + "\"" + json_row
+        json_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(oino_id, OINOContentType.json) + json_row
         // OINOLog_debug("OINOModelSet._writeRowJson="+json_row)
         return "{" + json_row + "}"
     }
@@ -93,7 +94,7 @@ export class OINOModelSet {
                 } 
                 oino_id += encodeURI(row[i] as string)
             }
-            csv_row += "," + fields[i].printCellAsCsv(row[i])
+            csv_row += "," + fields[i].serializeCell(row[i], OINOContentType.csv)
         }
         csv_row = "\"" + oino_id + "\"" + csv_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
@@ -114,11 +115,11 @@ export class OINOModelSet {
     }
 
     private _writeRowFormdataParameterBlock(blockName:string, blockValue:string, multipartBoundary:string):string {
-        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"\r\n\r\n" + blockValue + "\r\n"
+        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"\r\n\r\n" + blockValue
     }
 
     private _writeRowFormdataFileBlock(blockName:string, blockValue:string, multipartBoundary:string):string {
-        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"; filename=" + blockName + "\"\r\nContent-Type: application/octet-stream\r\nContent-Transfer-Encoding: BASE64\r\n\r\n" + blockValue + "\r\n"
+        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"; filename=" + blockName + "\"\r\nContent-Type: application/octet-stream\r\nContent-Transfer-Encoding: BASE64\r\n\r\n" + blockValue
     }
 
     private _writeRowFormdata(row:OINODataRow):string {
@@ -138,14 +139,14 @@ export class OINOModelSet {
 
             let formdata_block:string
             if (fields[i] instanceof OINOBlobDataField) {
-                formdata_block = this._writeRowFormdataFileBlock(fields[i].name, fields[i].printCellAsCsv(row[i]), multipart_boundary)
+                formdata_block = this._writeRowFormdataFileBlock(fields[i].name, fields[i].serializeCell(row[i], OINOContentType.formdata), multipart_boundary)
 
             } else {
-                formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, fields[i].printCellAsCsv(row[i]), multipart_boundary)
+                formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, fields[i].serializeCell(row[i], OINOContentType.formdata), multipart_boundary)
             }
 
             
-            OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
+            // OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
             result += formdata_block
         }
         result = this._writeRowFormdataParameterBlock(OINO_ID_FIELD, oino_id, multipart_boundary) + result
@@ -178,9 +179,9 @@ export class OINOModelSet {
             if (urlencode_row != "") {
                 urlencode_row += "&"
             } 
-            urlencode_row += encodeURIComponent(fields[i].name) + "=" + encodeURIComponent(fields[i].printCellAsCsv(row[i]))
+            urlencode_row += OINOStr.encode(fields[i].name, OINOContentType.urlencode) + "=" + fields[i].serializeCell(row[i], OINOContentType.urlencode)
         }
-        urlencode_row = encodeURIComponent(OINO_ID_FIELD) + "=" + encodeURIComponent(oino_id) + "&" + urlencode_row
+        urlencode_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(oino_id, OINOContentType.urlencode) + "&" + urlencode_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
         return urlencode_row
     }
