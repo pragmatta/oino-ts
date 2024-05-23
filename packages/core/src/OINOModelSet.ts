@@ -43,13 +43,18 @@ export class OINOModelSet {
         let oino_id:string = ""
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
-            if (fields[i].fieldParams.isPrimaryKey) {
-                if (oino_id != "") {
-                    oino_id += ":"
-                } 
-                oino_id += encodeURI(row[i] as string)
+            if (row[i] === undefined) {
+                OINOLog.info("OINOModelSet._writeRowJson: undefined value skipped", {field_name:fields[i].name})
+
+            } else {
+                if (fields[i].fieldParams.isPrimaryKey) {
+                    if (oino_id != "") {
+                        oino_id += ":"
+                    } 
+                    oino_id += encodeURI(row[i] as string)
+                }
+                json_row += "," + OINOStr.encode(fields[i].name, OINOContentType.json) + ":" + fields[i].serializeCell(row[i], OINOContentType.json)
             }
-            json_row += "," + OINOStr.encode(fields[i].name, OINOContentType.json) + ":" + fields[i].serializeCell(row[i], OINOContentType.json)
         }
         json_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(oino_id, OINOContentType.json) + json_row
         // OINOLog_debug("OINOModelSet._writeRowJson="+json_row)
@@ -114,12 +119,16 @@ export class OINOModelSet {
         return result
     }
 
-    private _writeRowFormdataParameterBlock(blockName:string, blockValue:string, multipartBoundary:string):string {
-        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"\r\n\r\n" + blockValue
+    private _writeRowFormdataParameterBlock(blockName:string, blockValue:string|null, multipartBoundary:string):string {
+        if (blockValue === null) {
+            return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"\r\n\r\n"
+        } else {
+            return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"\r\n\r\n" + blockValue + "\r\n"
+        }
     }
 
     private _writeRowFormdataFileBlock(blockName:string, blockValue:string, multipartBoundary:string):string {
-        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"; filename=" + blockName + "\"\r\nContent-Type: application/octet-stream\r\nContent-Transfer-Encoding: BASE64\r\n\r\n" + blockValue
+        return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"; filename=" + blockName + "\"\r\nContent-Type: application/octet-stream\r\nContent-Transfer-Encoding: BASE64\r\n\r\n" + blockValue + "\r\n"
     }
 
     private _writeRowFormdata(row:OINODataRow):string {
@@ -137,8 +146,15 @@ export class OINOModelSet {
                 oino_id += encodeURI(row[i] as string)
             }
 
-            let formdata_block:string
-            if (fields[i] instanceof OINOBlobDataField) {
+            let formdata_block:string = ""
+            if (row[i] === undefined) {
+                OINOLog.info("OINOModelSet._writeRowFormdata: undefined value skipped.", {field:fields[i].name})
+
+            } else if (row[i] === null) {
+                OINOLog.info("OINOModelSet._writeRowFormdata: null value.", {field:fields[i].name})
+                formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary)
+
+            } else if (fields[i] instanceof OINOBlobDataField) {
                 formdata_block = this._writeRowFormdataFileBlock(fields[i].name, fields[i].serializeCell(row[i], OINOContentType.formdata), multipart_boundary)
 
             } else {
@@ -164,22 +180,26 @@ export class OINOModelSet {
 
 
     private _writeRowUrlencode(row:OINODataRow):string {
-        // OINOLog_debug("OINOModelSet._writeRowCsv", {row:row})
+        // console.log("OINOModelSet._writeRowCsv row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
         let oino_id:string = ""
         let urlencode_row:string = ""
         for (let i=0; i<fields.length; i++) {
-            if (fields[i].fieldParams.isPrimaryKey) {
-                if (oino_id != "") {
-                    oino_id += ":"
+            if (row[i] === undefined) {
+                // console.log("OINOModelSet._writeRowCsv undefined field value:" + fields[i].name)
+            } else {
+                if (fields[i].fieldParams.isPrimaryKey) {
+                    if (oino_id != "") {
+                        oino_id += ":"
+                    } 
+                    oino_id += encodeURI(row[i] as string)
+                }
+                if (urlencode_row != "") {
+                    urlencode_row += "&"
                 } 
-                oino_id += encodeURI(row[i] as string)
+                urlencode_row += OINOStr.encode(fields[i].name, OINOContentType.urlencode) + "=" + fields[i].serializeCell(row[i], OINOContentType.urlencode)
             }
-            if (urlencode_row != "") {
-                urlencode_row += "&"
-            } 
-            urlencode_row += OINOStr.encode(fields[i].name, OINOContentType.urlencode) + "=" + fields[i].serializeCell(row[i], OINOContentType.urlencode)
         }
         urlencode_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(oino_id, OINOContentType.urlencode) + "&" + urlencode_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)

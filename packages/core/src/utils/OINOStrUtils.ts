@@ -146,9 +146,9 @@ export class OINOStr {
         if (str === undefined) { 
             return ""
         } else if (str === null) {
-            return "null"
+            return ""
         } else {
-            return str + "\r\n"
+            return str
         }
     }
 

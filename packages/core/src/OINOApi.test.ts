@@ -80,12 +80,22 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     })   
     
     target_group = "[HTTP PUT]"
+    const put_body_json = put_modelset.writeString(OINOContentType.json)
+    OINOLog.info("HTTP PUT JSON", {put_body_json:put_body_json})
+    test(target_db + target_table + target_group + " update JSON", async () => {
+        expect((await api.doRequest("PUT", new_row_id, post_body_json, {}))).toMatchSnapshot("PUT JSON reset")
+        expect((await api.doRequest("PUT", new_row_id, put_body_json, {}))).toMatchSnapshot("PUT JSON")
+        expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString()).toMatchSnapshot("GET JSON")
+    })
+
+    put_dataset.first()
     const put_body_csv = put_modelset.writeString(OINOContentType.csv)
-    const filter:OINOFilter = apiDataset.requestParams.filter
+    const filter:OINOFilter|undefined = apiDataset.requestParams.filter
     OINOLog.info("HTTP PUT csv", {put_body_csv:put_body_csv})
     test(target_db + target_table + target_group + " update CSV", async () => {
         apiDataset.requestParams.contentType = OINOContentType.csv
         apiDataset.requestParams.filter = undefined
+        expect((await api.doRequest("PUT", new_row_id, post_body_json, {}))).toMatchSnapshot("PUT CSV reset")
         expect((await api.doRequest("PUT", new_row_id, put_body_csv, apiDataset.requestParams))).toMatchSnapshot("PUT CSV")
         expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString(OINOContentType.csv)).toMatchSnapshot("GET CSV")
         apiDataset.requestParams.contentType = undefined
@@ -97,10 +107,13 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
     OINOLog.info("HTTP PUT FORMDATA", {put_body_formdata:put_body_formdata})
     test(target_db + target_table + target_group + " update FORMDATA", async () => {
-        apiDataset.requestParams.contentType = OINOContentType.csv
+        apiDataset.requestParams.contentType = OINOContentType.formdata
+        apiDataset.requestParams.multipartBoundary = multipart_boundary
+        expect((await api.doRequest("PUT", new_row_id, post_body_json, {}))).toMatchSnapshot("PUT FORMDATA reset")
         expect((await api.doRequest("PUT", new_row_id, put_body_formdata, apiDataset.requestParams))).toMatchSnapshot("PUT FORMDATA")
         expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString(OINOContentType.formdata)).toMatchSnapshot("GET FORMDATA")
         apiDataset.requestParams.contentType = undefined
+        apiDataset.requestParams.multipartBoundary = undefined
     })
     
     put_dataset.first()
@@ -108,19 +121,12 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     OINOLog.info("HTTP PUT URLENCODE", {put_body_urlencode:put_body_urlencode})
     test(target_db + target_table + target_group + " update URLENCODE", async () => {
         apiDataset.requestParams.contentType = OINOContentType.urlencode
+        expect((await api.doRequest("PUT", new_row_id, post_body_json, {}))).toMatchSnapshot("PUT URLENCODE reset")
         expect((await api.doRequest("PUT", new_row_id, put_body_urlencode, apiDataset.requestParams))).toMatchSnapshot("PUT URLENCODE")
         expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString(OINOContentType.urlencode)).toMatchSnapshot("GET URLENCODE")
         apiDataset.requestParams.contentType = undefined
     })
     
-    put_dataset.first()
-    const put_body_json = put_modelset.writeString(OINOContentType.json)
-    OINOLog.info("HTTP PUT JSON", {put_body_json:put_body_json})
-    test(target_db + target_table + target_group + " update JSON", async () => {
-        expect((await api.doRequest("PUT", new_row_id, put_body_json, {}))).toMatchSnapshot("PUT JSON")
-        expect((await api.doRequest("GET", new_row_id, "", {})).modelset?.writeString()).toMatchSnapshot("GET JSON")
-    })
-
     test(target_db + target_table + target_group + " update no data", async () => {
         expect((await api.doRequest("PUT", new_row_id, "", {}))).toMatchSnapshot("PUT")
     })
@@ -186,15 +192,15 @@ const apis:OINOTestApiParams[] = [
             filter: new OINOFilter("(UnitsInStock)-le(3)")
         },
         postRow: [99, "Umeshu", 1, 1, "500 ml", 12.99, 2, 0, 20, 0],
-        putRow: [99, "Umeshu", 1, 1, "1000 ml", 24.99, 3, 0, 20, 0]
+        putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
     },
     {
         apiParams: { tableName: "Employees" },
         requestParams: {
-            filter: new OINOFilter("(TitleOfCourtesy)-eq(Dr.)")
+            filter: new OINOFilter("(TitleOfCourtesy)-eq(Ms.)")
         },
         postRow: [99, "LastName", "FirstName", "Title", "TitleOfCourtesy", new Date("2024-04-06"), new Date("2024-04-07"), "Address", "City", "Region", 12345, "EU", "123 456 7890", "9876", Buffer.from("OINO"), "Line1\nLine2", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
-        putRow: [99, "LastName2", "FirstName2", "Title2", "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("OINO2"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
+        putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("OINO2"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
     }
 ]
 for (let db of dbs) {

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -107,8 +107,8 @@ export class OINOFactory {
         return n
     }
 
-    private static _parseCsvLine(csvLine:string):string[] {
-        let result:string[] = []
+    private static _parseCsvLine(csvLine:string):(string|null|undefined)[] {
+        let result:(string|null|undefined)[] = []
         const n:number = csvLine.length
         let start:number = 0
         let end:number = 0
@@ -135,15 +135,17 @@ export class OINOFactory {
                 }
             }
             if (found_field) {
-                // console.log("OINO_csvParseLine: next field=" + csvLine.substring(start,end))
-                let field_str:string
+                // console.log("OINO_csvParseLine: next field=" + csvLine.substring(start,end) + ", start="+start+", end="+end)
+                let field_str:string|undefined|null
                 if (has_quotes) {
                     field_str = csvLine.substring(start+1,end-1)
+                } else if (start == end) {
+                    field_str = undefined
                 } else {
                     field_str = csvLine.substring(start,end)
-                }
-                if (has_escaped_quotes) {
-                    // field_str = OINOStr.decodeCSV(field_str)
+                    if (field_str == "null") {
+                        field_str = null
+                    }
                 }
                 result.push(field_str)
                 has_quotes = false
@@ -162,7 +164,7 @@ export class OINOFactory {
         let start:number = 0
         let end:number = this._findCsvLineEnd(data, start)
         const header_str = data.substring(start, end)
-        const headers:string[] = this._parseCsvLine(header_str)
+        const headers:(string|null|undefined)[] = this._parseCsvLine(header_str)
         let field_to_header_mapping:number[] = new Array(datamodel.fields.length)
         let headers_found:boolean = false
         for (let i=0; i<field_to_header_mapping.length; i++) {
@@ -183,17 +185,22 @@ export class OINOFactory {
                 return result
             }
             end = this._findCsvLineEnd(data, start)
-            const row_data:string[] = this._parseCsvLine(data.substring(start, end))
+            const row_data:(string|null|undefined)[] = this._parseCsvLine(data.substring(start, end))
             const row:OINODataRow = new Array(field_to_header_mapping.length)
             for (let i=0; i<datamodel.fields.length; i++) {
                 let j:number = field_to_header_mapping[i]
-                if ((j >= 0) && (j < row_data.length)) {
-                    row[i] = datamodel.fields[i].deserializeCell(row_data[j], OINOContentType.csv)
+                const value:string|null|undefined = row_data[j]
+                if ((value === undefined) || (value === null)) {
+                    row[i] = value
+
+                } else if ((j >= 0) && (j < row_data.length)) {
+                    row[i] = datamodel.fields[i].deserializeCell(value, OINOContentType.csv)
+                    
                 } else {
-                    row[i] = null
+                    row[i] = undefined
                 }
             }
-            // OINOLog.debug("createRowFromCsv: next row", {row:row})
+            // console.log("createRowFromCsv: next row=" + row)
             result.push(row)
             start = end
             end = start
@@ -248,12 +255,12 @@ export class OINOFactory {
         }
     }
 
-    private static _findMultipartBoundary(csvData:string, multipartBoundary:string, start:number):number {
-        let n:number = csvData.indexOf(multipartBoundary, start)
+    private static _findMultipartBoundary(formData:string, multipartBoundary:string, start:number):number {
+        let n:number = formData.indexOf(multipartBoundary, start)
         if (n >= 0) {
             n += multipartBoundary.length + 2
         } else {
-            n = csvData.length
+            n = formData.length
         }
         return n
     }
@@ -274,23 +281,24 @@ export class OINOFactory {
         const n = data.length
         let start:number = this._findMultipartBoundary(data, multipartBoundary, 0)
         let end:number = this._findMultipartBoundary(data, multipartBoundary, start)
+        // OINOLog.debug("createRowFromFormdata: enter", {start:start, end:end, multipartBoundary:multipartBoundary})
         const row:OINODataRow = new Array(datamodel.fields.length)
         while (end < n) {
-            OINOLog.debug("createRowFromFormdata: next block", {start:start, end:end, block:data.substring(start, end)})
+            // OINOLog.debug("createRowFromFormdata: next block", {start:start, end:end, block:data.substring(start, end)})
             let block_ok:boolean = true
             let l:string = this._parseMultipartLine(data, start)
-            OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+            // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
             start += l.length+2
             const header_matches = OINOFactory._multipartHeaderRegex.exec(l)
             if (!header_matches) {
-                OINOLog.warning("OINOFactory.createRowFromFormdata: invalid multipart-block skipped!", {header_line:l})
+                OINOLog.warning("OINOFactory.createRowFromFormdata: unsupported block skipped!", {header_line:l})
                 block_ok = false
 
             } else {
                 const field_name = header_matches[2]
                 const is_file = header_matches[3] != null
                 const field_index:number = datamodel.findFieldIndexByName(field_name)
-                OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
+                // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
                 if (field_index < 0) {
                     OINOLog.warning("OINOFactory.createRowFromFormdata: form field not found and skipped!", {field_name:field_name})
                     block_ok = false
@@ -298,29 +306,37 @@ export class OINOFactory {
                 } else {
                     const field:OINODataField = datamodel.fields[field_index]
                     l = this._parseMultipartLine(data, start)
-                    OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
-                    while (l != '') {
+                    // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+                    while (block_ok && (l != '')) {
                         if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed')>=0)) {
                             OINOLog.warning("OINOFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", {header_line:l})
+                            block_ok = false
+                        } else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64')<0)) {
+                            OINOLog.warning("OINOFactory.createRowFromFormdata: Content-Transfer-Encoding must be BASE64!", {header_line:l})
+                            block_ok = false
                         }
                         start += l.length+2
                         l = this._parseMultipartLine(data, start)
-                        OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+                        // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
                     }
                     start += 2
-                    if (is_file) {
+                    if (!block_ok) {
+                        OINOLog.warning("OINOFactory.createRowFromFormdata: invalid block skipped", {field_name:field_name})
+                    } else if (start + multipartBoundary.length + 2 >= end) {
+                        // OINOLog.debug("OINOFactory.createRowFromFormdata: null value", {field_name:field_name})
+                        row[field_index] = null
                         
                     } else {
                         const value = this._parseMultipartLine(data, start).trim()
-                        OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
+                        // OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
                         row[field_index] = field.deserializeCell(value, OINOContentType.formdata)
                     }
                 }
             }
-            start = end
+            start = end 
             end = this._findMultipartBoundary(data, multipartBoundary, start)
         }
-        OINOLog.debug("createRowFromFormdata: next row", {row:row})
+        // OINOLog.debug("createRowFromFormdata: next row", {row:row})
         result.push(row)
 
         return result
@@ -345,7 +361,7 @@ export class OINOFactory {
             // const value = requestParams[]
 
         }
-        OINOLog.debug("createRowFromUrlencoded: next row", {row:row})
+        console.log("createRowFromUrlencoded: next row=" + row)
         result.push(row)
         return result
     }
