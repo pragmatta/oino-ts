@@ -297,6 +297,7 @@ export class OINOFactory {
             } else {
                 const field_name = header_matches[2]
                 const is_file = header_matches[3] != null
+                let is_base64:boolean = false
                 const field_index:number = datamodel.findFieldIndexByName(field_name)
                 // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
                 if (field_index < 0) {
@@ -311,9 +312,8 @@ export class OINOFactory {
                         if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed')>=0)) {
                             OINOLog.warning("OINOFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", {header_line:l})
                             block_ok = false
-                        } else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64')<0)) {
-                            OINOLog.warning("OINOFactory.createRowFromFormdata: Content-Transfer-Encoding must be BASE64!", {header_line:l})
-                            block_ok = false
+                        } else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64')>=0)) {
+                            is_base64 = true
                         }
                         start += l.length+2
                         l = this._parseMultipartLine(data, start)
@@ -326,6 +326,13 @@ export class OINOFactory {
                         // OINOLog.debug("OINOFactory.createRowFromFormdata: null value", {field_name:field_name})
                         row[field_index] = null
                         
+                    } else if (is_file) {
+                        const value = this._parseMultipartLine(data, start).trim()
+                        if (is_base64) {
+                            row[field_index] = field.deserializeCell(value, OINOContentType.formdata)    
+                        } else {
+                            row[field_index] = Buffer.from(value, "binary")
+                        }
                     } else {
                         const value = this._parseMultipartLine(data, start).trim()
                         // OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
@@ -348,11 +355,15 @@ export class OINOFactory {
         const data_parts:string[] = data.trim().split('&')
         for (let i=0; i<data_parts.length; i++) {
             const param_parts = data_parts[i].split('=')
+            // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
             if (param_parts.length == 2) {
                 const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
                 const value=param_parts[1]
                 const field_index:number = datamodel.findFieldIndexByName(key)
-                if (field_index >= 0) {
+                if (field_index < 0) {
+                    OINOLog.info("createRowFromUrlencoded: param filed not found", {field:key, value:value})
+
+                } else {
                     const field:OINODataField = datamodel.fields[field_index]
                     row[field_index] = field.deserializeCell(value, OINOContentType.urlencode)
                 }
