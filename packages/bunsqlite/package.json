@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/bunsqlite",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "OINO TS package for using Bun Sqlite databases.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
