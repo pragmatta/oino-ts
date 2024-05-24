@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Form data input</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <form method="POST" action="http://localhost:3001/Categories" enctype="multipart/form-data"  >
+        <label for="CategoryID">Category Id:</label><br>
+        <input type="text" id="CategoryID" name="CategoryID" value=""><br>
+        <label for="CategoryName">Category Name:</label><br>
+        <input type="text" id="CategoryName" name="CategoryName" value=""><br><br>
+        <label for="Description">Description:</label><br>
+        <input type="text" id="Description" name="Description" value=""><br><br>
+        <input type="submit" value="Submit">
+      </form>
+</body>
+</html>

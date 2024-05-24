@@ -10,7 +10,8 @@ const apis:Record<string, OINOApi> = {
     "employees": await OINOFactory.createApi(db, { tableName: "Employees", excludeFields:["BirthDate"] }),
     "orders": await OINOFactory.createApi(db, { tableName: "Orders" }),
     "orderdetails": await OINOFactory.createApi(db, { tableName: "OrderDetails" }),
-    "products": await OINOFactory.createApi(db, { tableName: "Products" })
+    "products": await OINOFactory.createApi(db, { tableName: "Products" }),
+    "categories": await OINOFactory.createApi(db, { tableName: "Categories" })
 }
 const api_array:OINOApi[] = Object.entries(apis).map(([path, api]) => (api))
 
