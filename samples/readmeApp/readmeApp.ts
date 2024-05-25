@@ -15,7 +15,7 @@ const apis:Record<string, OINOApi> = {
 }
 const api_array:OINOApi[] = Object.entries(apis).map(([path, api]) => (api))
 
-Bun.serve({
+const server = Bun.serve({
     port: 3001,
     async fetch(request) {
         let url = new URL(request.url.toLowerCase())
@@ -33,7 +33,7 @@ Bun.serve({
 
         } else {
             const body:string = await request.text()
-            const params:OINORequestParams = OINOFactory.createRequestParamsFromUrl(new URL(request.url))
+            const params:OINORequestParams = OINOFactory.createParamsFromRequest(request)
             const result:OINOApiResult = await api.doRequest(request.method, id, body, params)
             if (result.success && result.modelset) {
                 return new Response(result.modelset.writeString(params.contentType || OINOContentType.json))
@@ -44,3 +44,7 @@ Bun.serve({
         }
     },
 })
+
+OINOLog.info(
+    `🦊 Server is running at ${server.hostname}:${server.port}`
+);
