@@ -378,14 +378,11 @@ export class OINOFactory {
     }
 
    /**
-     * Create data rows from CSV-data based on datamodel. CSV data must have 
-     * - UTF8 formatted
-     * - headers as they are matched to datamodel columns
-     * - all elements doublequoted and separated by commas
+     * Create data rows from request body based on the datamodel. 
      * 
      * @param datamodel datamodel of the api
      * @param data data as a string
-     * @param contenttype mime-type of the data (application/json or text/csv)
+     * @param requestParams parameters
      * 
      */
     static createRows(datamodel:OINODataModel, data:string, requestParams:OINORequestParams ):OINODataRow[] {

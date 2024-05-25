@@ -98,11 +98,11 @@ export class OINODataField {
      * @param contentType content type to serialize into
      *
      */
-    serializeCell(cellValue: OINODataCell, contentType:OINOContentType):string {
-        if ((cellValue === null) || (cellValue === undefined))  { 
-            return OINOStr.encode(cellValue, contentType)  // let content type encoder worry what to do with the value (but force it to string)
+    serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
+        if ((cellVal === null) || (cellVal === undefined))  { 
+            return OINOStr.encode(cellVal, contentType)  // let content type encoder worry what to do with the value (but force it to string)
         } else {
-            return OINOStr.encode(cellValue.toString(), contentType)
+            return OINOStr.encode(cellVal.toString(), contentType)
         }
     }
 
@@ -110,6 +110,7 @@ export class OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param strVal string value
+     * @param contentType content type to serialize into
      *
      */
     deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
@@ -132,16 +133,6 @@ export class OINODataField {
      */
     printSqlColumnName():string {
         return this.db.printSqlColumnname(this.name)
-    }
-
-    /**
-     * Parce cell value from string using field type specific formatting rules.
-     * 
-     * @param strVal string value
-     *
-     */
-    parseCell(strVal: string): OINODataCell {
-        return strVal
     }
 }
 
@@ -210,6 +201,7 @@ export class OINOBooleanDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param strVal string value
+     * @param contentType content type to serialize into
      *
      */
     deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
@@ -266,6 +258,7 @@ export class OINONumberDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param strVal string value
+     * @param contentType content type to serialize into
      *
      */
     deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
@@ -310,7 +303,7 @@ export class OINOBlobDataField extends OINODataField {
             return OINOStr.encode(cellVal, contentType)
 
         } else if (cellVal instanceof Uint8Array) {
-            return OINOStr.encode(Buffer.from(cellVal).toString('base64', contentType), contentType)
+            return OINOStr.encode(Buffer.from(cellVal).toString('base64'), contentType)
 
         } else {
             return OINOStr.encode(cellVal.toString(), contentType)
@@ -321,6 +314,7 @@ export class OINOBlobDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param strVal string value
+     * @param contentType content type to serialize into
      *
      */
     deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
@@ -376,10 +370,11 @@ export class OINODatetimeDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param strVal string value
+     * @param contentType content type to serialize into
      *
      */
     deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
-        // OINOLog.debug("OINODatetimeDataField.parseCell", {strVal:strVal})
+        // OINOLog.debug("OINODatetimeDataField.deserializeCell", {strVal:strVal})
         const date_str = OINOStr.decode(strVal, contentType)
         if ((date_str === null) || (date_str === undefined)) {
             return date_str
