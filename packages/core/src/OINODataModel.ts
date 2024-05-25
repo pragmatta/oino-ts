@@ -135,6 +135,22 @@ export class OINODataModel {
     }
 
     /**
+     * Find index of a field of a given name if any.
+     * 
+     * @param name name of the field to find
+     *
+     */
+    findFieldIndexByName(name:string):number {
+        // OINOLog.debug("OINODataModel.findFieldIndexByName", {_columnLookup:this._columnLookup})
+        const i:number = this._columnLookup[name]
+        if (i >= 0) {
+            return i
+        } else {
+            return -1
+        }
+    }
+
+    /**
      * Find all fields based of given filter callback criteria (e.g. fields of certain data type, primary keys etc.)
      * 
      * @param filter callback called for each field to include or not
