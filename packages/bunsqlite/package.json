@@ -20,7 +20,7 @@
   "module": "./dist/esm/OINODbBunSqlite.js",
   "types": "./dist/types/OINODbBunSqlite.d.ts",
   "dependencies": {
-    "@oino-ts/core": "^0.0.3"
+    "@oino-ts/core": "^0.0.5"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

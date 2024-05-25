@@ -20,7 +20,7 @@
   "module": "./dist/esm/OINODbPostgresql.js",
   "types": "./dist/types/OINODbPostgresql.d.ts",
   "dependencies": {
-    "@oino-ts/core": "^0.0.3",
+    "@oino-ts/core": "^0.0.5",
     "pg": "^8.11.3"
   },
   "devDependencies": {
