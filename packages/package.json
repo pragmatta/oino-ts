@@ -9,9 +9,11 @@
     "build:docs": "bunx typedoc --options ./typedoc.json",
     "build:all": "bun run build:js && bun run build:types && bun run build:docs",
     "samples:update": "../samples/update_samples.cmd",
+    "snapshots:update": "../packages/update_snapshots.cmd",
     "version:patch": "npm --prefix ./core version patch && npm --prefix ./bunsqlite version patch && npm --prefix ./postgresql version patch && npm --prefix ./mariadb version patch",
-    "package:cleanup": "./cleanup_packages.cmd",
-    "package:update": "./update_packages.cmd",
-    "package:all": "bun run package:cleanup && bun run build:all && bun run package:update"
+    "packages:cleanup": "./cleanup_packages.cmd",
+    "packages:update": "./update_packages.cmd",
+    "packages:all": "bun run packages:cleanup && bun run build:all && bun run samples:update && bun run snapshots:update && bun run packages:update",
+    "publish:test": "npm --prefix ./core publish --dry-run"
   }
 }
