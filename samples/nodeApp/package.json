@@ -1,6 +1,6 @@
 {
   "name": "OinoNodeApp",
-  "version": "1.0.0",
+  "version": "0.0.6",
   "type": "module",
   "scripts": {
     "app": "node ./nodeApp.js",
