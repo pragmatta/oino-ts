@@ -73,7 +73,8 @@ export enum OINOLogLevel { debug=0, info=1, warn=2, error=3 }
 
 /** Request options */
 export type OINORequestParams = {
-    contentType?:OINOContentType
+    requestType?:OINOContentType
+    responseType?:OINOContentType
     multipartBoundary?:string
     filter?:OINOFilter
 }

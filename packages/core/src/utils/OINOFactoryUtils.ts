@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -63,18 +63,31 @@ export class OINOFactory {
         const url:URL = new URL(request.url)
         const content_type = request.headers.get("content-type")
         if (content_type == OINOContentType.csv) {
-            result.contentType = OINOContentType.csv
+            result.requestType = OINOContentType.csv
 
         } else if (content_type == OINOContentType.urlencode) {
-            result.contentType = OINOContentType.urlencode
+            result.requestType = OINOContentType.urlencode
 
         } else if (content_type?.startsWith(OINOContentType.formdata)) {
-            result.contentType = OINOContentType.formdata
+            result.requestType = OINOContentType.formdata
             result.multipartBoundary = content_type.split('boundary=')[1] || ""
 
         } else {
-            result.contentType = OINOContentType.json
+            result.requestType = OINOContentType.json
         }
+        const accept = request.headers.get("accept")
+        const accept_types = accept?.split(', ') || []
+        for (let i=0; i<accept_types.length; i++) {
+            if (accept_types[i] in OINOContentType) {
+                result.responseType = OINOContentType[accept_types[i]]
+                OINOLog.debug("createParamsFromRequest: response type found", {respnse_type:result.responseType})
+                break
+            }
+        }
+        if (result.responseType === undefined) {
+            result.responseType = OINOContentType.json
+        }
+
         const filter = url.searchParams.get("filter")
         if (filter) {
             result.filter = new OINOFilter(filter)
@@ -83,6 +96,56 @@ export class OINOFactory {
         return result
     }
 
+    /**
+     * Creates a HTTP Response from API results.
+     *
+     * @param apiResult API results
+     * @param requestParams API request parameters
+     * @param responseHeaders Headers to include in the response
+     * 
+     */
+    static createResponseFromApiResult(apiResult:OINOApiResult, requestParams:OINORequestParams, responseHeaders:Record<string, string> = {}):Response {
+        let response:Response|null = null
+        if (apiResult.success && apiResult.modelset) {
+            response = new Response(apiResult.modelset.writeString(requestParams.responseType), {status:apiResult.statusCode, statusText: apiResult.statusMessage, headers: responseHeaders })
+        } else {
+            response = new Response(JSON.stringify(apiResult), {status:apiResult.statusCode, statusText: apiResult.statusMessage, headers: responseHeaders })
+        }
+        for (let i=0; i<apiResult.messages.length; i++) {
+            response.headers.set('X-OINO-MESSAGE-' + i, apiResult.messages[i])
+        }         
+        return response
+    }
+
+    /**
+     * Creates a HTTP Response from API results.
+     *
+     * @param apiResult OINO API results
+     * @param requestParams OINO request parameters
+     * @param template HTML template
+     * 
+     */
+    static createHtmlFromResults(apiResult:OINOApiResult, id:string, template:string):string {
+        let result:string = ""
+        const dataset:OINODataSet|undefined = apiResult.modelset?.dataset
+        const datamodel:OINODataModel = apiResult.api.datamodel
+        if (dataset) {
+            while (dataset && !dataset.isEof()) {
+                const row:OINODataRow = dataset.getRow()
+                let html_row = template.replaceAll('##_OINOID_##', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.urlencode))
+                for (let i=0; i<datamodel.fields.length; i++) {
+                    html_row = html_row.replaceAll('##' + datamodel.fields[i].name + '##', datamodel.fields[i].serializeCell(row[i], OINOContentType.urlencode))
+                }
+                result += html_row + "\r\n"
+                dataset.next()
+            }
+        } else {
+            result = template.replaceAll('##_OINOID_##', OINOStr.encode(id, OINOContentType.urlencode))
+        }
+        return result
+    }
+    
+    
     private static _findCsvLineEnd(csvData:string, start:number):number {
         const n:number = csvData.length
         if (start >= n) {
@@ -386,13 +449,13 @@ export class OINOFactory {
      * 
      */
     static createRows(datamodel:OINODataModel, data:string, requestParams:OINORequestParams ):OINODataRow[] {
-        if (requestParams.contentType == OINOContentType.csv) {
+        if (requestParams.requestType == OINOContentType.csv) {
             return this.createRowFromCsv(datamodel, data)
 
-        } else if (requestParams.contentType == OINOContentType.formdata) {
+        } else if (requestParams.requestType == OINOContentType.formdata) {
             return this.createRowFromFormdata(datamodel, data, requestParams.multipartBoundary || "")
 
-        } else if (requestParams.contentType == OINOContentType.urlencode) {
+        } else if (requestParams.requestType == OINOContentType.urlencode) {
             return this.createRowFromUrlencoded(datamodel, data)
 
         } else {
