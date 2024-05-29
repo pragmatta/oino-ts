@@ -102,10 +102,24 @@
  DELETE FROM [OrderDetails] WHERE ("OrderID"=11077 AND "ProductID"=99);
  ```
   
- ## JSON/CSV Serialization
- OINO handles serialization of data to JSON and back based on the data model. It knows what columns exist, what is their data type and how to convert each to JSON/CSV and back. This allows also partial data to be sent, i.e. you can send only columns that are updated or even send extra columns and have them ignored.
+ ## Universal Serialization
+ OINO handles serialization of data to JSON/CSV/etc. and back based on the data model. It knows what columns exist, what is their data type and how to convert each to JSON/CSV and back. This allows also partial data to be sent, i.e. you can send only columns that need updating or even send extra columns and have them ignored.
 
- In addition to that OINO extends the JSON/CSV datamodel by supporting blob columns through BASE64 encoding and normalization of datetime columns to ISO 8601 format (you can also treat them as strings and handle proper formatting).
+ ### Features
+ - Files can be sent to BLOB fields using BASE64 encoding.
+ - Datetimes are (optionally) normalized to ISO 8601 format.
+ 
+
+ ### Supported content types
+ - JSON
+ - CSV
+  - Comma-separated, doublequotes
+  - unquoted literal `null` represents null values
+  - unquoted empty string represents undefined values (i.e. will not be set)
+ - Form data
+  - 
+
+
 
  ## Database Abstraction
  OINO functions as a database abstraction, providing a consistent interface for working with different databases. It abstracts out different conventions in connecting, making queries and formatting data.
