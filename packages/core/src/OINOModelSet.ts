@@ -40,23 +40,16 @@ export class OINOModelSet {
         // console.log("OINOModelSet._writeRowJson: row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
-        let oino_id:string = ""
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
             if (row[i] === undefined) {
                 OINOLog.info("OINOModelSet._writeRowJson: undefined value skipped", {field_name:fields[i].name})
 
             } else {
-                if (fields[i].fieldParams.isPrimaryKey) {
-                    if (oino_id != "") {
-                        oino_id += ":"
-                    } 
-                    oino_id += encodeURI(row[i] as string)
-                }
                 json_row += "," + OINOStr.encode(fields[i].name, OINOContentType.json) + ":" + fields[i].serializeCell(row[i], OINOContentType.json)
             }
         }
-        json_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(oino_id, OINOContentType.json) + json_row
+        json_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.json) + json_row
         // OINOLog_debug("OINOModelSet._writeRowJson="+json_row)
         return "{" + json_row + "}"
     }
@@ -90,18 +83,11 @@ export class OINOModelSet {
         // OINOLog_debug("OINOModelSet._writeRowCsv", {row:row})
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
-        let oino_id:string = ""
         let csv_row:string = ""
         for (let i=0; i<fields.length; i++) {
-            if (fields[i].fieldParams.isPrimaryKey) {
-                if (oino_id != "") {
-                    oino_id += ":"
-                } 
-                oino_id += encodeURI(row[i] as string)
-            }
             csv_row += "," + fields[i].serializeCell(row[i], OINOContentType.csv)
         }
-        csv_row = "\"" + oino_id + "\"" + csv_row
+        csv_row = "\"" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.csv) + "\"" + csv_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
         return csv_row
     }
