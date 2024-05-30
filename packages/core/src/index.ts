@@ -100,7 +100,7 @@ export const OINO_EMPTY_ROWS:OINODataRow[] = [OINO_EMPTY_ROW]
 export type OINOValues = Record<string, string>
 
 /** Supported content format mime-types */
-export enum OINOContentType { json='application/json', csv='text/csv', formdata='multipart/form-data', urlencode='application/x-www-form-urlencoded' }
+export enum OINOContentType { json='application/json', csv='text/csv', formdata='multipart/form-data', urlencode='application/x-www-form-urlencoded', html='text/html' }
 
 /** Set the name of the OINO ID field (default \_OINOID\_ */
 export function OINOSettings_setIdField(idField:string) {

@@ -132,15 +132,15 @@ export class OINOFactory {
         if (dataset) {
             while (dataset && !dataset.isEof()) {
                 const row:OINODataRow = dataset.getRow()
-                let html_row = template.replaceAll('##_OINOID_##', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.urlencode))
+                let html_row = template.replaceAll('##_OINOID_##', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
                 for (let i=0; i<datamodel.fields.length; i++) {
-                    html_row = html_row.replaceAll('##' + datamodel.fields[i].name + '##', datamodel.fields[i].serializeCell(row[i], OINOContentType.urlencode))
+                    html_row = html_row.replaceAll('##' + datamodel.fields[i].name + '##', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
                 }
                 result += html_row + "\r\n"
                 dataset.next()
             }
         } else {
-            result = template.replaceAll('##_OINOID_##', OINOStr.encode(id, OINOContentType.urlencode))
+            result = template.replaceAll('##_OINOID_##', OINOStr.encode(id, OINOContentType.html))
         }
         return result
     }

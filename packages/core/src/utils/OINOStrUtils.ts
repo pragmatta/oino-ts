@@ -1,4 +1,4 @@
-import { OINOContentType } from ".."
+import { OINOContentType, OINOLog } from ".."
 
 /** Callback to filter data fields */
 export type OINOStrEncoder = (str:string) => string
@@ -185,6 +185,29 @@ export class OINOStr {
     }
 
     /**
+     * Encode OINO serialized strings as valid HTML content.
+     * 
+     * @param str string to encode
+     */
+    static encodeHtml(str:string|null|undefined):string {
+        if (str === undefined) { 
+            return ""
+        } else if (str === null) {
+            return ""
+        } else {
+            return str.replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#039;', "'")
+        }
+    }
+
+    /**
+     * Decode HTML string as OINO serialization.
+     * 
+     * @param str string to encode
+     */
+    static decodeHtml(str:string):string|null|undefined {
+        return str.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;')
+    }
+    /**
      * Decode content type formatted string as OINO serialization.
      * 
      * @param str string to decode
@@ -198,6 +221,8 @@ export class OINOStr {
             return this.decodeFormdata(str)
         } else if (contentType == OINOContentType.urlencode) {
             return this.decodeUrlencode(str)
+        } else if (contentType == OINOContentType.html) {
+            return str 
         } else {
             return str
         }
@@ -216,6 +241,8 @@ export class OINOStr {
             return this.encodeFormdata(str)
         } else if (contentType == OINOContentType.urlencode) {
             return this.encodeUrlencode(str)
+        } else if (contentType == OINOContentType.html) {
+            return this.encodeHtml(str)
         } else {
             return str || ""
         }
