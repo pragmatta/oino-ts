@@ -87,7 +87,7 @@ export class OINOModelSet {
         for (let i=0; i<fields.length; i++) {
             csv_row += "," + fields[i].serializeCell(row[i], OINOContentType.csv)
         }
-        csv_row = "\"" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.csv) + "\"" + csv_row
+        csv_row = OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.csv) + csv_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
         return csv_row
     }

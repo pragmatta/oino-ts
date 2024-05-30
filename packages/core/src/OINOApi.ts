@@ -12,9 +12,6 @@ import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOFilter, OINOData
  *
  */
 export class OINOApiResult {
-    /** Reference to the API */
-    readonly api:OINOApi
-
     /** Wheter request was successfully executed */
     success: boolean
 
@@ -37,7 +34,6 @@ export class OINOApiResult {
      *
      */
     constructor (api:OINOApi, modelset?:OINOModelSet) {
-        this.api = api
         this.success = true
         this.statusCode = 200
         this.statusMessage = "OK"
@@ -268,7 +264,7 @@ export class OINOApi {
      */
     async doRequest(method:string, id: string, body:string, params:OINORequestParams):Promise<OINOApiResult> {
         OINOBenchmark.start("doRequest")
-        let result:OINOApiResult = new OINOApiResult(this)
+        let result:OINOApiResult = new OINOApiResult()
         OINOLog.debug("OINOApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
         if (method == "GET") {
             await this._doGet(result, id, params)

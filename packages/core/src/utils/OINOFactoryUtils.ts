@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -127,9 +127,10 @@ export class OINOFactory {
      */
     static createHtmlFromResults(apiResult:OINOApiResult, id:string, template:string):string {
         let result:string = ""
-        const dataset:OINODataSet|undefined = apiResult.modelset?.dataset
-        const datamodel:OINODataModel = apiResult.api.datamodel
-        if (dataset) {
+        const modelset:OINOModelSet|undefined = apiResult.modelset
+        if (modelset) {
+            const dataset:OINODataSet = modelset.dataset
+            const datamodel:OINODataModel = modelset.datamodel
             while (dataset && !dataset.isEof()) {
                 const row:OINODataRow = dataset.getRow()
                 let html_row = template.replaceAll('##_OINOID_##', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
@@ -406,7 +407,7 @@ export class OINOFactory {
             start = end 
             end = this._findMultipartBoundary(data, multipartBoundary, start)
         }
-        // OINOLog.debug("createRowFromFormdata: next row", {row:row})
+        OINOLog.debug("createRowFromFormdata: next row", {row:row})
         result.push(row)
 
         return result
@@ -449,7 +450,10 @@ export class OINOFactory {
      * 
      */
     static createRows(datamodel:OINODataModel, data:string, requestParams:OINORequestParams ):OINODataRow[] {
-        if (requestParams.requestType == OINOContentType.csv) {
+        if ((requestParams.requestType == OINOContentType.json) || (requestParams.requestType == undefined)) {
+            return this._createRowFromJson(datamodel, data)
+            
+        } else if (requestParams.requestType == OINOContentType.csv) {
             return this.createRowFromCsv(datamodel, data)
 
         } else if (requestParams.requestType == OINOContentType.formdata) {
@@ -458,8 +462,12 @@ export class OINOFactory {
         } else if (requestParams.requestType == OINOContentType.urlencode) {
             return this.createRowFromUrlencoded(datamodel, data)
 
+        } else if (requestParams.requestType == OINOContentType.html) {
+            OINOLog.error("HTML can't be used as an input content type!", {contentType:OINOContentType.html})
+            return []
         } else {
-            return this._createRowFromJson(datamodel, data)
+            OINOLog.error("Unrecognized input content type!", {contentType:requestParams.requestType})
+            return []
         }
     }
 }
