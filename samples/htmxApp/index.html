@@ -11,14 +11,14 @@
     <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="categories">
+    <div id="categories" class="container text-left">
         <div id="categories-header" class="row">
             <b class="col-3">CategoryID</b>
             <b class="col-3">CategoryName</b>
             <b class="col-3">Description</b>          
             <b class="col-3"></b>          
         </div>
-        <div id="categories-rows" class="container text-left" 
+        <div id="categories-rows"  
             hx-get="http://localhost:3002/categories" 
             hx-trigger="load, OINOApiTrigger-Categories from:body"
             hx-target="#categories-rows" 
