@@ -29,3 +29,8 @@ packages/update_snapshots.cmd
 samples/update_samples.cmd
 packages/publish_packages_test.cmd
 packages/publish_packages.cmd
+update_versions.cmd
+packages/bunsqlite/README.md
+packages/core/README.md
+packages/mariadb/README.md
+packages/postgresql/README.md

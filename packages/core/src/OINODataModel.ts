@@ -181,6 +181,25 @@ export class OINODataModel {
     }
 
     /**
+     * Print OINO ID of a data row.
+     *
+     * @param row A row of data.
+     * 
+     */
+    printRowOINOId(row:OINODataRow):string {
+        let result:string = ""
+        for (let i=0; i< this.fields.length; i++) {
+            if (this.fields[i].fieldParams.isPrimaryKey) {
+                if (result != "") {
+                    result += ":"
+                } 
+                result += encodeURI(row[i] as string)
+            }
+        }
+        return result
+    }
+
+    /**
      * Print all public properties (db, table name, fields) of the datamodel. Used
      * in automated testing validate schema has stayed the same.
      *

@@ -13,7 +13,7 @@ import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOFilter, OINOData
  */
 export class OINOApiResult {
     /** Wheter request was successfully executed */
-    success: boolean;
+    success: boolean
 
     /** HTTP status code */
     statusCode: number;

@@ -1,0 +1,22 @@
+<form id="OINOApiRow-Categories-##_OINOID_##" class="row"
+    hx-put="http://localhost:3002/categories/##_OINOID_##" 
+    hx-target="this" 
+    hx-swap="outerHTML"
+>
+    <div class="col-3">
+        <i><label for="CategoryID">Category Id:</label><br></i>
+        <input type="text" id="CategoryID" name="CategoryID" value="##CategoryID##"><br>
+    </div>
+    <div class="col-3">
+        <i><label for="CategoryName">Category Name:</label><br></i>
+        <input type="text" id="CategoryName" name="CategoryName" value="##CategoryName##"><br><br>
+    </div>
+    <div class="col-3">
+        <i><label for="Description">Description:</label><br></i>
+        <input type="text" id="Description" name="Description" value="##Description##"><br><br>
+    </div>
+    <div class="col-3">
+        <br/>
+        <input type="submit" value="Save">
+    </div>
+</form>

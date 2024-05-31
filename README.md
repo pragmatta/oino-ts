@@ -102,10 +102,25 @@
  DELETE FROM [OrderDetails] WHERE ("OrderID"=11077 AND "ProductID"=99);
  ```
   
- ## JSON/CSV Serialization
- OINO handles serialization of data to JSON and back based on the data model. It knows what columns exist, what is their data type and how to convert each to JSON/CSV and back. This allows also partial data to be sent, i.e. you can send only columns that are updated or even send extra columns and have them ignored.
+ ## Universal Serialization
+ OINO handles serialization of data to JSON/CSV/etc. and back based on the data model. It knows what columns exist, what is their data type and how to convert each to JSON/CSV and back. This allows also partial data to be sent, i.e. you can send only columns that need updating or even send extra columns and have them ignored.
 
- In addition to that OINO extends the JSON/CSV datamodel by supporting blob columns through BASE64 encoding and normalization of datetime columns to ISO 8601 format (you can also treat them as strings and handle proper formatting).
+ ### Features
+ - Files can be sent to BLOB fields using BASE64 encoding.
+ - Datetimes are (optionally) normalized to ISO 8601 format.
+ - Extended JSON-encoding
+   - Unquoted literal `undefined` can be used to represent non-existent values (leaving property out works too but preserving structure might be easier e.g. when translating data).
+ - CSV
+   - Comma-separated, doublequotes.
+   - Unquoted literal `null` represents null values.
+   - Unquoted empty string represents undefined values.
+ - Form data
+   - Multipart-mixed and binary files not supported.
+   - Non-existent value line (i.e. nothing after the empty line) treated as a null value.
+ - Url-encoded
+   - No null values, missing properties treated as undefined.
+   - Multiple lines could be used to post multiple rows.
+
 
  ## Database Abstraction
  OINO functions as a database abstraction, providing a consistent interface for working with different databases. It abstracts out different conventions in connecting, making queries and formatting data.
@@ -133,6 +148,8 @@
  ## Node support
  OINO is developped Typescript first but compiles to standard CommonJS and the NPM packages should work on either ESM / CommonJS. Checkout sample apps `readmeApp` (ESM) and `nodeApp` (CommonJS).
 
+ ## HTMX support
+ OINO is [htmx.org](https://htmx.org) friendly, allowing easy translation of [`OINODataRow`](https://pragmatta.github.io/oino-ts/types/core_src.OINODataRow.html) to HTML output using templates (cf. the [htmx sample app](https://github.com/pragmatta/oino-ts/tree/main/samples/htmxApp)).
 
  # STATUS
  OINO is currently a hobby project which should and should considered in alpha status. That also means compatibility breaking changes can be made without prior notice when architectual issues are discovered.
