@@ -1,6 +1,7 @@
 import { OINODb, OINODbParams, OINOApi, OINOApiParams, OINOFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINOApiResult, OINORequestParams } from "@oino-ts/core";
 
 import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
+import { BunFile } from "bun";
 
 const response_headers:HeadersInit = {
     'Access-Control-Allow-Headers': '*',
@@ -13,40 +14,29 @@ OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug))
 OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 
 const API_PATH_REGEX = /\/([^\/]+)\/?([^\/]*)\/?([^\/]*)/
-const TEMPLATES = ["Categories-id-edit", "Categories-id-PUT", "Categories-id-DELETE", "Categories-id", "Categories"]
-const TEMPLATE_CACHE:Record<string,string> = {}
-function findBestTemplateId(apiName:string, rowId:boolean, method:string, operation:string, statusCode:string):string|null {
-	let template_id:string = apiName
-	if (rowId) {
-		template_id += "-id"
-	}
-	if (method) {
-		template_id += "-" + method
-	}
+async function findBestTemplateId(apiName:string, operation:string, statusCode:string):BunFile|null {
+	let template_id:string = apiName.toLowerCase()
 	if (operation) {
-		template_id += "-" + operation
+		template_id += "-" + operation.toLowerCase()
 	}
 	if (statusCode) {
 		template_id += "-" + statusCode
 	}
-	if (TEMPLATES.indexOf(template_id) >= 0) {
+	const template_file:BunFile = Bun.file("./templates/" + template_id + ".htmx")
+	if (await template_file.exists()) {
 		OINOLog.debug("index.ts / findBestTemplateId", { template_id:template_id })
-		return template_id
+		return template_file
 	}
 	return null
 }
-async function getTemplate(apiName:string, rowId:boolean, method:string, operation:string, statusCode:string):Promise<string> {
-	OINOLog.debug("index.ts / getTemplate", { apiName:apiName, rowId:rowId, method:method, operation:operation, statusCode:statusCode})
-	const template_id = findBestTemplateId(apiName, rowId, method, operation, statusCode) ||
-						findBestTemplateId(apiName, rowId, method, operation, "") ||
-						findBestTemplateId(apiName, rowId, operation, "", statusCode) ||
-						findBestTemplateId(apiName, rowId, operation, "", "") ||
-						findBestTemplateId(apiName, rowId, method, "", statusCode) ||
-						findBestTemplateId(apiName, rowId, method, "", "") ||
-						findBestTemplateId(apiName, rowId, "", "", statusCode) ||
-						findBestTemplateId(apiName, rowId, "", "", "") || ""
-	if (template_id) {
-		const template_file = Bun.file("./templates/" + template_id + ".htmx")
+async function getTemplate(apiName:string, method:string, command:string, statusCode:string):Promise<string> {
+	OINOLog.debug("index.ts / getTemplate", { apiName:apiName, method:method, command:command, statusCode:statusCode})
+	const template_file = await findBestTemplateId(apiName, command, statusCode) ||
+						await findBestTemplateId(apiName, method, statusCode) ||
+						await findBestTemplateId(apiName, command, "") ||
+						await findBestTemplateId(apiName, method, "") ||
+						await findBestTemplateId(apiName, "", "") || ""
+	if (template_file) {
 		return await template_file.text()
 		// TEMPLATE_CACHE[id] = result
 	}	
@@ -102,7 +92,7 @@ try {
 				let api_result:OINOApiResult
 				if (api) {
 					api_result = await api.doRequest(request.method, id, body, params)
-					const template:string = await getTemplate(api.params.tableName, id != "", request.method, operation, api_result.statusCode.toString())
+					const template:string = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
 					const html:string = OINOFactory.createHtmlFromResults(api_result, id, template)
 					response = new Response(html, {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
 					if (request.method == "POST") {
