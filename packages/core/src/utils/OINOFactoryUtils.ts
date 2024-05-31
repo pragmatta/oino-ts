@@ -79,7 +79,7 @@ export class OINOFactory {
         const accept_types = accept?.split(', ') || []
         for (let i=0; i<accept_types.length; i++) {
             if (accept_types[i] in OINOContentType) {
-                result.responseType = OINOContentType[accept_types[i]]
+                result.responseType = accept_types[i] as OINOContentType
                 OINOLog.debug("createParamsFromRequest: response type found", {respnse_type:result.responseType})
                 break
             }
@@ -121,7 +121,7 @@ export class OINOFactory {
      * Creates a HTTP Response from API results.
      *
      * @param apiResult OINO API results
-     * @param requestParams OINO request parameters
+     * @param id OINO id
      * @param template HTML template
      * 
      */

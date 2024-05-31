@@ -33,7 +33,7 @@ export class OINOApiResult {
      * @param modelset result data
      *
      */
-    constructor (api:OINOApi, modelset?:OINOModelSet) {
+    constructor (modelset?:OINOModelSet) {
         this.success = true
         this.statusCode = 200
         this.statusMessage = "OK"
