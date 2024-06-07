@@ -121,17 +121,9 @@ export class OINOModelSet {
         const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // just for test data generation and we want it to be static
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
-        let oino_id:string = ""
         let result:string = ""
         for (let i=0; i<fields.length; i++) {
             
-            if (fields[i].fieldParams.isPrimaryKey) {
-                if (oino_id != "") {
-                    oino_id += ":"
-                } 
-                oino_id += encodeURI(row[i] as string)
-            }
-
             let formdata_block:string = ""
             if (row[i] === undefined) {
                 OINOLog.info("OINOModelSet._writeRowFormdata: undefined value skipped.", {field:fields[i].name})
@@ -151,7 +143,7 @@ export class OINOModelSet {
             // OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
             result += formdata_block
         }
-        result = this._writeRowFormdataParameterBlock(OINO_ID_FIELD, oino_id, multipart_boundary) + result
+        result = this._writeRowFormdataParameterBlock(OINO_ID_FIELD, this.datamodel.printRowOINOId(row), multipart_boundary) + result
         return result
     }
 
@@ -169,25 +161,18 @@ export class OINOModelSet {
         // console.log("OINOModelSet._writeRowCsv row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
-        let oino_id:string = ""
         let urlencode_row:string = ""
         for (let i=0; i<fields.length; i++) {
             if (row[i] === undefined) {
                 // console.log("OINOModelSet._writeRowCsv undefined field value:" + fields[i].name)
             } else {
-                if (fields[i].fieldParams.isPrimaryKey) {
-                    if (oino_id != "") {
-                        oino_id += ":"
-                    } 
-                    oino_id += encodeURI(row[i] as string)
-                }
                 if (urlencode_row != "") {
                     urlencode_row += "&"
                 } 
                 urlencode_row += OINOStr.encode(fields[i].name, OINOContentType.urlencode) + "=" + fields[i].serializeCell(row[i], OINOContentType.urlencode)
             }
         }
-        urlencode_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(oino_id, OINOContentType.urlencode) + "&" + urlencode_row
+        urlencode_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.urlencode) + "&" + urlencode_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
         return urlencode_row
     }
