@@ -88,7 +88,8 @@ export const OINO_INFO_PREFIX = "OINO INFO: "
 /** Name of the synthetic OINO ID field */
 export let OINO_ID_FIELD = "_OINOID_"
 /** Private key separator of the synthetic OINO ID field */
-export let OINO_ID_SEPARATOR = "."
+export let OINO_ID_SEPARATOR = "-"
+export let OINO_ID_SEPARATOR_ESCAPED = "%2d"
 
 
 /** A single column value of a data row */
@@ -112,9 +113,10 @@ export function OINOSettings_setIdField(idField:string) {
     }
 }
 
-/** Set the separator of the OINO ID field (default :) */
+/** Set the separator character of the OINO ID field (default -) */
 export function OINOSettings_setIdSeparator(idSeparator:string) {
-    if (idSeparator) {
+    if (idSeparator && (idSeparator.length == 1)) {
         OINO_ID_SEPARATOR = idSeparator
+        OINO_ID_SEPARATOR_ESCAPED = '%' + idSeparator.charCodeAt(0).toString(16)
     }
 }

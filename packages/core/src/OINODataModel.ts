@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINO_ID_SEPARATOR } from "./index.js";
+import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINO_ID_SEPARATOR, OINO_ID_SEPARATOR_ESCAPED as OINO_ID_SEPARATOR_URLESCAPED } from "./index.js";
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -97,7 +97,7 @@ export class OINODataModel {
                 if (result != "") {
                     result += " AND "
                 }
-                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(id_parts[i]); 
+                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(decodeURIComponent(id_parts[i])); 
                 i = i + 1
             }
         }
@@ -193,7 +193,7 @@ export class OINODataModel {
                 if (result != "") {
                     result += OINO_ID_SEPARATOR
                 } 
-                result += encodeURIComponent(row[i] as string).replaceAll('.', '%2E')
+                result += encodeURIComponent(row[i] as string).replaceAll(OINO_ID_SEPARATOR, OINO_ID_SEPARATOR_URLESCAPED)
             }
         }
         return result
