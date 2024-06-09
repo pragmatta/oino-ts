@@ -193,7 +193,7 @@ export class OINODataModel {
                 if (result != "") {
                     result += OINO_ID_SEPARATOR
                 } 
-                result += encodeURI(row[i] as string)
+                result += encodeURIComponent(row[i] as string).replaceAll('.', '%2E')
             }
         }
         return result

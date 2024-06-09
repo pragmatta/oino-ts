@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINO_ID_FIELD } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -125,23 +125,22 @@ export class OINOFactory {
      * @param template HTML template
      * 
      */
-    static createHtmlFromResults(apiResult:OINOApiResult, id:string, template:string):string {
+    static createHtmlFromResults(apiResult:OINOApiResult|null, id:string, template:string):string {
         let result:string = ""
-        const modelset:OINOModelSet|undefined = apiResult.modelset
-        if (modelset) {
-            const dataset:OINODataSet = modelset.dataset
-            const datamodel:OINODataModel = modelset.datamodel
+        if (apiResult && apiResult.modelset) {
+            const dataset:OINODataSet = apiResult.modelset.dataset
+            const datamodel:OINODataModel = apiResult.modelset.datamodel
             while (dataset && !dataset.isEof()) {
                 const row:OINODataRow = dataset.getRow()
-                let html_row = template.replaceAll('##_OINOID_##', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
+                let html_row = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
                 for (let i=0; i<datamodel.fields.length; i++) {
-                    html_row = html_row.replaceAll('##' + datamodel.fields[i].name + '##', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
+                    html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
                 }
                 result += html_row + "\r\n"
                 dataset.next()
             }
         } else {
-            result = template.replaceAll('##_OINOID_##', OINOStr.encode(id, OINOContentType.html))
+            result = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(id, OINOContentType.html))
         }
         return result
     }

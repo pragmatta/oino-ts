@@ -88,7 +88,7 @@ export const OINO_INFO_PREFIX = "OINO INFO: "
 /** Name of the synthetic OINO ID field */
 export let OINO_ID_FIELD = "_OINOID_"
 /** Private key separator of the synthetic OINO ID field */
-export let OINO_ID_SEPARATOR = ":"
+export let OINO_ID_SEPARATOR = "."
 
 
 /** A single column value of a data row */
