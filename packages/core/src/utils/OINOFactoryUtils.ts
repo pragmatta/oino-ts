@@ -118,30 +118,37 @@ export class OINOFactory {
     }
 
     /**
-     * Creates a HTTP Response from API results.
+     * Creates a HTTP Response from API modelset.
      *
-     * @param apiResult OINO API results
+     * @param modelset OINO API dataset
+     * @param template HTML template
+     * 
+     */
+    static createHtmlFromData(modelset:OINOModelSet, template:string):string {
+        let result:string = ""
+        const dataset:OINODataSet = modelset.dataset
+        const datamodel:OINODataModel = modelset.datamodel
+        while (!dataset.isEof()) {
+            const row:OINODataRow = dataset.getRow()
+            let html_row:string = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
+            for (let i=0; i<datamodel.fields.length; i++) {
+                html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
+            }
+            result += html_row + "\r\n"
+            dataset.next()
+        }
+        return result
+    }
+
+    /**
+     * Creates a HTTP Response from a row id.
+     *
      * @param id OINO id
      * @param template HTML template
      * 
      */
-    static createHtmlFromResults(apiResult:OINOApiResult|null, id:string, template:string):string {
-        let result:string = ""
-        if (apiResult && apiResult.modelset) {
-            const dataset:OINODataSet = apiResult.modelset.dataset
-            const datamodel:OINODataModel = apiResult.modelset.datamodel
-            while (dataset && !dataset.isEof()) {
-                const row:OINODataRow = dataset.getRow()
-                let html_row = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
-                for (let i=0; i<datamodel.fields.length; i++) {
-                    html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
-                }
-                result += html_row + "\r\n"
-                dataset.next()
-            }
-        } else {
-            result = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(id, OINOContentType.html))
-        }
+    static createHtmlFromId(id:string, template:string):string {
+        let result:string = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(id, OINOContentType.html))
         return result
     }
     
