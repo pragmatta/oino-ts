@@ -63,6 +63,7 @@ export class OINOApiResult {
         this.statusCode = statusCode
         this.statusMessage = OINO_ERROR_PREFIX + statusMessage
         this.messages.push(this.statusMessage)
+        OINOLog.error("OINOApi.setError", {code:statusCode, message:statusMessage})
     }
 
     /**
@@ -83,6 +84,30 @@ export class OINOApiResult {
      */
     addInfo(message:string) {
         this.messages.push(OINO_INFO_PREFIX + message)
+    }
+
+    /**
+     * Copy given messages to HTTP headers.
+     *
+     * @param headers HTTP headers
+     * @param copyErrors wether error messages should be copied (default true)
+     * @param copyWarnings wether warning messages should be copied (default false)
+     * @param copyInfos wether info messages should be copied (default false)
+     *
+     */
+    copyMessagesToHeaders(headers:Headers, copyErrors:boolean = true, copyWarnings:boolean = false, copyInfos:boolean = false) {
+        for(let i=0; i<this.messages.length; i++) {
+            const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ")
+            if (copyErrors && message.startsWith(OINO_ERROR_PREFIX)) {
+                headers.append('X-OINO-ERROR', message)
+            } 
+            if (copyWarnings && message.startsWith(OINO_WARNING_PREFIX)) {
+                headers.append('X-OINO-WARNING', message)
+            } 
+            if (copyInfos && message.startsWith(OINO_INFO_PREFIX)) {
+                headers.append('X-OINO-INDO', message)
+            } 
+        }
     }
 }
 
@@ -122,7 +147,6 @@ export class OINOApi {
         try {
             return new OINOFilter(filterStr)
         } catch (e:any) {
-            OINOLog.error("OINOApi._parseFilters ECXEPTION", {exception:e})
             httpResult.setError(500, "Unhandled exception in _parseFilters: " + e.message)
         }
         return new OINOFilter("")
@@ -176,7 +200,6 @@ export class OINOApi {
             }
             result.messages.push(...sql_res.messages)
         } catch (e:any) {
-            OINOLog.error("OINOApi.doGet ECXEPTION", {exception:e})
             result.setError(500, "Unhandled exception in doGet: " + e.message)
         }
         OINOBenchmark.end("doGet")
@@ -207,7 +230,6 @@ export class OINOApi {
                 result.messages.push(...sql_res.messages)
             }
         } catch (e:any) {
-            OINOLog.error("OINOApi.doPost ECXEPTION", {exception:e})
             result.setError(500, "Unhandled exception in doPost: " + e.message)
         }
         OINOBenchmark.end("doPost")
@@ -228,7 +250,6 @@ export class OINOApi {
                 result.messages.push(...sql_res.messages)
             }
         } catch (e:any) {
-            OINOLog.error("OINOApi.doPut ECXEPTION", {exception:e})
             result.setError(500, "Unhandled exception in doPut: " + e.message)
         }
         OINOBenchmark.end("doPut")
@@ -246,7 +267,6 @@ export class OINOApi {
             }
             result.messages.push(...sql_res.messages)
         } catch (e:any) {
-            OINOLog.error("OINOApi.doDelete ECXEPTION", {exception:e})
             result.setError(500, "Unhandled exception in doDelete: " + e.message)
         }
         OINOBenchmark.end("doDelete")
@@ -282,7 +302,6 @@ export class OINOApi {
                     await this._doPut(result, id, rows[0])
 
                 } catch (e:any) {
-                    OINOLog.error("OINOApi.doRequest ECXEPTION", {exception:e})
                     result.setError(500, "Unhandled exception in HTTP PUT doRequest: " + e.message)
                 }             
             }
@@ -300,7 +319,6 @@ export class OINOApi {
                     await this._doPost(result, rows)
 
                 } catch (e:any) {
-                    OINOLog.error("OINOApi.doRequest / POST ECXEPTION", {exception:e})
                     result.setError(500, "Unhandled exception in HTTP POST doRequest: " + e.message)
                 }
             }
@@ -313,7 +331,6 @@ export class OINOApi {
                     await this._doDelete(result, id)
 
                 } catch (e:any) {
-                    OINOLog.error("OINOApi.doRequest / DELETE ECXEPTION", {exception:e})
                     result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message)
                 }
             }
