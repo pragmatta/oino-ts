@@ -162,10 +162,10 @@ export class OINOApi {
             if ((val === null) && ((field.fieldParams.isNotNull)||(field.fieldParams.isPrimaryKey))) { // null is a valid SQL value except if it's not allowed
                 httpResult.setError(405, "Field '" + field.name + "' is not allowed to be NULL!")
 
-            } else if ((val === undefined) && (field.fieldParams.isPrimaryKey) && (requirePrimaryKey)) { 
+            } else if ((val === undefined) && (requirePrimaryKey) && (field.fieldParams.isPrimaryKey) && (!field.fieldParams.isAutoInc)) { 
                 httpResult.setError(405, "Primary key '" + field.name + "' is missing from the data!")
 
-            } else if ((val !== undefined) && (field.fieldParams.isAutoInc) && (this.params.failOnAutoincUpdates)) { 
+            } else if ((val !== undefined) && (this.params.failOnAutoincUpdates) && (field.fieldParams.isAutoInc)) { 
                 httpResult.setError(405, "Autoinc field '" + field.name + "' can't be updated!")
 
             } else {
