@@ -152,6 +152,24 @@ export class OINOFactory {
         return result
     }
     
+    /**
+     * Creates a HTTP Response from object properties.
+     *
+     * @param object object
+     * @param template HTML template
+     * 
+     */
+    static createHtmlFromObject(object:any, template:string):string {
+        let result:string = template
+        for (let key in object) {
+            const value = object[key]
+            if (value) {
+                result = result.replaceAll('###' + key + '###', OINOStr.encode(value.toString(), OINOContentType.html))
+            }
+        }
+        result = result.replace(/###[^#]*###/g, "")
+        return result
+    }
     
     private static _findCsvLineEnd(csvData:string, start:number):number {
         const n:number = csvData.length
