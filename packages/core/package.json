@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/core",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "OINO TS library package for publishing an SQL database tables as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",

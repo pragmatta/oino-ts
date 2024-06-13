@@ -1,6 +1,6 @@
 {
   "name": "OinoHtmxApp",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
     "test": "bun test ./node_modules/@oino-ts/core/src/OINOApi.test.ts",
     "app": "../update_app_src.cmd htmxApp && bun run ./htmxApp.ts --watch"
