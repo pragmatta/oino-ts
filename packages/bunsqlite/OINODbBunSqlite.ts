@@ -149,7 +149,7 @@ export class OINODbBunSqlite extends OINODb {
                     let primarykey_match = OINODbBunSqlite._tablePrimarykeyRegex.exec(field_str)
                     // OINOLog.debug("initDatamodel non-field definition", {primarykey_match:primarykey_match})
                     if (primarykey_match && primarykey_match.length >= 2) {
-                        const primary_keys:string[] = primarykey_match[1].split(',') // not sure if will have space or not so split by comma and trim later
+                        const primary_keys:string[] = primarykey_match[1].replaceAll("\"", "").split(',') // not sure if will have space or not so split by comma and trim later
                         for (let i:number=0; i<primary_keys.length; i++) {
                             const pk:string = primary_keys[i].trim() //..the trim
                             for (let j:number=0; j<api.datamodel.fields.length; j++) {
