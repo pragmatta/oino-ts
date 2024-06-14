@@ -34,3 +34,4 @@ packages/bunsqlite/README.md
 packages/core/README.md
 packages/mariadb/README.md
 packages/postgresql/README.md
+/samples/htmxApp/node_modules
