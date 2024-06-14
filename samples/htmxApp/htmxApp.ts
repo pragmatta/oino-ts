@@ -46,14 +46,10 @@ async function getTemplate(apiName:string, method:string, command:string, status
 
 try {
 
-	const db_params:OINODbParams = { type: "OINODbBunSqlite", url: "file://../localDb/northwind.sqlite" }
+	const db_params:OINODbParams = { type: "OINODbBunSqlite", url: "file://./northwind.sqlite" }
 	const db:OINODb = await OINOFactory.createDb(db_params)
 
 	const apis:Record<string, OINOApi> = {
-		"employees": await OINOFactory.createApi(db, { tableName: "Employees" }),
-		"orders": await OINOFactory.createApi(db, { tableName: "Orders" }),
-		"orderdetails": await OINOFactory.createApi(db, { tableName: "OrderDetails" }),
-		"products": await OINOFactory.createApi(db, { tableName: "Products" }),
 		"categories": await OINOFactory.createApi(db, { tableName: "Categories" })
 	};
 	const api_array:OINOApi[] = Object.entries(apis).map(([path, api]) => (api));
@@ -93,7 +89,13 @@ try {
 				if (api) {
 					api_result = await api.doRequest(request.method, id, body, params)
 					const template:string = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
-					const html:string = OINOFactory.createHtmlFromResults(api_result, id, template)
+					OINOLog.debug("index.ts / template", {template:template}) 
+					let html:string
+					if (api_result.modelset?.dataset) {
+						html = OINOFactory.createHtmlFromData(api_result.modelset, template)
+					} else {
+						html = OINOFactory.createHtmlFromId(id, template)
+					}
 					response = new Response(html, {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
 					if (request.method == "POST") {
 						response.headers.set('HX-Trigger', 'OINOApiTrigger-' + api.params.tableName)
