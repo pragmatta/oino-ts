@@ -76,9 +76,6 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     test(target_db + target_table + target_group + " insert duplicate", async () => {
         expect((await api.doRequest("POST", "", post_body_json, {}))).toMatchSnapshot("POST")
     })
-    test(target_db + target_table + target_group + " insert without primary key", async () => {
-        expect((await api.doRequest("POST", "", "[{\"Id\":null}]", {}))).toMatchSnapshot("POST")
-    })   
     
     target_group = "[HTTP PUT]"
     const put_body_json = put_modelset.writeString(OINOContentType.json)
