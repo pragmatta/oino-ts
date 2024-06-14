@@ -61,7 +61,11 @@ export class OINOApiResult {
     setError(statusCode:number, statusMessage:string) {
         this.success = false
         this.statusCode = statusCode
-        this.statusMessage = OINO_ERROR_PREFIX + statusMessage
+        if (statusMessage.startsWith(OINO_ERROR_PREFIX)) {
+            this.statusMessage = statusMessage
+        } else {
+            this.statusMessage = OINO_ERROR_PREFIX + statusMessage
+        }
         this.messages.push(this.statusMessage)
         OINOLog.error("OINOApi.setError", {code:statusCode, message:statusMessage})
     }
@@ -96,16 +100,20 @@ export class OINOApiResult {
      *
      */
     copyMessagesToHeaders(headers:Headers, copyErrors:boolean = true, copyWarnings:boolean = false, copyInfos:boolean = false) {
+        let j=1
         for(let i=0; i<this.messages.length; i++) {
             const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ")
             if (copyErrors && message.startsWith(OINO_ERROR_PREFIX)) {
-                headers.append('X-OINO-ERROR', message)
+                headers.append('X-OINO-MESSAGES-'+j, message)
+                j++
             } 
             if (copyWarnings && message.startsWith(OINO_WARNING_PREFIX)) {
-                headers.append('X-OINO-WARNING', message)
+                headers.append('X-OINO-MESSAGES-'+j, message)
+                j++
             } 
             if (copyInfos && message.startsWith(OINO_INFO_PREFIX)) {
-                headers.append('X-OINO-INDO', message)
+                headers.append('X-OINO-MESSAGES-'+j, message)
+                j++
             } 
         }
     }
@@ -194,7 +202,8 @@ export class OINOApi {
             const sql_res:OINODataSet = await this.db.sqlSelect(sql)
             // OINOLog.debug("OINOApi.doGet sql_res", {sql_res:sql_res})
             if (sql_res.hasErrors()) {
-                result.setError(500, "Errors in executing GET SQL: " + sql)
+                result.setError(500, sql_res.getFirstError())
+                result.messages.push("OINO SELECT SQL: " + sql)
             } else {
                 result.modelset = new OINOModelSet(this.datamodel, sql_res)
             }
@@ -225,7 +234,8 @@ export class OINOApi {
                 const sql_res:OINODataSet = await this.db.sqlExec(sql)
                 // OINOLog.debug("OINOApi.doPost sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
-                    result.setError(500, "Errors in executing POST SQL: " + sql)
+                    result.setError(500, sql_res.getFirstError())
+                    result.messages.push("OINO POST SQL: " + sql)
                 }
                 result.messages.push(...sql_res.messages)
             }
@@ -245,7 +255,8 @@ export class OINOApi {
                 const sql_res:OINODataSet = await this.db.sqlExec(sql)
                 // OINOLog.debug("OINOApi.doPut sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
-                    result.setError(500, "Errors in executing PUT SQL: " + sql)
+                    result.setError(500, sql_res.getFirstError())
+                    result.messages.push("OINO PUT SQL: " + sql)
                 }
                 result.messages.push(...sql_res.messages)
             }
@@ -263,7 +274,8 @@ export class OINOApi {
             const sql_res:OINODataSet = await this.db.sqlExec(sql)
             // OINOLog.debug("OINOApi.doDelete sql_res", {sql_res:sql_res})
             if (sql_res.hasErrors()) {
-                result.setError(500, "Errors in executing DELETE SQL: " + sql)
+                result.setError(500, sql_res.getFirstError())
+                result.messages.push("OINO DELETE SQL: " + sql)
             }
             result.messages.push(...sql_res.messages)
         } catch (e:any) {

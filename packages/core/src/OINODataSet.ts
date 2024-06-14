@@ -68,6 +68,18 @@ export abstract class OINODataSet {
         }
         return false
     }
+    /**
+     * Checks if the messages contain errors.
+     * 
+     */
+    getFirstError(): string {
+        for (let i=0; i<this.messages.length; i++) {
+            if (this.messages[i].startsWith(OINO_ERROR_PREFIX)) {
+                return this.messages[i]
+            }
+        }
+        return ""
+    }
 }
 
 /**
