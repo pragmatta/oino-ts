@@ -221,6 +221,7 @@ WHERE table_name = `
         // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: table description ", {res: res })
         while (!res.isEof()) {
             const row:OINODataRow = res.getRow()
+            // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: next row ", {row: row })
             const field_name:string = row[0]?.toString() || ""
             const sql_type:string = row[1]?.toString() || ""
             const field_length:number = this._parseFieldLength(row[2])
