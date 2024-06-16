@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "@oino-ts/core";
 
 import { Pool, QueryResult } from "pg";
 
@@ -152,6 +152,13 @@ WHERE table_name = `
         } else if (sqlType == "bytea") {
             return "\'" + cellValue + "\'"
 
+        } else if (sqlType == "boolean") {
+            if (cellValue == null || cellValue == "" || cellValue.toString().toLowerCase() == "false" || cellValue == "0") { 
+                return "false"
+            } else {
+                return "true"
+            }
+
         } else if ((sqlType == "date") && (cellValue instanceof Date)) {
             return "\'" + cellValue.toISOString() + "\'"
 
@@ -161,8 +168,11 @@ WHERE table_name = `
     }
 
     parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
-        if ((sqlValue === null) || (sqlValue === undefined) || (sqlValue == "NULL")) {
+        if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
+
+        } else if ((sqlValue === undefined)) {
+            return undefined
 
         } else if (((sqlType == "date")) && (typeof(sqlValue) == "string")) {
             return new Date(sqlValue)
@@ -250,6 +260,9 @@ WHERE table_name = `
 
                 } else if ((sql_type == "bytea")) {
                     api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length))
+
+                } else if ((sql_type == "boolean")) {
+                    api.datamodel.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params))
 
                 } else if ((sql_type == "decimal") || (sql_type == "numeric")) {
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1))
