@@ -99,6 +99,7 @@ export class OINODataField {
      *
      */
     serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
+        cellVal = this.db.parseSqlValueAsCell(cellVal, this.sqlType)
         if ((cellVal === null) || (cellVal === undefined))  { 
             return OINOStr.encode(cellVal, contentType)  // let content type encoder worry what to do with the value (but force it to string)
         } else {
@@ -184,8 +185,10 @@ export class OINOBooleanDataField extends OINODataField {
      *
      */
     serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
+        const parsed_value:OINODataCell = this.db.parseSqlValueAsCell(cellVal, this.sqlType)
         let result:string
-        if ((cellVal == null) || (cellVal == "") || (cellVal.toString().toLowerCase() == "false") || (cellVal == "0")) {
+        // console.log("OINOBooleanDataField.serializeCell: parsed_value=" + parsed_value)
+        if ((!parsed_value) || (parsed_value.toString().toLowerCase() == "false") || (parsed_value.match(/^0+$/))) {
             result = "false"
         } else {
             result = "true"
