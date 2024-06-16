@@ -185,10 +185,10 @@ export class OINOBooleanDataField extends OINODataField {
      *
      */
     serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
-        const parsed_value:OINODataCell = this.db.parseSqlValueAsCell(cellVal, this.sqlType)
+        const parsed_value:string = (this.db.parseSqlValueAsCell(cellVal, this.sqlType) || "").toString()
         let result:string
         // console.log("OINOBooleanDataField.serializeCell: parsed_value=" + parsed_value)
-        if ((!parsed_value) || (parsed_value.toString().toLowerCase() == "false") || (parsed_value.match(/^0+$/))) {
+        if ((parsed_value == "") || (parsed_value.toLowerCase() == "false") || (parsed_value.match(/^0+$/))) {
             result = "false"
         } else {
             result = "true"
