@@ -169,7 +169,7 @@ CREATE TABLE `Products` (
     `UnitsInStock` SMALLINT(2) DEFAULT 0,
     `UnitsOnOrder` SMALLINT(2) DEFAULT 0,
     `ReorderLevel` SMALLINT(2) DEFAULT 0,
-    `Discontinued` SMALLINT(1) DEFAULT 0,
+    `Discontinued` BIT(1) DEFAULT 0,
     CONSTRAINT `PK_Products` PRIMARY KEY (`ProductID`)
 );
 
