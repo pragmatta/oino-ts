@@ -5612,7 +5612,7 @@ CREATE TABLE [Products](
    [UnitsInStock]INTEGER DEFAULT 0,
    [UnitsOnOrder]INTEGER DEFAULT 0,
    [ReorderLevel]INTEGER DEFAULT 0,
-   [Discontinued]INTEGER NOT NULL DEFAULT '0',
+   [Discontinued]BOOLEAN NOT NULL DEFAULT FALSE,
     CHECK ([UnitPrice]>=(0)),
     CHECK ([ReorderLevel]>=(0)),
     CHECK ([UnitsInStock]>=(0)),

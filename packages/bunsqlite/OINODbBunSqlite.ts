@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINOMemoryDataSet, OINODataCell, OINOLog, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINOMemoryDataSet, OINODataCell, OINOLog, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr } from "@oino-ts/core";
 
 import { Database as BunSqliteDb } from "bun:sqlite";
 
@@ -17,7 +17,7 @@ class OINOBunSqliteDataset extends OINOMemoryDataSet {
 export class OINODbBunSqlite extends OINODb {
     private static _tableDescriptionRegex = /^CREATE TABLE\s*[\"\[]?\w+[\"\]]?\s*\(\s*(.*)\s*\)\s*(WITHOUT ROWID)?$/msi
     private static _tablePrimarykeyRegex = /PRIMARY KEY \(([^\)]+)\)/i
-    private static _tableFieldTypeRegex = /[\"\[\s]?(\w+)[\"\]\s]\s?(INTEGER|REAL|DOUBLE|NUMERIC|DECIMAL|TEXT|BLOB|VARCHAR|DATETIME|DATE)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
+    private static _tableFieldTypeRegex = /[\"\[\s]?(\w+)[\"\]\s]\s?(INTEGER|REAL|DOUBLE|NUMERIC|DECIMAL|TEXT|BLOB|VARCHAR|DATETIME|DATE|BOOLEAN)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
 
     private _db:BunSqliteDb|null
 
@@ -75,8 +75,11 @@ export class OINODbBunSqlite extends OINODb {
     }
 
     parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
-        if ((sqlValue === null) || (sqlValue === undefined) || (sqlValue == "NULL")) {
+        if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
+
+        } else if (sqlValue === undefined) {
+            return undefined
 
         } else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (typeof(sqlValue) == "string")) {
             return new Date(sqlValue)
@@ -189,6 +192,10 @@ export class OINODbBunSqlite extends OINODb {
                             } else {
                                 api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
                             }
+                        
+                        } else if ((sql_type == "BOOLEAN")) {
+                            api.datamodel.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params))
+                        
                         } else {
                             OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
                             api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
