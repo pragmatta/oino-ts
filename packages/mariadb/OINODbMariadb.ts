@@ -183,8 +183,11 @@ export class OINODbMariadb extends OINODb {
 
     parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
         // OINOLog.debug("OINODbMariadb.parseSqlValueAsCell", {sqlValue:sqlValue, sqlType:sqlType})
-        if ((sqlValue === null) || (sqlValue === undefined) || (sqlValue == "NULL")) {
+        if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
+
+        } else if (sqlValue === undefined) {
+            return undefined
 
         } else if (((sqlType == "date")) && (typeof(sqlValue) == "string")) {
             return new Date(sqlValue)
