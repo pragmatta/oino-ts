@@ -93,7 +93,7 @@ export let OINO_ID_SEPARATOR_ESCAPED = "%2d"
 
 
 /** A single column value of a data row */
-export type OINODataCell = string | bigint | number | boolean | Date | Uint8Array | null | undefined
+export type OINODataCell = string | bigint | number | boolean | Date | Uint8Array | Buffer | null | undefined
 /** A single data row */
 export type OINODataRow = Array<OINODataCell>
 /** Empty row instance */

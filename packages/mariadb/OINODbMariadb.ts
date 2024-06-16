@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/core";
 
 import mariadb from "mariadb";
 
@@ -167,7 +167,13 @@ export class OINODbMariadb extends OINODb {
             return "\"" + cellValue.toISOString().replace('T', ' ').substring(0, 23) + "\""
 
         } else if ((sqlType == "bit")) {
-            return "b'" + cellValue.toString() + "'"
+            if ((cellValue === false) || (cellValue == null) || (cellValue == "") || (cellValue.toString().toLowerCase() == "false") || (cellValue == "0")) {
+                return "b'0'"
+            } else if ((cellValue === true) || (cellValue.toString().toLowerCase() == "true")) {
+                return "b'1'"
+            } else {
+                return "b'" + cellValue.toString() + "'" // rest is assumed to be a valid bitstring
+            }
 
         } else {
             return "\"" + cellValue?.toString().replaceAll("\\", "\\\\").replaceAll("\"", "\\\"").replaceAll("\r", "\\r").replaceAll("\n", "\\n").replaceAll("\t", "\\t") + "\""
@@ -175,11 +181,23 @@ export class OINODbMariadb extends OINODb {
     }
 
     parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
-        if ((sqlValue === null) || (sqlValue === undefined) || (sqlValue == "NULL")) {
+        // OINOLog.debug("OINODbMariadb.parseSqlValueAsCell", {sqlValue:sqlValue, sqlType:sqlType})
+        if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
+
+        } else if (sqlValue === undefined) {
+            return undefined
 
         } else if (((sqlType == "date")) && (typeof(sqlValue) == "string")) {
             return new Date(sqlValue)
+
+        } else if ((sqlType == "bit") && (sqlValue instanceof Buffer)) { // mariadb returns a buffer for bit-fields
+            const buf:Buffer = sqlValue as Buffer
+            let result:string = ""
+            for (let i=0; i<buf.length; i++) {
+                result += buf[i].toString(2).padStart(8, '0')
+            }
+            return result
 
         } else {
             return sqlValue
@@ -261,7 +279,7 @@ export class OINODbMariadb extends OINODb {
                         api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
                     }
 
-                } else if ((sql_type == "bit") || (sql_type == "char") || (sql_type == "varchar") || (sql_type == "tinytext") || (sql_type == "tinytext") || (sql_type == "mediumtext") || (sql_type == "longtext")) {
+                } else if ((sql_type == "char") || (sql_type == "varchar") || (sql_type == "tinytext") || (sql_type == "tinytext") || (sql_type == "mediumtext") || (sql_type == "longtext")) {
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1))
 
                 } else if ((sql_type == "longblob") || (sql_type == "binary") || (sql_type == "varbinary")) {
@@ -269,6 +287,13 @@ export class OINODbMariadb extends OINODb {
 
                 } else if ((sql_type == "decimal")) {
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1 + field_length2 + 1))
+
+                } else if ((sql_type == "bit")) {
+                    if (field_length1 == 1) {
+                        api.datamodel.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params))
+                    } else {
+                        api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1*8))
+                    }
 
                 } else {
                     OINOLog.info("OINODbMariadb.initializeApiDatamodel: unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length1:field_length1, field_length2:field_length2, field_params:field_params })
