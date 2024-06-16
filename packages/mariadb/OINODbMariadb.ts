@@ -4,10 +4,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/core";
 
 import mariadb from "mariadb";
-import { OINOBooleanDataField } from "../core/src";
 
 class OINOMariadbData extends OINODataSet {
     private _rows:OINODataRow[] = OINO_EMPTY_ROWS
