@@ -1,16 +1,20 @@
-<div id="OINOApiRow-Categories-###_OINOID_###" class="row"
+<tr id="OINOApiRow-categories-###_OINOID_###"
     hx-get="http://localhost:3002/categories/###_OINOID_###" 
-    hx-trigger="OINOApiTrigger-Categories-###_OINOID_### from:body"
+    hx-trigger="OINOApiTrigger-categories-###_OINOID_### from:body"
     hx-target="this" 
     hx-swap="outerHTML"
 >
-    <div class="col-3">###CategoryID###</div>
-    <div class="col-3">###CategoryName###</div>
-    <div class="col-3">###Description###</div>
-    <div class="col-3">
-        <a class="link-primary" hx-get="http://localhost:3002/Categories/###_OINOID_###/edit" hx-target="#OINOApiRow-Categories-###_OINOID_###" hx-swap="outerHTML">Edit</a>
-        <a class="link-danger" hx-delete="http://localhost:3002/Categories/###_OINOID_###" hx-confirm="Delete row '###_OINOID_###', are you sure?">Delete</a>
-    </div>
-</div>
+    <td>###CategoryID###</td>
+    <td>###CategoryName###</td>
+    <td>###Description###</td>
+    <td>
+        <a hx-get="http://localhost:3002/categories/###_OINOID_###/edit" hx-target="#OINOApiRow-categories-###_OINOID_###" hx-swap="outerHTML">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+        <a hx-delete="http://localhost:3002/categories/###_OINOID_###" hx-confirm="Delete row '###_OINOID_###', are you sure?">
+           <i class="bi bi-trash"></i>
+        </a>
+    </td>
+</tr>
 
 
