@@ -13,7 +13,7 @@ const response_headers:HeadersInit = {
 OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug))
 OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 
-const API_PATH_REGEX = /\/([^\/]+)\/?([^\/]*)\/?([^\/]*)/
+const API_PATH_REGEX = /\/([^\/]*)\/?([^\/]*)\/?([^\/]*)/
 async function findBestTemplateId(apiName:string, operation:string, statusCode:string):BunFile|null {
 	let template_id:string = apiName.toLowerCase()
 	if (operation) {
@@ -80,13 +80,22 @@ try {
 				const api_name:string = path_matches[1]?.toLowerCase() || ""
 				const id:string = path_matches[2]?.toLowerCase() || ""
 				const operation:string = path_matches[3]?.toLowerCase() || ""
+				OINOLog.debug("index.ts / request", {api_name:api_name, id:id, operation:operation }) 
 
 				const params:OINORequestParams = OINOFactory.createParamsFromRequest(request)
 				const api:OINOApi|null = apis[api_name]
 				const body = await request.text()
-				OINOLog.debug("index.ts / api", {params:params, id:id, body:body }) 
+				OINOLog.debug("index.ts / api", {params:params, body:body }) 
 				let api_result:OINOApiResult
-				if (api) {
+				if (api_name == "") {
+					const template:string = await getTemplate(id, "", operation, "")
+					if (template) {
+						const html:string = OINOFactory.createHtmlFromId(id, template)
+						response = new Response(html, {status:200, statusText: "OK", headers: response_headers })	
+					} else {
+						response = new Response("Template not found!", {status:404, statusText: "Template not found!", headers: response_headers })	
+					}
+				} else if (api) {
 					api_result = await api.doRequest(request.method, id, body, params)
 					const template:string = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
 					OINOLog.debug("index.ts / template", {template:template}) 

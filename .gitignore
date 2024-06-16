@@ -35,3 +35,7 @@ packages/core/README.md
 packages/mariadb/README.md
 packages/postgresql/README.md
 /samples/htmxApp/node_modules
+/samples/nodeApp/node_modules
+/samples/readmeApp/node_modules
+samples/nodeApp/package-lock.json
+samples/readmeApp/package-lock.json
