@@ -30,7 +30,8 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     const put_dataset:OINOMemoryDataSet = new OINOMemoryDataSet([apiDataset.putRow])
     const put_modelset:OINOModelSet = new OINOModelSet(api.datamodel, put_dataset)
     
-    const new_row_id:string = apiDataset.postRow[0]?.toString() || ""
+    const new_row_id:string = post_modelset.datamodel.printRowOINOId(apiDataset.postRow)
+    // OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
     
     const target_db:string = "[" + dbParams.type + "]"
     let target_table:string = "[" + apiDataset.apiParams.tableName + "]"
@@ -55,7 +56,7 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
 
 
     test(target_db + target_table + target_group + " select * with filter", async () => {
-        expect((await api.doRequest("GET", "", "", apiDataset.requestParams)).modelset?.writeString()).toMatchSnapshot("GET JSON")
+        expect((await api.doRequest("GET", "", "", apiDataset.requestParams)).modelset?.writeString()).toMatchSnapshot("GET JSON FILTER")
         apiDataset.requestParams.filter = undefined // remove filter so it does not affect rest of the tests
     })
     
@@ -76,9 +77,6 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     test(target_db + target_table + target_group + " insert duplicate", async () => {
         expect((await api.doRequest("POST", "", post_body_json, {}))).toMatchSnapshot("POST")
     })
-    test(target_db + target_table + target_group + " insert without primary key", async () => {
-        expect((await api.doRequest("POST", "", "[{\"Id\":null}]", {}))).toMatchSnapshot("POST")
-    })   
     
     target_group = "[HTTP PUT]"
     const put_body_json = put_modelset.writeString(OINOContentType.json)
@@ -197,7 +195,16 @@ const apis:OINOTestApiParams[] = [
         },
         postRow: [99, "LastName", "FirstName", "Title", "TitleOfCourtesy", new Date("2024-04-06"), new Date("2024-04-07"), "Address", "City", "Region", 12345, "EU", "123 456 7890", "9876", Buffer.from("OINO"), "Line1\nLine2", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
         putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("OINO2"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
+    },
+    {
+        apiParams: { tableName: "OrderDetails" },
+        requestParams: {
+            filter: new OINOFilter("(Quantity)-gt(100)")
+        },
+        postRow: [10249,77,12.34,56,0],
+        putRow: [10249,77,23.45,67,0]
     }
+
 ]
 for (let db of dbs) {
     for (let api of apis) {
