@@ -195,7 +195,7 @@ export class OINOStr {
         } else if (str === null) {
             return ""
         } else {
-            return str.replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#039;', "'")
+            return str.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;')
         }
     }
 
@@ -205,7 +205,7 @@ export class OINOStr {
      * @param str string to encode
      */
     static decodeHtml(str:string):string|null|undefined {
-        return str.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;')
+        return str.replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#039;', "'")
     }
     /**
      * Decode content type formatted string as OINO serialization.
