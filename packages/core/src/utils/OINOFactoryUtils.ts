@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINO_ID_FIELD } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINO_ID_FIELD } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -59,7 +59,7 @@ export class OINOFactory {
      * @param request HTTP Request 
      */
     static createParamsFromRequest(request:Request):OINORequestParams {
-        let result:OINORequestParams = {}
+        let result:OINORequestParams = { sqlParams: {}}
         const url:URL = new URL(request.url)
         const content_type = request.headers.get("content-type")
         if (content_type == OINOContentType.csv) {
@@ -90,7 +90,7 @@ export class OINOFactory {
 
         const filter = url.searchParams.get("filter")
         if (filter) {
-            result.filter = new OINOFilter(filter)
+            result.sqlParams.filter = new OINOSqlFilter(filter)
         }
         OINOLog.debug("createParamsFromRequest", {params:result})
         return result
