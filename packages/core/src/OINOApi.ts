@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOFilter, OINODataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINOModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams } from "./index.js"
+import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOSqlFilter, OINODataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINOModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams } from "./index.js"
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 
@@ -151,13 +151,13 @@ export class OINOApi {
         this.datamodel = new OINODataModel(this)
     }
 
-    private _parseFilter(filterStr:string, httpResult:OINOApiResult):OINOFilter {
+    private _parseFilter(filterStr:string, httpResult:OINOApiResult):OINOSqlFilter {
         try {
-            return new OINOFilter(filterStr)
+            return new OINOSqlFilter(filterStr)
         } catch (e:any) {
             httpResult.setError(500, "Unhandled exception in _parseFilters: " + e.message)
         }
-        return new OINOFilter("")
+        return new OINOSqlFilter("")
     }
 
     private _validateRowValues(httpResult:OINOApiResult, row:OINODataRow, requirePrimaryKey:boolean):void {
