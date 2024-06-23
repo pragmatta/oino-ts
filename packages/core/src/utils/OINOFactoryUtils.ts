@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINO_ID_FIELD } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -130,7 +130,7 @@ export class OINOFactory {
         const datamodel:OINODataModel = modelset.datamodel
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
-            let html_row:string = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
+            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
             for (let i=0; i<datamodel.fields.length; i++) {
                 html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
             }
@@ -143,12 +143,12 @@ export class OINOFactory {
     /**
      * Creates a HTTP Response from a row id.
      *
-     * @param id OINO id
+     * @param oinoId OINO id
      * @param template HTML template
      * 
      */
-    static createHtmlFromId(id:string, template:string):string {
-        let result:string = template.replaceAll('###' + OINO_ID_FIELD + '###', OINOStr.encode(id, OINOContentType.html))
+    static createHtmlFromOinoId(oinoId:string, template:string):string {
+        let result:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(oinoId, OINOContentType.html))
         return result
     }
     

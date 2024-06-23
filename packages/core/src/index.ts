@@ -10,6 +10,7 @@ export { OINODataField, OINOBooleanDataField, OINONumberDataField, OINOStringDat
 export { OINODb } from "./OINODb.js"
 export { OINODataSet, OINOMemoryDataSet } from "./OINODataSet.js"
 export { OINOSqlFilter } from "./OINOSqlParams.js"
+export { OINOSettings } from "./OINOSettings.js"
 
 export { OINOSwagger } from "./utils/OINOSwaggerUtils.js"
 export { OINOBenchmark } from "./utils/OINOBenchmarkingUtils.js"
@@ -90,12 +91,6 @@ export const OINO_ERROR_PREFIX = "OINO ERROR: "
 export const OINO_WARNING_PREFIX = "OINO WARNING: "
 /** OINO info message prefix */
 export const OINO_INFO_PREFIX = "OINO INFO: "
-/** Name of the synthetic OINO ID field */
-export let OINO_ID_FIELD = "_OINOID_"
-/** Private key separator of the synthetic OINO ID field */
-export let OINO_ID_SEPARATOR = "-"
-export let OINO_ID_SEPARATOR_ESCAPED = "%2d"
-
 
 /** A single column value of a data row */
 export type OINODataCell = string | bigint | number | boolean | Date | Uint8Array | Buffer | null | undefined
@@ -111,17 +106,3 @@ export type OINOValues = Record<string, string>
 /** Supported content format mime-types */
 export enum OINOContentType { json='application/json', csv='text/csv', formdata='multipart/form-data', urlencode='application/x-www-form-urlencoded', html='text/html' }
 
-/** Set the name of the OINO ID field (default \_OINOID\_) */
-export function OINOSettings_setIdField(idField:string) {
-    if (idField) {
-        OINO_ID_FIELD = idField
-    }
-}
-
-/** Set the separator character of the OINO ID field (default -) */
-export function OINOSettings_setIdSeparator(idSeparator:string) {
-    if (idSeparator && (idSeparator.length == 1)) {
-        OINO_ID_SEPARATOR = idSeparator
-        OINO_ID_SEPARATOR_ESCAPED = '%' + idSeparator.charCodeAt(0).toString(16)
-    }
-}

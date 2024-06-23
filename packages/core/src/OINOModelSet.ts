@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINO_ID_FIELD, OINOLog, OINOBlobDataField, OINOStr } from "./index.js";
+import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -49,7 +49,7 @@ export class OINOModelSet {
                 json_row += "," + OINOStr.encode(fields[i].name, OINOContentType.json) + ":" + fields[i].serializeCell(row[i], OINOContentType.json)
             }
         }
-        json_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.json) + json_row
+        json_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.json) + json_row
         // OINOLog_debug("OINOModelSet._writeRowJson="+json_row)
         return "{" + json_row + "}"
     }
@@ -71,7 +71,7 @@ export class OINOModelSet {
     private _writeHeaderCsv():string {
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
-        let csv_header:string = "\"" + OINO_ID_FIELD + "\""
+        let csv_header:string = "\"" + OINOSettings.OINO_ID_FIELD + "\""
         for (let i=0; i<fields.length; i++) {
             csv_header += ",\"" + fields[i].name + "\""
         }
@@ -143,7 +143,7 @@ export class OINOModelSet {
             // OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
             result += formdata_block
         }
-        result = this._writeRowFormdataParameterBlock(OINO_ID_FIELD, this.datamodel.printRowOINOId(row), multipart_boundary) + result
+        result = this._writeRowFormdataParameterBlock(OINOSettings.OINO_ID_FIELD, this.datamodel.printRowOINOId(row), multipart_boundary) + result
         return result
     }
 
@@ -172,7 +172,7 @@ export class OINOModelSet {
                 urlencode_row += OINOStr.encode(fields[i].name, OINOContentType.urlencode) + "=" + fields[i].serializeCell(row[i], OINOContentType.urlencode)
             }
         }
-        urlencode_row = OINOStr.encode(OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.urlencode) + "&" + urlencode_row
+        urlencode_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.urlencode) + "&" + urlencode_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
         return urlencode_row
     }

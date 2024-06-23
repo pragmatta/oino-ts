@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINO_ID_SEPARATOR, OINO_ID_SEPARATOR_ESCAPED as OINO_ID_SEPARATOR_URLESCAPED } from "./index.js";
+import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINOSettings } from "./index.js";
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -91,7 +91,7 @@ export class OINODataModel {
     private _printSqlPrimaryKeyCondition(id_value: string): string {
         let result: string = ""
         let i:number = 0
-        const id_parts = id_value.split(OINO_ID_SEPARATOR)
+        const id_parts = id_value.split(OINOSettings.OINO_ID_SEPARATOR)
         for (let f of this.fields) {
             if (f.fieldParams.isPrimaryKey) {
                 if (result != "") {
@@ -191,9 +191,9 @@ export class OINODataModel {
         for (let i=0; i< this.fields.length; i++) {
             if (this.fields[i].fieldParams.isPrimaryKey) {
                 if (result != "") {
-                    result += OINO_ID_SEPARATOR
+                    result += OINOSettings.OINO_ID_SEPARATOR
                 } 
-                result += encodeURIComponent(row[i] as string).replaceAll(OINO_ID_SEPARATOR, OINO_ID_SEPARATOR_URLESCAPED)
+                result += encodeURIComponent(row[i] as string).replaceAll(OINOSettings.OINO_ID_SEPARATOR, OINOSettings.OINO_ID_SEPARATOR_URLESCAPED)
             }
         }
         return result
