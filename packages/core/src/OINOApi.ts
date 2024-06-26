@@ -196,7 +196,7 @@ export class OINOApi {
 
     private async _doGet(result:OINOApiResult, id:string, params:OINORequestParams):Promise<void> {
         OINOBenchmark.start("doGet")
-        const sql:string = this.datamodel.printSqlSelect(id, params)
+        const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams)
         // OINOLog.debug("OINOApi.doGet sql", {sql:sql})
         try {
             const sql_res:OINODataSet = await this.db.sqlSelect(sql)

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINOSettings } from "./index.js";
+import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINOSettings, OINOSqlParams } from "./index.js";
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -222,7 +222,7 @@ export class OINODataModel {
      * @param params OINO reqest params
      *
      */
-    printSqlSelect(id: string, params:OINORequestParams): string {
+    printSqlSelect(id: string, params:OINOSqlParams): string {
         let result:string = "SELECT " + this._printSqlColumnNames() + " FROM " + this.api.db.printSqlTablename(this.api.params.tableName);
         const filter_sql = params.filter?.toSql(this) || ""
         // OINOLog_debug("OINODataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql})

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr } from "./index.js";
+import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr, OINOSettings } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
