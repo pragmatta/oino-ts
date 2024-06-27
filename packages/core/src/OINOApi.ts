@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOSqlFilter, OINODataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINOModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams } from "./index.js"
+import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOSqlFilter, OINODataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINOModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams, OINOHashid } from "./index.js"
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 
@@ -133,6 +133,9 @@ export class OINOApi {
     /** API parameters */
     readonly params: OINOApiParams
 
+    /** API hashid */
+    readonly hashid:OINOHashid|null
+
     /**
      * Constructor of API object.
      * NOTE! OINODb.initDatamodel must be called if created manually instead of the factory.
@@ -149,6 +152,11 @@ export class OINOApi {
         this.db = db
         this.params = params
         this.datamodel = new OINODataModel(this)
+        if (this.params.hashidKey) {
+            this.hashid = new OINOHashid(this.params.hashidKey, this.db.name + " " + this.params.tableName, this.params.hashidLength)
+        } else {
+            this.hashid = null
+        }
     }
 
     private _parseFilter(filterStr:string, httpResult:OINOApiResult):OINOSqlFilter {

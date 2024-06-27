@@ -11,6 +11,7 @@ export { OINODb } from "./OINODb.js"
 export { OINODataSet, OINOMemoryDataSet } from "./OINODataSet.js"
 export { OINOSqlFilter } from "./OINOSqlParams.js"
 export { OINOSettings } from "./OINOSettings.js"
+export { OINOHashid } from "./OINOHashid.js"
 
 export { OINOSwagger } from "./utils/OINOSwaggerUtils.js"
 export { OINOBenchmark } from "./utils/OINOBenchmarkingUtils.js"
@@ -31,7 +32,11 @@ export type OINOApiParams = {
     /** Exclude all fields with this prefix from the API */
     excludeFieldPrefix?:string
     /** Exclude given fields from the API */
-    excludeFields?:string[]
+    excludeFields?:string[],
+    /** Enable hashids for numeric primarykeys by adding a 32 char key */
+    hashidKey?:string,
+    /** Set (minimum) length (12-32 chars) of the hashids */
+    hashidLength?:number
 }
 
 /** Database class (constructor) type */
@@ -44,7 +49,7 @@ export type OINODbParams = {
     /** Connection URL, either file://-path or an IP-address or an HTTP-url */
     url: string
     /** Name of the database */
-    database?: string 
+    database: string 
     /** TCP port of the database */
     port?: number
     /** Username used to authenticate */
