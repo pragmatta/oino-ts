@@ -98,24 +98,24 @@ export class OINODataField {
      * @param contentType content type to serialize into
      *
      */
-    serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
+    serializeCell(cellVal: OINODataCell):string|null|undefined {
         cellVal = this.db.parseSqlValueAsCell(cellVal, this.sqlType)
         if ((cellVal === null) || (cellVal === undefined))  { 
-            return OINOStr.encode(cellVal, contentType)  // let content type encoder worry what to do with the value (but force it to string)
+            return cellVal  // let content type encoder worry what to do with the value (so not force it to string)
         } else {
-            return OINOStr.encode(cellVal.toString(), contentType)
+            return cellVal.toString()
         }
     }
 
     /**
      * Parce cell value from string using field type specific formatting rules.
      * 
-     * @param strVal string value
+     * @param value string value
      * @param contentType content type to serialize into
      *
      */
-    deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
-        return OINOStr.decode(strVal, contentType)
+    deserializeCell(value: string|null|undefined): OINODataCell {
+        return value
     }
 
     /**
@@ -184,7 +184,7 @@ export class OINOBooleanDataField extends OINODataField {
      * @param contentType content type to serialize into
      *
      */
-    serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
+    serializeCell(cellVal: OINODataCell):string|null|undefined {
         const parsed_value:string = (this.db.parseSqlValueAsCell(cellVal, this.sqlType) || "").toString()
         let result:string
         // console.log("OINOBooleanDataField.serializeCell: parsed_value=" + parsed_value)
@@ -193,22 +193,18 @@ export class OINOBooleanDataField extends OINODataField {
         } else {
             result = "true"
         }
-        if (contentType == OINOContentType.json) {
-            return OINOStr.encodeJSON(result, true) // boolean fields are treated as values in JSON
-        } else {
-            return super.serializeCell(result, contentType)
-        }
+        return result
     }
 
     /**
      * Parce cell value from string using field type specific formatting rules.
      * 
-     * @param strVal string value
+     * @param value string value
      * @param contentType content type to serialize into
      *
      */
-    deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
-        if (strVal == null || strVal == "" || strVal.toString().toLowerCase() == "false" || strVal == "0") { // TODO: testaa poistaa .toString()
+    deserializeCell(value: string|null|undefined): OINODataCell {
+        if (value == null || value == "" || value.toString().toLowerCase() == "false" || value == "0") { // TODO: testaa poistaa .toString()
             return false
         } else {
             return true
@@ -242,33 +238,28 @@ export class OINONumberDataField extends OINODataField {
      * @param contentType content type to serialize into
      *
      */
-    serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
+    serializeCell(cellVal: OINODataCell):string|null|undefined {
         let result:string|null
         if ((cellVal === null) || (cellVal === undefined) || (cellVal === "")) {
             result = null
         } else {
             result = cellVal.toString()
         }
-        // OINOLog.debug("OINONumberDataField.serializeCell", { field:this.name, cellVal:cellVal, cellVal_type:typeof(cellVal), contentType:contentType, result:result})
-        if (contentType == OINOContentType.json) {
-            return OINOStr.encodeJSON(result, true) // number fields are treated as values in JSON
-        } else {
-            return super.serializeCell(result, contentType)
-        }
+        return result
     }
 
     /**
      * Parce cell value from string using field type specific formatting rules.
      * 
-     * @param strVal string value
+     * @param value string value
      * @param contentType content type to serialize into
      *
      */
-    deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
-        if (strVal == "") { // TODO: testaa poistaa .toString()
+    deserializeCell(value: string|null|undefined): OINODataCell {
+        if (value == "") { 
             return 0
         } else {
-            return Number.parseFloat(strVal)
+            return Number.parseFloat(value)
         }
     }
 }
@@ -300,28 +291,33 @@ export class OINOBlobDataField extends OINODataField {
      * @param contentType content type to serialize into
      *
      */
-    serializeCell(cellVal: OINODataCell, contentType:OINOContentType):string {
+    serializeCell(cellVal: OINODataCell):string|null|undefined {
         // OINOLog_debug("OINOBlobDataField.serializeCell", {cellVal:cellVal})
         if ((cellVal === null) || (cellVal === undefined))  {
-            return OINOStr.encode(cellVal, contentType)
+            return cellVal
 
         } else if (cellVal instanceof Uint8Array) {
-            return OINOStr.encode(Buffer.from(cellVal).toString('base64'), contentType)
+            return Buffer.from(cellVal).toString('base64')
 
         } else {
-            return OINOStr.encode(cellVal.toString(), contentType)
+            return cellVal.toString()
         }
     }
 
     /**
      * Parce cell value from string using field type specific formatting rules.
      * 
-     * @param strVal string value
+     * @param value string value
      * @param contentType content type to serialize into
      *
      */
-    deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
-        return Buffer.from(strVal, 'base64') // Blob-field data is base64 encoded and converted internally to UInt8Array / Buffer
+    deserializeCell(value: string|null|undefined): OINODataCell {
+        if (value == null) {
+            return new Buffer(0)
+
+        } else {
+            return Buffer.from(value, 'base64') // Blob-field data is base64 encoded and converted internally to UInt8Array / Buffer
+        }
     }
 
 }
@@ -352,37 +348,36 @@ export class OINODatetimeDataField extends OINODataField {
      * @param contentType content type to serialize into
      *
      */
-    serializeCell(cellVal: OINODataCell, contentType:OINOContentType): string {
+    serializeCell(cellVal: OINODataCell): string|null|undefined {
         // OINOLog.debug("OINODatetimeDataField.serializeCell", {cellVal:cellVal, type:typeof(cellVal)})
         if (typeof(cellVal) == "string") {
             cellVal = this.db.parseSqlValueAsCell(cellVal, this.sqlType)
             // OINOLog.debug("OINODatetimeDataField.serializeCell parsed", {cellVal:cellVal, type:typeof(cellVal)})
         }
         if ((cellVal === null) || (cellVal === undefined))  {
-            return OINOStr.encode(cellVal, contentType)
+            return cellVal
             
         } else if (cellVal instanceof Date) {
-            return OINOStr.encode(cellVal.toISOString(), contentType)
+            return cellVal.toISOString()
 
         } else {
-            return OINOStr.encode(cellVal.toString(), contentType)
+            return cellVal.toString()
         }
     }
 
     /**
      * Parce cell value from string using field type specific formatting rules.
      * 
-     * @param strVal string value
+     * @param value string value
      * @param contentType content type to serialize into
      *
      */
-    deserializeCell(strVal: string, contentType:OINOContentType): OINODataCell {
+    deserializeCell(value: string|null|undefined): OINODataCell {
         // OINOLog.debug("OINODatetimeDataField.deserializeCell", {strVal:strVal})
-        const date_str = OINOStr.decode(strVal, contentType)
-        if ((date_str === null) || (date_str === undefined)) {
-            return date_str
+        if ((value === null) || (value === undefined)) {
+            return value
         } else {
-            return new Date(date_str)
+            return new Date(value)
         }        
     }
     

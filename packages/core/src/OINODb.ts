@@ -15,12 +15,15 @@ export abstract class OINODb {
     
     protected _params:OINODbParams
 
+    readonly name:string
+
     /**
      * Constructor for `OINODb`.
      *
      */
     constructor(params:OINODbParams) {
         this._params = params
+        this.name = params.database
     }
 
     /**

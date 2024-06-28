@@ -36,7 +36,10 @@ export type OINOApiParams = {
     /** Enable hashids for numeric primarykeys by adding a 32 char key */
     hashidKey?:string,
     /** Set (minimum) length (12-32 chars) of the hashids */
-    hashidLength?:number
+    hashidLength?:number,
+    /** Make hashids static per row/table */
+    hashidStatic?: boolean
+    
 }
 
 /** Database class (constructor) type */

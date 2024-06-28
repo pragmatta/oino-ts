@@ -30,7 +30,7 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     const put_dataset:OINOMemoryDataSet = new OINOMemoryDataSet([apiDataset.putRow])
     const put_modelset:OINOModelSet = new OINOModelSet(api.datamodel, put_dataset)
     
-    const new_row_id:string = post_modelset.datamodel.printRowOINOId(apiDataset.postRow)
+    const new_row_id:string = OINOSettings.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
     // OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
 
     const empty_params:OINORequestParams = { sqlParams: {}}
@@ -168,7 +168,7 @@ OINOBenchmark.setEnabled(["doRequest"])
 OINOBenchmark.reset()
 
 const dbs:OINODbParams[] = [
-    { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite" }, 
+    { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite", database: "Northwind" }, 
     { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: Bun.env.OINO_POSTGRESQL_TOKEN },
     { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: Bun.env.OINO_MARIADB_TOKEN } 
 ]

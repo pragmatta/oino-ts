@@ -21,4 +21,21 @@ export class OINOSettings {
             OINOSettings.OINO_ID_SEPARATOR_ESCAPED = '%' + idSeparator.charCodeAt(0).toString(16);
         }
     }
+
+    /**
+     * Print OINO ID for primary key values.
+     *
+     * @param primaryKeys an array of primary key values.
+     * 
+     */
+    static printOINOId(primaryKeys:string[]):string {
+        let result:string = ""
+        for (let i=0; i< primaryKeys.length; i++) {
+            if (i > 0) {
+                result += OINOSettings.OINO_ID_SEPARATOR
+            } 
+            result += encodeURIComponent(primaryKeys[i] as string).replaceAll(OINOSettings.OINO_ID_SEPARATOR, OINOSettings.OINO_ID_SEPARATOR_ESCAPED)
+        }
+        return result
+    }
 }
