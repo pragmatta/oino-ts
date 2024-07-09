@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -76,11 +76,12 @@ export class OINOFactory {
             result.requestType = OINOContentType.json
         }
         const accept = request.headers.get("accept")
+        // OINOLog.debug("createParamsFromRequest: accept headers", {accept:accept})
         const accept_types = accept?.split(', ') || []
         for (let i=0; i<accept_types.length; i++) {
-            if (accept_types[i] in OINOContentType) {
+            if (Object.values(OINOContentType).includes(accept_types[i] as OINOContentType)) {
                 result.responseType = accept_types[i] as OINOContentType
-                OINOLog.debug("createParamsFromRequest: response type found", {respnse_type:result.responseType})
+                // OINOLog.debug("createParamsFromRequest: response type found", {respnse_type:result.responseType})
                 break
             }
         }
@@ -92,7 +93,7 @@ export class OINOFactory {
         if (filter) {
             result.sqlParams.filter = new OINOSqlFilter(filter)
         }
-        OINOLog.debug("createParamsFromRequest", {params:result})
+        // OINOLog.debug("createParamsFromRequest", {params:result})
         return result
     }
 
@@ -130,7 +131,7 @@ export class OINOFactory {
         const datamodel:OINODataModel = modelset.datamodel
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
-            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printRowOINOId(row), OINOContentType.html))
+            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printOINOId(row), OINOContentType.html))
             for (let i=0; i<datamodel.fields.length; i++) {
                 html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
             }
@@ -170,7 +171,7 @@ export class OINOFactory {
         result = result.replace(/###[^#]*###/g, "")
         return result
     }
-    
+
     private static _findCsvLineEnd(csvData:string, start:number):number {
         const n:number = csvData.length
         if (start >= n) {
@@ -276,13 +277,18 @@ export class OINOFactory {
             const row_data:(string|null|undefined)[] = this._parseCsvLine(data.substring(start, end))
             const row:OINODataRow = new Array(field_to_header_mapping.length)
             for (let i=0; i<datamodel.fields.length; i++) {
+                const field:OINODataField = datamodel.fields[i]
                 let j:number = field_to_header_mapping[i]
-                const value:string|null|undefined = row_data[j]
-                if ((value === undefined) || (value === null)) {
+                let value:OINODataCell = row_data[j] 
+                if ((value === undefined) || (value === null)) { // null/undefined-decoding built into the parser
                     row[i] = value
 
                 } else if ((j >= 0) && (j < row_data.length)) {
-                    row[i] = datamodel.fields[i].deserializeCell(value, OINOContentType.csv)
+                    value = OINOStr.decode(value, OINOContentType.csv)
+                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.decode(value)
+                    }
+                    row[i] = field.deserializeCell(value)
                     
                 } else {
                     row[i] = undefined
@@ -303,18 +309,20 @@ export class OINOFactory {
         let result:OINODataRow = new Array(fields.length)
         //  console.log("createRowFromJsonObj: " + result)
         for (let i=0; i < fields.length; i++) {
-            const val = obj[fields[i].name]
-            // console.log("createRowFromJsonObj: key=" + fields[i].name + ", val=" + val)
-            if (val === undefined) {
-                result[i] = undefined
-            } else if (val === null) {
-                result[i] = null
+            const field = fields[i]
+            let value:OINODataCell = OINOStr.decode(obj[field.name], OINOContentType.json)
+            // console.log("createRowFromJsonObj: key=" + field.name + ", val=" + val)
+            if ((value === undefined) || (value === null)) {
+                result[i] = value
             } else {
-                if (Array.isArray(val) || typeof val === "object") { // only single level deep object, rest is handled as JSON-strings
-                    result[i] = JSON.stringify(val).replaceAll("\"","\\\"")
+                if (Array.isArray(value) || typeof value === "object") { // only single level deep object, rest is handled as JSON-strings
+                    result[i] = JSON.stringify(value).replaceAll("\"","\\\"")
 
                 } else {
-                    result[i] = datamodel.fields[i].deserializeCell(val, OINOContentType.json)
+                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.decode(value)
+                    }
+                    result[i] = field.deserializeCell(value)
                 }
             }
             // console.log("createRowFromJsonObj: result["+i+"]=" + result[i])
@@ -417,14 +425,17 @@ export class OINOFactory {
                     } else if (is_file) {
                         const value = this._parseMultipartLine(data, start).trim()
                         if (is_base64) {
-                            row[field_index] = field.deserializeCell(value, OINOContentType.formdata)    
+                            row[field_index] = field.deserializeCell(OINOStr.decode(value, OINOContentType.formdata))
                         } else {
                             row[field_index] = Buffer.from(value, "binary")
                         }
                     } else {
-                        const value = this._parseMultipartLine(data, start).trim()
+                        let value:OINODataCell = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
                         // OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
-                        row[field_index] = field.deserializeCell(value, OINOContentType.formdata)
+                        if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                            value = datamodel.api.hashid.decode(value)
+                        }
+                        row[field_index] = field.deserializeCell(value)
                     }
                 }
             }
@@ -446,14 +457,17 @@ export class OINOFactory {
             // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
             if (param_parts.length == 2) {
                 const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
-                const value=param_parts[1]
                 const field_index:number = datamodel.findFieldIndexByName(key)
                 if (field_index < 0) {
-                    OINOLog.info("createRowFromUrlencoded: param filed not found", {field:key, value:value})
+                    OINOLog.info("createRowFromUrlencoded: param field not found", {field:key})
 
                 } else {
                     const field:OINODataField = datamodel.fields[field_index]
-                    row[field_index] = field.deserializeCell(value, OINOContentType.urlencode)
+                    let value:OINODataCell=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
+                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.decode(value)
+                    }
+                    row[field_index] = field.deserializeCell(value)
                 }
             }
 

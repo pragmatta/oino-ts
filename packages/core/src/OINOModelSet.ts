@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr } from "./index.js";
+import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr, OINOSettings, OINONumberDataField, OINOBooleanDataField } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -40,16 +40,34 @@ export class OINOModelSet {
         // console.log("OINOModelSet._writeRowJson: row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
+        let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
+        let primary_key_values:string[] = []
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
-            if (row[i] === undefined) {
-                OINOLog.info("OINOModelSet._writeRowJson: undefined value skipped", {field_name:fields[i].name})
+            const f = fields[i]
+            let value:string|null|undefined = f.serializeCell(row[i])
+            if (value === undefined) {
+                OINOLog.info("OINOModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
+
+            } else if (value === null) {
+                json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":null"
 
             } else {
-                json_row += "," + OINOStr.encode(fields[i].name, OINOContentType.json) + ":" + fields[i].serializeCell(row[i], OINOContentType.json)
+
+                let is_hashed:boolean = false
+                let is_value = (f instanceof OINOBooleanDataField) || (f instanceof OINONumberDataField)
+                if (f.fieldParams.isPrimaryKey) {
+                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
+                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
+                        is_hashed = true
+                    }
+                    primary_key_values.push(value)
+                }
+                value = OINOStr.encodeJSON(value, is_value && (!is_hashed)) // (non-hashed) value types get quotes                    
+                json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":" + value
             }
         }
-        json_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.json) + json_row
+        json_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.json) + json_row
         // OINOLog_debug("OINOModelSet._writeRowJson="+json_row)
         return "{" + json_row + "}"
     }
@@ -83,11 +101,28 @@ export class OINOModelSet {
         // OINOLog_debug("OINOModelSet._writeRowCsv", {row:row})
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
+        let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
+        let primary_key_values:string[] = []
         let csv_row:string = ""
         for (let i=0; i<fields.length; i++) {
-            csv_row += "," + fields[i].serializeCell(row[i], OINOContentType.csv)
+            const f = fields[i]
+            let value:string|null|undefined = f.serializeCell(row[i])
+            if (value == null) {
+                csv_row += "," + OINOStr.encode(value, OINOContentType.csv) // either null or undefined
+    
+            } else {
+    
+                if (f.fieldParams.isPrimaryKey) {
+                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
+                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
+                    }
+                    primary_key_values.push(value)
+                }
+                value = OINOStr.encode(value, OINOContentType.csv)
+                csv_row += "," + value        
+            }
         }
-        csv_row = OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.csv) + csv_row
+        csv_row = OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.csv) + csv_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
         return csv_row
     }
@@ -118,32 +153,46 @@ export class OINOModelSet {
     }
 
     private _writeRowFormdata(row:OINODataRow):string {
-        const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // just for test data generation and we want it to be static
+        const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // this method is just used for test data generation and we want it to be static
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
+        let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
+        let primary_key_values:string[] = []
         let result:string = ""
         for (let i=0; i<fields.length; i++) {
-            
+            const f = fields[i]
+            let value:string|null|undefined = f.serializeCell(row[i])
             let formdata_block:string = ""
-            if (row[i] === undefined) {
-                OINOLog.info("OINOModelSet._writeRowFormdata: undefined value skipped.", {field:fields[i].name})
+            let is_file = (f instanceof OINOBlobDataField)
 
-            } else if (row[i] === null) {
-                OINOLog.info("OINOModelSet._writeRowFormdata: null value.", {field:fields[i].name})
+            if (value === undefined) {
+                OINOLog.info("OINOModelSet._writeRowFormdata: undefined value skipped.", {field:f.name})
+
+            } else if (value === null) {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary)
-
-            } else if (fields[i] instanceof OINOBlobDataField) {
-                formdata_block = this._writeRowFormdataFileBlock(fields[i].name, fields[i].serializeCell(row[i], OINOContentType.formdata), multipart_boundary)
-
+            
             } else {
-                formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, fields[i].serializeCell(row[i], OINOContentType.formdata), multipart_boundary)
+                if (f.fieldParams.isPrimaryKey) {
+                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
+                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
+                    }
+                    primary_key_values.push(value)
+                }  
+                value = OINOStr.encode(value, OINOContentType.formdata)
+    
+
+                if (is_file) {
+                    formdata_block = this._writeRowFormdataFileBlock(f.name, value, multipart_boundary)
+                } else {
+                    formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, value, multipart_boundary)
+                }
             }
 
             
-            // OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
+        // OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
             result += formdata_block
         }
-        result = this._writeRowFormdataParameterBlock(OINOSettings.OINO_ID_FIELD, this.datamodel.printRowOINOId(row), multipart_boundary) + result
+        result = this._writeRowFormdataParameterBlock(OINOSettings.OINO_ID_FIELD, OINOSettings.printOINOId(primary_key_values), multipart_boundary) + result
         return result
     }
 
@@ -161,18 +210,29 @@ export class OINOModelSet {
         // console.log("OINOModelSet._writeRowCsv row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
+        let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
+        let primary_key_values:string[] = []
         let urlencode_row:string = ""
         for (let i=0; i<fields.length; i++) {
-            if (row[i] === undefined) {
+            const f = fields[i]
+            let value:string|null|undefined = f.serializeCell(row[i])
+            if ((value === undefined)) {
                 // console.log("OINOModelSet._writeRowCsv undefined field value:" + fields[i].name)
             } else {
+                if (f.fieldParams.isPrimaryKey && (value)) {
+                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
+                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
+                    }
+                    primary_key_values.push(value)
+                }  
+                value = OINOStr.encode(value, OINOContentType.urlencode)
                 if (urlencode_row != "") {
                     urlencode_row += "&"
                 } 
-                urlencode_row += OINOStr.encode(fields[i].name, OINOContentType.urlencode) + "=" + fields[i].serializeCell(row[i], OINOContentType.urlencode)
+                urlencode_row += OINOStr.encode(f.name, OINOContentType.urlencode) + "=" + value
             }
         }
-        urlencode_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(this.datamodel.printRowOINOId(row), OINOContentType.urlencode) + "&" + urlencode_row
+        urlencode_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row
         // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
         return urlencode_row
     }

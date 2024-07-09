@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINOSettings } from "./index.js";
+import { OINODataField, OINOApi, OINODataRow, OINO_ERROR_PREFIX, OINODataFieldFilter, OINORequestParams, OINOLog, OINOSettings, OINOSqlParams, OINONumberDataField } from "./index.js";
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -97,7 +97,11 @@ export class OINODataModel {
                 if (result != "") {
                     result += " AND "
                 }
-                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(decodeURIComponent(id_parts[i])); 
+                let value = decodeURIComponent(id_parts[i])
+                if ((f instanceof OINONumberDataField) && (this.api.hashid)) {
+                    value = this.api.hashid.decode(value)
+                }
+                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(value); 
                 i = i + 1
             }
         }
@@ -167,6 +171,27 @@ export class OINODataModel {
     }
 
     /**
+     * Return the primary key values of one row in order of the data model
+     * 
+     * @param row data row
+     *
+     */
+    getRowPrimarykeyValues(row: OINODataRow, hashidValues:boolean = false): string[] {
+        let values: string[] = [];
+        for (let i=0; i< this.fields.length; i++) {
+            const f = this.fields[i]
+            if (f.fieldParams.isPrimaryKey) {
+                if (hashidValues && (f instanceof OINONumberDataField) && this.api.hashid) {
+                    values.push(this.api.hashid.encode(row[i]))
+                } else {
+                    values.push(row[i])
+                }
+            }
+        }
+        return values
+    }
+
+    /**
      * Print debug information about the fields.
      * 
      * @param separator string to separate field prints
@@ -178,25 +203,6 @@ export class OINODataModel {
             result += f.printColumnDebug() + separator;
         }
         return result;
-    }
-
-    /**
-     * Print OINO ID of a data row.
-     *
-     * @param row A row of data.
-     * 
-     */
-    printRowOINOId(row:OINODataRow):string {
-        let result:string = ""
-        for (let i=0; i< this.fields.length; i++) {
-            if (this.fields[i].fieldParams.isPrimaryKey) {
-                if (result != "") {
-                    result += OINOSettings.OINO_ID_SEPARATOR
-                } 
-                result += encodeURIComponent(row[i] as string).replaceAll(OINOSettings.OINO_ID_SEPARATOR, OINOSettings.OINO_ID_SEPARATOR_URLESCAPED)
-            }
-        }
-        return result
     }
 
     /**
@@ -222,7 +228,7 @@ export class OINODataModel {
      * @param params OINO reqest params
      *
      */
-    printSqlSelect(id: string, params:OINORequestParams): string {
+    printSqlSelect(id: string, params:OINOSqlParams): string {
         let result:string = "SELECT " + this._printSqlColumnNames() + " FROM " + this.api.db.printSqlTablename(this.api.params.tableName);
         const filter_sql = params.filter?.toSql(this) || ""
         // OINOLog_debug("OINODataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql})
