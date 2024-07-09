@@ -5,6 +5,7 @@
  */
 
 import { OINOLog } from "./index.js"
+import { Buffer } from "node"
 import { createCipheriv, createDecipheriv, createHmac, randomFillSync } from 'node:crypto';
 
 const MIN_LENGTH_DEFAULT:number = 12
