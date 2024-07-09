@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -171,7 +171,7 @@ export class OINOFactory {
         result = result.replace(/###[^#]*###/g, "")
         return result
     }
-    
+
     private static _findCsvLineEnd(csvData:string, start:number):number {
         const n:number = csvData.length
         if (start >= n) {
@@ -277,13 +277,18 @@ export class OINOFactory {
             const row_data:(string|null|undefined)[] = this._parseCsvLine(data.substring(start, end))
             const row:OINODataRow = new Array(field_to_header_mapping.length)
             for (let i=0; i<datamodel.fields.length; i++) {
+                const field:OINODataField = datamodel.fields[i]
                 let j:number = field_to_header_mapping[i]
-                const value:string|null|undefined = row_data[j]
-                if ((value === undefined) || (value === null)) {
+                let value:OINODataCell = row_data[j] 
+                if ((value === undefined) || (value === null)) { // null/undefined-decoding built into the parser
                     row[i] = value
 
                 } else if ((j >= 0) && (j < row_data.length)) {
-                    row[i] = datamodel.fields[i].deserializeCell(OINOStr.decode(value, OINOContentType.csv))
+                    value = OINOStr.decode(value, OINOContentType.csv)
+                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.decode(value)
+                    }
+                    row[i] = field.deserializeCell(value)
                     
                 } else {
                     row[i] = undefined
@@ -304,18 +309,20 @@ export class OINOFactory {
         let result:OINODataRow = new Array(fields.length)
         //  console.log("createRowFromJsonObj: " + result)
         for (let i=0; i < fields.length; i++) {
-            const value = obj[fields[i].name]
-            // console.log("createRowFromJsonObj: key=" + fields[i].name + ", val=" + val)
-            if (value === undefined) {
-                result[i] = undefined
-            } else if (value === null) {
-                result[i] = null
+            const field = fields[i]
+            let value:OINODataCell = OINOStr.decode(obj[field.name], OINOContentType.json)
+            // console.log("createRowFromJsonObj: key=" + field.name + ", val=" + val)
+            if ((value === undefined) || (value === null)) {
+                result[i] = value
             } else {
                 if (Array.isArray(value) || typeof value === "object") { // only single level deep object, rest is handled as JSON-strings
                     result[i] = JSON.stringify(value).replaceAll("\"","\\\"")
 
                 } else {
-                    result[i] = datamodel.fields[i].deserializeCell(OINOStr.decode(value, OINOContentType.json))
+                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.decode(value)
+                    }
+                    result[i] = field.deserializeCell(value)
                 }
             }
             // console.log("createRowFromJsonObj: result["+i+"]=" + result[i])
@@ -423,9 +430,12 @@ export class OINOFactory {
                             row[field_index] = Buffer.from(value, "binary")
                         }
                     } else {
-                        const value = this._parseMultipartLine(data, start).trim()
+                        let value:OINODataCell = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
                         // OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
-                        row[field_index] = field.deserializeCell(OINOStr.decode(value, OINOContentType.formdata))
+                        if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                            value = datamodel.api.hashid.decode(value)
+                        }
+                        row[field_index] = field.deserializeCell(value)
                     }
                 }
             }
@@ -447,14 +457,17 @@ export class OINOFactory {
             // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
             if (param_parts.length == 2) {
                 const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
-                const value=param_parts[1]
                 const field_index:number = datamodel.findFieldIndexByName(key)
                 if (field_index < 0) {
-                    OINOLog.info("createRowFromUrlencoded: param field not found", {field:key, value:value})
+                    OINOLog.info("createRowFromUrlencoded: param field not found", {field:key})
 
                 } else {
                     const field:OINODataField = datamodel.fields[field_index]
-                    row[field_index] = field.deserializeCell(OINOStr.decode(value, OINOContentType.urlencode))
+                    let value:OINODataCell=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
+                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.decode(value)
+                    }
+                    row[field_index] = field.deserializeCell(value)
                 }
             }
 

@@ -97,7 +97,11 @@ export class OINODataModel {
                 if (result != "") {
                     result += " AND "
                 }
-                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(decodeURIComponent(id_parts[i])); 
+                let value = decodeURIComponent(id_parts[i])
+                if ((f instanceof OINONumberDataField) && (this.api.hashid)) {
+                    value = this.api.hashid.decode(value)
+                }
+                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(value); 
                 i = i + 1
             }
         }
@@ -172,12 +176,16 @@ export class OINODataModel {
      * @param row data row
      *
      */
-    getRowPrimarykeyValues(row: OINODataRow): string[] {
+    getRowPrimarykeyValues(row: OINODataRow, hashidValues:boolean = false): string[] {
         let values: string[] = [];
         for (let i=0; i< this.fields.length; i++) {
             const f = this.fields[i]
             if (f.fieldParams.isPrimaryKey) {
-                values.push(row[i])
+                if (hashidValues && (f instanceof OINONumberDataField) && this.api.hashid) {
+                    values.push(this.api.hashid.encode(row[i]))
+                } else {
+                    values.push(row[i])
+                }
             }
         }
         return values
