@@ -38,7 +38,7 @@ export type OINOApiParams = {
     /** Set (minimum) length (12-32 chars) of the hashids */
     hashidLength?:number,
     /** Make hashids static per row/table */
-    hashidStatic?: boolean
+    hashidRandomIds?: boolean
     
 }
 

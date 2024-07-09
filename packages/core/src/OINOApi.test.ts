@@ -30,8 +30,9 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     const put_dataset:OINOMemoryDataSet = new OINOMemoryDataSet([apiDataset.putRow])
     const put_modelset:OINOModelSet = new OINOModelSet(api.datamodel, put_dataset)
     
-    const new_row_id:string = OINOSettings.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
-    // OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
+    // const new_row_id:string = OINOSettings.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
+    const new_row_id:string = OINOSettings.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow, true))
+    OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
 
     const empty_params:OINORequestParams = { sqlParams: {}}
     
@@ -191,7 +192,7 @@ const apis:OINOTestApiParams[] = [
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
     },
     {
-        apiParams: { tableName: "Employees" },
+        apiParams: { tableName: "Employees", hashidKey: "12345678901234567890123456789012" },
         requestParams: {
             sqlParams: { filter: new OINOSqlFilter("(TitleOfCourtesy)-eq(Ms.)") }
         },

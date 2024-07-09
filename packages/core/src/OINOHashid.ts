@@ -23,7 +23,7 @@ export class OINOHashid {
     private _iv:Buffer
     private _domainId:string
     private _minLength:number
-    private _staticHash
+    private _randomIds
 
     /**
      * Hashid constructor
@@ -31,10 +31,10 @@ export class OINOHashid {
      * @param key AES128 key (32 char hex-string)
      * @param domainId a sufficiently unique domain ID in which row-Id's are unique
      * @param minLength minimum length of nonce and crypto
-     * @param staticHash whether hash values should remain static per row or random values 
+     * @param randomIds whether hash values should remain static per row or random values 
      * 
      */
-    constructor (key: string, domainId:string, minLength:number = MIN_LENGTH_DEFAULT, staticHash:boolean = false) {
+    constructor (key: string, domainId:string, minLength:number = MIN_LENGTH_DEFAULT, randomIds:boolean = false) {
         this._domainId = domainId
         if (minLength < MIN_LENGTH_DEFAULT) {
             throw Error("OINOHashid minLength needs to be at least " + MIN_LENGTH_DEFAULT + " !")
@@ -43,7 +43,7 @@ export class OINOHashid {
         if (key.length != 32) {
             throw Error("OINOHashid key needs to be a 32 character hex-string!")
         }
-        this._staticHash = staticHash
+        this._randomIds = randomIds
         this._key = new Buffer.from(key, 'hex')
         this._iv = new Buffer(16)
     }
@@ -58,14 +58,14 @@ export class OINOHashid {
 
         // if seed was given use it for pseudorandom chars, otherwise generate them
         let random_chars:string = ""
-        if (this._staticHash) {
+        if (this._randomIds) {
+            randomFillSync(this._iv, 0, 16)
+            random_chars = this._iv.toString('base64url')
+
+        } else {
             const hmac_seed = createHmac('sha1', this._key)
             hmac_seed.update(this._domainId + " " + rowSeed)
             random_chars = hmac_seed.digest('base64url')
-
-        } else {
-            randomFillSync(this._iv, 0, 16)
-            random_chars = this._iv.toString('base64url')
         }
         const hmac = createHmac('sha1', this._key)
         // OINOLog.debug("OINOHashid.encode", {random_chars:random_chars})
