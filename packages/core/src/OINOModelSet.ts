@@ -40,7 +40,7 @@ export class OINOModelSet {
         // console.log("OINOModelSet._writeRowJson: row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
-        let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
+        let cell_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
@@ -58,7 +58,7 @@ export class OINOModelSet {
                 let is_value = (f instanceof OINOBooleanDataField) || (f instanceof OINONumberDataField)
                 if (f.fieldParams.isPrimaryKey) {
                     if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
-                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
+                        value = this.datamodel.api.hashid.encode(value, f.name + " " + cell_id_seed)
                         is_hashed = true
                     }
                     primary_key_values.push(value)
