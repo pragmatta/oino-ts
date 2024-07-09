@@ -151,6 +151,10 @@
  ## HTMX support
  OINO is [htmx.org](https://htmx.org) friendly, allowing easy translation of [`OINODataRow`](https://pragmatta.github.io/oino-ts/types/core_src.OINODataRow.html) to HTML output using templates (cf. the [htmx sample app](https://github.com/pragmatta/oino-ts/tree/main/samples/htmxApp)).
 
+ ### Hashids
+ Autoinc numeric id's are very pragmatic and fit well with OINO (e.g. using a form without primary key fields to insert new rows with database assigned ids). However it's not always sensible to share information about the sequence. Hashids solve this by masking the original values by encrypting the ids using AES-128 and some randomness. Length of the hashid can be chosen from 12-32 characters where longer ids provide more security. However this should not be considereded a cryptographic solution for keeping ids secret but rather making it infeasible to iterate all ids.
+
+
  # STATUS
  OINO is currently a hobby project which should and should considered in alpha status. That also means compatibility breaking changes can be made without prior notice when architectual issues are discovered.
 
@@ -180,9 +184,6 @@
  ### Streaming
  One core idea is to be efficient in not making unnecessary copies of the data and minimizing garbage collection debt. This can be taken further by implementing streaming, allowing large dataset to be written to HTTP response as SQL result rows are received.
 
- ### HTMX utils
- OINO is well suited to be used as almost complete backend for HTMX and this can be further helped with efficient utilities to map [`OINOModelSet`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOModelSet.OINOModelSet.html) to HTMX template.
- 
  ### SQL generation callbacks
  It would be useful to allow developer to validate / override SQL generation to cover cases OINO does not support or even workaround issues.
 
