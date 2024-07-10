@@ -7,7 +7,8 @@
 import { OINOLog } from "./index.js"
 import { createCipheriv, createDecipheriv, createHmac, randomFillSync } from 'node:crypto';
 
-const MIN_LENGTH_DEFAULT:number = 12
+const HASHID_MIN_LENGTH:number = 12
+const HASHID_MAX_LENGTH:number = 40
 
 /**
  * Hashid implementation for OINO API:s for the purpose of making it infeasible to scan 
@@ -34,27 +35,28 @@ export class OINOHashid {
      * @param randomIds whether hash values should remain static per row or random values 
      * 
      */
-    constructor (key: string, domainId:string, minLength:number = MIN_LENGTH_DEFAULT, randomIds:boolean = false) {
+    constructor (key: string, domainId:string, minLength:number = HASHID_MIN_LENGTH, randomIds:boolean = false) {
         this._domainId = domainId
-        if (minLength < MIN_LENGTH_DEFAULT) {
-            throw Error("OINOHashid minLength needs to be at least " + MIN_LENGTH_DEFAULT + " !")
+        if ((minLength < HASHID_MIN_LENGTH) || (minLength > HASHID_MAX_LENGTH)) {
+            throw Error("OINOHashid minLength needs to be between " + HASHID_MIN_LENGTH + " and " + HASHID_MAX_LENGTH + "!")
         }
         this._minLength = Math.ceil(minLength/2)
         if (key.length != 32) {
             throw Error("OINOHashid key needs to be a 32 character hex-string!")
         }
         this._randomIds = randomIds
-        this._key = new Buffer.from(key, 'hex')
+        this._key = Buffer.from(key, 'hex')
         this._iv = new Buffer(16)
     }
 
     /**
+     * Encode given id value as a hashid either using random data or given seed value for nonce.
      * 
-     * @param key AES128 key (32 char hex-string)
-     * @param domainId a sufficiently unique domain ID in which row-Id's are unique
-     * @param minLength minimum length of nonce and crypto
+     * @param id numeric value
+     * @param cellSeed a sufficiently unique seed for the current cell to keep hashids unique but persistent (e.g. fieldname + primarykey values)
+     * 
      */
-    encode(id:string, rowSeed:string = ""):string {
+    encode(id:string, cellSeed:string = ""):string {
 
         // if seed was given use it for pseudorandom chars, otherwise generate them
         let random_chars:string = ""
@@ -64,7 +66,7 @@ export class OINOHashid {
 
         } else {
             const hmac_seed = createHmac('sha1', this._key)
-            hmac_seed.update(this._domainId + " " + rowSeed)
+            hmac_seed.update(this._domainId + " " + cellSeed)
             random_chars = hmac_seed.digest('base64url')
         }
         const hmac = createHmac('sha1', this._key)
@@ -89,6 +91,12 @@ export class OINOHashid {
         return iv_seed + cryptotext
     }
 
+    /**
+     * Decode given hashid.
+     * 
+     * @param hashid value
+     * 
+     */
     decode(hashid:string):string {
         // reproduce nonce from seed
         const hmac = createHmac('sha1', this._key)

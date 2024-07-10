@@ -131,9 +131,10 @@ export class OINOFactory {
         const datamodel:OINODataModel = modelset.datamodel
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
-            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(datamodel.printOINOId(row), OINOContentType.html))
+            const primary_key_values:string[] = datamodel.getRowPrimarykeyValues(row)
+            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html))
             for (let i=0; i<datamodel.fields.length; i++) {
-                html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', datamodel.fields[i].serializeCell(row[i], OINOContentType.html))
+                html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', OINOStr.encode(datamodel.fields[i].serializeCell(row[i]), OINOContentType.html))
             }
             result += html_row + "\r\n"
             dataset.next()

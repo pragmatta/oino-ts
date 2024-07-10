@@ -40,7 +40,8 @@ const server = createServer(async (request, response) => {
         let body = ""
         request.on("data", (chunk) => { body += chunk })
         request.on("end", async () => {
-            const result = await api.doRequest(request.method, id, body, {});
+            const request_params = { sqlParams: {}}
+            const result = await api.doRequest(request.method, id, body, request_params);
             if (result.success && result.modelset) {
                 response.setHeader('Content-Type', OINOContentType.json);
                 response.end(result.modelset.writeString(OINOContentType.json));

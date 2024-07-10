@@ -13,11 +13,11 @@ const response_headers:HeadersInit = {
 
 const db:OINODb = await OINOFactory.createDb( { type: "OINODbBunSqlite", url: "file://./northwind.sqlite" } )
 const apis:Record<string, OINOApi> = {
-    "employees": await OINOFactory.createApi(db, { tableName: "Employees", excludeFields:["BirthDate"] }),
-    "orders": await OINOFactory.createApi(db, { tableName: "Orders" }),
-    "orderdetails": await OINOFactory.createApi(db, { tableName: "OrderDetails" }),
-    "products": await OINOFactory.createApi(db, { tableName: "Products" }),
-    "categories": await OINOFactory.createApi(db, { tableName: "Categories" })
+    "Employees": await OINOFactory.createApi(db, { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidLength:16, hashidRandomIds:true }),
+    "Orders": await OINOFactory.createApi(db, { tableName: "Orders" }),
+    "OrderDetails": await OINOFactory.createApi(db, { tableName: "OrderDetails" }),
+    "Products": await OINOFactory.createApi(db, { tableName: "Products" }),
+    "Categories": await OINOFactory.createApi(db, { tableName: "Categories" })
 }
 const api_array:OINOApi[] = Object.entries(apis).map(([path, api]) => (api))
 
@@ -25,7 +25,7 @@ const server = Bun.serve({
     development: true,
     port: 3001,
     async fetch(request) {
-        let url = new URL(request.url.toLowerCase())
+        let url = new URL(request.url)
         let path_matches = url.pathname.match(/\/(\w+)\/?(.+)?/i) || []
         OINOLog.debug("readmeApp serve", {path:url.pathname, path_matches:path_matches})
         let path:string = path_matches[1] || ""

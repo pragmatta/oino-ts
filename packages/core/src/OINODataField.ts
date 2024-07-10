@@ -95,7 +95,6 @@ export class OINODataField {
      * Serialize cell value in the given content format.
      * 
      * @param cellVal cell value
-     * @param contentType content type to serialize into
      *
      */
     serializeCell(cellVal: OINODataCell):string|null|undefined {
@@ -111,7 +110,6 @@ export class OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param value string value
-     * @param contentType content type to serialize into
      *
      */
     deserializeCell(value: string|null|undefined): OINODataCell {
@@ -181,7 +179,6 @@ export class OINOBooleanDataField extends OINODataField {
      * Serialize cell value in the given content format.
      * 
      * @param cellVal cell value
-     * @param contentType content type to serialize into
      *
      */
     serializeCell(cellVal: OINODataCell):string|null|undefined {
@@ -200,7 +197,6 @@ export class OINOBooleanDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param value string value
-     * @param contentType content type to serialize into
      *
      */
     deserializeCell(value: string|null|undefined): OINODataCell {
@@ -235,7 +231,6 @@ export class OINONumberDataField extends OINODataField {
      * Serialize cell value in the given content format.
      * 
      * @param cellVal cell value
-     * @param contentType content type to serialize into
      *
      */
     serializeCell(cellVal: OINODataCell):string|null|undefined {
@@ -252,11 +247,10 @@ export class OINONumberDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param value string value
-     * @param contentType content type to serialize into
      *
      */
     deserializeCell(value: string|null|undefined): OINODataCell {
-        if (value == "") { 
+        if (!value) { 
             return 0
         } else {
             return Number.parseFloat(value)
@@ -288,7 +282,6 @@ export class OINOBlobDataField extends OINODataField {
      * Serialize cell value in the given content format.
      * 
      * @param cellVal cell value
-     * @param contentType content type to serialize into
      *
      */
     serializeCell(cellVal: OINODataCell):string|null|undefined {
@@ -308,7 +301,6 @@ export class OINOBlobDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param value string value
-     * @param contentType content type to serialize into
      *
      */
     deserializeCell(value: string|null|undefined): OINODataCell {
@@ -345,7 +337,6 @@ export class OINODatetimeDataField extends OINODataField {
      * Serialize cell value in the given content format.
      * 
      * @param cellVal cell value
-     * @param contentType content type to serialize into
      *
      */
     serializeCell(cellVal: OINODataCell): string|null|undefined {
@@ -369,7 +360,6 @@ export class OINODatetimeDataField extends OINODataField {
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param value string value
-     * @param contentType content type to serialize into
      *
      */
     deserializeCell(value: string|null|undefined): OINODataCell {
