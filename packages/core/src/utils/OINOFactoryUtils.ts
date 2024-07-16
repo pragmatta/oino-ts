@@ -131,11 +131,21 @@ export class OINOFactory {
         const datamodel:OINODataModel = modelset.datamodel
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
-            const primary_key_values:string[] = datamodel.getRowPrimarykeyValues(row)
-            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html))
+            let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
+            let primary_key_values:string[] = []
+            let html_row:string = template
             for (let i=0; i<datamodel.fields.length; i++) {
-                html_row = html_row.replaceAll('###' + datamodel.fields[i].name + '###', OINOStr.encode(datamodel.fields[i].serializeCell(row[i]), OINOContentType.html))
+                const f:OINODataField = datamodel.fields[i]
+                let value:string|null|undefined = f.serializeCell(row[i])
+                if (f.fieldParams.isPrimaryKey) {
+                    if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.encode(value, row_id_seed)
+                    }
+                    primary_key_values.push(value || "")
+                }
+                html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
             }
+            html_row = html_row.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html)) 
             result += html_row + "\r\n"
             dataset.next()
         }
