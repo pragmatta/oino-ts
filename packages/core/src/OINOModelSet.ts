@@ -36,11 +36,22 @@ export class OINOModelSet {
         this.errors = this.dataset.messages
     }
 
+    private _encodeAndHashFieldValue(field:OINODataField, value:string, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string) {
+        if (field.fieldParams.isPrimaryKey) {
+            if ((field instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
+                value = this.datamodel.api.hashid.encode(value, rowIdSeed)
+            }
+            primaryKeyValues.push(value)
+        }  
+        value = OINOStr.encode(value, contentType)
+        return value
+    }
+
     private _writeRowJson(row:OINODataRow):string {
         // console.log("OINOModelSet._writeRowJson: row=" + row)
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
-        let cell_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
+        let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
@@ -54,16 +65,12 @@ export class OINOModelSet {
 
             } else {
 
-                let is_hashed:boolean = false
-                let is_value = (f instanceof OINOBooleanDataField) || (f instanceof OINONumberDataField)
-                if (f.fieldParams.isPrimaryKey) {
-                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
-                        value = this.datamodel.api.hashid.encode(value, f.name + " " + cell_id_seed)
-                        is_hashed = true
-                    }
-                    primary_key_values.push(value)
+                let is_hashed:boolean = f.fieldParams.isPrimaryKey && (f instanceof OINONumberDataField) && (this.datamodel.api.hashid != null)
+                let is_value = (f instanceof OINOBooleanDataField) || ((f instanceof OINONumberDataField) && !is_hashed)
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.json, primary_key_values, f.name + " " + row_id_seed)
+                if (is_value) {
+                    value = value.substring(1, value.length-1)
                 }
-                value = OINOStr.encodeJSON(value, is_value && (!is_hashed)) // (non-hashed) value types get quotes                    
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":" + value
             }
         }
@@ -111,14 +118,7 @@ export class OINOModelSet {
                 csv_row += "," + OINOStr.encode(value, OINOContentType.csv) // either null or undefined
     
             } else {
-    
-                if (f.fieldParams.isPrimaryKey) {
-                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
-                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
-                    }
-                    primary_key_values.push(value)
-                }
-                value = OINOStr.encode(value, OINOContentType.csv)
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.csv, primary_key_values, f.name + " " + row_id_seed)
                 csv_row += "," + value        
             }
         }
@@ -172,15 +172,7 @@ export class OINOModelSet {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary)
             
             } else {
-                if (f.fieldParams.isPrimaryKey) {
-                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
-                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
-                    }
-                    primary_key_values.push(value)
-                }  
-                value = OINOStr.encode(value, OINOContentType.formdata)
-    
-
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.formdata, primary_key_values, f.name + " " + row_id_seed)
                 if (is_file) {
                     formdata_block = this._writeRowFormdataFileBlock(f.name, value, multipart_boundary)
                 } else {
@@ -216,16 +208,10 @@ export class OINOModelSet {
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
             let value:string|null|undefined = f.serializeCell(row[i])
-            if ((value === undefined)) {
-                // console.log("OINOModelSet._writeRowCsv undefined field value:" + fields[i].name)
+            if ((value === undefined)) { // || (value === null)) {
+                // console.log("OINOModelSet._writeRowUrlencode undefined field value:" + fields[i].name)
             } else {
-                if (f.fieldParams.isPrimaryKey && (value)) {
-                    if ((f instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
-                        value = this.datamodel.api.hashid.encode(value, row_id_seed)
-                    }
-                    primary_key_values.push(value)
-                }  
-                value = OINOStr.encode(value, OINOContentType.urlencode)
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.urlencode, primary_key_values, f.name + " " + row_id_seed)
                 if (urlencode_row != "") {
                     urlencode_row += "&"
                 } 
