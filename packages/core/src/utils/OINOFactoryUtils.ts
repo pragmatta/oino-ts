@@ -139,7 +139,7 @@ export class OINOFactory {
                 let value:string|null|undefined = f.serializeCell(row[i])
                 if (f.fieldParams.isPrimaryKey) {
                     if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
-                        value = datamodel.api.hashid.encode(value, row_id_seed)
+                        value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
                     }
                     primary_key_values.push(value || "")
                 }
