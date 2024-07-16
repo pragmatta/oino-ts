@@ -36,12 +36,12 @@ export class OINOModelSet {
         this.errors = this.dataset.messages
     }
 
-    private _encodeAndHashFieldValue(field:OINODataField, value:string, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string) {
+    private _encodeAndHashFieldValue(field:OINODataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string) {
         if (field.fieldParams.isPrimaryKey) {
-            if ((field instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
+            if (value && (field instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed)
             }
-            primaryKeyValues.push(value)
+            primaryKeyValues.push(value || "")
         }  
         value = OINOStr.encode(value, contentType)
         return value
