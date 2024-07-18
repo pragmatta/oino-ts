@@ -6,9 +6,12 @@
 
 import { OINOLog } from "./index.js"
 import { createCipheriv, createDecipheriv, createHmac, randomFillSync } from 'node:crypto';
+import basex from 'base-x'
 
 const HASHID_MIN_LENGTH:number = 12
 const HASHID_MAX_LENGTH:number = 40
+const HASHID_ALPHABET:string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const hashidEncoder = basex(HASHID_ALPHABET)
 
 /**
  * Hashid implementation for OINO API:s for the purpose of making it infeasible to scan 
@@ -62,12 +65,12 @@ export class OINOHashid {
         let random_chars:string = ""
         if (this._randomIds) {
             randomFillSync(this._iv, 0, 16)
-            random_chars = this._iv.toString('base64url')
+            random_chars = hashidEncoder.encode(this._iv) // this._iv.toString('base64url')
 
         } else {
             const hmac_seed = createHmac('sha1', this._key)
             hmac_seed.update(this._domainId + " " + cellSeed)
-            random_chars = hmac_seed.digest('base64url')
+            random_chars = hashidEncoder.encode(hmac_seed.digest()) // hmac_seed.digest('base64url')
         }
         const hmac = createHmac('sha1', this._key)
         // OINOLog.debug("OINOHashid.encode", {random_chars:random_chars})
@@ -86,7 +89,7 @@ export class OINOHashid {
         // OINOLog.debug("OINOHashid.encode", {plaintext:plaintext})
 
         const cipher = createCipheriv('aes-128-gcm', this._key, this._iv)
-        const cryptotext = cipher.update(plaintext, 'utf8', 'base64url') + cipher.final('base64url')
+        const cryptotext = hashidEncoder.encode(cipher.update(plaintext, 'utf8')) + hashidEncoder.encode(cipher.final())
         // OINOLog.debug("OINOHashid.encode", {plaintext:plaintext, cryptotext:cryptotext})
         return iv_seed + cryptotext
     }
@@ -106,9 +109,10 @@ export class OINOHashid {
         hash.copy(this._iv, 0, 0, 16)
 
         const cryptotext:string = hashid.substring(this._minLength)
+        const cryptobytes:Buffer = new Buffer(hashidEncoder.decode(cryptotext))
         // OINOLog.debug("OINOHashid.decode", {iv:this._iv.toString('hex'), cryptotext:cryptotext })
         const decipher = createDecipheriv('aes-128-gcm', this._key, this._iv)
-        const plaintext = decipher.update(cryptotext, 'base64url', 'utf8') 
+        const plaintext = decipher.update(cryptobytes, '', 'utf8') //, cryptotext, 'base64url', 'utf8') 
         
         // OINOLog.debug("OINOHashid.decode", {plaintext:plaintext})
         return plaintext.split(" ")[0]

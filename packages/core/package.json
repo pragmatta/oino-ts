@@ -18,6 +18,9 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
+  "dependencies": {
+    "base-x": "5.0.0"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^20.14.10",
