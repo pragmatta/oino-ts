@@ -4,8 +4,8 @@ export class OINOSettings {
     /** Name of the synthetic OINO ID field */
     static OINO_ID_FIELD:string = "_OINOID_"
     /** Private key separator of the synthetic OINO ID field */
-    static OINO_ID_SEPARATOR:string = "-"
-    static OINO_ID_SEPARATOR_ESCAPED:string = "%2d"
+    static OINO_ID_SEPARATOR:string = "_"
+    static OINO_ID_SEPARATOR_ESCAPED:string = "%5f"
 
 
     static setIdField(idField: string) {
