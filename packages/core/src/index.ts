@@ -1,3 +1,8 @@
+import { OINODb } from "./OINODb.js"
+import { OINODataField } from "./OINODataField.js"
+import { OINOLog } from "./utils/OINOLoggingUtils.js"
+import { OINOSqlFilter, OINOSqlOrder } from "./OINOSqlParams.js"
+
 export { OINOApiResult, OINOApi } from "./OINOApi.js"
 export { OINODataModel } from "./OINODataModel.js"
 export { OINOModelSet } from "./OINOModelSet.js"
@@ -88,6 +93,7 @@ export enum OINOLogLevel {
 export type OINOSqlParams = {
     /** Additional SQL select where-conditions */
     filter?:OINOSqlFilter,
+    /** SQL result ordering conditions */
     order?:OINOSqlOrder
 }
 
