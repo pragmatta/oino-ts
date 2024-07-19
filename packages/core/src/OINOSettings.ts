@@ -7,16 +7,21 @@ export class OINOSettings {
     static OINO_ID_SEPARATOR:string = "_"
     private static OINO_ID_SEPARATOR_ESCAPED:string = "%"
 
+    /** Name of the OINOSqlFilter-parameter in request */
+    static OINO_SQL_FILTER_PARAM:string = "oinosqlfilter"
+
+    /** Name of the OINOSqlFilter-parameter in request */
+    static OINO_SQL_ORDER_PARAM:string = "oinosqlorder"
 
     /** Set the name of the OINO ID field */
-    static setIdField(idField: string) {
+    static setOinoIdField(idField: string) {
         if (idField) {
             OINOSettings.OINO_ID_FIELD = idField;
         }
     }
 
     /** Set the separator character of the OINO ID field */
-    static setIdSeparator(idSeparator: string) {
+    static setOinoIdSeparator(idSeparator: string) {
         if (idSeparator && (idSeparator.length == 1)) {
             OINOSettings.OINO_ID_SEPARATOR = idSeparator;
             OINOSettings.OINO_ID_SEPARATOR_ESCAPED = '%' + idSeparator.charCodeAt(0).toString(16);
@@ -39,4 +44,19 @@ export class OINOSettings {
         }
         return result
     }
+
+    /** Set the name of the OINOSqlFilter-param field */
+    static setOinoSqlFilterParam(sqlFilterParam: string) {
+        if (sqlFilterParam) {
+            OINOSettings.OINO_SQL_FILTER_PARAM = sqlFilterParam;
+        }
+    }
+
+    /** Set the name of the OINOSqlOrder-param field */
+    static setOinoSqlOrderParam(sqlOrderParam: string) {
+        if (sqlOrderParam) {
+            OINOSettings.OINO_SQL_ORDER_PARAM = sqlOrderParam;
+        }
+    }
+
 }

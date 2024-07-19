@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell, OINOSqlOrder } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -89,9 +89,13 @@ export class OINOFactory {
             result.responseType = OINOContentType.json
         }
 
-        const filter = url.searchParams.get("filter")
+        const filter = url.searchParams.get(OINOSettings.OINO_SQL_FILTER_PARAM)
         if (filter) {
             result.sqlParams.filter = new OINOSqlFilter(filter)
+        }
+        const order = url.searchParams.get(OINOSettings.OINO_SQL_ORDER_PARAM)
+        if (order) {
+            result.sqlParams.order = new OINOSqlOrder(order)
         }
         // OINOLog.debug("createParamsFromRequest", {params:result})
         return result

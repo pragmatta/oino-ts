@@ -4,6 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { debug } from "console"
 import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX, OINOLog } from "./index.js"
 
 /**
@@ -129,7 +130,73 @@ export class OINOSqlFilter {
                 result += this._rightSide
             }
         }
-        // OINOLog.debug("OINOFilter.toSql", {result:result})
+        OINOLog.debug("OINOFilter.toSql", {result:result})
         return "(" + result + ")"
+    }
+}
+
+/**
+ * Class for ordering select results on a number of columns. 
+ *
+ */
+export class OINOSqlOrder {
+    private static _orderColumnRegex = /^\s*(\w+)\s?(ASC|DESC)?\s*?$/i
+    
+    private _columns: string []
+    private _directions: string []
+
+    /**
+     * Constructor for `OINOSqlOrder`.
+     * 
+     * @param orderString string representation of filter from HTTP-request
+     *
+     */
+    constructor(orderString: string) {
+        OINOLog.debug("OINOSqlOrder.constructor", {orderString:orderString})
+        this._columns = []
+        this._directions = []
+
+        const column_strings = orderString.split(',')
+        for (let i=0; i<column_strings.length; i++) {
+            let match = OINOSqlOrder._orderColumnRegex.exec(column_strings[i])
+            if (match != null) {
+                this._columns.push(match[1])
+                this._directions.push((match[2] || "ASC").toUpperCase())
+            }
+        }
+        OINOLog.debug("OINOSqlOrder.constructor", {columns:this._columns, directions:this._directions})
+    }
+
+    /**
+     * Does filter contain any valid conditions.
+     *
+     */
+    isEmpty():boolean {
+        return (this._columns.length == 0)
+    }
+
+    /**
+     * Print order as SQL condition based on the datamodel of the API.
+     * 
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    toSql(dataModel:OINODataModel):string {
+        if (this.isEmpty()) {
+            return ""
+        }
+        OINOLog.debug("OINOSqlOrder.toSql", {columns:this._columns, directions:this._directions})
+        let result:string = ""
+        for (let i=0; i<this._columns.length; i++) {
+            const field:OINODataField|null = dataModel.findFieldByName(this._columns[i])
+            if (field) {
+                if (result) {
+                    result += ","
+                }
+                result += dataModel.api.db.printSqlColumnname(field.name) + " " + this._directions[i]
+            }
+        }
+        OINOLog.debug("OINOSqlOrder.toSql", {result:result})
+        return result
     }
 }

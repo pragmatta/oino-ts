@@ -232,16 +232,20 @@ export class OINODataModel {
     printSqlSelect(id: string, params:OINOSqlParams): string {
         let result:string = "SELECT " + this._printSqlColumnNames() + " FROM " + this.api.db.printSqlTablename(this.api.params.tableName);
         const filter_sql = params.filter?.toSql(this) || ""
-        // OINOLog_debug("OINODataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql})
+        const order_sql = params.order?.toSql(this) || ""
+        // OINOLog.debug("OINODataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
         if ((id != "") && (filter_sql != ""))  {
-            result = result + " WHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql + ";";
+            result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
         } else if (id != "") {
-            result = result + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
+            result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id);
         } else if (filter_sql != "") {
-            result = result + " WHERE " + filter_sql + ";";
-        } else {
-            result = result + ";";
+            result += "\nWHERE " + filter_sql;
         }
+        if (order_sql) {
+            result += "\nORDER BY " + order_sql 
+        }
+        result += ";"
+        OINOLog.debug("OINODataModel.printSqlSelect", {result:result})
         return result;
     }
 
