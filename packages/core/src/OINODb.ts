@@ -15,6 +15,7 @@ export abstract class OINODb {
     
     protected _params:OINODbParams
 
+    /** Name of the database */
     readonly name:string
 
     /**
@@ -52,37 +53,37 @@ export abstract class OINODb {
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
      * 
-     * @param sqlValue data from sql results
+     * @param cellValue data from sql results
      * @param sqlType native type name for table column
      *
      */
-    abstract printCellAsSqlValue(sqlValue:OINODataCell, sqlType: string): string
+    abstract printCellAsSqlValue(cellValue:OINODataCell, sqlType: string): string
 
     /**
      * Parse a single SQL result value for serialization using the context of the native data
      * type.
      * 
-     * @param strValue data from serialization
+     * @param sqlValue data from serialization
      * @param sqlType native type name for table column
      * 
      */
-    abstract parseSqlValueAsCell(strValue:OINODataCell, sqlType: string): OINODataCell
+    abstract parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell
     
     /**
      * Execute a select operation.
      * 
-     * @param sqlCmd SQL statement.
+     * @param sql SQL statement.
      *
      */
-    abstract sqlSelect(sqlCmd:string): Promise<OINODataSet>
+    abstract sqlSelect(sql:string): Promise<OINODataSet>
 
     /**
      * Execute other sql operations.
      * 
-     * @param sqlCmd SQL statement.
+     * @param sql SQL statement.
      *
      */
-    abstract sqlExec(sqlCmd:string): Promise<OINODataSet>
+    abstract sqlExec(sql:string): Promise<OINODataSet>
 
     /**
      * Initialize a data model by getting the SQL schema and populating OINODataFields of 

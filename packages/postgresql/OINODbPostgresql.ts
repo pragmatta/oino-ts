@@ -10,6 +10,10 @@ import { Pool, QueryResult } from "pg";
 
 const EMPTY_ROW:string[] = []
 
+/**
+ * Implmentation of OINODataSet for Postgresql.
+ * 
+ */
 class OINOPostgresqlData extends OINODataSet {
     private _rows:OINODataRow[]
     
@@ -58,6 +62,10 @@ class OINOPostgresqlData extends OINODataSet {
     }
 }
 
+/**
+ * Implementation of Postgresql-database.
+ * 
+ */
 export class OINODbPostgresql extends OINODb {
     
     private static table_schema_sql:string =
@@ -131,14 +139,34 @@ WHERE table_name = `
         return Promise.resolve(query_result.rows)
     }
 
+    /**
+     * Print a table name using database specific SQL escaping.
+     * 
+     * @param sqlTable name of the table
+     *
+     */
     printSqlTablename(sqlTable:string): string {
         return "\""+sqlTable.toLowerCase()+"\""
     }
 
+    /**
+     * Print a column name with correct SQL escaping.
+     * 
+     * @param sqlColumn name of the column
+     *
+     */
     printSqlColumnname(sqlColumn:string): string {
         return "\""+sqlColumn+"\""
     }
 
+    /**
+     * Print a single data value from serialization using the context of the native data
+     * type with the correct SQL escaping.
+     * 
+     * @param cellValue data from sql results
+     * @param sqlType native type name for table column
+     *
+     */
     printCellAsSqlValue(cellValue:OINODataCell, sqlType: string): string {
         if (cellValue === null) {
             return "NULL"
@@ -167,6 +195,14 @@ WHERE table_name = `
         }
     }
 
+    /**
+     * Parse a single SQL result value for serialization using the context of the native data
+     * type.
+     * 
+     * @param sqlValue data from serialization
+     * @param sqlType native type name for table column
+     * 
+     */
     parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
@@ -183,6 +219,10 @@ WHERE table_name = `
 
     }
 
+    /**
+     * Connect to database.
+     *
+     */
     async connect(): Promise<boolean> {
         try {
             // make sure that any items are correctly URL encoded in the connection string
@@ -196,6 +236,12 @@ WHERE table_name = `
         }        
     }
 
+    /**
+     * Execute a select operation.
+     * 
+     * @param sql SQL statement.
+     *
+     */
     async sqlSelect(sql:string): Promise<OINODataSet> {
         OINOBenchmark.start("sqlSelect")
         let result:OINODataSet
@@ -210,6 +256,13 @@ WHERE table_name = `
         OINOBenchmark.end("sqlSelect")
         return result
     }
+
+    /**
+     * Execute other sql operations.
+     * 
+     * @param sql SQL statement.
+     *
+     */
     async sqlExec(sql:string): Promise<OINODataSet> {
         OINOBenchmark.start("sqlExec")
         let result:OINODataSet
@@ -225,6 +278,13 @@ WHERE table_name = `
         return result
     }
 
+    /**
+     * Initialize a data model by getting the SQL schema and populating OINODataFields of 
+     * the model.
+     * 
+     * @param api api which data model to initialize.
+     *
+     */
     async initializeApiDatamodel(api:OINOApi): Promise<void> {
         
         const res:OINODataSet = await this.sqlSelect(OINODbPostgresql.table_schema_sql + "'" + api.params.tableName.toLowerCase() + "';")

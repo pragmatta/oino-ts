@@ -6,6 +6,11 @@
     "skipErrorChecking": true,
     "excludePrivate": true,
     "excludeProtected": true,
+    "validation": {
+        "invalidLink": true,
+        "notDocumented": true,
+        "notExported": true
+    },
     "out": "../docs",
     "exclude": ["**/node_modules/**", "**/*.test.ts"]
 }
