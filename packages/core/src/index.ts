@@ -78,18 +78,32 @@ export type OINODataFieldFilter = (field:OINODataField) => Boolean
 export type OINOLogConstructor = new () => OINOLog
 
 /** Logging levels */
-export enum OINOLogLevel { debug=0, info=1, warn=2, error=3 }
+export enum OINOLogLevel { 
+    /** Debug messages */
+    debug=0, 
+    /** Informational messages */
+    info=1, 
+    /** Warning messages */
+    warn=2, 
+    /** Error messages */
+    error=3 
+}
 
 /** Request options */
 export type OINOSqlParams = {
+    /** Additional SQL select where-conditions */
     filter?:OINOSqlFilter
 }
 
 /** Request options */
 export type OINORequestParams = {
+    /** Content type of the request body */
     requestType?:OINOContentType
+    /** Content type of the response body */
     responseType?:OINOContentType
+    /** Multipart boundary token */
     multipartBoundary?:string
+    /** SQL parameters */
     sqlParams:OINOSqlParams
 }
 
@@ -106,11 +120,23 @@ export type OINODataCell = string | bigint | number | boolean | Date | Uint8Arra
 export type OINODataRow = Array<OINODataCell>
 /** Empty row instance */
 export const OINO_EMPTY_ROW:OINODataRow = []
+/** Empty row array instance */
 export const OINO_EMPTY_ROWS:OINODataRow[] = [OINO_EMPTY_ROW]
 
 /** Key-value collection */
 export type OINOValues = Record<string, string>
 
 /** Supported content format mime-types */
-export enum OINOContentType { json='application/json', csv='text/csv', formdata='multipart/form-data', urlencode='application/x-www-form-urlencoded', html='text/html' }
+export enum OINOContentType { 
+    /** JSON encoded data */
+    json='application/json', 
+    /** CSV encoded data */
+    csv='text/csv', 
+    /** Multipart encoded form data */
+    formdata='multipart/form-data', 
+    /** URL encoded form data */
+    urlencode='application/x-www-form-urlencoded', 
+    /** HTML encoded data (output only) */
+    html='text/html' 
+}
 

@@ -381,7 +381,7 @@ export class OINOFactory {
         }
     }
 
-    static _multipartHeaderRegex:RegExp = /Content-Disposition\: (form-data|file); name=\"([^\"]+)\"(; filename=.*)?/i
+    private static _multipartHeaderRegex:RegExp = /Content-Disposition\: (form-data|file); name=\"([^\"]+)\"(; filename=.*)?/i
 
     private static createRowFromFormdata(datamodel:OINODataModel, data:string, multipartBoundary:string):OINODataRow[] {
         let result:OINODataRow[] = []

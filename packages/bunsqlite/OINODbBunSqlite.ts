@@ -8,12 +8,20 @@ import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINON
 
 import { Database as BunSqliteDb } from "bun:sqlite";
 
+/**
+ * Implmentation of OINODataSet for BunSqlite.
+ * 
+ */
 class OINOBunSqliteDataset extends OINOMemoryDataSet {
     constructor(data: unknown, messages:string[]=[]) {
         super(data, messages)
     }
 }
 
+/**
+ * Implementation of BunSqlite-database.
+ * 
+ */
 export class OINODbBunSqlite extends OINODb {
     private static _tableDescriptionRegex = /^CREATE TABLE\s*[\"\[]?\w+[\"\]]?\s*\(\s*(.*)\s*\)\s*(WITHOUT ROWID)?$/msi
     private static _tablePrimarykeyRegex = /PRIMARY KEY \(([^\)]+)\)/i
@@ -44,14 +52,34 @@ export class OINODbBunSqlite extends OINODb {
         return result
     }
 
+    /**
+     * Print a table name using database specific SQL escaping.
+     * 
+     * @param sqlTable name of the table
+     *
+     */
     printSqlTablename(sqlTable:string): string {
         return "["+sqlTable+"]"
     }
 
+    /**
+     * Print a column name with correct SQL escaping.
+     * 
+     * @param sqlColumn name of the column
+     *
+     */
     printSqlColumnname(sqlColumn:string): string {
         return "\""+sqlColumn+"\""
     }
 
+    /**
+     * Print a single data value from serialization using the context of the native data
+     * type with the correct SQL escaping.
+     * 
+     * @param cellValue data from sql results
+     * @param sqlType native type name for table column
+     *
+     */
     printCellAsSqlValue(cellValue:OINODataCell, sqlType: string): string {
         // OINOLog.debug("OINODbBunSqlite.printCellAsSqlValue", {cellValue:cellValue, sqlType:sqlType, type:typeof(cellValue)})
         if (cellValue === null) {
@@ -74,6 +102,14 @@ export class OINODbBunSqlite extends OINODb {
         }
     }
 
+    /**
+     * Parse a single SQL result value for serialization using the context of the native data
+     * type.
+     * 
+     * @param sqlValue data from serialization
+     * @param sqlType native type name for table column
+     * 
+     */
     parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
@@ -91,6 +127,10 @@ export class OINODbBunSqlite extends OINODb {
     }
 
 
+    /**
+     * Connect to database.
+     *
+     */
     connect(): Promise<boolean> {
         const filepath:string = this._params.url.substring(7)
         try {
@@ -103,6 +143,12 @@ export class OINODbBunSqlite extends OINODb {
         }   
     }
 
+    /**
+     * Execute a select operation.
+     * 
+     * @param sql SQL statement.
+     *
+     */
     async sqlSelect(sql:string): Promise<OINODataSet> {
         OINOBenchmark.start("sqlSelect")
         let result:OINODataSet
@@ -116,6 +162,13 @@ export class OINODbBunSqlite extends OINODb {
         OINOBenchmark.end("sqlSelect")
         return Promise.resolve(result)
     }
+
+    /**
+     * Execute other sql operations.
+     * 
+     * @param sql SQL statement.
+     *
+     */
     async sqlExec(sql:string): Promise<OINODataSet> {
         OINOBenchmark.start("sqlExec")
         let result:OINODataSet
@@ -130,6 +183,13 @@ export class OINODbBunSqlite extends OINODb {
         return Promise.resolve(result)
     }
 
+    /**
+     * Initialize a data model by getting the SQL schema and populating OINODataFields of 
+     * the model.
+     * 
+     * @param api api which data model to initialize.
+     *
+     */
     async initializeApiDatamodel(api:OINOApi): Promise<void> {
         const res:OINODataSet|null = await this.sqlSelect("select sql from sqlite_schema WHERE name='" + api.params.tableName + "'")
         const sql_desc:string = (res?.getRow()[0]) as string
