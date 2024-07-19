@@ -233,6 +233,7 @@ export class OINODataModel {
         let result:string = "SELECT " + this._printSqlColumnNames() + " FROM " + this.api.db.printSqlTablename(this.api.params.tableName);
         const filter_sql = params.filter?.toSql(this) || ""
         const order_sql = params.order?.toSql(this) || ""
+        const limit_sql = params.limit?.toSql(this) || ""
         // OINOLog.debug("OINODataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
         if ((id != "") && (filter_sql != ""))  {
             result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
@@ -243,6 +244,9 @@ export class OINODataModel {
         }
         if (order_sql) {
             result += "\nORDER BY " + order_sql 
+        }
+        if (limit_sql) {
+            result += "\nLIMIT " + limit_sql 
         }
         result += ";"
         OINOLog.debug("OINODataModel.printSqlSelect", {result:result})

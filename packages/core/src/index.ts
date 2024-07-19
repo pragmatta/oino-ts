@@ -1,7 +1,7 @@
 import { OINODb } from "./OINODb.js"
 import { OINODataField } from "./OINODataField.js"
 import { OINOLog } from "./utils/OINOLoggingUtils.js"
-import { OINOSqlFilter, OINOSqlOrder } from "./OINOSqlParams.js"
+import { OINOSqlFilter, OINOSqlLimit, OINOSqlOrder } from "./OINOSqlParams.js"
 
 export { OINOApiResult, OINOApi } from "./OINOApi.js"
 export { OINODataModel } from "./OINODataModel.js"
@@ -9,7 +9,7 @@ export { OINOModelSet } from "./OINOModelSet.js"
 export { OINODataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODataField.js"
 export { OINODb } from "./OINODb.js"
 export { OINODataSet, OINOMemoryDataSet } from "./OINODataSet.js"
-export { OINOSqlFilter, OINOSqlOrder } from "./OINOSqlParams.js"
+export { OINOSqlFilter, OINOSqlOrder, OINOSqlLimit } from "./OINOSqlParams.js"
 export { OINOSettings } from "./OINOSettings.js"
 export { OINOHashid } from "./OINOHashid.js"
 
@@ -95,6 +95,8 @@ export type OINOSqlParams = {
     filter?:OINOSqlFilter,
     /** SQL result ordering conditions */
     order?:OINOSqlOrder
+    /** SQL result limit condition */
+    limit?:OINOSqlLimit
 }
 
 /** Request options */

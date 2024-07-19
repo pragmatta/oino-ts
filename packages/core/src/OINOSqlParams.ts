@@ -152,7 +152,7 @@ export class OINOSqlOrder {
      *
      */
     constructor(orderString: string) {
-        OINOLog.debug("OINOSqlOrder.constructor", {orderString:orderString})
+        // OINOLog.debug("OINOSqlOrder.constructor", {orderString:orderString})
         this._columns = []
         this._directions = []
 
@@ -164,7 +164,7 @@ export class OINOSqlOrder {
                 this._directions.push((match[2] || "ASC").toUpperCase())
             }
         }
-        OINOLog.debug("OINOSqlOrder.constructor", {columns:this._columns, directions:this._directions})
+        // OINOLog.debug("OINOSqlOrder.constructor", {columns:this._columns, directions:this._directions})
     }
 
     /**
@@ -185,7 +185,7 @@ export class OINOSqlOrder {
         if (this.isEmpty()) {
             return ""
         }
-        OINOLog.debug("OINOSqlOrder.toSql", {columns:this._columns, directions:this._directions})
+        // OINOLog.debug("OINOSqlOrder.toSql", {columns:this._columns, directions:this._directions})
         let result:string = ""
         for (let i=0; i<this._columns.length; i++) {
             const field:OINODataField|null = dataModel.findFieldByName(this._columns[i])
@@ -196,7 +196,50 @@ export class OINOSqlOrder {
                 result += dataModel.api.db.printSqlColumnname(field.name) + " " + this._directions[i]
             }
         }
-        OINOLog.debug("OINOSqlOrder.toSql", {result:result})
+        // OINOLog.debug("OINOSqlOrder.toSql", {result:result})
+        return result
+    }
+}
+
+/**
+ * Class for limiting the number of results. 
+ *
+ */
+export class OINOSqlLimit {
+    private static _orderColumnRegex = /^(\d+)?$/i
+    
+    private _limit: number
+
+    /**
+     * Constructor for `OINOSqlLimit`.
+     * 
+     * @param limitString string representation of filter from HTTP-request
+     *
+     */
+    constructor(limitString: string) {
+        this._limit = 0
+        this._limit = Number.parseInt(limitString)
+    }
+
+    /**
+     * Does filter contain any valid conditions.
+     *
+     */
+    isEmpty():boolean {
+        return (this._limit <= 0)
+    }
+
+    /**
+     * Print order as SQL condition based on the datamodel of the API.
+     * 
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    toSql(dataModel:OINODataModel):string {
+        if (this.isEmpty()) {
+            return ""
+        }
+        let result:string = this._limit.toString()
         return result
     }
 }
