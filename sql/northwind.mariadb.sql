@@ -165,7 +165,7 @@ CREATE TABLE `Products` (
     `SupplierID` INTEGER,
     `CategoryID` INTEGER,
     `QuantityPerUnit` VARCHAR(20),
-    `UnitPrice` DECIMAL(10,2) ZEROFILL DEFAULT 0,
+    `UnitPrice` DOUBLE DEFAULT 0,
     `UnitsInStock` SMALLINT(2) DEFAULT 0,
     `UnitsOnOrder` SMALLINT(2) DEFAULT 0,
     `ReorderLevel` SMALLINT(2) DEFAULT 0,
