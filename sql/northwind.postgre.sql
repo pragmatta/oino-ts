@@ -178,7 +178,7 @@ CREATE TABLE products (
     "SupplierID" smallint,
     "CategoryID" smallint,
     "QuantityPerUnit" character varying(20),
-    "UnitPrice" NUMERIC(10,2),
+    "UnitPrice" real,
     "UnitsInStock" smallint,
     "UnitsOnOrder" smallint,
     "ReorderLevel" smallint,
