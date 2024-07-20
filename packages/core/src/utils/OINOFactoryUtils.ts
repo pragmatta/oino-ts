@@ -141,7 +141,7 @@ export class OINOFactory {
             const row:OINODataRow = dataset.getRow()
             let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
             let primary_key_values:string[] = []
-            let html_row:string = template
+            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
             for (let i=0; i<datamodel.fields.length; i++) {
                 const f:OINODataField = datamodel.fields[i]
                 let value:string|null|undefined = f.serializeCell(row[i])
@@ -153,7 +153,7 @@ export class OINOFactory {
                 }
                 html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
             }
-            html_row = html_row.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html)) 
+            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html)) 
             result += html_row + "\r\n"
             dataset.next()
         }
