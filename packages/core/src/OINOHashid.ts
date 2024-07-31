@@ -110,11 +110,11 @@ export class OINOHashid {
 
         const cryptotext:string = hashid.substring(this._minLength)
         const cryptobytes:Buffer = new Buffer(hashidEncoder.decode(cryptotext))
-        // OINOLog.debug("OINOHashid.decode", {iv:this._iv.toString('hex'), cryptotext:cryptotext })
+        OINOLog.debug("OINOHashid.decode", {iv:this._iv.toString('hex'), cryptotext:cryptotext })
         const decipher = createDecipheriv('aes-128-gcm', this._key, this._iv)
         const plaintext = decipher.update(cryptobytes, undefined, 'utf8') //, cryptotext, 'base64url', 'utf8') 
         
-        // OINOLog.debug("OINOHashid.decode", {plaintext:plaintext})
+        OINOLog.debug("OINOHashid.decode", {plaintext:plaintext})
         return plaintext.split(" ")[0]
     }
 
