@@ -10,8 +10,11 @@ export class OINOSettings {
     /** Name of the OINOSqlFilter-parameter in request */
     static OINO_SQL_FILTER_PARAM:string = "oinosqlfilter"
 
-    /** Name of the OINOSqlFilter-parameter in request */
+    /** Name of the OINOSqlOrder-parameter in request */
     static OINO_SQL_ORDER_PARAM:string = "oinosqlorder"
+
+    /** Name of the OINOSqlLimit-parameter in request */
+    static OINO_SQL_LIMIT_PARAM:string = "oinosqllimit"
 
     /** Set the name of the OINO ID field */
     static setOinoIdField(idField: string) {

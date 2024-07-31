@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell, OINOSqlOrder } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell, OINOSqlOrder, OINOSqlLimit } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -97,6 +97,10 @@ export class OINOFactory {
         if (order) {
             result.sqlParams.order = new OINOSqlOrder(order)
         }
+        const limit = url.searchParams.get(OINOSettings.OINO_SQL_LIMIT_PARAM)
+        if (limit) {
+            result.sqlParams.limit = new OINOSqlLimit(limit)
+        }
         // OINOLog.debug("createParamsFromRequest", {params:result})
         return result
     }
@@ -137,7 +141,7 @@ export class OINOFactory {
             const row:OINODataRow = dataset.getRow()
             let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
             let primary_key_values:string[] = []
-            let html_row:string = template
+            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
             for (let i=0; i<datamodel.fields.length; i++) {
                 const f:OINODataField = datamodel.fields[i]
                 let value:string|null|undefined = f.serializeCell(row[i])
@@ -149,7 +153,7 @@ export class OINOFactory {
                 }
                 html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
             }
-            html_row = html_row.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html)) 
+            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html)) 
             result += html_row + "\r\n"
             dataset.next()
         }
@@ -469,7 +473,7 @@ export class OINOFactory {
         const data_parts:string[] = data.trim().split('&')
         for (let i=0; i<data_parts.length; i++) {
             const param_parts = data_parts[i].split('=')
-            // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
+            OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
             if (param_parts.length == 2) {
                 const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
                 const field_index:number = datamodel.findFieldIndexByName(key)
