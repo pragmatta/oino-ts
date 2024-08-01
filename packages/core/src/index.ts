@@ -25,8 +25,10 @@ export type OINOApiParams = {
     tableName: string 
     /** Reject values that exceed field max length (behaviour on such is platform dependent) */
     failOnOversizedValues?: Boolean
-    /** Reject updates that contain values for autoinc-type fields */
-    failOnAutoincUpdates?: Boolean
+    /** Reject PUT-requests that contain values for autoinc-type fields */
+    failOnUpdateOnAutoinc?: boolean
+    /** Reject POST-requests without primary key value (can work if DB-side ) */
+    failOnInsertWithoutKey?: boolean
     /** Treat date type fields as just strings and use the native formatting instead of the ISO 8601 format */
     useDatesAsString?: Boolean
     /** Exclude all fields with this prefix from the API */

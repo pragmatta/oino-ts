@@ -179,9 +179,9 @@ export class OINOApi {
                 httpResult.setError(405, "Field '" + field.name + "' is not allowed to be NULL!")
 
             } else if ((val === undefined) && (requirePrimaryKey) && (field.fieldParams.isPrimaryKey) && (!field.fieldParams.isAutoInc)) { 
-                httpResult.setError(405, "Primary key '" + field.name + "' is missing from the data!")
+                httpResult.setError(405, "Primary key '" + field.name + "' is not autoinc and missing from the data!")
 
-            } else if ((val !== undefined) && (this.params.failOnAutoincUpdates) && (field.fieldParams.isAutoInc)) { 
+            } else if ((val !== undefined) && (this.params.failOnUpdateOnAutoinc) && (field.fieldParams.isAutoInc)) { 
                 httpResult.setError(405, "Autoinc field '" + field.name + "' can't be updated!")
 
             } else {
@@ -228,7 +228,7 @@ export class OINOApi {
             let sql:string = "" 
             let i:number = 0
             while (i<rows.length) {
-                this._validateRowValues(result, rows[i], true)
+                this._validateRowValues(result, rows[i], this.params.failOnInsertWithoutKey||false)
                 if (result.success) {
                     sql += this.datamodel.printSqlInsert(rows[i]) 
                 }
