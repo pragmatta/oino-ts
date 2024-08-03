@@ -161,11 +161,11 @@ export class OINOApi {
 
     private _parseFilter(filterStr:string, httpResult:OINOApiResult):OINOSqlFilter {
         try {
-            return new OINOSqlFilter(filterStr)
+            return OINOSqlFilter.parse(filterStr)
         } catch (e:any) {
             httpResult.setError(500, "Unhandled exception in _parseFilters: " + e.message)
         }
-        return new OINOSqlFilter("")
+        return new OINOSqlFilter("", "", "")
     }
 
     private _validateRowValues(httpResult:OINOApiResult, row:OINODataRow, requirePrimaryKey:boolean):void {

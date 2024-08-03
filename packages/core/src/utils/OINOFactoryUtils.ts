@@ -91,7 +91,7 @@ export class OINOFactory {
 
         const filter = url.searchParams.get(OINOSettings.OINO_SQL_FILTER_PARAM)
         if (filter) {
-            result.sqlParams.filter = new OINOSqlFilter(filter)
+            result.sqlParams.filter = OINOSqlFilter.parse(filter)
         }
         const order = url.searchParams.get(OINOSettings.OINO_SQL_ORDER_PARAM)
         if (order) {
