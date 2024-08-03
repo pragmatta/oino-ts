@@ -4,7 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { debug } from "console"
 import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX, OINOLog } from "./index.js"
 
 /**
@@ -37,38 +36,36 @@ export class OINOSqlFilter {
     private _rightSide: OINOSqlFilter | string
     private _operator:string
 
+    constructor(leftSide:OINOSqlFilter|string, operation:string, rightSide:OINOSqlFilter|string) {
+        this._leftSide = leftSide
+        this._operator = operation
+        this._rightSide = rightSide
+    }
+
     /**
-     * Constructor for `OINOFilter`.
+     * Constructor for `OINOFilter` as parser of http parameter.
      * 
      * @param filterString string representation of filter from HTTP-request
      *
      */
-    constructor(filterString: string) {
+    static parse(filterString: string):OINOSqlFilter {
         // OINOLog_debug("OINOFilter.constructor", {filterString:filterString})
         if (!filterString) {
-            this._leftSide = ""
-            this._operator = ""
-            this._rightSide = ""
+            return new OINOSqlFilter("", "", "")
 
         } else {
             let match = OINOSqlFilter._filterPredicateRegex.exec(filterString)
             if (match != null) {
-                this._leftSide = match[1]
-                this._operator = match[2].toLowerCase()
-                this._rightSide = match[3]
+                return new OINOSqlFilter(match[1], match[2].toLowerCase(), match[3])
             } else {
                 let match = OINOSqlFilter._unaryPredicateRegex.exec(filterString)
                 if (match != null) {
-                    this._leftSide = ""
-                    this._operator = match[2].toLowerCase()
-                    this._rightSide = new OINOSqlFilter(match[3])
+                    return new OINOSqlFilter("", match[2].toLowerCase(), OINOSqlFilter.parse(match[3]))
                 } else {
                     let boolean_parts = OINOStr.splitByBrackets(filterString, true, false, '(', ')')
                     // OINOLog_debug("OINOFilter.constructor", {boolean_parts:boolean_parts})
                     if (boolean_parts.length == 3 && (boolean_parts[1].match(OINOSqlFilter._booleanOperationRegex))) {
-                        this._leftSide = new OINOSqlFilter(boolean_parts[0])
-                        this._operator = boolean_parts[1].trim().toLowerCase().substring(1)
-                        this._rightSide = new OINOSqlFilter(boolean_parts[2])
+                        return new OINOSqlFilter(OINOSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1), OINOSqlFilter.parse(boolean_parts[2]))
         
                     } else {
                         throw new Error(OINO_ERROR_PREFIX + "Invalid filter '" + filterString + "'")
