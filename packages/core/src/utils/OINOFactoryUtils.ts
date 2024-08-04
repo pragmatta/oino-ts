@@ -127,7 +127,7 @@ export class OINOFactory {
     }
 
     /**
-     * Creates a HTTP Response from API modelset.
+     * Creates HTML Response from API modelset.
      *
      * @param modelset OINO API dataset
      * @param template HTML template
@@ -161,7 +161,7 @@ export class OINOFactory {
     }
 
     /**
-     * Creates a HTTP Response from a row id.
+     * Creates HTML Response from a row id.
      *
      * @param oinoId OINO id
      * @param template HTML template
@@ -173,7 +173,7 @@ export class OINOFactory {
     }
     
     /**
-     * Creates a HTTP Response from object properties.
+     * Creates HTML Response from object properties.
      *
      * @param object object
      * @param template HTML template
@@ -192,7 +192,7 @@ export class OINOFactory {
     }
 
     /**
-     * Creates a HTTP Response from API result.
+     * Creates HTML Response from API result.
      *
      * @param apiResult object
      * @param template HTML template
