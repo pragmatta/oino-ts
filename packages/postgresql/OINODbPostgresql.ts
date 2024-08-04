@@ -21,7 +21,7 @@ class OINOPostgresqlData extends OINODataSet {
         super(data, messages)
 
         if ((data != null) && !(Array.isArray(data))) {
-            throw new Error(OINO_ERROR_PREFIX + "Invalid Posgresql data type!") // TODO: maybe check all rows
+            throw new Error(OINO_ERROR_PREFIX + ": Invalid Posgresql data type!") // TODO: maybe check all rows
         }
         this._rows = data as OINODataRow[]
         if (this.isEmpty()) {
@@ -100,7 +100,7 @@ WHERE table_name = `
 
         // OINOLog.debug("OINODbPostgresql.constructor", {params:params})
         if (this._params.type !== "OINODbPostgresql") {
-            throw new Error(OINO_ERROR_PREFIX + "Not OINODbPostgresql-type: " + this._params.type)
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type)
         } 
         this._pool = new Pool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password })
         this._pool.on("error", (err: any) => {
@@ -232,7 +232,7 @@ WHERE table_name = `
             return Promise.resolve(true)
         } catch (err) {
             // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + "Error connecting to Postgresql server: " + err)
+            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
         }        
     }
 
@@ -251,7 +251,7 @@ WHERE table_name = `
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + "OINODbPostgresql.sqlSelect exception in _db.query: " + e.message])
+            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + ": OINODbPostgresql.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.end("sqlSelect")
         return result
@@ -272,7 +272,7 @@ WHERE table_name = `
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + "OINODbPostgresql.sqlExec exception in _db.exec: " + e.message])
+            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + ": OINODbPostgresql.sqlExec exception in _db.exec: " + e.message])
         }
         OINOBenchmark.end("sqlExec")
         return result

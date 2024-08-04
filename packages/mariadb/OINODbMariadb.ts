@@ -81,7 +81,7 @@ export class OINODbMariadb extends OINODb {
 
         // OINOLog.debug("OINODbMariadb.constructor", {params:params})
         if (this._params.type !== "OINODbMariadb") {
-            throw new Error(OINO_ERROR_PREFIX + "Not OINODbMariadb-type: " + this._params.type)
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type)
         } 
         this._pool = mariadb.createPool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password, acquireTimeout: 2000, debug:false, rowsAsArray: true })
        
@@ -254,7 +254,7 @@ export class OINODbMariadb extends OINODb {
             return Promise.resolve(true)
         } catch (err) {
             // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + "Error connecting to Postgresql server: " + err)
+            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
         }        
     }
 
@@ -273,7 +273,7 @@ export class OINODbMariadb extends OINODb {
             result = new OINOMariadbData(sql_res, [])
 
         } catch (e:any) {
-            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + "OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
+            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + ": OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.end("sqlSelect")
         return result
@@ -294,7 +294,7 @@ export class OINODbMariadb extends OINODb {
             result = new OINOMariadbData(sql_res, [])
 
         } catch (e:any) {
-            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + "OINODbMariadb.sqlExec exception in _db.exec: " + e.message])
+            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + ": OINODbMariadb.sqlExec exception in _db.exec: " + e.message])
         }
         OINOBenchmark.end("sqlExec")
         return result

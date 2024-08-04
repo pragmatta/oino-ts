@@ -68,7 +68,7 @@ export class OINOSqlFilter {
                         return new OINOSqlFilter(OINOSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1), OINOSqlFilter.parse(boolean_parts[2]))
         
                     } else {
-                        throw new Error(OINO_ERROR_PREFIX + "Invalid filter '" + filterString + "'")
+                        throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'")
                     }                
                 }            
             }

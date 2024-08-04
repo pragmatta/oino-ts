@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell, OINOSqlOrder, OINOSqlLimit } from "../index.js"
+import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell, OINOSqlOrder, OINOSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -127,7 +127,7 @@ export class OINOFactory {
     }
 
     /**
-     * Creates a HTTP Response from API modelset.
+     * Creates HTML Response from API modelset.
      *
      * @param modelset OINO API dataset
      * @param template HTML template
@@ -161,7 +161,7 @@ export class OINOFactory {
     }
 
     /**
-     * Creates a HTTP Response from a row id.
+     * Creates HTML Response from a row id.
      *
      * @param oinoId OINO id
      * @param template HTML template
@@ -173,7 +173,7 @@ export class OINOFactory {
     }
     
     /**
-     * Creates a HTTP Response from object properties.
+     * Creates HTML Response from object properties.
      *
      * @param object object
      * @param template HTML template
@@ -186,6 +186,44 @@ export class OINOFactory {
             if (value) {
                 result = result.replaceAll('###' + key + '###', OINOStr.encode(value.toString(), OINOContentType.html))
             }
+        }
+        result = result.replace(/###[^#]*###/g, "")
+        return result
+    }
+
+    /**
+     * Creates HTML Response from API result.
+     *
+     * @param apiResult object
+     * @param template HTML template
+     * @param includeErrorMessages include debug messages in result
+     * @param includeWarningMessages include debug messages in result
+     * @param includeInfoMessages include debug messages in result
+     * @param includeDebugMessages include debug messages in result
+     * 
+     */
+    static createHtmlFromApiResult(apiResult:OINOApiResult, template:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):string {
+        let result:string = template
+        result = result.replaceAll('###statusCode###', OINOStr.encode(apiResult.statusCode.toString(), OINOContentType.html))
+        result = result.replaceAll('###statusMessage###', OINOStr.encode(apiResult.statusMessage.toString(), OINOContentType.html))
+        let messages = ""
+        for (let i:number = 0; i<apiResult.messages.length; i++) {
+            if (includeErrorMessages && apiResult.messages[i].startsWith(OINO_ERROR_PREFIX)) {
+                messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
+            } 
+            if (includeWarningMessages && apiResult.messages[i].startsWith(OINO_WARNING_PREFIX)) {
+                messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
+            } 
+            if (includeInfoMessages && apiResult.messages[i].startsWith(OINO_INFO_PREFIX)) {
+                messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
+            } 
+            if (includeDebugMessages && apiResult.messages[i].startsWith(OINO_DEBUG_PREFIX)) {
+                messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
+            } 
+            
+        }
+        if (messages) {
+            result = result.replaceAll('###messages###', "<ul>" + messages + "</ul>")
         }
         result = result.replace(/###[^#]*###/g, "")
         return result

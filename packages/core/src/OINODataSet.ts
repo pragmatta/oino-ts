@@ -102,7 +102,7 @@ export class OINOMemoryDataSet extends OINODataSet {
     constructor(data: unknown, errors: string[] = []) {
         super(data, errors);
         if ((data == null) || !(Array.isArray(data))) {
-            throw new Error(OINO_ERROR_PREFIX + "Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
+            throw new Error(OINO_ERROR_PREFIX + ": Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
         }
         this._rows = data as OINODataRow[];
         if (this.isEmpty()) {
