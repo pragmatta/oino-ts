@@ -106,7 +106,7 @@ export class OINODataModel {
             }
         }
         if (i != id_parts.length) {
-            throw new Error(OINO_ERROR_PREFIX + "id '" + id_value + "' is not a valid key for table " + this.api.params.tableName)
+            throw new Error(OINO_ERROR_PREFIX + ": id '" + id_value + "' is not a valid key for table " + this.api.params.tableName)
         }
         return "(" + result + ")";
     }
