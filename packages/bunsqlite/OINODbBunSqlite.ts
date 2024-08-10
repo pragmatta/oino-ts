@@ -177,7 +177,7 @@ export class OINODbBunSqlite extends OINODb {
             result = new OINOBunSqliteDataset([[]], [])
 
         } catch (e:any) {
-            result = new OINOBunSqliteDataset([[]], ["OINODbBunSqlite.sqlExec exception in _db.exec: " + e.message])
+            result = new OINOBunSqliteDataset([[]], [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlExec")
         return Promise.resolve(result)

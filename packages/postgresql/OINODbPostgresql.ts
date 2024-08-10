@@ -251,7 +251,7 @@ WHERE table_name = `
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + ": OINODbPostgresql.sqlSelect exception in _db.query: " + e.message])
+            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlSelect")
         return result
@@ -272,7 +272,7 @@ WHERE table_name = `
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + ": OINODbPostgresql.sqlExec exception in _db.exec: " + e.message])
+            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlExec")
         return result
