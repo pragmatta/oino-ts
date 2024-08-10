@@ -10,13 +10,13 @@ import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX, OINOLog } fro
  * Supported logical conjunctions in filter predicates.
  * 
  */
-export enum OINOSqlConjunction { and = "and", or = "or" } 
+export enum OINOBooleanOperation { none="none", and = "and", or = "or", not = "not" } 
 
 /**
  * Supported logical conjunctions in filter predicates.
  * 
  */
-export enum OINOSqlCondition { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
+export enum OINOSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
 
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions. 
@@ -29,14 +29,14 @@ export enum OINOSqlCondition { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = 
  */
 export class OINOSqlFilter {
     private static _booleanOperationRegex = /^\s?\-(and|or)\s?$/i
-    private static _unaryPredicateRegex = /^-(not|)\((.+)\)$/i
-    private static _filterPredicateRegex = /^\(([^'"\(\)]+)\)\s?\-(lt|le|eq|ge|gt|like)\s?\(([^'"\(\)]+)\)$/i
+    private static _negationRegex = /^-(not|)\((.+)\)$/i
+    private static _filterComparisonRegex = /^\(([^'"\(\)]+)\)\s?\-(lt|le|eq|ge|gt|like)\s?\(([^'"\(\)]+)\)$/i
     
     private _leftSide: OINOSqlFilter | string
     private _rightSide: OINOSqlFilter | string
-    private _operator:string
+    private _operator:OINOSqlComparison|OINOBooleanOperation|null
 
-    constructor(leftSide:OINOSqlFilter|string, operation:string, rightSide:OINOSqlFilter|string) {
+    constructor(leftSide:OINOSqlFilter|string, operation:OINOSqlComparison|OINOBooleanOperation|null, rightSide:OINOSqlFilter|string) {
         this._leftSide = leftSide
         this._operator = operation
         this._rightSide = rightSide
@@ -51,21 +51,21 @@ export class OINOSqlFilter {
     static parse(filterString: string):OINOSqlFilter {
         // OINOLog_debug("OINOFilter.constructor", {filterString:filterString})
         if (!filterString) {
-            return new OINOSqlFilter("", "", "")
+            return new OINOSqlFilter("", null, "")
 
         } else {
-            let match = OINOSqlFilter._filterPredicateRegex.exec(filterString)
+            let match = OINOSqlFilter._filterComparisonRegex.exec(filterString)
             if (match != null) {
-                return new OINOSqlFilter(match[1], match[2].toLowerCase(), match[3])
+                return new OINOSqlFilter(match[1], match[2].toLowerCase() as OINOSqlComparison, match[3])
             } else {
-                let match = OINOSqlFilter._unaryPredicateRegex.exec(filterString)
+                let match = OINOSqlFilter._negationRegex.exec(filterString)
                 if (match != null) {
-                    return new OINOSqlFilter("", match[2].toLowerCase(), OINOSqlFilter.parse(match[3]))
+                    return new OINOSqlFilter("", OINOBooleanOperation.not, OINOSqlFilter.parse(match[3]))
                 } else {
                     let boolean_parts = OINOStr.splitByBrackets(filterString, true, false, '(', ')')
                     // OINOLog_debug("OINOFilter.constructor", {boolean_parts:boolean_parts})
                     if (boolean_parts.length == 3 && (boolean_parts[1].match(OINOSqlFilter._booleanOperationRegex))) {
-                        return new OINOSqlFilter(OINOSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1), OINOSqlFilter.parse(boolean_parts[2]))
+                        return new OINOSqlFilter(OINOSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1) as OINOBooleanOperation, OINOSqlFilter.parse(boolean_parts[2]))
         
                     } else {
                         throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'")
@@ -95,7 +95,7 @@ export class OINOSqlFilter {
      *
      */
     isEmpty():boolean {
-        return (this._leftSide == "") && (this._operator == "") && (this._rightSide == "")
+        return (this._leftSide == "") && (this._operator == null) && (this._rightSide == "")
     }
 
     /**
