@@ -61,8 +61,8 @@ export class OINOApiResult {
     setError(statusCode:number, statusMessage:string, operation:string) {
         this.success = false
         this.statusCode = statusCode
-        if (this.statusMessage) {
-            this.messages.push(this.statusMessage)
+        if (this.statusMessage != "OK") {
+            this.messages.push(this.statusMessage) // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
         if (statusMessage.startsWith(OINO_ERROR_PREFIX)) {
             this.statusMessage = statusMessage
@@ -335,26 +335,26 @@ export class OINOApi {
         } else if (method == "PUT") {
             const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params)
             if (!id) {
-                result.setError(400, "HTTP PUT method requires an URL ID for the row that is updated!")
+                result.setError(400, "HTTP PUT method requires an URL ID for the row that is updated!", "DoRequest")
 
             } else if (rows.length != 1) {
-                result.setError(400, "HTTP PUT method requires exactly one row in the body data!")
+                result.setError(400, "HTTP PUT method requires exactly one row in the body data!", "DoRequest")
     
             } else {
                 try {
                     await this._doPut(result, id, rows[0])
 
                 } catch (e:any) {
-                    result.setError(500, "Unhandled exception in HTTP PUT doRequest: " + e.message)
+                    result.setError(500, "Unhandled exception in HTTP PUT doRequest: " + e.message, "DoRequest")
                 }             
             }
         } else if (method == "POST") {
             const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params)
             if (id) {
-                result.setError(400, "HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!")
+                result.setError(400, "HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!", "DoRequest")
 
             } else if (rows.length == 0)  {
-                result.setError(400, "HTTP POST method requires at least one row in the body data!")
+                result.setError(400, "HTTP POST method requires at least one row in the body data!", "DoRequest")
 
             } else {
                 try {
@@ -362,23 +362,23 @@ export class OINOApi {
                     await this._doPost(result, rows)
 
                 } catch (e:any) {
-                    result.setError(500, "Unhandled exception in HTTP POST doRequest: " + e.message)
+                    result.setError(500, "Unhandled exception in HTTP POST doRequest: " + e.message, "DoRequest")
                 }
             }
         } else if (method == "DELETE") {
             if (!id)  {
-                result.setError(400, "HTTP DELETE method requires an id!")
+                result.setError(400, "HTTP DELETE method requires an id!", "DoRequest")
 
             } else {
                 try {
                     await this._doDelete(result, id)
 
                 } catch (e:any) {
-                    result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message)
+                    result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message, "DoRequest")
                 }
             }
         } else {
-            result.setError(405, "Unsupported HTTP method '" + method + "'")
+            result.setError(405, "Unsupported HTTP method '" + method + "'", "DoRequest")
         }
         OINOBenchmark.end("doRequest")
         return result

@@ -9,7 +9,7 @@ export { OINOModelSet } from "./OINOModelSet.js"
 export { OINODataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODataField.js"
 export { OINODb } from "./OINODb.js"
 export { OINODataSet, OINOMemoryDataSet } from "./OINODataSet.js"
-export { OINOSqlFilter, OINOSqlOrder, OINOSqlLimit } from "./OINOSqlParams.js"
+export { OINOSqlFilter, OINOSqlOrder, OINOSqlLimit, OINOBooleanOperation } from "./OINOSqlParams.js"
 export { OINOSettings } from "./OINOSettings.js"
 export { OINOHashid } from "./OINOHashid.js"
 

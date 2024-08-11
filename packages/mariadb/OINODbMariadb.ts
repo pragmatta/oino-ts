@@ -72,6 +72,7 @@ class OINOMariadbData extends OINODataSet {
 export class OINODbMariadb extends OINODb {
     
     private static _fieldLengthRegex = /([^\(\)]+)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
+    private static _exceptionMessageRegex = /\(([^\)]*)\) (.*)\nsql\:(.*)?/i
     private static _tableSchemaSql:string = `SHOW COLUMNS from ` 
     
     private _pool:mariadb.Pool
@@ -137,9 +138,9 @@ export class OINODbMariadb extends OINODb {
             return Promise.resolve(result)
         
         } catch (err) {
-            const msg_parts = (err as Error).message.split(') ')
-            // OINOLog.debug("OINODbMariadb._exec exception", {connection: msg_parts[0].substring(1), message:msg_parts[1]}) // print connection info just to log so tests don't break on runtime output
-            throw new Error(msg_parts[1]);
+            const msg_parts = (err as Error).message.match(OINODbMariadb._exceptionMessageRegex) || []
+            // OINOLog.debug("OINODbMariadb._exec exception", {connection: msg_parts[1], message:msg_parts[2], sql:msg_parts[3]}) // print connection info just to log so tests don't break on runtime output
+            throw new Error(msg_parts[2]);
         } finally {
             if (connection) {
                 await connection.end()
@@ -273,7 +274,7 @@ export class OINODbMariadb extends OINODb {
             result = new OINOMariadbData(sql_res, [])
 
         } catch (e:any) {
-            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + ": OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
+            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.end("sqlSelect")
         return result
@@ -294,7 +295,7 @@ export class OINODbMariadb extends OINODb {
             result = new OINOMariadbData(sql_res, [])
 
         } catch (e:any) {
-            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + ": OINODbMariadb.sqlExec exception in _db.exec: " + e.message])
+            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlExec")
         return result
