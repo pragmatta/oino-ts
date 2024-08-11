@@ -21,9 +21,9 @@ export enum OINOSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt =
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions. 
  * Supports three types of statements
- * - conditions: (field)-lt|le|eq|ge|gt|like(value)
+ * - comparison: (field)-lt|le|eq|ge|gt|like(value)
  * - negation: -not(filter)
- * - conjunction: (filter)-and|or(filter)
+ * - conjunction/disjunction: (filter)-and|or(filter)
  * Supported conditions are comparisons (<, <=, =, >=, >) and substring match (LIKE).
  *
  */
@@ -37,6 +37,15 @@ export class OINOSqlFilter {
     private _operator:OINOSqlComparison|OINOBooleanOperation|null
 
     constructor(leftSide:OINOSqlFilter|string, operation:OINOSqlComparison|OINOBooleanOperation|null, rightSide:OINOSqlFilter|string) {
+        if (!(
+            ((operation === null) && (leftSide == "") && (rightSide == "")) ||
+            ((operation !== null) && (Object.values(OINOSqlComparison).includes(operation)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
+            ((operation == OINOBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINOSqlFilter)) ||
+            (((operation == OINOBooleanOperation.and) || (operation == OINOBooleanOperation.or)) && (leftSide instanceof OINOSqlFilter) && (rightSide instanceof OINOSqlFilter))
+        )) {
+            OINOLog.debug("Unsupported OINOSqlFilter format!", {leftSide:leftSide, operation:operation, rightSide:rightSide})
+            throw new Error(OINO_ERROR_PREFIX + ": Unsupported OINOSqlFilter format!")
+        }
         this._leftSide = leftSide
         this._operator = operation
         this._rightSide = rightSide
