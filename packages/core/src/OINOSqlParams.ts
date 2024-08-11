@@ -10,7 +10,7 @@ import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX, OINOLog } fro
  * Supported logical conjunctions in filter predicates.
  * 
  */
-export enum OINOBooleanOperation { none="none", and = "and", or = "or", not = "not" } 
+export enum OINOBooleanOperation { and = "and", or = "or", not = "not" } 
 
 /**
  * Supported logical conjunctions in filter predicates.
