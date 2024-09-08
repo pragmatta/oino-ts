@@ -17,6 +17,10 @@ const EMPTY_ROW:string[] = []
 class OINOPostgresqlData extends OINODataSet {
     private _rows:OINODataRow[]
     
+    /**
+     * OINOPostgresqlData constructor
+     * @param params database parameters
+     */
     constructor(data: unknown, messages:string[]=[]) {
         super(data, messages)
 
@@ -95,6 +99,10 @@ WHERE table_name = `
     // private _client:Client
     private _pool:Pool
 
+    /**
+     * Constructor of `OINODbPostgresql`
+     * @param params database paraneters
+     */
     constructor(params:OINODbParams) {
         super(params)
 

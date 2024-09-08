@@ -16,14 +16,20 @@ export class OINOSettings {
     /** Name of the OINOSqlLimit-parameter in request */
     static OINO_SQL_LIMIT_PARAM:string = "oinosqllimit"
 
-    /** Set the name of the OINO ID field */
+    /** 
+     * Set the name of the OINO ID field 
+     * @param idField name of the OINO ID field 
+     */
     static setOinoIdField(idField: string) {
         if (idField) {
             OINOSettings.OINO_ID_FIELD = idField;
         }
     }
 
-    /** Set the separator character of the OINO ID field */
+    /** 
+     * Set the separator character of the OINO ID field 
+     * @param idSeparator character to use as separator of id parts
+    */
     static setOinoIdSeparator(idSeparator: string) {
         if (idSeparator && (idSeparator.length == 1)) {
             OINOSettings.OINO_ID_SEPARATOR = idSeparator;
@@ -48,18 +54,39 @@ export class OINOSettings {
         return result
     }
 
-    /** Set the name of the OINOSqlFilter-param field */
+    /** 
+     * Set the name of the OINOSqlFilter-param field 
+     * 
+     * @param sqlFilterParam name of the http parameter with `OINOSqlFilter` definition
+     * 
+     */
     static setOinoSqlFilterParam(sqlFilterParam: string) {
         if (sqlFilterParam) {
             OINOSettings.OINO_SQL_FILTER_PARAM = sqlFilterParam;
         }
     }
 
-    /** Set the name of the OINOSqlOrder-param field */
+    /** 
+     * Set the name of the OINOSqlOrder-param field 
+     * 
+     * @param sqlOrderParam name of the http parameter with `OINOSqlOrder` definition
+     * 
+     */
     static setOinoSqlOrderParam(sqlOrderParam: string) {
         if (sqlOrderParam) {
             OINOSettings.OINO_SQL_ORDER_PARAM = sqlOrderParam;
         }
     }
 
+    /** 
+     * Set the name of the OINOSqlLimit-param field 
+     * 
+     * @param sqlLimitParam name of the http parameter with `OINOSqlLimit` definition
+     * 
+     */
+    static setOinoSqlLimitParam(sqlLimitParam: string) {
+        if (sqlLimitParam) {
+            OINOSettings.OINO_SQL_LIMIT_PARAM = sqlLimitParam;
+        }
+    }
 }

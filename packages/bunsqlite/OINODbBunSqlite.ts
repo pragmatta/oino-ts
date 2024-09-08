@@ -29,6 +29,10 @@ export class OINODbBunSqlite extends OINODb {
 
     private _db:BunSqliteDb|null
 
+    /**
+     * OINODbBunSqlite constructor
+     * @param params database parameters
+     */
     constructor(params:OINODbParams) {
         super(params)
         this._db = null

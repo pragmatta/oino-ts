@@ -174,6 +174,7 @@ export class OINODataModel {
      * Return the primary key values of one row in order of the data model
      * 
      * @param row data row
+     * @param hashidValues apply hashid when applicable
      *
      */
     getRowPrimarykeyValues(row: OINODataRow, hashidValues:boolean = false): string[] {

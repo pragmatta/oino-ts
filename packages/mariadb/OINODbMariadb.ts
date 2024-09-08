@@ -15,6 +15,10 @@ import mariadb from "mariadb";
 class OINOMariadbData extends OINODataSet {
     private _rows:OINODataRow[] = OINO_EMPTY_ROWS
     
+    /**
+     * OINOMariadbData constructor
+     * @param params database parameters
+     */
     constructor(data: any, messages:string[]=[]) {
         super(data, messages)
 
@@ -77,6 +81,10 @@ export class OINODbMariadb extends OINODb {
     
     private _pool:mariadb.Pool
 
+    /**
+     * Constructor of `OINODbMariadb` 
+     * @param params database parameters
+     */
     constructor(params:OINODbParams) {
         super(params)
 

@@ -89,6 +89,7 @@ export class OINOStr {
      * Encode OINO serialized strings as valid JSON.
      * 
      * @param str string to encode
+     * @param valueType wether it is a value type
      */
     static encodeJSON(str:string|null|undefined, valueType:boolean = false):string {
         if (str === undefined) { // no undefined literal in JSON
@@ -211,6 +212,8 @@ export class OINOStr {
      * Decode content type formatted string as OINO serialization.
      * 
      * @param str string to decode
+     * @param contentType content type for serialization
+     * 
      */
     static decode(str:string, contentType:OINOContentType):string|null|undefined {
         if (contentType == OINOContentType.csv) {
@@ -231,6 +234,8 @@ export class OINOStr {
      * Encode OINO serialized string to the content type formatting.
      * 
      * @param str string to encode
+     * @param contentType content type for serialization
+     * 
      */
     static encode(str:string|null|undefined, contentType:OINOContentType):string {
         if (contentType == OINOContentType.csv) {
