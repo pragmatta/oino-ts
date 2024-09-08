@@ -84,6 +84,28 @@ export class OINOSqlFilter {
         }
     }
 
+    /**
+     * Construct a new `OINOFilter` as combination of (boolean and/or) of two filters.
+     * 
+     * @param leftSide string representation of filter from HTTP-request
+     *
+     */
+    static combine(leftSide:OINOSqlFilter|null, operation:OINOBooleanOperation, rightSide:OINOSqlFilter|null):OINOSqlFilter|null {
+        if ((leftSide) && (!leftSide.isEmpty()) && (rightSide) && (!rightSide.isEmpty())) {
+            return new OINOSqlFilter(leftSide, operation, rightSide)
+
+        } else if ((leftSide) && (!leftSide.isEmpty())) {
+            return leftSide
+
+        } else if ((rightSide) && (!rightSide.isEmpty())) {
+            return rightSide
+            
+        } else {
+            return null
+        }
+    }
+
+
     private _operatorToSql():string {
         switch (this._operator) {
             case "and": return " AND "
