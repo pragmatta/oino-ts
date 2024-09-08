@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr, OINOSettings, OINONumberDataField, OINOBooleanDataField } from "./index.js";
+import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr, OINOSettings, OINONumberDataField, OINOBooleanDataField, OINODataCell } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -240,6 +240,8 @@ export class OINOModelSet {
 
     /**
      * Serialize model set in the given format.
+     * 
+     * @param [contentType=OINOContentType.json] serialization content type
      *
      */
     writeString(contentType:OINOContentType = OINOContentType.json):string {
@@ -258,6 +260,25 @@ export class OINOModelSet {
             
         } else {
             OINOLog.error("OINOModelSet.writeString: content type is only for input!", {contentType:contentType})
+        }
+        return result
+    }
+
+    /**
+     * Get value of given field in the current row. Undefined if no rows, 
+     * field not found or value does not exist.
+     * 
+     * @param fieldName name of the field
+     * 
+     */
+    getValueByFieldName(fieldName:string):OINODataCell {
+        let result:OINODataCell = undefined
+        if (!this.dataset.isEof()) {
+            const current_row:OINODataRow = this.dataset.getRow()
+            const field_index:number = this.datamodel.findFieldIndexByName(fieldName)
+            if (field_index >= 0) {
+                result = current_row[field_index]
+            }
         }
         return result
     }
