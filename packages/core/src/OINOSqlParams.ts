@@ -8,13 +8,13 @@ import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX, OINOLog } fro
 
 /**
  * Supported logical conjunctions in filter predicates.
- * 
+ * @enum
  */
 export enum OINOBooleanOperation { and = "and", or = "or", not = "not" } 
 
 /**
  * Supported logical conjunctions in filter predicates.
- * 
+ * @enum
  */
 export enum OINOSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
 
@@ -36,10 +36,16 @@ export class OINOSqlFilter {
     private _rightSide: OINOSqlFilter | string
     private _operator:OINOSqlComparison|OINOBooleanOperation|null
 
+    /**
+     * Constructor of `OINOSqlFilter`
+     * @param leftSide left side of the filter, either another filter or a column name
+     * @param operation operation of the filter, either `OINOSqlComparison` or `OINOBooleanOperation`
+     * @param rightSide right side of the filter, either another filter or a value
+     */
     constructor(leftSide:OINOSqlFilter|string, operation:OINOSqlComparison|OINOBooleanOperation|null, rightSide:OINOSqlFilter|string) {
         if (!(
             ((operation === null) && (leftSide == "") && (rightSide == "")) ||
-            ((operation !== null) && (Object.values(OINOSqlComparison).includes(operation)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
+            ((operation !== null) && (Object.values(OINOSqlComparison).includes(operation as OINOSqlComparison)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
             ((operation == OINOBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINOSqlFilter)) ||
             (((operation == OINOBooleanOperation.and) || (operation == OINOBooleanOperation.or)) && (leftSide instanceof OINOSqlFilter) && (rightSide instanceof OINOSqlFilter))
         )) {
@@ -87,10 +93,12 @@ export class OINOSqlFilter {
     /**
      * Construct a new `OINOFilter` as combination of (boolean and/or) of two filters.
      * 
-     * @param leftSide string representation of filter from HTTP-request
+     * @param leftSide left side to combine
+     * @param operation boolean operation to use in combination
+     * @param rightSide right side to combine
      *
      */
-    static combine(leftSide:OINOSqlFilter|null, operation:OINOBooleanOperation, rightSide:OINOSqlFilter|null):OINOSqlFilter|null {
+    static combine(leftSide:OINOSqlFilter|undefined, operation:OINOBooleanOperation, rightSide:OINOSqlFilter|undefined):OINOSqlFilter|undefined {
         if ((leftSide) && (!leftSide.isEmpty()) && (rightSide) && (!rightSide.isEmpty())) {
             return new OINOSqlFilter(leftSide, operation, rightSide)
 
@@ -101,7 +109,7 @@ export class OINOSqlFilter {
             return rightSide
             
         } else {
-            return null
+            return undefined
         }
     }
 

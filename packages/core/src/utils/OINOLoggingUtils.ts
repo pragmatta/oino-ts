@@ -131,6 +131,11 @@ export abstract class OINOLog {
  *
  */
 export class OINOConsoleLog extends OINOLog {
+
+    /**
+     * Constructor of `OINOConsoleLog`
+     * @param logLevel logging level
+     */
     constructor (logLevel:OINOLogLevel = OINOLogLevel.warn) {
         super(logLevel)
     }

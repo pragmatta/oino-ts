@@ -20,7 +20,7 @@ export abstract class OINODb {
 
     /**
      * Constructor for `OINODb`.
-     *
+     * @param params database parameters
      */
     constructor(params:OINODbParams) {
         this._params = params

@@ -17,6 +17,8 @@ export class OINOFactory {
      * Register a supported database class. Used to enable those that are installed in the factory 
      * instead of forcing everyone to install all database libraries.
      *
+     * @param dbName name of the database implementation class
+     * @param dbTypeClass constructor for creating a database of that type
      */
     static registerDb(dbName:string, dbTypeClass: OINODbConstructor):void {
         // OINOLog.debug("OINOFactory.registerDb", {dbType:dbName})

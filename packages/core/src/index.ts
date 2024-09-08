@@ -44,7 +44,10 @@ export type OINOApiParams = {
     
 }
 
-/** Database class (constructor) type */
+/** 
+ * Database class (constructor) type 
+ * @param dbParams database parameters
+ */
 export type OINODbConstructor = new (dbParams:OINODbParams) => OINODb
 
 /** Database parameters */
@@ -73,7 +76,10 @@ export type OINODataFieldParams = {
     isNotNull: Boolean
 }
 
-/** Callback to filter data fields */
+/** 
+ * Callback to filter data fields 
+ * @param field fields to filter
+ */
 export type OINODataFieldFilter = (field:OINODataField) => Boolean
 
 /** Logging class (constructor) type */

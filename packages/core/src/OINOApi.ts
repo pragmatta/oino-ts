@@ -56,6 +56,7 @@ export class OINOApiResult {
      * 
      * @param statusCode HTTP status code
      * @param statusMessage HTTP status message
+     * @param operation operation where error occured
      *
      */
     setError(statusCode:number, statusMessage:string, operation:string) {
@@ -76,6 +77,7 @@ export class OINOApiResult {
      * Add warning message.
      *
      * @param message HTTP status message
+     * @param operation operation where warning occured
      * 
      */
     addWarning(message:string, operation:string) {
@@ -89,6 +91,7 @@ export class OINOApiResult {
      * Add info message.
      *
      * @param message HTTP status message
+     * @param operation operation where info occured
      *
      */
     addInfo(message:string, operation:string) {
@@ -102,6 +105,7 @@ export class OINOApiResult {
      * Add debug message.
      *
      * @param message HTTP status message
+     * @param operation operation where debug occured
      *
      */
     addDebug(message:string, operation:string) {
@@ -118,6 +122,7 @@ export class OINOApiResult {
      * @param copyErrors wether error messages should be copied (default true)
      * @param copyWarnings wether warning messages should be copied (default false)
      * @param copyInfos wether info messages should be copied (default false)
+     * @param copyDebug wether debug messages should be copied (default false)
      *
      */
     copyMessagesToHeaders(headers:Headers, copyErrors:boolean = true, copyWarnings:boolean = false, copyInfos:boolean = false, copyDebug:boolean = false) {

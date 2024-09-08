@@ -90,7 +90,7 @@ try {
 				if (api_name == "") {
 					const template:string = await getTemplate(id, "", operation, "")
 					if (template) {
-						const html:string = OINOFactory.createHtmlFromId(id, template)
+						const html:string = OINOFactory.createHtmlFromOinoId(id, template)
 						response = new Response(html, {status:200, statusText: "OK", headers: response_headers })	
 					} else {
 						response = new Response("Template not found!", {status:404, statusText: "Template not found!", headers: response_headers })	
@@ -103,7 +103,7 @@ try {
 					if (api_result.modelset?.dataset) {
 						html = OINOFactory.createHtmlFromData(api_result.modelset, template)
 					} else {
-						html = OINOFactory.createHtmlFromId(id, template)
+						html = OINOFactory.createHtmlFromOinoId(id, template)
 					}
 					response = new Response(html, {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
 					if (request.method == "POST") {

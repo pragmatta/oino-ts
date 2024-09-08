@@ -12,5 +12,17 @@
         "notExported": true
     },
     "out": "../docs",
-    "exclude": ["**/node_modules/**", "**/*.test.ts"]
+    "exclude": ["**/node_modules/**", "**/*.test.ts"],
+    "requiredToBeDocumented": [
+        "Enum",
+        "Variable",
+        "Function",
+        "Class",
+        "Interface",
+        "Property",
+        "Method",
+        "Accessor",
+        "TypeAlias",
+        "Parameter"
+    ]
 }
