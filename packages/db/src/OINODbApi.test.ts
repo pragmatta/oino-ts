@@ -6,7 +6,7 @@
 
 import { expect, test } from "bun:test";
 
-import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINOLogLevel, OINOLog, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"

@@ -4,19 +4,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOStr, OINODbDataField, OINODbDataModel, OINODB_ERROR_PREFIX, OINOLog } from "./index.js"
+import { OINOStr, OINODbDataField, OINODbDataModel, OINO_ERROR_PREFIX, OINOLog } from "./index.js"
 
 /**
  * Supported logical conjunctions in filter predicates.
  * @enum
  */
-export enum OINODbBooleanOperation { and = "and", or = "or", not = "not" } 
+export enum OINODbSqlBooleanOperation { and = "and", or = "or", not = "not" } 
 
 /**
  * Supported logical conjunctions in filter predicates.
  * @enum
  */
-export enum OINODbComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
+export enum OINODbSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
 
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions. 
@@ -34,23 +34,23 @@ export class OINODbSqlFilter {
     
     private _leftSide: OINODbSqlFilter | string
     private _rightSide: OINODbSqlFilter | string
-    private _operator:OINODbComparison|OINODbBooleanOperation|null
+    private _operator:OINODbSqlComparison|OINODbSqlBooleanOperation|null
 
     /**
      * Constructor of `OINODbSqlFilter`
      * @param leftSide left side of the filter, either another filter or a column name
-     * @param operation operation of the filter, either `OINODbComparison` or `OINODbBooleanOperation`
+     * @param operation operation of the filter, either `OINODbSqlComparison` or `OINODbSqlBooleanOperation`
      * @param rightSide right side of the filter, either another filter or a value
      */
-    constructor(leftSide:OINODbSqlFilter|string, operation:OINODbComparison|OINODbBooleanOperation|null, rightSide:OINODbSqlFilter|string) {
+    constructor(leftSide:OINODbSqlFilter|string, operation:OINODbSqlComparison|OINODbSqlBooleanOperation|null, rightSide:OINODbSqlFilter|string) {
         if (!(
             ((operation === null) && (leftSide == "") && (rightSide == "")) ||
-            ((operation !== null) && (Object.values(OINODbComparison).includes(operation as OINODbComparison)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
-            ((operation == OINODbBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINODbSqlFilter)) ||
-            (((operation == OINODbBooleanOperation.and) || (operation == OINODbBooleanOperation.or)) && (leftSide instanceof OINODbSqlFilter) && (rightSide instanceof OINODbSqlFilter))
+            ((operation !== null) && (Object.values(OINODbSqlComparison).includes(operation as OINODbSqlComparison)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
+            ((operation == OINODbSqlBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINODbSqlFilter)) ||
+            (((operation == OINODbSqlBooleanOperation.and) || (operation == OINODbSqlBooleanOperation.or)) && (leftSide instanceof OINODbSqlFilter) && (rightSide instanceof OINODbSqlFilter))
         )) {
             OINOLog.debug("Unsupported OINODbSqlFilter format!", {leftSide:leftSide, operation:operation, rightSide:rightSide})
-            throw new Error(OINODB_ERROR_PREFIX + ": Unsupported OINODbSqlFilter format!")
+            throw new Error(OINO_ERROR_PREFIX + ": Unsupported OINODbSqlFilter format!")
         }
         this._leftSide = leftSide
         this._operator = operation
@@ -71,19 +71,19 @@ export class OINODbSqlFilter {
         } else {
             let match = OINODbSqlFilter._filterComparisonRegex.exec(filterString)
             if (match != null) {
-                return new OINODbSqlFilter(match[1], match[2].toLowerCase() as OINODbComparison, match[3])
+                return new OINODbSqlFilter(match[1], match[2].toLowerCase() as OINODbSqlComparison, match[3])
             } else {
                 let match = OINODbSqlFilter._negationRegex.exec(filterString)
                 if (match != null) {
-                    return new OINODbSqlFilter("", OINODbBooleanOperation.not, OINODbSqlFilter.parse(match[3]))
+                    return new OINODbSqlFilter("", OINODbSqlBooleanOperation.not, OINODbSqlFilter.parse(match[3]))
                 } else {
                     let boolean_parts = OINOStr.splitByBrackets(filterString, true, false, '(', ')')
                     // OINOLog_debug("OINOFilter.constructor", {boolean_parts:boolean_parts})
                     if (boolean_parts.length == 3 && (boolean_parts[1].match(OINODbSqlFilter._booleanOperationRegex))) {
-                        return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1) as OINODbBooleanOperation, OINODbSqlFilter.parse(boolean_parts[2]))
+                        return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1) as OINODbSqlBooleanOperation, OINODbSqlFilter.parse(boolean_parts[2]))
         
                     } else {
-                        throw new Error(OINODB_ERROR_PREFIX + ": Invalid filter '" + filterString + "'")
+                        throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'")
                     }                
                 }            
             }
@@ -98,7 +98,7 @@ export class OINODbSqlFilter {
      * @param rightSide right side to combine
      *
      */
-    static combine(leftSide:OINODbSqlFilter|undefined, operation:OINODbBooleanOperation, rightSide:OINODbSqlFilter|undefined):OINODbSqlFilter|undefined {
+    static combine(leftSide:OINODbSqlFilter|undefined, operation:OINODbSqlBooleanOperation, rightSide:OINODbSqlFilter|undefined):OINODbSqlFilter|undefined {
         if ((leftSide) && (!leftSide.isEmpty()) && (rightSide) && (!rightSide.isEmpty())) {
             return new OINODbSqlFilter(leftSide, operation, rightSide)
 

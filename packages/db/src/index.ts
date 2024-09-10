@@ -1,6 +1,10 @@
+import { OINOContentType } from "@oino-ts/types"
+export { OINOContentType }
+
+export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog } from "@oino-ts/types"
+
 import { OINODb } from "./OINODb.js"
 import { OINODbDataField } from "./OINODbDataField.js"
-import { OINOLog } from "./utils/OINOLoggingUtils.js"
 import { OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbRequestParams.js"
 
 export { OINODbResult, OINODbApi } from "./OINODbApi.js"
@@ -9,15 +13,10 @@ export { OINODbModelSet } from "./OINODbModelSet.js"
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js"
 export { OINODb } from "./OINODb.js"
 export { OINODbDataSet, OINODbMemoryDataSet } from "./OINODbDataSet.js"
-export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit, OINODbBooleanOperation } from "./OINODbRequestParams.js"
+export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation } from "./OINODbRequestParams.js"
 export { OINODbConfig } from "./OINODbConfig.js"
-export { OINOHashid } from "./OINOHashid.js"
-
-export { OINOSwagger } from "./utils/OINOSwaggerUtils.js"
-export { OINOBenchmark } from "./utils/OINOBenchmarkingUtils.js"
 export { OINODbFactory } from "./OINODbFactory.js"
-export { OINOLog, OINOConsoleLog } from "./utils/OINOLoggingUtils.js"
-export { OINOStr } from "./utils/OINOStrUtils.js"
+export { OINODbSwagger } from "./OINODbSwagger.js"
 
 /** API parameters */
 export type OINODbApiParams = {
@@ -41,7 +40,6 @@ export type OINODbApiParams = {
     hashidLength?:number,
     /** Make hashids static per row/table */
     hashidRandomIds?: boolean
-    
 }
 
 /** 
@@ -82,21 +80,6 @@ export type OINODbDataFieldParams = {
  */
 export type OINODbDataFieldFilter = (field:OINODbDataField) => Boolean
 
-/** Logging class (constructor) type */
-export type OINOLogConstructor = new () => OINOLog
-
-/** Logging levels */
-export enum OINOLogLevel { 
-    /** Debug messages */
-    debug=0, 
-    /** Informational messages */
-    info=1, 
-    /** Warning messages */
-    warn=2, 
-    /** Error messages */
-    error=3 
-}
-
 /** Request options */
 export type OINODbSqlParams = {
     /** Additional SQL select where-conditions */
@@ -119,15 +102,6 @@ export type OINORequestParams = {
     sqlParams:OINODbSqlParams
 }
 
-/** OINO error message prefix */
-export const OINODB_ERROR_PREFIX = "OINO ERROR"
-/** OINO warning message prefix */
-export const OINODB_WARNING_PREFIX = "OINO WARNING"
-/** OINO info message prefix */
-export const OINODB_INFO_PREFIX = "OINO INFO"
-/** OINO debug message prefix */
-export const OINODB_DEBUG_PREFIX = "OINO DEBUG"
-
 /** A single column value of a data row */
 export type OINODataCell = string | bigint | number | boolean | Date | Uint8Array | Buffer | null | undefined
 /** A single data row */
@@ -139,18 +113,4 @@ export const OINODB_EMPTY_ROWS:OINODataRow[] = [OINODB_EMPTY_ROW]
 
 /** Key-value collection */
 export type OINOValues = Record<string, string>
-
-/** Supported content format mime-types */
-export enum OINOContentType { 
-    /** JSON encoded data */
-    json='application/json', 
-    /** CSV encoded data */
-    csv='text/csv', 
-    /** Multipart encoded form data */
-    formdata='multipart/form-data', 
-    /** URL encoded form data */
-    urlencode='application/x-www-form-urlencoded', 
-    /** HTML encoded data (output only) */
-    html='text/html' 
-}
 

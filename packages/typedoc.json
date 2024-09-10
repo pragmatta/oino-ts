@@ -1,6 +1,12 @@
 {
     "name": "OINO TS",
-    "entryPoints": ["./db-bunsqlite/*.ts", "./db-mariadb/*.ts",  "./db-postgresql/*.ts", "./db/src/index.ts"],
+    "entryPoints": [
+        "./db-bunsqlite/src/index.ts",
+        "./db-mariadb/src/index.ts",
+        "./db-postgresql/src/index.ts",
+        "./db/src/index.ts",
+        "./types/src/index.ts"
+    ],
     "entryPointStrategy": "resolve",
     "sortEntryPoints": true,
     "skipErrorChecking": true,

@@ -16,9 +16,9 @@
     "library",
     "sqlite"
   ],
-  "main": "./dist/cjs/OINODbBunSqlite.js",
-  "module": "./dist/esm/OINODbBunSqlite.js",
-  "types": "./dist/types/OINODbBunSqlite.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@oino-ts/db": "^0.0.10"
   },
@@ -27,9 +27,10 @@
     "@types/bun": "latest"
   },
   "files": [
-    "OINODbBunSqlite.ts",
-    "dist/cjs/OINODbBunSqlite.js",
-    "dist/esm/OINODbBunSqlite.js",
-    "dist/types/OINODbBunSqlite.d.ts"
+    "src/index.ts",
+    "src/OINODbBunSqlite.ts",
+    "dist/cjs/index.js",
+    "dist/esm/index.js",
+    "dist/types/index.d.ts"
   ]
 }

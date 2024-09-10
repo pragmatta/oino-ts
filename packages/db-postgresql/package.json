@@ -16,9 +16,9 @@
     "library",
     "postgresql"
   ],
-  "main": "./dist/cjs/OINODbPostgresql.js",
-  "module": "./dist/esm/OINODbPostgresql.js",
-  "types": "./dist/types/OINODbPostgresql.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@oino-ts/db": "^0.0.10",
     "pg": "^8.11.3"
@@ -29,9 +29,10 @@
     "@types/bun": "latest"
   },
   "files": [
-    "OINODbBunSqlite.ts",
-    "dist/cjs/OINODbPostgresql.js",
-    "dist/esm/OINODbPostgresql.js",
-    "dist/types/OINODbPostgresql.d.ts"
+    "src/index.ts",
+    "src/OINODbPostgresql.ts",
+    "dist/cjs/index.js",
+    "dist/esm/index.js",
+    "dist/types/index.d.ts"
   ]
 }

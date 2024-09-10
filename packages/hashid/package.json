@@ -1,0 +1,33 @@
+{
+  "name": "@oino-ts/hashid",
+  "version": "0.0.10",
+  "description": "OINO TS package for hashid's.",
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
+  "keywords": [
+    "hashid",
+    "typescript",
+    "library"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "dependencies": {
+    "@types/node": "^20.12.7",
+    "@oino-ts/types": "^0.0.10",
+    "base-x": "5.0.0"
+  },
+  "devDependencies": {
+  },
+  "files": [
+    "src/index.ts",
+    "src/OINOHashid.ts",
+    "dist/cjs/index.js",
+    "dist/esm/index.js",
+    "dist/types/index.d.ts"
+  ]
+}

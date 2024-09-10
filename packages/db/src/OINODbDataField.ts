@@ -4,9 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbDataFieldParams, OINODataCell, OINODb, OINOContentType, OINOLog } from "./index.js";
-import { OINOStr } from "./utils/OINOStrUtils.js";
-
+import { OINODbDataFieldParams, OINODataCell, OINODb } from "./index.js";
 
 /**
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
@@ -50,7 +48,7 @@ export class OINODbDataField {
         this.maxLength = maxLength
         this.sqlType = sqlType
         this.fieldParams = fieldParams
-        // OINOLog_debug("OINODbDataField.constructor", {this:this})
+        // OINOLog.debug("OINODbDataField.constructor", {this:this})
     }
 
     /**
@@ -285,7 +283,7 @@ export class OINOBlobDataField extends OINODbDataField {
      *
      */
     serializeCell(cellVal: OINODataCell):string|null|undefined {
-        // OINOLog_debug("OINOBlobDataField.serializeCell", {cellVal:cellVal})
+        // OINOLog.debug("OINOBlobDataField.serializeCell", {cellVal:cellVal})
         if ((cellVal === null) || (cellVal === undefined))  {
             return cellVal
 

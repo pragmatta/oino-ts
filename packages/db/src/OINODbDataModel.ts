@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbDataField, OINODbApi, OINODataRow, OINODB_ERROR_PREFIX, OINODbDataFieldFilter, OINOLog, OINODbConfig, OINODbSqlParams, OINONumberDataField } from "./index.js";
+import { OINODbDataField, OINODbApi, OINODataRow, OINO_ERROR_PREFIX, OINODbDataFieldFilter, OINODbConfig, OINODbSqlParams, OINONumberDataField, OINOLog } from "./index.js";
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -106,7 +106,7 @@ export class OINODbDataModel {
             }
         }
         if (i != id_parts.length) {
-            throw new Error(OINODB_ERROR_PREFIX + ": id '" + id_value + "' is not a valid key for table " + this.api.params.tableName)
+            throw new Error(OINO_ERROR_PREFIX + ": id '" + id_value + "' is not a valid key for table " + this.api.params.tableName)
         }
         return "(" + result + ")";
     }

@@ -4,7 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbSqlFilter, OINODbDataField, OINOStringDataField, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOLog, OINOBenchmark, OINODbFactory, OINORequestParams, OINOHashid, OINODB_DEBUG_PREFIX } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINORequestParams, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINOHashid } from "@oino-ts/hashid"
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 
@@ -65,10 +66,10 @@ export class OINODbResult {
         if (this.statusMessage != "OK") {
             this.messages.push(this.statusMessage) // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
-        if (statusMessage.startsWith(OINODB_ERROR_PREFIX)) {
+        if (statusMessage.startsWith(OINO_ERROR_PREFIX)) {
             this.statusMessage = statusMessage
         } else {
-            this.statusMessage = OINODB_ERROR_PREFIX + " (" + operation + "): " + statusMessage
+            this.statusMessage = OINO_ERROR_PREFIX + " (" + operation + "): " + statusMessage
         }
         OINOLog.error("OINODbApi.setError", {code:statusCode, message:statusMessage, operation:operation})
     }
@@ -83,7 +84,7 @@ export class OINODbResult {
     addWarning(message:string, operation:string) {
         message = message.trim()
         if (message) {
-            this.messages.push(OINODB_WARNING_PREFIX + " (" + operation + "): " + message)
+            this.messages.push(OINO_WARNING_PREFIX + " (" + operation + "): " + message)
         }
     }
 
@@ -97,7 +98,7 @@ export class OINODbResult {
     addInfo(message:string, operation:string) {
         message = message.trim()
         if (message) {
-            this.messages.push(OINODB_INFO_PREFIX + " (" + operation + "): " + message)
+            this.messages.push(OINO_INFO_PREFIX + " (" + operation + "): " + message)
         }
     }
 
@@ -111,7 +112,7 @@ export class OINODbResult {
     addDebug(message:string, operation:string) {
         message = message.trim()
         if (message) {
-            this.messages.push(OINODB_DEBUG_PREFIX + " (" + operation + "): " + message)
+            this.messages.push(OINO_DEBUG_PREFIX + " (" + operation + "): " + message)
         }
     }
 
@@ -129,19 +130,19 @@ export class OINODbResult {
         let j=1
         for(let i=0; i<this.messages.length; i++) {
             const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ")
-            if (copyErrors && message.startsWith(OINODB_ERROR_PREFIX)) {
+            if (copyErrors && message.startsWith(OINO_ERROR_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
-            if (copyWarnings && message.startsWith(OINODB_WARNING_PREFIX)) {
+            if (copyWarnings && message.startsWith(OINO_WARNING_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
-            if (copyInfos && message.startsWith(OINODB_INFO_PREFIX)) {
+            if (copyInfos && message.startsWith(OINO_INFO_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
-            if (copyDebug && message.startsWith(OINODB_DEBUG_PREFIX)) {
+            if (copyDebug && message.startsWith(OINO_DEBUG_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
@@ -177,7 +178,7 @@ export class OINODbApi {
     constructor (db: OINODb, params:OINODbApiParams) {
         // OINOLog.debug("OINODbApi.constructor", {db:db, tableName:tableName, params:params})
         if (!params.tableName) {
-            throw new Error(OINODB_ERROR_PREFIX + ": OINODbApiParams needs to define a table name!")
+            throw new Error(OINO_ERROR_PREFIX + ": OINODbApiParams needs to define a table name!")
         }
         this.db = db
         this.params = params

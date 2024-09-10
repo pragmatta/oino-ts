@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODB_DEBUG_PREFIX } from "./index.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -210,16 +210,16 @@ export class OINODbFactory {
         result = result.replaceAll('###statusMessage###', OINOStr.encode(apiResult.statusMessage.toString(), OINOContentType.html))
         let messages = ""
         for (let i:number = 0; i<apiResult.messages.length; i++) {
-            if (includeErrorMessages && apiResult.messages[i].startsWith(OINODB_ERROR_PREFIX)) {
+            if (includeErrorMessages && apiResult.messages[i].startsWith(OINO_ERROR_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
-            if (includeWarningMessages && apiResult.messages[i].startsWith(OINODB_WARNING_PREFIX)) {
+            if (includeWarningMessages && apiResult.messages[i].startsWith(OINO_WARNING_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
-            if (includeInfoMessages && apiResult.messages[i].startsWith(OINODB_INFO_PREFIX)) {
+            if (includeInfoMessages && apiResult.messages[i].startsWith(OINO_INFO_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
-            if (includeDebugMessages && apiResult.messages[i].startsWith(OINODB_DEBUG_PREFIX)) {
+            if (includeDebugMessages && apiResult.messages[i].startsWith(OINO_DEBUG_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
             

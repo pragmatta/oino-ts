@@ -1,4 +1,6 @@
-import { OINODb, OINODbParams, OINODbApi, OINODbApiParams, OINODbFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINODbResult, OINORequestParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINODbResult, OINORequestParams } from "@oino-ts/db";
+import { OINOLog, OINOLogLevel } from "@oino-ts/log"
+
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { BunFile } from "bun";

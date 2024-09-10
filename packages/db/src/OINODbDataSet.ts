@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataRow, OINODB_ERROR_PREFIX, OINODB_EMPTY_ROW } from "./index.js";
+import { OINODataRow, OINO_ERROR_PREFIX, OINODB_EMPTY_ROW } from "./index.js";
 
 /**
  * Base class for SQL results that can be asynchronously iterated (but 
@@ -62,7 +62,7 @@ export abstract class OINODbDataSet {
      */
     hasErrors(): boolean {
         for (let i=0; i<this.messages.length; i++) {
-            if (this.messages[i].startsWith(OINODB_ERROR_PREFIX)) {
+            if (this.messages[i].startsWith(OINO_ERROR_PREFIX)) {
                 return true
             }
         }
@@ -74,7 +74,7 @@ export abstract class OINODbDataSet {
      */
     getFirstError(): string {
         for (let i=0; i<this.messages.length; i++) {
-            if (this.messages[i].startsWith(OINODB_ERROR_PREFIX)) {
+            if (this.messages[i].startsWith(OINO_ERROR_PREFIX)) {
                 return this.messages[i]
             }
         }
@@ -102,7 +102,7 @@ export class OINODbMemoryDataSet extends OINODbDataSet {
     constructor(data: unknown, errors: string[] = []) {
         super(data, errors);
         if ((data == null) || !(Array.isArray(data))) {
-            throw new Error(OINODB_ERROR_PREFIX + ": Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
+            throw new Error(OINO_ERROR_PREFIX + ": Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
         }
         this._rows = data as OINODataRow[];
         if (this.isEmpty()) {
@@ -138,7 +138,6 @@ export class OINODbMemoryDataSet extends OINODbDataSet {
      *
      */
     next(): boolean {
-        // OINOLog_debug("OINODbMemoryDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length - 1) {
             this._currentRow = this._currentRow + 1;
         } else {
