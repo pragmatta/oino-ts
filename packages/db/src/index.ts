@@ -15,7 +15,7 @@ export { OINOHashid } from "./OINOHashid.js"
 
 export { OINOSwagger } from "./utils/OINOSwaggerUtils.js"
 export { OINOBenchmark } from "./utils/OINOBenchmarkingUtils.js"
-export { OINOFactory } from "./utils/OINOFactoryUtils.js"
+export { OINODbFactory } from "./OINODbFactory.js"
 export { OINOLog, OINOConsoleLog } from "./utils/OINOLoggingUtils.js"
 export { OINOStr } from "./utils/OINOStrUtils.js"
 

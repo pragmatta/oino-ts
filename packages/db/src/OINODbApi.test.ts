@@ -6,7 +6,7 @@
 
 import { expect, test } from "bun:test";
 
-import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINOFactory, OINODbParams, OINOLogLevel, OINOLog, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINOLogLevel, OINOLog, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
@@ -15,14 +15,14 @@ import { OINODbMariadb } from "@oino-ts/db-mariadb"
 Math.random()
 
 OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
-OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
-OINOFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
-OINOFactory.registerDb("OINODbMariadb", OINODbMariadb)
+OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
+OINODbFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
+OINODbFactory.registerDb("OINODbMariadb", OINODbMariadb)
 
 export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApiParams) {
     // OINOLog.info("OINOTestApi", {dbParams:dbParams, apiDataset:apiDataset})
-    const db:OINODb = await OINOFactory.createDb( dbParams )
-    const api:OINODbApi = await OINOFactory.createApi(db, apiDataset.apiParams)
+    const db:OINODb = await OINODbFactory.createDb( dbParams )
+    const api:OINODbApi = await OINODbFactory.createApi(db, apiDataset.apiParams)
     
     const post_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([apiDataset.postRow])
     const post_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, post_dataset)

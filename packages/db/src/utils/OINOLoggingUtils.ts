@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOLogConstructor, OINOLogLevel } from "../index.js";
+import { OINOLogLevel } from "../index.js";
 
 /**
  * Abstract base class for logging implementations supporting 

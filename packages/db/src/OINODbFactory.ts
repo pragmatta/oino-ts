@@ -4,13 +4,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODB_DEBUG_PREFIX } from "../index.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODB_DEBUG_PREFIX } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
  *
  */
-export class OINOFactory {
+export class OINODbFactory {
     private static _dbRegistry:Record<string, OINODbConstructor> = {}
 
     /**
@@ -21,7 +21,7 @@ export class OINOFactory {
      * @param dbTypeClass constructor for creating a database of that type
      */
     static registerDb(dbName:string, dbTypeClass: OINODbConstructor):void {
-        // OINOLog.debug("OINOFactory.registerDb", {dbType:dbName})
+        // OINOLog.debug("OINODbFactory.registerDb", {dbType:dbName})
         this._dbRegistry[dbName] = dbTypeClass
 
     }
@@ -444,9 +444,9 @@ export class OINOFactory {
             let l:string = this._parseMultipartLine(data, start)
             // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
             start += l.length+2
-            const header_matches = OINOFactory._multipartHeaderRegex.exec(l)
+            const header_matches = OINODbFactory._multipartHeaderRegex.exec(l)
             if (!header_matches) {
-                OINOLog.warning("OINOFactory.createRowFromFormdata: unsupported block skipped!", {header_line:l})
+                OINOLog.warning("OINODbFactory.createRowFromFormdata: unsupported block skipped!", {header_line:l})
                 block_ok = false
 
             } else {
@@ -456,7 +456,7 @@ export class OINOFactory {
                 const field_index:number = datamodel.findFieldIndexByName(field_name)
                 // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
                 if (field_index < 0) {
-                    OINOLog.warning("OINOFactory.createRowFromFormdata: form field not found and skipped!", {field_name:field_name})
+                    OINOLog.warning("OINODbFactory.createRowFromFormdata: form field not found and skipped!", {field_name:field_name})
                     block_ok = false
     
                 } else {
@@ -465,7 +465,7 @@ export class OINOFactory {
                     // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
                     while (block_ok && (l != '')) {
                         if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed')>=0)) {
-                            OINOLog.warning("OINOFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", {header_line:l})
+                            OINOLog.warning("OINODbFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", {header_line:l})
                             block_ok = false
                         } else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64')>=0)) {
                             is_base64 = true
@@ -476,9 +476,9 @@ export class OINOFactory {
                     }
                     start += 2
                     if (!block_ok) {
-                        OINOLog.warning("OINOFactory.createRowFromFormdata: invalid block skipped", {field_name:field_name})
+                        OINOLog.warning("OINODbFactory.createRowFromFormdata: invalid block skipped", {field_name:field_name})
                     } else if (start + multipartBoundary.length + 2 >= end) {
-                        // OINOLog.debug("OINOFactory.createRowFromFormdata: null value", {field_name:field_name})
+                        // OINOLog.debug("OINODbFactory.createRowFromFormdata: null value", {field_name:field_name})
                         row[field_index] = null
                         
                     } else if (is_file) {
@@ -490,7 +490,7 @@ export class OINOFactory {
                         }
                     } else {
                         let value:OINODataCell = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
-                        // OINOLog.debug("OINOFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
+                        // OINOLog.debug("OINODbFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
                         if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                             value = datamodel.api.hashid.decode(value)
                         }

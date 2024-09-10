@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbSqlFilter, OINODbDataField, OINOStringDataField, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams, OINOHashid, OINODB_DEBUG_PREFIX } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbSqlFilter, OINODbDataField, OINOStringDataField, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOLog, OINOBenchmark, OINODbFactory, OINORequestParams, OINOHashid, OINODB_DEBUG_PREFIX } from "./index.js"
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 
@@ -338,7 +338,7 @@ export class OINODbApi {
             await this._doGet(result, id, params)
     
         } else if (method == "PUT") {
-            const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params)
+            const rows:OINODataRow[] = OINODbFactory.createRows(this.datamodel, body, params)
             if (!id) {
                 result.setError(400, "HTTP PUT method requires an URL ID for the row that is updated!", "DoRequest")
 
@@ -354,7 +354,7 @@ export class OINODbApi {
                 }             
             }
         } else if (method == "POST") {
-            const rows:OINODataRow[] = OINOFactory.createRows(this.datamodel, body, params)
+            const rows:OINODataRow[] = OINODbFactory.createRows(this.datamodel, body, params)
             if (id) {
                 result.setError(400, "HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!", "DoRequest")
 
