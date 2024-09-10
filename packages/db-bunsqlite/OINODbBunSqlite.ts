@@ -4,15 +4,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINOMemoryDataSet, OINODataCell, OINOLog, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINODB_ERROR_PREFIX, OINODbMemoryDataSet, OINODataCell, OINOLog, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr } from "@oino-ts/db";
 
 import { Database as BunSqliteDb } from "bun:sqlite";
 
 /**
- * Implmentation of OINODataSet for BunSqlite.
+ * Implmentation of OINODbDataSet for BunSqlite.
  * 
  */
-class OINOBunSqliteDataset extends OINOMemoryDataSet {
+class OINOBunSqliteDataset extends OINODbMemoryDataSet {
     constructor(data: unknown, messages:string[]=[]) {
         super(data, messages)
     }
@@ -37,17 +37,17 @@ export class OINODbBunSqlite extends OINODb {
         super(params)
         this._db = null
         if (!this._params.url.startsWith("file://")) {
-            throw new Error(OINO_ERROR_PREFIX + ": OINODbBunSqlite url must be a file://-url!")
+            throw new Error(OINODB_ERROR_PREFIX + ": OINODbBunSqlite url must be a file://-url!")
         }
         OINOLog.debug("OINODbBunSqlite.constructor", {params:params})
         
         if (this._params.type !== "OINODbBunSqlite") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbBunSqlite-type: " + this._params.type)
+            throw new Error(OINODB_ERROR_PREFIX + ": Not OINODbBunSqlite-type: " + this._params.type)
         } 
     }
 
-    private _parseDbFieldParams(fieldStr:string): OINODataFieldParams {
-        const result:OINODataFieldParams = {
+    private _parseDbFieldParams(fieldStr:string): OINODbDataFieldParams {
+        const result:OINODbDataFieldParams = {
             isPrimaryKey: fieldStr.indexOf("PRIMARY KEY") >= 0,
             isAutoInc: fieldStr.indexOf("AUTOINCREMENT") >= 0,
             isNotNull: fieldStr.indexOf("NOT NULL") >= 0
@@ -143,7 +143,7 @@ export class OINODbBunSqlite extends OINODb {
             // OINOLog.debug("OINODbBunSqlite.connect done")
             return Promise.resolve(true)
         } catch (err) {
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Sqlite database ("+ filepath +"): " + err)
+            throw new Error(OINODB_ERROR_PREFIX + ": Error connecting to Sqlite database ("+ filepath +"): " + err)
         }   
     }
 
@@ -153,9 +153,9 @@ export class OINODbBunSqlite extends OINODb {
      * @param sql SQL statement.
      *
      */
-    async sqlSelect(sql:string): Promise<OINODataSet> {
+    async sqlSelect(sql:string): Promise<OINODbDataSet> {
         OINOBenchmark.start("sqlSelect")
-        let result:OINODataSet
+        let result:OINODbDataSet
         try {
             result = new OINOBunSqliteDataset(this._db?.query(sql).values(), [])
             // OINOLog.debug("OINODbBunSqlite.sqlSelect", {result:result})
@@ -173,29 +173,29 @@ export class OINODbBunSqlite extends OINODb {
      * @param sql SQL statement.
      *
      */
-    async sqlExec(sql:string): Promise<OINODataSet> {
+    async sqlExec(sql:string): Promise<OINODbDataSet> {
         OINOBenchmark.start("sqlExec")
-        let result:OINODataSet
+        let result:OINODbDataSet
         try {
             this._db?.exec(sql)
             result = new OINOBunSqliteDataset([[]], [])
 
         } catch (e:any) {
-            result = new OINOBunSqliteDataset([[]], [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"])
+            result = new OINOBunSqliteDataset([[]], [OINODB_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlExec")
         return Promise.resolve(result)
     }
 
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of 
+     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
      * 
      * @param api api which data model to initialize.
      *
      */
-    async initializeApiDatamodel(api:OINOApi): Promise<void> {
-        const res:OINODataSet|null = await this.sqlSelect("select sql from sqlite_schema WHERE name='" + api.params.tableName + "'")
+    async initializeApiDatamodel(api:OINODbApi): Promise<void> {
+        const res:OINODbDataSet|null = await this.sqlSelect("select sql from sqlite_schema WHERE name='" + api.params.tableName + "'")
         const sql_desc:string = (res?.getRow()[0]) as string
         // OINOLog.debug("OINODbBunSqlite.initDatamodel.sql_desc=" + sql_desc)
         let table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc)

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbParams, OINOApi, OINODataCell, OINODataSet } from "./index.js"
+import { OINODbParams, OINODbApi, OINODataCell, OINODbDataSet } from "./index.js"
 
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data 
@@ -75,7 +75,7 @@ export abstract class OINODb {
      * @param sql SQL statement.
      *
      */
-    abstract sqlSelect(sql:string): Promise<OINODataSet>
+    abstract sqlSelect(sql:string): Promise<OINODbDataSet>
 
     /**
      * Execute other sql operations.
@@ -83,16 +83,16 @@ export abstract class OINODb {
      * @param sql SQL statement.
      *
      */
-    abstract sqlExec(sql:string): Promise<OINODataSet>
+    abstract sqlExec(sql:string): Promise<OINODbDataSet>
 
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of 
+     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
      * 
      * @param api api which data model to initialize.
      *
      */
-    abstract initializeApiDatamodel(api:OINOApi): Promise<void>
+    abstract initializeApiDatamodel(api:OINODbApi): Promise<void>
 }
 
 

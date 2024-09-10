@@ -1,5 +1,5 @@
 {
-  "name": "@oino-ts/core",
+  "name": "@oino-ts/db",
   "version": "0.0.10",
   "description": "OINO TS library package for publishing an SQL database tables as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",

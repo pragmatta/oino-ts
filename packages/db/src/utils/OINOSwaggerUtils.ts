@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINODataField, OINOLog } from "../index.js";
+import { OINODbApi, OINODbDataField, OINOLog } from "../index.js";
 
 
 /**
@@ -79,7 +79,7 @@ export class OINOSwagger {
         }
     }
 
-    private static _getSchemaFieldType(field:OINODataField): any {
+    private static _getSchemaFieldType(field:OINODbDataField): any {
         let type_string:string
         if (field.type == "boolean") {
             type_string = "boolean"
@@ -104,13 +104,13 @@ export class OINOSwagger {
         }
     }
 
-    private static _getSwaggerApiType(api:OINOApi):any {
+    private static _getSwaggerApiType(api:OINODbApi):any {
         let result:any = {
             type: "object",
             properties: {},
             required: []
         }
-        let field:OINODataField
+        let field:OINODbDataField
         for (field of api.datamodel.fields) {
             result.properties[field.name] = this._getSchemaFieldType(field)
             if (field.fieldParams.isPrimaryKey) {
@@ -183,7 +183,7 @@ export class OINOSwagger {
      * @param apis array of API's use for Swagger definition
      *
      */
-    static getApiDefinition(apis:OINOApi[]): any {
+    static getApiDefinition(apis:OINODbApi[]): any {
         let result:any = {
             "openapi": "3.1.0",
             "info": {

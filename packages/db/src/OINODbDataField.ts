@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataFieldParams, OINODataCell, OINODb, OINOContentType, OINOLog } from "./index.js";
+import { OINODbDataFieldParams, OINODataCell, OINODb, OINOContentType, OINOLog } from "./index.js";
 import { OINOStr } from "./utils/OINOStrUtils.js";
 
 
@@ -12,7 +12,7 @@ import { OINOStr } from "./utils/OINOStrUtils.js";
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
  *
  */
-export class OINODataField {
+export class OINODbDataField {
 
     /** OINODB reference*/
     readonly db:OINODb;
@@ -30,7 +30,7 @@ export class OINODataField {
     readonly maxLength: number;
 
     /** Parameters for the field */
-    readonly fieldParams: OINODataFieldParams;
+    readonly fieldParams: OINODbDataFieldParams;
 
     /**
      * Constructor for a data field
@@ -43,14 +43,14 @@ export class OINODataField {
      * @param maxLength maximum length of the field (or 0)
      *
      */
-    constructor(db:OINODb, name: string, type:string, sqlType: string, fieldParams: OINODataFieldParams, maxLength:number = 0) {
+    constructor(db:OINODb, name: string, type:string, sqlType: string, fieldParams: OINODbDataFieldParams, maxLength:number = 0) {
         this.db = db
         this.name = name
         this.type = type
         this.maxLength = maxLength
         this.sqlType = sqlType
         this.fieldParams = fieldParams
-        // OINOLog_debug("OINODataField.constructor", {this:this})
+        // OINOLog_debug("OINODbDataField.constructor", {this:this})
     }
 
     /**
@@ -139,7 +139,7 @@ export class OINODataField {
  * Specialised class for a string column.
  *
  */
-export class OINOStringDataField extends OINODataField {
+export class OINOStringDataField extends OINODbDataField {
 
     /**
      * Constructor for a string data field
@@ -151,7 +151,7 @@ export class OINOStringDataField extends OINODataField {
      * @param maxLength maximum length of the field (or 0)
      *
      */
-    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODataFieldParams, maxLength: number) {
+    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODbDataFieldParams, maxLength: number) {
         super(db, name, "string", sqlType, fieldParams, maxLength)
     }
 
@@ -161,7 +161,7 @@ export class OINOStringDataField extends OINODataField {
  * Specialised class for a boolean column.
  *
  */
-export class OINOBooleanDataField extends OINODataField {
+export class OINOBooleanDataField extends OINODbDataField {
 
     /**
      * Constructor for a boolean data field
@@ -172,7 +172,7 @@ export class OINOBooleanDataField extends OINODataField {
      * @param fieldParams parameters of the field
      *
      */
-    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODataFieldParams) {
+    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODbDataFieldParams) {
         super(db, name, "boolean", sqlType, fieldParams)
     }
     /**
@@ -212,7 +212,7 @@ export class OINOBooleanDataField extends OINODataField {
  * Specialised class for a number column.
  *
  */
-export class OINONumberDataField extends OINODataField {
+export class OINONumberDataField extends OINODbDataField {
 
     /**
      * Constructor for a string data field
@@ -223,7 +223,7 @@ export class OINONumberDataField extends OINODataField {
      * @param fieldParams parameters of the field
      *
      */
-    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODataFieldParams) {
+    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODbDataFieldParams) {
         super(db, name, "number", sqlType, fieldParams)
     }
 
@@ -262,7 +262,7 @@ export class OINONumberDataField extends OINODataField {
  * Specialised class for a blob column.
  *
  */
-export class OINOBlobDataField extends OINODataField {
+export class OINOBlobDataField extends OINODbDataField {
 
     /**
      * Constructor for a blob data field
@@ -274,7 +274,7 @@ export class OINOBlobDataField extends OINODataField {
      * @param maxLength maximum length of the field (or 0)
      *
      */
-    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODataFieldParams, maxLength:number) {
+    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODbDataFieldParams, maxLength:number) {
         super(db, name, "blob", sqlType, fieldParams, maxLength)
     }
 
@@ -318,7 +318,7 @@ export class OINOBlobDataField extends OINODataField {
  * Specialised class for a datetime column.
  *
  */
-export class OINODatetimeDataField extends OINODataField {
+export class OINODatetimeDataField extends OINODbDataField {
 
     /**
      * Constructor for a string data field
@@ -329,7 +329,7 @@ export class OINODatetimeDataField extends OINODataField {
      * @param fieldParams parameters of the field
      *
      */
-    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODataFieldParams) {
+    constructor(db:OINODb, name: string, sqlType: string, fieldParams: OINODbDataFieldParams) {
         super(db, name, "datetime", sqlType, fieldParams)
     }
 

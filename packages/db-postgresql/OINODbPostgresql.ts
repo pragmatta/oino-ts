@@ -4,17 +4,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINODB_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField } from "@oino-ts/db";
 
 import { Pool, QueryResult } from "pg";
 
 const EMPTY_ROW:string[] = []
 
 /**
- * Implmentation of OINODataSet for Postgresql.
+ * Implmentation of OINODbDataSet for Postgresql.
  * 
  */
-class OINOPostgresqlData extends OINODataSet {
+class OINOPostgresqlData extends OINODbDataSet {
     private _rows:OINODataRow[]
     
     /**
@@ -25,7 +25,7 @@ class OINOPostgresqlData extends OINODataSet {
         super(data, messages)
 
         if ((data != null) && !(Array.isArray(data))) {
-            throw new Error(OINO_ERROR_PREFIX + ": Invalid Posgresql data type!") // TODO: maybe check all rows
+            throw new Error(OINODB_ERROR_PREFIX + ": Invalid Posgresql data type!") // TODO: maybe check all rows
         }
         this._rows = data as OINODataRow[]
         if (this.isEmpty()) {
@@ -48,7 +48,7 @@ class OINOPostgresqlData extends OINODataSet {
     }
 
     next():boolean {
-        // OINOLog.debug("OINODataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
+        // OINOLog.debug("OINODbDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length-1) {
             this._currentRow = this._currentRow + 1
         } else {
@@ -108,7 +108,7 @@ WHERE table_name = `
 
         // OINOLog.debug("OINODbPostgresql.constructor", {params:params})
         if (this._params.type !== "OINODbPostgresql") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type)
+            throw new Error(OINODB_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type)
         } 
         this._pool = new Pool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password })
         this._pool.on("error", (err: any) => {
@@ -240,7 +240,7 @@ WHERE table_name = `
             return Promise.resolve(true)
         } catch (err) {
             // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
+            throw new Error(OINODB_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
         }        
     }
 
@@ -250,16 +250,16 @@ WHERE table_name = `
      * @param sql SQL statement.
      *
      */
-    async sqlSelect(sql:string): Promise<OINODataSet> {
+    async sqlSelect(sql:string): Promise<OINODbDataSet> {
         OINOBenchmark.start("sqlSelect")
-        let result:OINODataSet
+        let result:OINODbDataSet
         try {
             const rows:OINODataRow[] = await this._query(sql)
             // OINOLog.debug("OINODbPostgresql.sqlSelect", {rows:rows})
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"])
+            result = new OINOPostgresqlData([[]], [OINODB_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlSelect")
         return result
@@ -271,31 +271,31 @@ WHERE table_name = `
      * @param sql SQL statement.
      *
      */
-    async sqlExec(sql:string): Promise<OINODataSet> {
+    async sqlExec(sql:string): Promise<OINODbDataSet> {
         OINOBenchmark.start("sqlExec")
-        let result:OINODataSet
+        let result:OINODbDataSet
         try {
             const rows:OINODataRow[] = await this._exec(sql)
             // OINOLog.debug("OINODbPostgresql.sqlExec", {rows:rows})
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
+            result = new OINOPostgresqlData([[]], [OINODB_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlExec")
         return result
     }
 
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of 
+     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
      * 
      * @param api api which data model to initialize.
      *
      */
-    async initializeApiDatamodel(api:OINOApi): Promise<void> {
+    async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const res:OINODataSet = await this.sqlSelect(OINODbPostgresql.table_schema_sql + "'" + api.params.tableName.toLowerCase() + "';")
+        const res:OINODbDataSet = await this.sqlSelect(OINODbPostgresql.table_schema_sql + "'" + api.params.tableName.toLowerCase() + "';")
         // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: table description ", {res: res })
         while (!res.isEof()) {
             const row:OINODataRow = res.getRow()
@@ -306,7 +306,7 @@ WHERE table_name = `
             const numeric_precision:number = this._parseFieldLength(row[5])
             const numeric_scale:number = this._parseFieldLength(row[6])
             const default_val:string = row[7]?.toString() || ""
-            const field_params:OINODataFieldParams = {
+            const field_params:OINODbDataFieldParams = {
                 isPrimaryKey: row[4] == "YES",
                 isNotNull: row[3] == "NO",
                 isAutoInc: default_val.startsWith("nextval(")

@@ -4,24 +4,24 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataRow, OINO_ERROR_PREFIX, OINO_EMPTY_ROW } from "./index.js";
+import { OINODataRow, OINODB_ERROR_PREFIX, OINODB_EMPTY_ROW } from "./index.js";
 
 /**
  * Base class for SQL results that can be asynchronously iterated (but 
  * not necessarity rewinded). Idea is to handle database specific mechanisms
  * for returning and formatting conventions in the database specific 
  * implementation. Data might be in memory or streamed in chunks and
- * `OINODataSet` will serve it out consistently.
+ * `OINODbDataSet` will serve it out consistently.
  *
  */
-export abstract class OINODataSet {
+export abstract class OINODbDataSet {
     private _data: unknown;
 
     /** Error messages */
     readonly messages: string[];
 
     /**
-     * Constructor for `OINODataSet`.
+     * Constructor for `OINODbDataSet`.
      *
      * @param data internal database specific data type (constructor will throw if invalid)
      * @param messages error messages from SQL-query
@@ -62,7 +62,7 @@ export abstract class OINODataSet {
      */
     hasErrors(): boolean {
         for (let i=0; i<this.messages.length; i++) {
-            if (this.messages[i].startsWith(OINO_ERROR_PREFIX)) {
+            if (this.messages[i].startsWith(OINODB_ERROR_PREFIX)) {
                 return true
             }
         }
@@ -74,7 +74,7 @@ export abstract class OINODataSet {
      */
     getFirstError(): string {
         for (let i=0; i<this.messages.length; i++) {
-            if (this.messages[i].startsWith(OINO_ERROR_PREFIX)) {
+            if (this.messages[i].startsWith(OINODB_ERROR_PREFIX)) {
                 return this.messages[i]
             }
         }
@@ -87,13 +87,13 @@ export abstract class OINODataSet {
  * by BunSqlite and automated testing. Can be rewinded.
  *
  */
-export class OINOMemoryDataSet extends OINODataSet {
+export class OINODbMemoryDataSet extends OINODbDataSet {
     private _rows: OINODataRow[];
     private _currentRow: number;
     private _eof: boolean;
 
     /**
-     * Constructor of `OINOMemoryDataSet`.
+     * Constructor of `OINODbMemoryDataSet`.
      * 
      * @param data data as OINODataRow[] (constructor will throw if invalid)
      * @param errors error messages from SQL-query
@@ -102,7 +102,7 @@ export class OINOMemoryDataSet extends OINODataSet {
     constructor(data: unknown, errors: string[] = []) {
         super(data, errors);
         if ((data == null) || !(Array.isArray(data))) {
-            throw new Error(OINO_ERROR_PREFIX + ": Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
+            throw new Error(OINODB_ERROR_PREFIX + ": Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
         }
         this._rows = data as OINODataRow[];
         if (this.isEmpty()) {
@@ -138,7 +138,7 @@ export class OINOMemoryDataSet extends OINODataSet {
      *
      */
     next(): boolean {
-        // OINOLog_debug("OINOMemoryDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
+        // OINOLog_debug("OINODbMemoryDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length - 1) {
             this._currentRow = this._currentRow + 1;
         } else {
@@ -155,7 +155,7 @@ export class OINOMemoryDataSet extends OINODataSet {
         if ((this._currentRow >= 0) && (this._currentRow < this._rows.length)) {
             return this._rows[this._currentRow];
         } else {
-            return OINO_EMPTY_ROW;
+            return OINODB_EMPTY_ROW;
         }
     }
 

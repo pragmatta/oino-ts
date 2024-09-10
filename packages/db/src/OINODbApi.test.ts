@@ -6,11 +6,11 @@
 
 import { expect, test } from "bun:test";
 
-import { OINOApi, OINOApiParams, OINOContentType, OINODataRow, OINODataField, OINOStringDataField, OINODb, OINOFactory, OINODbParams, OINOLogLevel, OINOLog, OINOMemoryDataSet, OINOModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINOSqlFilter, OINOSettings, OINOSqlOrder } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINOFactory, OINODbParams, OINOLogLevel, OINOLog, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder } from "./index.js";
 
-import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
-import { OINODbPostgresql } from "@oino-ts/postgresql"
-import { OINODbMariadb } from "@oino-ts/mariadb"
+import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
+import { OINODbPostgresql } from "@oino-ts/db-postgresql"
+import { OINODbMariadb } from "@oino-ts/db-mariadb"
 
 Math.random()
 
@@ -22,16 +22,16 @@ OINOFactory.registerDb("OINODbMariadb", OINODbMariadb)
 export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApiParams) {
     // OINOLog.info("OINOTestApi", {dbParams:dbParams, apiDataset:apiDataset})
     const db:OINODb = await OINOFactory.createDb( dbParams )
-    const api:OINOApi = await OINOFactory.createApi(db, apiDataset.apiParams)
+    const api:OINODbApi = await OINOFactory.createApi(db, apiDataset.apiParams)
     
-    const post_dataset:OINOMemoryDataSet = new OINOMemoryDataSet([apiDataset.postRow])
-    const post_modelset:OINOModelSet = new OINOModelSet(api.datamodel, post_dataset)
+    const post_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([apiDataset.postRow])
+    const post_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, post_dataset)
     
-    const put_dataset:OINOMemoryDataSet = new OINOMemoryDataSet([apiDataset.putRow])
-    const put_modelset:OINOModelSet = new OINOModelSet(api.datamodel, put_dataset)
+    const put_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([apiDataset.putRow])
+    const put_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, put_dataset)
     
-    // const new_row_id:string = OINOSettings.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
-    const new_row_id:string = OINOSettings.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow, true))
+    // const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
+    const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow, true))
     OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
 
     const empty_params:OINORequestParams = { sqlParams: {}}
@@ -129,19 +129,19 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
         expect((await api.doRequest("PUT", new_row_id, "", empty_params))).toMatchSnapshot("PUT")
     })
 
-    const primary_keys:OINODataField[] = api.datamodel.filterFields((field:OINODataField) => { return field.fieldParams.isPrimaryKey })
+    const primary_keys:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return field.fieldParams.isPrimaryKey })
     if (primary_keys.length != 1) {
         OINOLog.info("HTTP PUT table " + apiDataset.apiParams.tableName + " does not have an individual primary key so 'invalid null' and 'oversized data' tests are skipped")
     } else {
         const id_field:string = primary_keys[0].name 
-        const notnull_fields:OINODataField[] = api.datamodel.filterFields((field:OINODataField) => { return (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isNotNull == true) })
+        const notnull_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isNotNull == true) })
         if (notnull_fields.length > 0) {
             const invalid_null_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + notnull_fields[0].name + "\":null}]"
             test(target_db + target_table + target_group + " update with invalid null value", async () => {
                 expect((await api.doRequest("PUT", new_row_id, invalid_null_value, empty_params))).toMatchSnapshot("PUT")
             })
         }
-        const maxsize_fields:OINODataField[] = api.datamodel.filterFields((field:OINODataField) => { return (field instanceof OINOStringDataField) && (field.fieldParams.isPrimaryKey == false) && (field.maxLength > 0) })
+        const maxsize_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINOStringDataField) && (field.fieldParams.isPrimaryKey == false) && (field.maxLength > 0) })
         if (maxsize_fields.length > 0) {
             const oversized_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + maxsize_fields[0].name + "\":\"" + "".padEnd(maxsize_fields[0].maxLength+1, "z") + "\"}]"
             test(target_db + target_table + target_group + " update with oversized data", async () => {
@@ -158,7 +158,7 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
 }
 
 type OINOTestApiParams = {
-    apiParams: OINOApiParams
+    apiParams: OINODbApiParams
     requestParams: OINORequestParams
     postRow: OINODataRow
     putRow: OINODataRow
@@ -170,15 +170,15 @@ OINOBenchmark.reset()
 
 const dbs:OINODbParams[] = [
     { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite", database: "Northwind" }, 
-    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: Bun.env.OINO_POSTGRESQL_TOKEN },
-    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: Bun.env.OINO_MARIADB_TOKEN } 
+    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: Bun.env.OINODB_POSTGRESQL_TOKEN },
+    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: Bun.env.OINODB_MARIADB_TOKEN } 
 ]
 
 const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Orders" },
         requestParams: {
-            sqlParams: { filter: OINOSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: new OINOSqlOrder("ShipPostalCode desc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: new OINODbSqlOrder("ShipPostalCode desc") }
         },
         postRow: [30000,"CACTU",1,new Date("2024-04-05"),new Date("2024-04-06"),new Date("2024-04-07"),2,"184.75","a'b\"c%d_e\tf\rg\nh\\i","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK"],
         putRow: [30000,"CACTU",1,new Date("2023-04-05"),new Date("2023-04-06"),new Date("2023-04-07"),2,"847.51","k'l\"m%n_o\tp\rq\nr\\s","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK"]
@@ -186,7 +186,7 @@ const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Products" },
         requestParams: {
-            sqlParams: { filter: OINOSqlFilter.parse("(UnitsInStock)-le(5)"), order: new OINOSqlOrder("UnitsInStock asc,UnitPrice asc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: new OINODbSqlOrder("UnitsInStock asc,UnitPrice asc") }
         },
         postRow: [99, "Umeshu", 1, 1, "500 ml", 12.99, 2, 0, 20, 0],
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
@@ -194,7 +194,7 @@ const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Employees", hashidKey: "12345678901234567890123456789012" },
         requestParams: {
-            sqlParams: { filter: OINOSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: new OINOSqlOrder("LastName") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: new OINODbSqlOrder("LastName") }
         },
         postRow: [99, "LastName", "FirstName", "Title", "TitleOfCourtesy", new Date("2024-04-06"), new Date("2024-04-07"), "Address", "City", "Region", 12345, "EU", "123 456 7890", "9876", Buffer.from("OINO"), "Line1\nLine2", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
         putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("OINO2"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
@@ -202,7 +202,7 @@ const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "OrderDetails" },
         requestParams: {
-            sqlParams: { filter: OINOSqlFilter.parse("(Quantity)-gt(100)"), order: new OINOSqlOrder("Quantity desc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(Quantity)-gt(100)"), order: new OINODbSqlOrder("Quantity desc") }
         },
         postRow: [10249,77,12.34,56,0],
         putRow: [10249,77,23.45,67,0]
@@ -215,9 +215,9 @@ for (let db of dbs) {
     }
 }
 
-const snapshot_file = Bun.file("./node_modules/@oino-ts/core/src/__snapshots__/OINOApi.test.ts.snap")
-await Bun.write("./node_modules/@oino-ts/core/src/__snapshots__/OINOApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
-const snapshots = require("./__snapshots__/OINOApi.test.ts.snap.js")
+const snapshot_file = Bun.file("./node_modules/@oino-ts/db/src/__snapshots__/OINODbApi.test.ts.snap")
+await Bun.write("./node_modules/@oino-ts/db/src/__snapshots__/OINODbApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+const snapshots = require("./__snapshots__/OINODbApi.test.ts.snap.js")
 
 const crosscheck_tests:string[] = [
     "[HTTP GET] select *: GET JSON 1",

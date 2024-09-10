@@ -1,16 +1,16 @@
 import { OINODb } from "./OINODb.js"
-import { OINODataField } from "./OINODataField.js"
+import { OINODbDataField } from "./OINODbDataField.js"
 import { OINOLog } from "./utils/OINOLoggingUtils.js"
-import { OINOSqlFilter, OINOSqlLimit, OINOSqlOrder } from "./OINOSqlParams.js"
+import { OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbRequestParams.js"
 
-export { OINOApiResult, OINOApi } from "./OINOApi.js"
-export { OINODataModel } from "./OINODataModel.js"
-export { OINOModelSet } from "./OINOModelSet.js"
-export { OINODataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODataField.js"
+export { OINODbResult, OINODbApi } from "./OINODbApi.js"
+export { OINODbDataModel } from "./OINODbDataModel.js"
+export { OINODbModelSet } from "./OINODbModelSet.js"
+export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js"
 export { OINODb } from "./OINODb.js"
-export { OINODataSet, OINOMemoryDataSet } from "./OINODataSet.js"
-export { OINOSqlFilter, OINOSqlOrder, OINOSqlLimit, OINOBooleanOperation } from "./OINOSqlParams.js"
-export { OINOSettings } from "./OINOSettings.js"
+export { OINODbDataSet, OINODbMemoryDataSet } from "./OINODbDataSet.js"
+export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit, OINODbBooleanOperation } from "./OINODbRequestParams.js"
+export { OINODbConfig } from "./OINODbConfig.js"
 export { OINOHashid } from "./OINOHashid.js"
 
 export { OINOSwagger } from "./utils/OINOSwaggerUtils.js"
@@ -20,7 +20,7 @@ export { OINOLog, OINOConsoleLog } from "./utils/OINOLoggingUtils.js"
 export { OINOStr } from "./utils/OINOStrUtils.js"
 
 /** API parameters */
-export type OINOApiParams = {
+export type OINODbApiParams = {
     /** Name of the database table */
     tableName: string 
     /** Reject values that exceed field max length (behaviour on such is platform dependent) */
@@ -67,7 +67,7 @@ export type OINODbParams = {
 }
 
 /** Field parameters in database */
-export type OINODataFieldParams = {
+export type OINODbDataFieldParams = {
     /** Is the field a primary key */
     isPrimaryKey: Boolean
     /** Is the field an auto inc type */
@@ -80,7 +80,7 @@ export type OINODataFieldParams = {
  * Callback to filter data fields 
  * @param field fields to filter
  */
-export type OINODataFieldFilter = (field:OINODataField) => Boolean
+export type OINODbDataFieldFilter = (field:OINODbDataField) => Boolean
 
 /** Logging class (constructor) type */
 export type OINOLogConstructor = new () => OINOLog
@@ -98,13 +98,13 @@ export enum OINOLogLevel {
 }
 
 /** Request options */
-export type OINOSqlParams = {
+export type OINODbSqlParams = {
     /** Additional SQL select where-conditions */
-    filter?:OINOSqlFilter,
+    filter?:OINODbSqlFilter,
     /** SQL result ordering conditions */
-    order?:OINOSqlOrder
+    order?:OINODbSqlOrder
     /** SQL result limit condition */
-    limit?:OINOSqlLimit
+    limit?:OINODbSqlLimit
 }
 
 /** Request options */
@@ -116,26 +116,26 @@ export type OINORequestParams = {
     /** Multipart boundary token */
     multipartBoundary?:string
     /** SQL parameters */
-    sqlParams:OINOSqlParams
+    sqlParams:OINODbSqlParams
 }
 
 /** OINO error message prefix */
-export const OINO_ERROR_PREFIX = "OINO ERROR"
+export const OINODB_ERROR_PREFIX = "OINO ERROR"
 /** OINO warning message prefix */
-export const OINO_WARNING_PREFIX = "OINO WARNING"
+export const OINODB_WARNING_PREFIX = "OINO WARNING"
 /** OINO info message prefix */
-export const OINO_INFO_PREFIX = "OINO INFO"
+export const OINODB_INFO_PREFIX = "OINO INFO"
 /** OINO debug message prefix */
-export const OINO_DEBUG_PREFIX = "OINO DEBUG"
+export const OINODB_DEBUG_PREFIX = "OINO DEBUG"
 
 /** A single column value of a data row */
 export type OINODataCell = string | bigint | number | boolean | Date | Uint8Array | Buffer | null | undefined
 /** A single data row */
 export type OINODataRow = Array<OINODataCell>
 /** Empty row instance */
-export const OINO_EMPTY_ROW:OINODataRow = []
+export const OINODB_EMPTY_ROW:OINODataRow = []
 /** Empty row array instance */
-export const OINO_EMPTY_ROWS:OINODataRow[] = [OINO_EMPTY_ROW]
+export const OINODB_EMPTY_ROWS:OINODataRow[] = [OINODB_EMPTY_ROW]
 
 /** Key-value collection */
 export type OINOValues = Record<string, string>

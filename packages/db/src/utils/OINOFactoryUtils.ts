@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINODbParams, OINOContentType, OINODataModel, OINODataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINOSqlFilter, OINOStr, OINOBlobDataField, OINOApiResult, OINODataSet, OINOModelSet, OINOSettings, OINONumberDataField, OINODataCell, OINOSqlOrder, OINOSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX } from "../index.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINOLog, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODB_DEBUG_PREFIX } from "../index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -49,8 +49,8 @@ export class OINOFactory {
      * @param db databased used in API
      * @param params parameters of the API
      */
-    static async createApi(db: OINODb, params: OINOApiParams):Promise<OINOApi> {
-        let result:OINOApi = new OINOApi(db, params)
+    static async createApi(db: OINODb, params: OINODbApiParams):Promise<OINODbApi> {
+        let result:OINODbApi = new OINODbApi(db, params)
         await db.initializeApiDatamodel(result)
         return result
     }
@@ -91,17 +91,17 @@ export class OINOFactory {
             result.responseType = OINOContentType.json
         }
 
-        const filter = url.searchParams.get(OINOSettings.OINO_SQL_FILTER_PARAM)
+        const filter = url.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM)
         if (filter) {
-            result.sqlParams.filter = OINOSqlFilter.parse(filter)
+            result.sqlParams.filter = OINODbSqlFilter.parse(filter)
         }
-        const order = url.searchParams.get(OINOSettings.OINO_SQL_ORDER_PARAM)
+        const order = url.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM)
         if (order) {
-            result.sqlParams.order = new OINOSqlOrder(order)
+            result.sqlParams.order = new OINODbSqlOrder(order)
         }
-        const limit = url.searchParams.get(OINOSettings.OINO_SQL_LIMIT_PARAM)
+        const limit = url.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
         if (limit) {
-            result.sqlParams.limit = new OINOSqlLimit(limit)
+            result.sqlParams.limit = new OINODbSqlLimit(limit)
         }
         // OINOLog.debug("createParamsFromRequest", {params:result})
         return result
@@ -115,7 +115,7 @@ export class OINOFactory {
      * @param responseHeaders Headers to include in the response
      * 
      */
-    static createResponseFromApiResult(apiResult:OINOApiResult, requestParams:OINORequestParams, responseHeaders:Record<string, string> = {}):Response {
+    static createResponseFromApiResult(apiResult:OINODbResult, requestParams:OINORequestParams, responseHeaders:Record<string, string> = {}):Response {
         let response:Response|null = null
         if (apiResult.success && apiResult.modelset) {
             response = new Response(apiResult.modelset.writeString(requestParams.responseType), {status:apiResult.statusCode, statusText: apiResult.statusMessage, headers: responseHeaders })
@@ -135,17 +135,17 @@ export class OINOFactory {
      * @param template HTML template
      * 
      */
-    static createHtmlFromData(modelset:OINOModelSet, template:string):string {
+    static createHtmlFromData(modelset:OINODbModelSet, template:string):string {
         let result:string = ""
-        const dataset:OINODataSet = modelset.dataset
-        const datamodel:OINODataModel = modelset.datamodel
+        const dataset:OINODbDataSet = modelset.dataset
+        const datamodel:OINODbDataModel = modelset.datamodel
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
             let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
             let primary_key_values:string[] = []
-            let html_row:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
+            let html_row:string = template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
             for (let i=0; i<datamodel.fields.length; i++) {
-                const f:OINODataField = datamodel.fields[i]
+                const f:OINODbDataField = datamodel.fields[i]
                 let value:string|null|undefined = f.serializeCell(row[i])
                 if (f.fieldParams.isPrimaryKey) {
                     if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
@@ -155,7 +155,7 @@ export class OINOFactory {
                 }
                 html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
             }
-            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.html)) 
+            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
             result += html_row + "\r\n"
             dataset.next()
         }
@@ -170,7 +170,7 @@ export class OINOFactory {
      * 
      */
     static createHtmlFromOinoId(oinoId:string, template:string):string {
-        let result:string = template.replaceAll('###' + OINOSettings.OINO_ID_FIELD + '###', OINOStr.encode(oinoId, OINOContentType.html))
+        let result:string = template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', OINOStr.encode(oinoId, OINOContentType.html))
         return result
     }
     
@@ -204,22 +204,22 @@ export class OINOFactory {
      * @param includeDebugMessages include debug messages in result
      * 
      */
-    static createHtmlFromApiResult(apiResult:OINOApiResult, template:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):string {
+    static createHtmlFromApiResult(apiResult:OINODbResult, template:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):string {
         let result:string = template
         result = result.replaceAll('###statusCode###', OINOStr.encode(apiResult.statusCode.toString(), OINOContentType.html))
         result = result.replaceAll('###statusMessage###', OINOStr.encode(apiResult.statusMessage.toString(), OINOContentType.html))
         let messages = ""
         for (let i:number = 0; i<apiResult.messages.length; i++) {
-            if (includeErrorMessages && apiResult.messages[i].startsWith(OINO_ERROR_PREFIX)) {
+            if (includeErrorMessages && apiResult.messages[i].startsWith(OINODB_ERROR_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
-            if (includeWarningMessages && apiResult.messages[i].startsWith(OINO_WARNING_PREFIX)) {
+            if (includeWarningMessages && apiResult.messages[i].startsWith(OINODB_WARNING_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
-            if (includeInfoMessages && apiResult.messages[i].startsWith(OINO_INFO_PREFIX)) {
+            if (includeInfoMessages && apiResult.messages[i].startsWith(OINODB_INFO_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
-            if (includeDebugMessages && apiResult.messages[i].startsWith(OINO_DEBUG_PREFIX)) {
+            if (includeDebugMessages && apiResult.messages[i].startsWith(OINODB_DEBUG_PREFIX)) {
                 messages += "<li>" + OINOStr.encode(apiResult.messages[i], OINOContentType.html) + "</li>"
             } 
             
@@ -283,7 +283,7 @@ export class OINOFactory {
                 }
             }
             if (found_field) {
-                // console.log("OINO_csvParseLine: next field=" + csvLine.substring(start,end) + ", start="+start+", end="+end)
+                // console.log("OINODB_csvParseLine: next field=" + csvLine.substring(start,end) + ", start="+start+", end="+end)
                 let field_str:string|undefined|null
                 if (has_quotes) {
                     field_str = csvLine.substring(start+1,end-1)
@@ -306,7 +306,7 @@ export class OINOFactory {
         return result
     }
 
-    private static createRowFromCsv(datamodel:OINODataModel, data:string):OINODataRow[] {
+    private static createRowFromCsv(datamodel:OINODbDataModel, data:string):OINODataRow[] {
         let result:OINODataRow[] = []
         const n = data.length
         let start:number = 0
@@ -336,7 +336,7 @@ export class OINOFactory {
             const row_data:(string|null|undefined)[] = this._parseCsvLine(data.substring(start, end))
             const row:OINODataRow = new Array(field_to_header_mapping.length)
             for (let i=0; i<datamodel.fields.length; i++) {
-                const field:OINODataField = datamodel.fields[i]
+                const field:OINODbDataField = datamodel.fields[i]
                 let j:number = field_to_header_mapping[i]
                 let value:OINODataCell = row_data[j] 
                 if ((value === undefined) || (value === null)) { // null/undefined-decoding built into the parser
@@ -362,9 +362,9 @@ export class OINOFactory {
         return result
     }
 
-    private static _createRowFromJsonObj(obj:any, datamodel:OINODataModel):OINODataRow {
+    private static _createRowFromJsonObj(obj:any, datamodel:OINODbDataModel):OINODataRow {
         // console.log("createRowFromJsonObj: obj=" + JSON.stringify(obj))
-        const fields:OINODataField[] = datamodel.fields
+        const fields:OINODbDataField[] = datamodel.fields
         let result:OINODataRow = new Array(fields.length)
         //  console.log("createRowFromJsonObj: " + result)
         for (let i=0; i < fields.length; i++) {
@@ -390,7 +390,7 @@ export class OINOFactory {
         return result
     }
 
-    private static _createRowFromJson(datamodel:OINODataModel, data:string):OINODataRow[] {
+    private static _createRowFromJson(datamodel:OINODbDataModel, data:string):OINODataRow[] {
         try {
             let result:OINODataRow[] = []
             // console.log("OINORowFactoryJson: data=" + data)
@@ -431,7 +431,7 @@ export class OINOFactory {
 
     private static _multipartHeaderRegex:RegExp = /Content-Disposition\: (form-data|file); name=\"([^\"]+)\"(; filename=.*)?/i
 
-    private static createRowFromFormdata(datamodel:OINODataModel, data:string, multipartBoundary:string):OINODataRow[] {
+    private static createRowFromFormdata(datamodel:OINODbDataModel, data:string, multipartBoundary:string):OINODataRow[] {
         let result:OINODataRow[] = []
         const n = data.length
         let start:number = this._findMultipartBoundary(data, multipartBoundary, 0)
@@ -460,7 +460,7 @@ export class OINOFactory {
                     block_ok = false
     
                 } else {
-                    const field:OINODataField = datamodel.fields[field_index]
+                    const field:OINODbDataField = datamodel.fields[field_index]
                     l = this._parseMultipartLine(data, start)
                     // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
                     while (block_ok && (l != '')) {
@@ -506,7 +506,7 @@ export class OINOFactory {
 
         return result
     }
-    private static createRowFromUrlencoded(datamodel:OINODataModel, data:string):OINODataRow[] {
+    private static createRowFromUrlencoded(datamodel:OINODbDataModel, data:string):OINODataRow[] {
         // OINOLog.debug("createRowFromUrlencoded: enter", {data:data})
         let result:OINODataRow[] = []
         const row:OINODataRow = new Array(datamodel.fields.length)
@@ -521,7 +521,7 @@ export class OINOFactory {
                     OINOLog.info("createRowFromUrlencoded: param field not found", {field:key})
 
                 } else {
-                    const field:OINODataField = datamodel.fields[field_index]
+                    const field:OINODbDataField = datamodel.fields[field_index]
                     let value:OINODataCell=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
                     if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                         value = datamodel.api.hashid.decode(value)
@@ -546,7 +546,7 @@ export class OINOFactory {
      * @param requestParams parameters
      * 
      */
-    static createRows(datamodel:OINODataModel, data:string, requestParams:OINORequestParams ):OINODataRow[] {
+    static createRows(datamodel:OINODbDataModel, data:string, requestParams:OINORequestParams ):OINODataRow[] {
         if ((requestParams.requestType == OINOContentType.json) || (requestParams.requestType == undefined)) {
             return this._createRowFromJson(datamodel, data)
             

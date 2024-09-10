@@ -4,14 +4,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApiParams, OINODb, OINODataSet, OINODataModel, OINOSqlFilter, OINODataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINOModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams, OINOHashid, OINO_DEBUG_PREFIX } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbSqlFilter, OINODbDataField, OINOStringDataField, OINODB_ERROR_PREFIX, OINODB_WARNING_PREFIX, OINODB_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOLog, OINOBenchmark, OINOFactory, OINORequestParams, OINOHashid, OINODB_DEBUG_PREFIX } from "./index.js"
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 
  * error / warning messages.
  *
  */
-export class OINOApiResult {
+export class OINODbResult {
     /** Wheter request was successfully executed */
     success: boolean
 
@@ -22,18 +22,18 @@ export class OINOApiResult {
     statusMessage: string;
 
     /** Returned data if any */
-    modelset?: OINOModelSet;
+    modelset?: OINODbModelSet;
 
     /** Error / warning messages */
     messages: string[];
 
     /**
-     * Constructor of OINOApiResult.
+     * Constructor of OINODbResult.
      * 
      * @param modelset result data
      *
      */
-    constructor (modelset?:OINOModelSet) {
+    constructor (modelset?:OINODbModelSet) {
         this.success = true
         this.statusCode = 200
         this.statusMessage = "OK"
@@ -65,12 +65,12 @@ export class OINOApiResult {
         if (this.statusMessage != "OK") {
             this.messages.push(this.statusMessage) // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
-        if (statusMessage.startsWith(OINO_ERROR_PREFIX)) {
+        if (statusMessage.startsWith(OINODB_ERROR_PREFIX)) {
             this.statusMessage = statusMessage
         } else {
-            this.statusMessage = OINO_ERROR_PREFIX + " (" + operation + "): " + statusMessage
+            this.statusMessage = OINODB_ERROR_PREFIX + " (" + operation + "): " + statusMessage
         }
-        OINOLog.error("OINOApi.setError", {code:statusCode, message:statusMessage, operation:operation})
+        OINOLog.error("OINODbApi.setError", {code:statusCode, message:statusMessage, operation:operation})
     }
 
     /**
@@ -83,7 +83,7 @@ export class OINOApiResult {
     addWarning(message:string, operation:string) {
         message = message.trim()
         if (message) {
-            this.messages.push(OINO_WARNING_PREFIX + " (" + operation + "): " + message)
+            this.messages.push(OINODB_WARNING_PREFIX + " (" + operation + "): " + message)
         }
     }
 
@@ -97,7 +97,7 @@ export class OINOApiResult {
     addInfo(message:string, operation:string) {
         message = message.trim()
         if (message) {
-            this.messages.push(OINO_INFO_PREFIX + " (" + operation + "): " + message)
+            this.messages.push(OINODB_INFO_PREFIX + " (" + operation + "): " + message)
         }
     }
 
@@ -111,7 +111,7 @@ export class OINOApiResult {
     addDebug(message:string, operation:string) {
         message = message.trim()
         if (message) {
-            this.messages.push(OINO_DEBUG_PREFIX + " (" + operation + "): " + message)
+            this.messages.push(OINODB_DEBUG_PREFIX + " (" + operation + "): " + message)
         }
     }
 
@@ -129,19 +129,19 @@ export class OINOApiResult {
         let j=1
         for(let i=0; i<this.messages.length; i++) {
             const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ")
-            if (copyErrors && message.startsWith(OINO_ERROR_PREFIX)) {
+            if (copyErrors && message.startsWith(OINODB_ERROR_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
-            if (copyWarnings && message.startsWith(OINO_WARNING_PREFIX)) {
+            if (copyWarnings && message.startsWith(OINODB_WARNING_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
-            if (copyInfos && message.startsWith(OINO_INFO_PREFIX)) {
+            if (copyInfos && message.startsWith(OINODB_INFO_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
-            if (copyDebug && message.startsWith(OINO_DEBUG_PREFIX)) {
+            if (copyDebug && message.startsWith(OINODB_DEBUG_PREFIX)) {
                 headers.append('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
@@ -153,15 +153,15 @@ export class OINOApiResult {
  * API class with method to process HTTP REST requests.
  *
  */
-export class OINOApi {
+export class OINODbApi {
     /** API database reference */
     readonly db: OINODb
 
     /** API datamodel */
-    readonly datamodel: OINODataModel
+    readonly datamodel: OINODbDataModel
 
     /** API parameters */
-    readonly params: OINOApiParams
+    readonly params: OINODbApiParams
 
     /** API hashid */
     readonly hashid:OINOHashid|null
@@ -174,14 +174,14 @@ export class OINOApi {
      * @param params parameters for the API
      * 
      */
-    constructor (db: OINODb, params:OINOApiParams) {
-        // OINOLog.debug("OINOApi.constructor", {db:db, tableName:tableName, params:params})
+    constructor (db: OINODb, params:OINODbApiParams) {
+        // OINOLog.debug("OINODbApi.constructor", {db:db, tableName:tableName, params:params})
         if (!params.tableName) {
-            throw new Error(OINO_ERROR_PREFIX + ": OINOApiParams needs to define a table name!")
+            throw new Error(OINODB_ERROR_PREFIX + ": OINODbApiParams needs to define a table name!")
         }
         this.db = db
         this.params = params
-        this.datamodel = new OINODataModel(this)
+        this.datamodel = new OINODbDataModel(this)
         if (this.params.hashidKey) {
             this.hashid = new OINOHashid(this.params.hashidKey, this.db.name, this.params.hashidLength, this.params.hashidRandomIds)
         } else {
@@ -189,13 +189,13 @@ export class OINOApi {
         }
     }
 
-    private _validateRowValues(httpResult:OINOApiResult, row:OINODataRow, requirePrimaryKey:boolean):void {
-        let field:OINODataField
+    private _validateRowValues(httpResult:OINODbResult, row:OINODataRow, requirePrimaryKey:boolean):void {
+        let field:OINODbDataField
         for (let i=0; i<this.datamodel.fields.length; i++) {
             field = this.datamodel.fields[i]
-            // OINOLog.debug("OINOApi.validateHttpValues", {field:field})
+            // OINOLog.debug("OINODbApi.validateHttpValues", {field:field})
             const val:OINODataCell = row[i]
-            // OINOLog.debug("OINOApi.validateHttpValues", {val:val})
+            // OINOLog.debug("OINODbApi.validateHttpValues", {val:val})
             if ((val === null) && ((field.fieldParams.isNotNull)||(field.fieldParams.isPrimaryKey))) { // null is a valid SQL value except if it's not allowed
                 httpResult.setError(405, "Field '" + field.name + "' is not allowed to be NULL!", "ValidateRowValues")
 
@@ -208,7 +208,7 @@ export class OINOApi {
             } else {
                 if ((field instanceof OINOStringDataField) && ((field.maxLength > 0))){
                     const str_val = val?.toString() || ""
-                    // OINOLog.debug("OINOApi.validateHttpValues", {f:str_field, val:val})
+                    // OINOLog.debug("OINODbApi.validateHttpValues", {f:str_field, val:val})
                     if (str_val.length > field.maxLength) {
                         if (this.params.failOnOversizedValues) {
                             httpResult.setError(405, "Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and can't be set!", "ValidateRowValues")
@@ -220,21 +220,21 @@ export class OINOApi {
 
             }
         }
-        //logDebug("OINOApi.validateHttpValues", {result:result})
+        //logDebug("OINODbApi.validateHttpValues", {result:result})
     }
 
-    private async _doGet(result:OINOApiResult, id:string, params:OINORequestParams):Promise<void> {
+    private async _doGet(result:OINODbResult, id:string, params:OINORequestParams):Promise<void> {
         OINOBenchmark.start("doGet")
         const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams)
-        // OINOLog.debug("OINOApi.doGet sql", {sql:sql})
+        // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
         try {
-            const sql_res:OINODataSet = await this.db.sqlSelect(sql)
-            // OINOLog.debug("OINOApi.doGet sql_res", {sql_res:sql_res})
+            const sql_res:OINODbDataSet = await this.db.sqlSelect(sql)
+            // OINOLog.debug("OINODbApi.doGet sql_res", {sql_res:sql_res})
             if (sql_res.hasErrors()) {
                 result.setError(500, sql_res.getFirstError(), "DoGet")
                 result.addDebug("OINO GET SQL [" + sql + "]", "DoPut")
             } else {
-                result.modelset = new OINOModelSet(this.datamodel, sql_res)
+                result.modelset = new OINODbModelSet(this.datamodel, sql_res)
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet")
@@ -243,7 +243,7 @@ export class OINOApi {
         OINOBenchmark.end("doGet")
     }
     
-    private async _doPost(result:OINOApiResult, rows:OINODataRow[]):Promise<void> {
+    private async _doPost(result:OINODbResult, rows:OINODataRow[]):Promise<void> {
         OINOBenchmark.start("doPost")
         let sql:string = "" 
         try {
@@ -261,9 +261,9 @@ export class OINOApi {
                 result.addDebug("OINO POST DATA [" + rows.join("|") + "]", "DoPost")
 
             } else {
-                // OINOLog.debug("OINOApi.doPost sql", {sql:sql})
-                const sql_res:OINODataSet = await this.db.sqlExec(sql)
-                // OINOLog.debug("OINOApi.doPost sql_res", {sql_res:sql_res})
+                // OINOLog.debug("OINODbApi.doPost sql", {sql:sql})
+                const sql_res:OINODbDataSet = await this.db.sqlExec(sql)
+                // OINOLog.debug("OINODbApi.doPost sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoPost")
                     result.addDebug("OINO POST MESSAGES [" + sql_res.messages.join('|') + "]", "DoPost")
@@ -277,16 +277,16 @@ export class OINOApi {
         OINOBenchmark.end("doPost")
     }
 
-    private async _doPut(result:OINOApiResult, id:string, row:OINODataRow):Promise<void> {
+    private async _doPut(result:OINODbResult, id:string, row:OINODataRow):Promise<void> {
         OINOBenchmark.start("doPut")
         let sql:string = ""
         try {
             this._validateRowValues(result, row, false)
             if (result.success) {
                 sql = this.datamodel.printSqlUpdate(id, row)
-                // OINOLog.debug("OINOApi.doPut sql", {sql:sql})
-                const sql_res:OINODataSet = await this.db.sqlExec(sql)
-                // OINOLog.debug("OINOApi.doPut sql_res", {sql_res:sql_res})
+                // OINOLog.debug("OINODbApi.doPut sql", {sql:sql})
+                const sql_res:OINODbDataSet = await this.db.sqlExec(sql)
+                // OINOLog.debug("OINODbApi.doPut sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoPut")
                     result.addDebug("OINO PUT MESSAGES [" + sql_res.messages.join('|') + "]", "DoPut")
@@ -300,14 +300,14 @@ export class OINOApi {
         OINOBenchmark.end("doPut")
     }
 
-    private async _doDelete(result:OINOApiResult, id:string):Promise<void> {
+    private async _doDelete(result:OINODbResult, id:string):Promise<void> {
         OINOBenchmark.start("doDelete")
         let sql:string = ""
         try {
             sql = this.datamodel.printSqlDelete(id)
-            // OINOLog.debug("OINOApi.doDelete sql", {sql:sql})
-            const sql_res:OINODataSet = await this.db.sqlExec(sql)
-            // OINOLog.debug("OINOApi.doDelete sql_res", {sql_res:sql_res})
+            // OINOLog.debug("OINODbApi.doDelete sql", {sql:sql})
+            const sql_res:OINODbDataSet = await this.db.sqlExec(sql)
+            // OINOLog.debug("OINODbApi.doDelete sql_res", {sql_res:sql_res})
             if (sql_res.hasErrors()) {
                 result.setError(500, sql_res.getFirstError(), "DoDelete")
                 result.addDebug("OINO DELETE MESSAGES [" + sql_res.messages.join('|') + "]", "DoDelete")
@@ -330,10 +330,10 @@ export class OINOApi {
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string, params:OINORequestParams):Promise<OINOApiResult> {
+    async doRequest(method:string, id: string, body:string, params:OINORequestParams):Promise<OINODbResult> {
         OINOBenchmark.start("doRequest")
-        let result:OINOApiResult = new OINOApiResult()
-        OINOLog.debug("OINOApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
+        let result:OINODbResult = new OINODbResult()
+        OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
         if (method == "GET") {
             await this._doGet(result, id, params)
     
@@ -363,7 +363,7 @@ export class OINOApi {
 
             } else {
                 try {
-                    OINOLog.debug("OINOApi.doRequest / POST", {rows:rows})
+                    OINOLog.debug("OINODbApi.doRequest / POST", {rows:rows})
                     await this._doPost(result, rows)
 
                 } catch (e:any) {

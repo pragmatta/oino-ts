@@ -4,19 +4,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOStr, OINODataField, OINODataModel, OINO_ERROR_PREFIX, OINOLog } from "./index.js"
+import { OINOStr, OINODbDataField, OINODbDataModel, OINODB_ERROR_PREFIX, OINOLog } from "./index.js"
 
 /**
  * Supported logical conjunctions in filter predicates.
  * @enum
  */
-export enum OINOBooleanOperation { and = "and", or = "or", not = "not" } 
+export enum OINODbBooleanOperation { and = "and", or = "or", not = "not" } 
 
 /**
  * Supported logical conjunctions in filter predicates.
  * @enum
  */
-export enum OINOSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
+export enum OINODbComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
 
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions. 
@@ -27,30 +27,30 @@ export enum OINOSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt =
  * Supported conditions are comparisons (<, <=, =, >=, >) and substring match (LIKE).
  *
  */
-export class OINOSqlFilter {
+export class OINODbSqlFilter {
     private static _booleanOperationRegex = /^\s?\-(and|or)\s?$/i
     private static _negationRegex = /^-(not|)\((.+)\)$/i
     private static _filterComparisonRegex = /^\(([^'"\(\)]+)\)\s?\-(lt|le|eq|ge|gt|like)\s?\(([^'"\(\)]+)\)$/i
     
-    private _leftSide: OINOSqlFilter | string
-    private _rightSide: OINOSqlFilter | string
-    private _operator:OINOSqlComparison|OINOBooleanOperation|null
+    private _leftSide: OINODbSqlFilter | string
+    private _rightSide: OINODbSqlFilter | string
+    private _operator:OINODbComparison|OINODbBooleanOperation|null
 
     /**
-     * Constructor of `OINOSqlFilter`
+     * Constructor of `OINODbSqlFilter`
      * @param leftSide left side of the filter, either another filter or a column name
-     * @param operation operation of the filter, either `OINOSqlComparison` or `OINOBooleanOperation`
+     * @param operation operation of the filter, either `OINODbComparison` or `OINODbBooleanOperation`
      * @param rightSide right side of the filter, either another filter or a value
      */
-    constructor(leftSide:OINOSqlFilter|string, operation:OINOSqlComparison|OINOBooleanOperation|null, rightSide:OINOSqlFilter|string) {
+    constructor(leftSide:OINODbSqlFilter|string, operation:OINODbComparison|OINODbBooleanOperation|null, rightSide:OINODbSqlFilter|string) {
         if (!(
             ((operation === null) && (leftSide == "") && (rightSide == "")) ||
-            ((operation !== null) && (Object.values(OINOSqlComparison).includes(operation as OINOSqlComparison)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
-            ((operation == OINOBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINOSqlFilter)) ||
-            (((operation == OINOBooleanOperation.and) || (operation == OINOBooleanOperation.or)) && (leftSide instanceof OINOSqlFilter) && (rightSide instanceof OINOSqlFilter))
+            ((operation !== null) && (Object.values(OINODbComparison).includes(operation as OINODbComparison)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
+            ((operation == OINODbBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINODbSqlFilter)) ||
+            (((operation == OINODbBooleanOperation.and) || (operation == OINODbBooleanOperation.or)) && (leftSide instanceof OINODbSqlFilter) && (rightSide instanceof OINODbSqlFilter))
         )) {
-            OINOLog.debug("Unsupported OINOSqlFilter format!", {leftSide:leftSide, operation:operation, rightSide:rightSide})
-            throw new Error(OINO_ERROR_PREFIX + ": Unsupported OINOSqlFilter format!")
+            OINOLog.debug("Unsupported OINODbSqlFilter format!", {leftSide:leftSide, operation:operation, rightSide:rightSide})
+            throw new Error(OINODB_ERROR_PREFIX + ": Unsupported OINODbSqlFilter format!")
         }
         this._leftSide = leftSide
         this._operator = operation
@@ -63,27 +63,27 @@ export class OINOSqlFilter {
      * @param filterString string representation of filter from HTTP-request
      *
      */
-    static parse(filterString: string):OINOSqlFilter {
+    static parse(filterString: string):OINODbSqlFilter {
         // OINOLog_debug("OINOFilter.constructor", {filterString:filterString})
         if (!filterString) {
-            return new OINOSqlFilter("", null, "")
+            return new OINODbSqlFilter("", null, "")
 
         } else {
-            let match = OINOSqlFilter._filterComparisonRegex.exec(filterString)
+            let match = OINODbSqlFilter._filterComparisonRegex.exec(filterString)
             if (match != null) {
-                return new OINOSqlFilter(match[1], match[2].toLowerCase() as OINOSqlComparison, match[3])
+                return new OINODbSqlFilter(match[1], match[2].toLowerCase() as OINODbComparison, match[3])
             } else {
-                let match = OINOSqlFilter._negationRegex.exec(filterString)
+                let match = OINODbSqlFilter._negationRegex.exec(filterString)
                 if (match != null) {
-                    return new OINOSqlFilter("", OINOBooleanOperation.not, OINOSqlFilter.parse(match[3]))
+                    return new OINODbSqlFilter("", OINODbBooleanOperation.not, OINODbSqlFilter.parse(match[3]))
                 } else {
                     let boolean_parts = OINOStr.splitByBrackets(filterString, true, false, '(', ')')
                     // OINOLog_debug("OINOFilter.constructor", {boolean_parts:boolean_parts})
-                    if (boolean_parts.length == 3 && (boolean_parts[1].match(OINOSqlFilter._booleanOperationRegex))) {
-                        return new OINOSqlFilter(OINOSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1) as OINOBooleanOperation, OINOSqlFilter.parse(boolean_parts[2]))
+                    if (boolean_parts.length == 3 && (boolean_parts[1].match(OINODbSqlFilter._booleanOperationRegex))) {
+                        return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1) as OINODbBooleanOperation, OINODbSqlFilter.parse(boolean_parts[2]))
         
                     } else {
-                        throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'")
+                        throw new Error(OINODB_ERROR_PREFIX + ": Invalid filter '" + filterString + "'")
                     }                
                 }            
             }
@@ -98,9 +98,9 @@ export class OINOSqlFilter {
      * @param rightSide right side to combine
      *
      */
-    static combine(leftSide:OINOSqlFilter|undefined, operation:OINOBooleanOperation, rightSide:OINOSqlFilter|undefined):OINOSqlFilter|undefined {
+    static combine(leftSide:OINODbSqlFilter|undefined, operation:OINODbBooleanOperation, rightSide:OINODbSqlFilter|undefined):OINODbSqlFilter|undefined {
         if ((leftSide) && (!leftSide.isEmpty()) && (rightSide) && (!rightSide.isEmpty())) {
-            return new OINOSqlFilter(leftSide, operation, rightSide)
+            return new OINODbSqlFilter(leftSide, operation, rightSide)
 
         } else if ((leftSide) && (!leftSide.isEmpty())) {
             return leftSide
@@ -143,21 +143,21 @@ export class OINOSqlFilter {
      * @param dataModel data model (and database) to use for formatting of values
      *
      */
-    toSql(dataModel:OINODataModel):string {
+    toSql(dataModel:OINODbDataModel):string {
         // OINOLog.debug("OINOFilter.toSql", {_leftSide:this._leftSide, _operator:this._operator, _rightSide:this._rightSide})
         if (this.isEmpty()) {
             return ""
         }
         let result:string = ""
-        let field:OINODataField|null = null
-        if (this._leftSide instanceof OINOSqlFilter) {
+        let field:OINODbDataField|null = null
+        if (this._leftSide instanceof OINODbSqlFilter) {
             result += this._leftSide.toSql(dataModel)
         } else {
             result += dataModel.api.db.printSqlColumnname(this._leftSide)
             field = dataModel.findFieldByName(this._leftSide)
         }
         result += this._operatorToSql()
-        if (this._rightSide instanceof OINOSqlFilter) {
+        if (this._rightSide instanceof OINODbSqlFilter) {
             result += this._rightSide.toSql(dataModel)
         } else {
             if (field) {
@@ -175,32 +175,32 @@ export class OINOSqlFilter {
  * Class for ordering select results on a number of columns. 
  *
  */
-export class OINOSqlOrder {
+export class OINODbSqlOrder {
     private static _orderColumnRegex = /^\s*(\w+)\s?(ASC|DESC)?\s*?$/i
     
     private _columns: string []
     private _directions: string []
 
     /**
-     * Constructor for `OINOSqlOrder`.
+     * Constructor for `OINODbSqlOrder`.
      * 
      * @param orderString string representation of filter from HTTP-request
      *
      */
     constructor(orderString: string) {
-        // OINOLog.debug("OINOSqlOrder.constructor", {orderString:orderString})
+        // OINOLog.debug("OINODbSqlOrder.constructor", {orderString:orderString})
         this._columns = []
         this._directions = []
 
         const column_strings = orderString.split(',')
         for (let i=0; i<column_strings.length; i++) {
-            let match = OINOSqlOrder._orderColumnRegex.exec(column_strings[i])
+            let match = OINODbSqlOrder._orderColumnRegex.exec(column_strings[i])
             if (match != null) {
                 this._columns.push(match[1])
                 this._directions.push((match[2] || "ASC").toUpperCase())
             }
         }
-        // OINOLog.debug("OINOSqlOrder.constructor", {columns:this._columns, directions:this._directions})
+        // OINOLog.debug("OINODbSqlOrder.constructor", {columns:this._columns, directions:this._directions})
     }
 
     /**
@@ -217,14 +217,14 @@ export class OINOSqlOrder {
      * @param dataModel data model (and database) to use for formatting of values
      *
      */
-    toSql(dataModel:OINODataModel):string {
+    toSql(dataModel:OINODbDataModel):string {
         if (this.isEmpty()) {
             return ""
         }
-        // OINOLog.debug("OINOSqlOrder.toSql", {columns:this._columns, directions:this._directions})
+        // OINOLog.debug("OINODbSqlOrder.toSql", {columns:this._columns, directions:this._directions})
         let result:string = ""
         for (let i=0; i<this._columns.length; i++) {
-            const field:OINODataField|null = dataModel.findFieldByName(this._columns[i])
+            const field:OINODbDataField|null = dataModel.findFieldByName(this._columns[i])
             if (field) {
                 if (result) {
                     result += ","
@@ -232,7 +232,7 @@ export class OINOSqlOrder {
                 result += dataModel.api.db.printSqlColumnname(field.name) + " " + this._directions[i]
             }
         }
-        // OINOLog.debug("OINOSqlOrder.toSql", {result:result})
+        // OINOLog.debug("OINODbSqlOrder.toSql", {result:result})
         return result
     }
 }
@@ -241,13 +241,13 @@ export class OINOSqlOrder {
  * Class for limiting the number of results. 
  *
  */
-export class OINOSqlLimit {
+export class OINODbSqlLimit {
     private static _orderColumnRegex = /^(\d+)?$/i
     
     private _limit: number
 
     /**
-     * Constructor for `OINOSqlLimit`.
+     * Constructor for `OINODbSqlLimit`.
      * 
      * @param limitString string representation of filter from HTTP-request
      *
@@ -271,7 +271,7 @@ export class OINOSqlLimit {
      * @param dataModel data model (and database) to use for formatting of values
      *
      */
-    toSql(dataModel:OINODataModel):string {
+    toSql(dataModel:OINODbDataModel):string {
         if (this.isEmpty()) {
             return ""
         }

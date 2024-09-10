@@ -4,16 +4,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODataSet, OINOApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINODB_ERROR_PREFIX, OINODataRow, OINODataCell, OINOLog, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINODB_INFO_PREFIX, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 
 import mariadb from "mariadb";
 
 /**
- * Implmentation of OINODataSet for MariaDb.
+ * Implmentation of OINODbDataSet for MariaDb.
  * 
  */
-class OINOMariadbData extends OINODataSet {
-    private _rows:OINODataRow[] = OINO_EMPTY_ROWS
+class OINOMariadbData extends OINODbDataSet {
+    private _rows:OINODataRow[] = OINODB_EMPTY_ROWS
     
     /**
      * OINOMariadbData constructor
@@ -23,7 +23,7 @@ class OINOMariadbData extends OINODataSet {
         super(data, messages)
 
         if (data == null) {
-            this.messages.push(OINO_INFO_PREFIX + "SQL result is empty")
+            this.messages.push(OINODB_INFO_PREFIX + "SQL result is empty")
 
         } else if (Array.isArray(data)) {
             this._rows = data as OINODataRow[]
@@ -51,7 +51,7 @@ class OINOMariadbData extends OINODataSet {
     }
 
     next():boolean {
-        // OINOLog.debug("OINODataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
+        // OINOLog.debug("OINODbDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length-1) {
             this._currentRow = this._currentRow + 1
         } else {
@@ -64,7 +64,7 @@ class OINOMariadbData extends OINODataSet {
         if ((this._currentRow >=0) && (this._currentRow < this._rows.length)) {
             return this._rows[this._currentRow]
         } else {
-            return OINO_EMPTY_ROW
+            return OINODB_EMPTY_ROW
         }
     }
 }
@@ -90,7 +90,7 @@ export class OINODbMariadb extends OINODb {
 
         // OINOLog.debug("OINODbMariadb.constructor", {params:params})
         if (this._params.type !== "OINODbMariadb") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type)
+            throw new Error(OINODB_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type)
         } 
         this._pool = mariadb.createPool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password, acquireTimeout: 2000, debug:false, rowsAsArray: true })
        
@@ -263,7 +263,7 @@ export class OINODbMariadb extends OINODb {
             return Promise.resolve(true)
         } catch (err) {
             // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
+            throw new Error(OINODB_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
         }        
     }
 
@@ -273,16 +273,16 @@ export class OINODbMariadb extends OINODb {
      * @param sql SQL statement.
      *
      */
-    async sqlSelect(sql:string): Promise<OINODataSet> {
+    async sqlSelect(sql:string): Promise<OINODbDataSet> {
         OINOBenchmark.start("sqlSelect")
-        let result:OINODataSet
+        let result:OINODbDataSet
         try {
             const sql_res:OINODataRow[] = await this._query(sql)
             // OINOLog.debug("OINODbMariadb.sqlSelect", {sql_res:sql_res})
             result = new OINOMariadbData(sql_res, [])
 
         } catch (e:any) {
-            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
+            result = new OINOMariadbData([[]], [OINODB_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.end("sqlSelect")
         return result
@@ -294,31 +294,31 @@ export class OINODbMariadb extends OINODb {
      * @param sql SQL statement.
      *
      */
-    async sqlExec(sql:string): Promise<OINODataSet> {
+    async sqlExec(sql:string): Promise<OINODbDataSet> {
         OINOBenchmark.start("sqlExec")
-        let result:OINODataSet
+        let result:OINODbDataSet
         try {
             const sql_res:OINODataRow[] = await this._exec(sql)
             // OINOLog.debug("OINODbMariadb.sqlExec", {sql_res:sql_res})
             result = new OINOMariadbData(sql_res, [])
 
         } catch (e:any) {
-            result = new OINOMariadbData([[]], [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
+            result = new OINOMariadbData([[]], [OINODB_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("sqlExec")
         return result
     }
 
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of 
+     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
      * 
      * @param api api which data model to initialize.
      *
      */
-    async initializeApiDatamodel(api:OINOApi): Promise<void> {
+    async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const res:OINODataSet = await this.sqlSelect(OINODbMariadb._tableSchemaSql + this._params.database + "." + api.params.tableName + ";")
+        const res:OINODbDataSet = await this.sqlSelect(OINODbMariadb._tableSchemaSql + this._params.database + "." + api.params.tableName + ";")
         while (!res.isEof()) {
             const row:OINODataRow = res.getRow()
             // OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { description:row })
@@ -329,7 +329,7 @@ export class OINODbMariadb extends OINODb {
             const field_length1:number = this._parseFieldLength(field_matches[3] || "0")
             const field_length2:number = this._parseFieldLength(field_matches[4] || "0")
             const extra:string = row[5]?.toString() || ""
-            const field_params:OINODataFieldParams = {
+            const field_params:OINODbDataFieldParams = {
                 isPrimaryKey: row[3] == "PRI",
                 isAutoInc: extra.indexOf('auto_increment') >= 0,
                 isNotNull: row[2] == "NO"

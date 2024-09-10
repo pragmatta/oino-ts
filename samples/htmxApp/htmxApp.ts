@@ -1,6 +1,6 @@
-import { OINODb, OINODbParams, OINOApi, OINOApiParams, OINOFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINOApiResult, OINORequestParams } from "@oino-ts/core";
+import { OINODb, OINODbParams, OINODbApi, OINODbApiParams, OINOFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINODbResult, OINORequestParams } from "@oino-ts/db";
 
-import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
+import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { BunFile } from "bun";
 
 const response_headers:HeadersInit = {
@@ -49,10 +49,10 @@ try {
 	const db_params:OINODbParams = { type: "OINODbBunSqlite", url: "file://./northwind.sqlite" }
 	const db:OINODb = await OINOFactory.createDb(db_params)
 
-	const apis:Record<string, OINOApi> = {
+	const apis:Record<string, OINODbApi> = {
 		"categories": await OINOFactory.createApi(db, { tableName: "Categories" })
 	};
-	const api_array:OINOApi[] = Object.entries(apis).map(([path, api]) => (api));
+	const api_array:OINODbApi[] = Object.entries(apis).map(([path, api]) => (api));
 	
 	
 	OINOBenchmark.reset()
@@ -83,10 +83,10 @@ try {
 				OINOLog.debug("index.ts / request", {api_name:api_name, id:id, operation:operation }) 
 
 				const params:OINORequestParams = OINOFactory.createParamsFromRequest(request)
-				const api:OINOApi|null = apis[api_name]
+				const api:OINODbApi|null = apis[api_name]
 				const body = await request.text()
 				OINOLog.debug("index.ts / api", {params:params, body:body }) 
-				let api_result:OINOApiResult
+				let api_result:OINODbResult
 				if (api_name == "") {
 					const template:string = await getTemplate(id, "", operation, "")
 					if (template) {
@@ -107,9 +107,9 @@ try {
 					}
 					response = new Response(html, {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
 					if (request.method == "POST") {
-						response.headers.set('HX-Trigger', 'OINOApiTrigger-' + api.params.tableName)
+						response.headers.set('HX-Trigger', 'OINODbApiTrigger-' + api.params.tableName)
 					} else if ((request.method == "PUT") || (request.method == "DELETE")) {
-						response.headers.set('HX-Trigger', 'OINOApiTrigger-' + api.params.tableName + "-" + id)
+						response.headers.set('HX-Trigger', 'OINODbApiTrigger-' + api.params.tableName + "-" + id)
 					}
 
 

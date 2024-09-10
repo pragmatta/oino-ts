@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr, OINOSettings, OINONumberDataField, OINOBooleanDataField, OINODataCell } from "./index.js";
+import { OINODbDataSet, OINODbDataModel, OINODbDataField, OINODataRow, OINOContentType, OINOLog, OINOBlobDataField, OINOStr, OINODbConfig, OINONumberDataField, OINOBooleanDataField, OINODataCell } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -13,30 +13,30 @@ import { OINODataSet, OINODataModel, OINODataField, OINODataRow, OINOContentType
  * - CSV (text/csv)
  *
  */
-export class OINOModelSet {
+export class OINODbModelSet {
 
     /** Reference to datamodel */
-    readonly datamodel: OINODataModel
+    readonly datamodel: OINODbDataModel
 
     /** Reference to data set */
-    readonly dataset: OINODataSet
+    readonly dataset: OINODbDataSet
 
     /** Collection of errors */
     errors: string[]
 
     /**
-     * Constructor for `OINOModelSet`.
+     * Constructor for `OINODbModelSet`.
      *
      * @param datamodel data model
      * @param dataset data set
      */
-    constructor(datamodel: OINODataModel, dataset: OINODataSet) {
+    constructor(datamodel: OINODbDataModel, dataset: OINODbDataSet) {
         this.datamodel = datamodel
         this.dataset = dataset
         this.errors = this.dataset.messages
     }
 
-    private _encodeAndHashFieldValue(field:OINODataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string) {
+    private _encodeAndHashFieldValue(field:OINODbDataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string) {
         if (field.fieldParams.isPrimaryKey) {
             if (value && (field instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed)
@@ -48,9 +48,9 @@ export class OINOModelSet {
     }
 
     private _writeRowJson(row:OINODataRow):string {
-        // console.log("OINOModelSet._writeRowJson: row=" + row)
-        const model:OINODataModel = this.datamodel
-        const fields:OINODataField[] = model.fields
+        // console.log("OINODbModelSet._writeRowJson: row=" + row)
+        const model:OINODbDataModel = this.datamodel
+        const fields:OINODbDataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let json_row:string = ""
@@ -58,7 +58,7 @@ export class OINOModelSet {
             const f = fields[i]
             let value:string|null|undefined = f.serializeCell(row[i])
             if (value === undefined) {
-                OINOLog.info("OINOModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
+                OINOLog.info("OINODbModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
 
             } else if (value === null) {
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":null"
@@ -74,8 +74,8 @@ export class OINOModelSet {
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":" + value
             }
         }
-        json_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.json) + json_row
-        // OINOLog_debug("OINOModelSet._writeRowJson="+json_row)
+        json_row = OINOStr.encode(OINODbConfig.OINODB_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.json) + json_row
+        // OINOLog_debug("OINODbModelSet._writeRowJson="+json_row)
         return "{" + json_row + "}"
     }
 
@@ -89,25 +89,25 @@ export class OINOModelSet {
             this.dataset.next()
         }
         result = "[\r\n" + result + "\r\n]"
-        // OINOLog_debug("OINOModelSet._writeStringJson="+result)
+        // OINOLog_debug("OINODbModelSet._writeStringJson="+result)
         return result
     }
 
     private _writeHeaderCsv():string {
-        const model:OINODataModel = this.datamodel
-        const fields:OINODataField[] = model.fields
-        let csv_header:string = "\"" + OINOSettings.OINO_ID_FIELD + "\""
+        const model:OINODbDataModel = this.datamodel
+        const fields:OINODbDataField[] = model.fields
+        let csv_header:string = "\"" + OINODbConfig.OINODB_ID_FIELD + "\""
         for (let i=0; i<fields.length; i++) {
             csv_header += ",\"" + fields[i].name + "\""
         }
-        // OINOLog_debug("OINOModelSet._writeHeaderCsv="+csv_header)
+        // OINOLog_debug("OINODbModelSet._writeHeaderCsv="+csv_header)
         return csv_header
     }
 
     private _writeRowCsv(row:OINODataRow):string {
-        // OINOLog_debug("OINOModelSet._writeRowCsv", {row:row})
-        const model:OINODataModel = this.datamodel
-        const fields:OINODataField[] = model.fields
+        // OINOLog_debug("OINODbModelSet._writeRowCsv", {row:row})
+        const model:OINODbDataModel = this.datamodel
+        const fields:OINODbDataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let csv_row:string = ""
@@ -122,8 +122,8 @@ export class OINOModelSet {
                 csv_row += "," + value        
             }
         }
-        csv_row = OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.csv) + csv_row
-        // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
+        csv_row = OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.csv) + csv_row
+        // OINOLog_debug("OINODbModelSet._writeRowCsv="+csv_row)
         return csv_row
     }
 
@@ -136,7 +136,7 @@ export class OINOModelSet {
             result += this._writeRowCsv(this.dataset.getRow())
             this.dataset.next()
         }
-        // OINOLog_debug("OINOModelSet._writeStringCsv="+result)
+        // OINOLog_debug("OINODbModelSet._writeStringCsv="+result)
         return result
     }
 
@@ -154,8 +154,8 @@ export class OINOModelSet {
 
     private _writeRowFormdata(row:OINODataRow):string {
         const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // this method is just used for test data generation and we want it to be static
-        const model:OINODataModel = this.datamodel
-        const fields:OINODataField[] = model.fields
+        const model:OINODbDataModel = this.datamodel
+        const fields:OINODbDataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let result:string = ""
@@ -166,7 +166,7 @@ export class OINOModelSet {
             let is_file = (f instanceof OINOBlobDataField)
 
             if (value === undefined) {
-                OINOLog.info("OINOModelSet._writeRowFormdata: undefined value skipped.", {field:f.name})
+                OINOLog.info("OINODbModelSet._writeRowFormdata: undefined value skipped.", {field:f.name})
 
             } else if (value === null) {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary)
@@ -181,10 +181,10 @@ export class OINOModelSet {
             }
 
             
-        // OINOLog.debug("OINOModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
+        // OINOLog.debug("OINODbModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
             result += formdata_block
         }
-        result = this._writeRowFormdataParameterBlock(OINOSettings.OINO_ID_FIELD, OINOSettings.printOINOId(primary_key_values), multipart_boundary) + result
+        result = this._writeRowFormdataParameterBlock(OINODbConfig.OINODB_ID_FIELD, OINODbConfig.printOINOId(primary_key_values), multipart_boundary) + result
         return result
     }
 
@@ -192,16 +192,16 @@ export class OINOModelSet {
         let result:string = this._writeRowFormdata(this.dataset.getRow())
         this.dataset.next()
         if (!this.dataset.isEof()) {
-            OINOLog.warning("OINOModelSet._writeStringUrlencode: content type " + OINOContentType.formdata + " does not mixed part content and only first row has been written!")
+            OINOLog.warning("OINODbModelSet._writeStringUrlencode: content type " + OINOContentType.formdata + " does not mixed part content and only first row has been written!")
         }
         return result
     }
 
 
     private _writeRowUrlencode(row:OINODataRow):string {
-        // console.log("OINOModelSet._writeRowCsv row=" + row)
-        const model:OINODataModel = this.datamodel
-        const fields:OINODataField[] = model.fields
+        // console.log("OINODbModelSet._writeRowCsv row=" + row)
+        const model:OINODbDataModel = this.datamodel
+        const fields:OINODbDataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let urlencode_row:string = ""
@@ -209,7 +209,7 @@ export class OINOModelSet {
             const f = fields[i]
             let value:string|null|undefined = f.serializeCell(row[i])
             if ((value === undefined)) { // || (value === null)) {
-                // console.log("OINOModelSet._writeRowUrlencode undefined field value:" + fields[i].name)
+                // console.log("OINODbModelSet._writeRowUrlencode undefined field value:" + fields[i].name)
             } else {
                 value = this._encodeAndHashFieldValue(f, value, OINOContentType.urlencode, primary_key_values, f.name + " " + row_id_seed)
                 if (urlencode_row != "") {
@@ -218,8 +218,8 @@ export class OINOModelSet {
                 urlencode_row += OINOStr.encode(f.name, OINOContentType.urlencode) + "=" + value
             }
         }
-        urlencode_row = OINOStr.encode(OINOSettings.OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINOSettings.printOINOId(primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row
-        // OINOLog_debug("OINOModelSet._writeRowCsv="+csv_row)
+        urlencode_row = OINOStr.encode(OINODbConfig.OINODB_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row
+        // OINOLog_debug("OINODbModelSet._writeRowCsv="+csv_row)
         return urlencode_row
     }
 
@@ -231,9 +231,9 @@ export class OINOModelSet {
             this.dataset.next()
             line_count += 1
         }
-        // OINOLog_debug("OINOModelSet._writeStringCsv="+result)
+        // OINOLog_debug("OINODbModelSet._writeStringCsv="+result)
         if (line_count > 1) {
-            OINOLog.warning("OINOModelSet._writeStringUrlencode: content type " + OINOContentType.urlencode + " does not officially support multiline content!")
+            OINOLog.warning("OINODbModelSet._writeStringUrlencode: content type " + OINOContentType.urlencode + " does not officially support multiline content!")
         }
         return result
     }
@@ -259,7 +259,7 @@ export class OINOModelSet {
             result += this._writeStringUrlencode()
             
         } else {
-            OINOLog.error("OINOModelSet.writeString: content type is only for input!", {contentType:contentType})
+            OINOLog.error("OINODbModelSet.writeString: content type is only for input!", {contentType:contentType})
         }
         return result
     }
