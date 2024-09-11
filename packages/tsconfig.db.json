@@ -30,9 +30,9 @@
   },
   "include": [
     "./db/src/index.ts", 
-    "./db-bunsqlite/src/OINODbBunSqlite.ts", 
-    "./db-mariadb/src/OINODbMariadb.ts", 
-    "./db-postgresql/src/OINODbPostgresql.ts",
+    "./db-bunsqlite/src/index.ts", 
+    "./db-mariadb/src/index.ts", 
+    "./db-postgresql/src/index.ts",
     "./hashid/src/index.ts",
     "./types/src/index.ts"
   ],
