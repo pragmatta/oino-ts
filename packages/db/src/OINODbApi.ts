@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINORequestParams, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINORequestParams, OINO_DEBUG_PREFIX, OINOLog, OINOResult } from "./index.js"
 import { OINOHashid } from "@oino-ts/hashid"
 
 /**
@@ -12,141 +12,19 @@ import { OINOHashid } from "@oino-ts/hashid"
  * error / warning messages.
  *
  */
-export class OINODbResult {
-    /** Wheter request was successfully executed */
-    success: boolean
-
-    /** HTTP status code */
-    statusCode: number;
-
-    /** HTTP status message */
-    statusMessage: string;
-
+export class OINODbApiResult extends OINOResult {
     /** Returned data if any */
-    modelset?: OINODbModelSet;
-
-    /** Error / warning messages */
-    messages: string[];
+    data?: OINODbModelSet;
 
     /**
-     * Constructor of OINODbResult.
+     * Constructor of OINODbApiResult.
      * 
-     * @param modelset result data
+     * @param data result data
      *
      */
-    constructor (modelset?:OINODbModelSet) {
-        this.success = true
-        this.statusCode = 200
-        this.statusMessage = "OK"
-        this.modelset = modelset
-        this.messages = []
-    }
-
-    /**
-     * Set HTTP OK status (does not reset messages).
-     *
-     */
-    setOk() {
-        this.success = true
-        this.statusCode = 200
-        this.statusMessage = "OK"
-    }
-
-    /**
-     * Set HTTP error status using given code and message.
-     * 
-     * @param statusCode HTTP status code
-     * @param statusMessage HTTP status message
-     * @param operation operation where error occured
-     *
-     */
-    setError(statusCode:number, statusMessage:string, operation:string) {
-        this.success = false
-        this.statusCode = statusCode
-        if (this.statusMessage != "OK") {
-            this.messages.push(this.statusMessage) // latest error becomes status, but if there was something non-trivial, add it to the messages
-        }
-        if (statusMessage.startsWith(OINO_ERROR_PREFIX)) {
-            this.statusMessage = statusMessage
-        } else {
-            this.statusMessage = OINO_ERROR_PREFIX + " (" + operation + "): " + statusMessage
-        }
-        OINOLog.error("OINODbApi.setError", {code:statusCode, message:statusMessage, operation:operation})
-    }
-
-    /**
-     * Add warning message.
-     *
-     * @param message HTTP status message
-     * @param operation operation where warning occured
-     * 
-     */
-    addWarning(message:string, operation:string) {
-        message = message.trim()
-        if (message) {
-            this.messages.push(OINO_WARNING_PREFIX + " (" + operation + "): " + message)
-        }
-    }
-
-    /**
-     * Add info message.
-     *
-     * @param message HTTP status message
-     * @param operation operation where info occured
-     *
-     */
-    addInfo(message:string, operation:string) {
-        message = message.trim()
-        if (message) {
-            this.messages.push(OINO_INFO_PREFIX + " (" + operation + "): " + message)
-        }
-    }
-
-    /**
-     * Add debug message.
-     *
-     * @param message HTTP status message
-     * @param operation operation where debug occured
-     *
-     */
-    addDebug(message:string, operation:string) {
-        message = message.trim()
-        if (message) {
-            this.messages.push(OINO_DEBUG_PREFIX + " (" + operation + "): " + message)
-        }
-    }
-
-    /**
-     * Copy given messages to HTTP headers.
-     *
-     * @param headers HTTP headers
-     * @param copyErrors wether error messages should be copied (default true)
-     * @param copyWarnings wether warning messages should be copied (default false)
-     * @param copyInfos wether info messages should be copied (default false)
-     * @param copyDebug wether debug messages should be copied (default false)
-     *
-     */
-    copyMessagesToHeaders(headers:Headers, copyErrors:boolean = true, copyWarnings:boolean = false, copyInfos:boolean = false, copyDebug:boolean = false) {
-        let j=1
-        for(let i=0; i<this.messages.length; i++) {
-            const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ")
-            if (copyErrors && message.startsWith(OINO_ERROR_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
-                j++
-            } 
-            if (copyWarnings && message.startsWith(OINO_WARNING_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
-                j++
-            } 
-            if (copyInfos && message.startsWith(OINO_INFO_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
-                j++
-            } 
-            if (copyDebug && message.startsWith(OINO_DEBUG_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
-                j++
-            } 
-        }
+    constructor (data?:OINODbModelSet) {
+        super()
+        this.data = data
     }
 }
 
@@ -190,7 +68,7 @@ export class OINODbApi {
         }
     }
 
-    private _validateRowValues(httpResult:OINODbResult, row:OINODataRow, requirePrimaryKey:boolean):void {
+    private _validateRowValues(httpResult:OINODbApiResult, row:OINODataRow, requirePrimaryKey:boolean):void {
         let field:OINODbDataField
         for (let i=0; i<this.datamodel.fields.length; i++) {
             field = this.datamodel.fields[i]
@@ -224,7 +102,7 @@ export class OINODbApi {
         //logDebug("OINODbApi.validateHttpValues", {result:result})
     }
 
-    private async _doGet(result:OINODbResult, id:string, params:OINORequestParams):Promise<void> {
+    private async _doGet(result:OINODbApiResult, id:string, params:OINORequestParams):Promise<void> {
         OINOBenchmark.start("doGet")
         const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams)
         // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
@@ -235,7 +113,7 @@ export class OINODbApi {
                 result.setError(500, sql_res.getFirstError(), "DoGet")
                 result.addDebug("OINO GET SQL [" + sql + "]", "DoPut")
             } else {
-                result.modelset = new OINODbModelSet(this.datamodel, sql_res)
+                result.data = new OINODbModelSet(this.datamodel, sql_res)
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet")
@@ -244,7 +122,7 @@ export class OINODbApi {
         OINOBenchmark.end("doGet")
     }
     
-    private async _doPost(result:OINODbResult, rows:OINODataRow[]):Promise<void> {
+    private async _doPost(result:OINODbApiResult, rows:OINODataRow[]):Promise<void> {
         OINOBenchmark.start("doPost")
         let sql:string = "" 
         try {
@@ -278,7 +156,7 @@ export class OINODbApi {
         OINOBenchmark.end("doPost")
     }
 
-    private async _doPut(result:OINODbResult, id:string, row:OINODataRow):Promise<void> {
+    private async _doPut(result:OINODbApiResult, id:string, row:OINODataRow):Promise<void> {
         OINOBenchmark.start("doPut")
         let sql:string = ""
         try {
@@ -301,7 +179,7 @@ export class OINODbApi {
         OINOBenchmark.end("doPut")
     }
 
-    private async _doDelete(result:OINODbResult, id:string):Promise<void> {
+    private async _doDelete(result:OINODbApiResult, id:string):Promise<void> {
         OINOBenchmark.start("doDelete")
         let sql:string = ""
         try {
@@ -331,9 +209,9 @@ export class OINODbApi {
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string, params:OINORequestParams):Promise<OINODbResult> {
+    async doRequest(method:string, id: string, body:string, params:OINORequestParams):Promise<OINODbApiResult> {
         OINOBenchmark.start("doRequest")
-        let result:OINODbResult = new OINODbResult()
+        let result:OINODbApiResult = new OINODbApiResult()
         OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
         if (method == "GET") {
             await this._doGet(result, id, params)

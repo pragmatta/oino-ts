@@ -1,13 +1,13 @@
 import { OINOContentType } from "@oino-ts/types"
 export { OINOContentType }
 
-export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog } from "@oino-ts/types"
+export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult } from "@oino-ts/types"
 
 import { OINODb } from "./OINODb.js"
 import { OINODbDataField } from "./OINODbDataField.js"
 import { OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbRequestParams.js"
 
-export { OINODbResult, OINODbApi } from "./OINODbApi.js"
+export { OINODbApiResult, OINODbApi } from "./OINODbApi.js"
 export { OINODbDataModel } from "./OINODbDataModel.js"
 export { OINODbModelSet } from "./OINODbModelSet.js"
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js"

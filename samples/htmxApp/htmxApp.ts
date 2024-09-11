@@ -1,4 +1,4 @@
-import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINODbResult, OINORequestParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINODbApiResult, OINORequestParams } from "@oino-ts/db";
 import { OINOLog, OINOLogLevel } from "@oino-ts/log"
 
 
@@ -88,7 +88,7 @@ try {
 				const api:OINODbApi|null = apis[api_name]
 				const body = await request.text()
 				OINOLog.debug("index.ts / api", {params:params, body:body }) 
-				let api_result:OINODbResult
+				let api_result:OINODbApiResult
 				if (api_name == "") {
 					const template:string = await getTemplate(id, "", operation, "")
 					if (template) {
@@ -102,8 +102,8 @@ try {
 					const template:string = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
 					OINOLog.debug("index.ts / template", {template:template}) 
 					let html:string
-					if (api_result.modelset?.dataset) {
-						html = OINODbFactory.createHtmlFromData(api_result.modelset, template)
+					if (api_result.data?.dataset) {
+						html = OINODbFactory.createHtmlFromData(api_result.data, template)
 					} else {
 						html = OINODbFactory.createHtmlFromOinoId(id, template)
 					}

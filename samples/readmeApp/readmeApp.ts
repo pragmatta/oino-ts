@@ -1,4 +1,4 @@
-import { OINODb, OINODbApi, OINODbFactory, OINOConsoleLog, OINODbResult, OINOContentType, OINOSwagger, OINORequestParams } from "@oino-ts/db";
+import { OINODb, OINODbApi, OINODbFactory, OINOConsoleLog, OINODbApiResult, OINOContentType, OINOSwagger, OINORequestParams } from "@oino-ts/db";
 import { OINOLog, OINOLogLevel } from "@oino-ts/log"
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
@@ -46,9 +46,9 @@ const server = Bun.serve({
         } else {
             const body:string = await request.text()
             const params:OINORequestParams = OINODbFactory.createParamsFromRequest(request)
-            const api_result:OINODbResult = await api.doRequest(request.method, id, body, params)
-            if (api_result.success && api_result.modelset) {
-                response = new Response(api_result.modelset.writeString(params.contentType || OINOContentType.json), {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
+            const api_result:OINODbApiResult = await api.doRequest(request.method, id, body, params)
+            if (api_result.success && api_result.data) {
+                response = new Response(api_result.data.writeString(params.contentType || OINOContentType.json), {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
             } else {
                 response = new Response(JSON.stringify(api_result), {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
             }

@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbApiResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -115,10 +115,10 @@ export class OINODbFactory {
      * @param responseHeaders Headers to include in the response
      * 
      */
-    static createResponseFromApiResult(apiResult:OINODbResult, requestParams:OINORequestParams, responseHeaders:Record<string, string> = {}):Response {
+    static createResponseFromApiResult(apiResult:OINODbApiResult, requestParams:OINORequestParams, responseHeaders:Record<string, string> = {}):Response {
         let response:Response|null = null
-        if (apiResult.success && apiResult.modelset) {
-            response = new Response(apiResult.modelset.writeString(requestParams.responseType), {status:apiResult.statusCode, statusText: apiResult.statusMessage, headers: responseHeaders })
+        if (apiResult.success && apiResult.data) {
+            response = new Response(apiResult.data.writeString(requestParams.responseType), {status:apiResult.statusCode, statusText: apiResult.statusMessage, headers: responseHeaders })
         } else {
             response = new Response(JSON.stringify(apiResult), {status:apiResult.statusCode, statusText: apiResult.statusMessage, headers: responseHeaders })
         }
@@ -204,7 +204,7 @@ export class OINODbFactory {
      * @param includeDebugMessages include debug messages in result
      * 
      */
-    static createHtmlFromApiResult(apiResult:OINODbResult, template:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):string {
+    static createHtmlFromApiResult(apiResult:OINODbApiResult, template:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):string {
         let result:string = template
         result = result.replaceAll('###statusCode###', OINOStr.encode(apiResult.statusCode.toString(), OINOContentType.html))
         result = result.replaceAll('###statusMessage###', OINOStr.encode(apiResult.statusMessage.toString(), OINOContentType.html))

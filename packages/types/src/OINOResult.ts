@@ -25,7 +25,7 @@ export class OINOResult {
     messages: string[];
 
     /**
-     * Constructor of OINODbResult.
+     * Constructor of OINOResult.
      * 
      */
     constructor () {

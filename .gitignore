@@ -39,3 +39,4 @@ packages/db-postgresql/README.md
 /samples/readmeApp/node_modules
 samples/nodeApp/package-lock.json
 samples/readmeApp/package-lock.json
+/packages/hashid/node_modules
