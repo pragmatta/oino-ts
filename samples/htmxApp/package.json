@@ -1,6 +1,6 @@
 {
   "name": "OinoHtmxApp",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "scripts": {
     "app": "bun run ./htmxApp.ts --watch"
   },

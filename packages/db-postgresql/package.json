@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/db-postgresql",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "OINO TS package for using Postgresql databases.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -20,7 +20,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/db": "^0.0.10",
+    "@oino-ts/db": "^0.0.11",
     "pg": "^8.11.3"
   },
   "devDependencies": {
@@ -29,10 +29,9 @@
     "@types/bun": "latest"
   },
   "files": [
-    "src/index.ts",
-    "src/OINODbPostgresql.ts",
-    "dist/cjs/index.js",
-    "dist/esm/index.js",
-    "dist/types/index.d.ts"
+    "src/*.ts",
+    "dist/cjs/*.js",
+    "dist/esm/*.js",
+    "dist/types/*.d.ts"
   ]
 }

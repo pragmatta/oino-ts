@@ -134,7 +134,7 @@
  To support tables with multipart primary keys OINO generates a composite key `_OINOID_` that is included in the result and can be used as the REST ID. For example in the example above table `OrderDetails` has two primary keys `OrderID` and `ProductID` making the `_OINOID_` of form `11077:99`. 
 
  ## Power Of SQL
- Since OINO controls the SQL, WHERE-conditions can be defined through [`OINOFilter`](https://pragmatta.github.io/oino-ts/classes/core_src_OINOFilter.OINOFilter.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
+ Since OINO controls the SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/core_src.OINOSqlFilter.html) and order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/core_src.OINOSqlOrder.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
 
  ## Swagger Support
  Swagger is great as long as the definitions are updated and with OINO you can automatically get a Swagger definition including a data model schema.
@@ -178,8 +178,8 @@
  ### Batch updates
  Supporting batch updates similar to batch inserts is slightly bending the RESTfull principles but would still be a useful optional feature.
 
- ### Aggregation, ordering and limits
- Similar to filtering, aggregation, ordering and limits can be implemented as HTTP request parameters telling what column is aggregated or used for ordering or how many results to return.
+ ### Aggregation and limits
+ Similar to filtering and ordering, aggregation and limits can be implemented as HTTP request parameters telling what column is aggregated or used for ordering or how many results to return.
 
  ### Streaming
  One core idea is to be efficient in not making unnecessary copies of the data and minimizing garbage collection debt. This can be taken further by implementing streaming, allowing large dataset to be written to HTTP response as SQL result rows are received.
