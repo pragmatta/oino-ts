@@ -1,0 +1,29 @@
+{
+  "name": "@oino-ts/db",
+  "version": "0.0.10",
+  "description": "OINO TS library package for publishing an SQL database tables as a REST API.",
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
+  "keywords": [
+    "sql",
+    "database",
+    "rest-api",
+    "typescript",
+    "library"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "dependencies": {
+    "@types/node": "^20.14.10",
+    "@oino-ts/types": "0.0.10"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typedoc": "^0.25.13"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    
+    "allowImportingTsExtensions": false,
+    "verbatimModuleSyntax": false,
+
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "allowSyntheticDefaultImports": true,
+
+    "paths": {
+      "@oino-ts/types": ["./types/src/index.ts"],
+      "@oino-ts/db": ["./db/src/index.ts"],
+      "@oino-ts/hashid": ["./hashid/src/index.ts"],
+      "@types/node": ["./db/node_modules/@types/node/index.d.ts"],
+      "pg": ["./db/node_modules/@types/pg/index.d.ts"],
+      "mariadb": ["./mariadb/node_modules/mariadb/types/index.d.ts"],
+      "bun:sqlite": ["./db/node_modules/@types/bun/index.d.ts"]
+    }
+  },
+  "include": [
+    "./db/src/index.ts", 
+    "./db-bunsqlite/src/OINODbBunSqlite.ts", 
+    "./db-mariadb/src/OINODbMariadb.ts", 
+    "./db-postgresql/src/OINODbPostgresql.ts",
+    "./hashid/src/index.ts",
+    "./types/src/index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "_dist",
+    "dist",
+    "docs",
+    "db/src/*.test.ts"
+  ]
+}

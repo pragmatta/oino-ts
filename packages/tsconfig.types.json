@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.core",
+  "extends": "./tsconfig.db",
   "compilerOptions": {
     "declaration": true,
     "emitDeclarationOnly": true,

@@ -1,8 +1,9 @@
-import { OINODb, OINOApi, OINOFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OINOApiResult, OINOContentType, OINOSwagger, OINORequestParams } from "@oino-ts/core";
+import { OINODb, OINODbApi, OINODbFactory, OINOConsoleLog, OINODbApiResult, OINOContentType, OINOSwagger, OINORequestParams } from "@oino-ts/db";
+import { OINOLog, OINOLogLevel } from "@oino-ts/log"
 
-import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
+import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 
-OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
+OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug))
 
 const response_headers:HeadersInit = {
@@ -11,15 +12,15 @@ const response_headers:HeadersInit = {
     'Access-Control-Allow-Origin': '*'
 }
 
-const db:OINODb = await OINOFactory.createDb( { type: "OINODbBunSqlite", url: "file://./northwind.sqlite" } )
-const apis:Record<string, OINOApi> = {
-    "Employees": await OINOFactory.createApi(db, { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidLength:16, hashidRandomIds:true }),
-    "Orders": await OINOFactory.createApi(db, { tableName: "Orders" }),
-    "OrderDetails": await OINOFactory.createApi(db, { tableName: "OrderDetails" }),
-    "Products": await OINOFactory.createApi(db, { tableName: "Products" }),
-    "Categories": await OINOFactory.createApi(db, { tableName: "Categories" })
+const db:OINODb = await OINODbFactory.createDb( { type: "OINODbBunSqlite", url: "file://./northwind.sqlite" } )
+const apis:Record<string, OINODbApi> = {
+    "Employees": await OINODbFactory.createApi(db, { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidLength:16, hashidRandomIds:true }),
+    "Orders": await OINODbFactory.createApi(db, { tableName: "Orders" }),
+    "OrderDetails": await OINODbFactory.createApi(db, { tableName: "OrderDetails" }),
+    "Products": await OINODbFactory.createApi(db, { tableName: "Products" }),
+    "Categories": await OINODbFactory.createApi(db, { tableName: "Categories" })
 }
-const api_array:OINOApi[] = Object.entries(apis).map(([path, api]) => (api))
+const api_array:OINODbApi[] = Object.entries(apis).map(([path, api]) => (api))
 
 const server = Bun.serve({
     development: true,
@@ -30,7 +31,7 @@ const server = Bun.serve({
         OINOLog.debug("readmeApp serve", {path:url.pathname, path_matches:path_matches})
         let path:string = path_matches[1] || ""
         let id:string = path_matches[2] || ""
-        let api:OINOApi = apis[path]
+        let api:OINODbApi = apis[path]
 
         let response:Response|null = null
         if (request.method == "OPTIONS") {
@@ -44,10 +45,10 @@ const server = Bun.serve({
 
         } else {
             const body:string = await request.text()
-            const params:OINORequestParams = OINOFactory.createParamsFromRequest(request)
-            const api_result:OINOApiResult = await api.doRequest(request.method, id, body, params)
-            if (api_result.success && api_result.modelset) {
-                response = new Response(api_result.modelset.writeString(params.contentType || OINOContentType.json), {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
+            const params:OINORequestParams = OINODbFactory.createParamsFromRequest(request)
+            const api_result:OINODbApiResult = await api.doRequest(request.method, id, body, params)
+            if (api_result.success && api_result.data) {
+                response = new Response(api_result.data.writeString(params.contentType || OINOContentType.json), {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
             } else {
                 response = new Response(JSON.stringify(api_result), {status:api_result.statusCode, statusText: api_result.statusMessage, headers: response_headers })
             }

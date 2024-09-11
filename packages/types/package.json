@@ -1,0 +1,29 @@
+{
+  "name": "@oino-ts/types",
+  "version": "0.0.10",
+  "description": "OINO TS package for types.",
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
+  "keywords": [
+    "types",
+    "typescript",
+    "library"
+  ],
+  "main": "./dist/cjs/OINOTypes.js",
+  "module": "./dist/esm/OINOTypes.js",
+  "types": "./dist/types/OINOTypes.d.ts",
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "files": [
+    "src/OINOTypes.ts",
+    "dist/cjs/OINOTypes.js",
+    "dist/esm/OINOTypes.js",
+    "dist/types/OINOTypes.d.ts"
+  ]
+}

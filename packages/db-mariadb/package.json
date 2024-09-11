@@ -1,0 +1,38 @@
+{
+  "name": "@oino-ts/db-mariadb",
+  "version": "0.0.10",
+  "description": "OINO TS package for using Mariadb databases.",
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
+  "keywords": [
+    "sql",
+    "database",
+    "rest-api",
+    "typescript",
+    "library",
+    "mariadb",
+    "mysql"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "dependencies": {
+    "@oino-ts/db": "^0.0.10",
+    "mariadb": "3.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/bun": "latest"
+  },
+  "files": [
+    "src/index.ts",
+    "src/OINODbMariadb.ts",
+    "dist/cjs/index.js",
+    "dist/esm/index.js",
+    "dist/types/index.d.ts"
+  ]
+}
