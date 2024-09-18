@@ -7,6 +7,8 @@
 import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINORequestParams, OINO_DEBUG_PREFIX, OINOLog, OINOResult } from "./index.js"
 import { OINOHashid } from "@oino-ts/hashid"
 
+const API_EMPTY_PARAMS:OINORequestParams = { sqlParams: {} }
+
 /**
  * OINO API request result object with returned data and/or http status code/message and 
  * error / warning messages.
@@ -209,7 +211,7 @@ export class OINODbApi {
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string, params:OINORequestParams):Promise<OINODbApiResult> {
+    async doRequest(method:string, id: string, body:string, params:OINORequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("doRequest")
         let result:OINODbApiResult = new OINODbApiResult()
         OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
