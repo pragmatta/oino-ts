@@ -186,7 +186,13 @@ WHERE table_name = `
             return cellValue.toString()
 
         } else if (sqlType == "bytea") {
-            return "\'" + cellValue + "\'"
+            if (cellValue instanceof Buffer) {
+                return "'\\x" + (cellValue as Buffer).toString("hex") + "'"
+            } else if (cellValue instanceof Uint8Array) {
+                return "'\\x" + Buffer.from(cellValue as Uint8Array).toString("hex") + "'"
+            } else {
+                return "\'" + cellValue?.toString() + "\'"
+            }
 
         } else if (sqlType == "boolean") {
             if (cellValue == null || cellValue == "" || cellValue.toString().toLowerCase() == "false" || cellValue == "0") { 

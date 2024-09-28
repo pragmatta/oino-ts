@@ -198,7 +198,13 @@ export class OINODbMariadb extends OINODb {
             return cellValue.toString()
 
         } else if ((sqlType == "longblob") || (sqlType == "binary") || (sqlType == "varbinary")) {
-            return "\"" + cellValue + "\""
+            if (cellValue instanceof Buffer) {
+                return "x'" + (cellValue as Buffer).toString("hex") + "'"
+            } else if (cellValue instanceof Uint8Array) {
+                return "x'" + Buffer.from(cellValue as Uint8Array).toString("hex") + "'"
+            } else {
+                return "\"" + cellValue?.toString() + "\""
+            }
 
         } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
             return "\"" + cellValue.toISOString().replace('T', ' ').substring(0, 23) + "\""

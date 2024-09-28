@@ -196,8 +196,8 @@ const apis:OINOTestApiParams[] = [
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: new OINODbSqlOrder("LastName") }
         },
-        postRow: [99, "LastName", "FirstName", "Title", "TitleOfCourtesy", new Date("2024-04-06"), new Date("2024-04-07"), "Address", "City", "Region", 12345, "EU", "123 456 7890", "9876", Buffer.from("OINO"), "Line1\nLine2", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
-        putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("OINO2"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
+        postRow: [99, "LastName", "FirstName", "Title", "TitleOfCourtesy", new Date("2024-04-06"), new Date("2024-04-07"), "Address", "City", "Region", 12345, "EU", "123 456 7890", "9876", Buffer.from("0001020304", "hex"), "Line1\nLine2", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
+        putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("0506070809", "hex"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
     },
     {
         apiParams: { tableName: "OrderDetails" },
