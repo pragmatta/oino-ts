@@ -533,7 +533,7 @@ export class OINODbFactory {
             // const value = requestParams[]
 
         }
-        console.log("createRowFromUrlencoded: next row=" + row)
+        // console.log("createRowFromUrlencoded: next row=" + row)
         result.push(row)
         return result
     }
@@ -567,4 +567,21 @@ export class OINODbFactory {
             return []
         }
     }
+   /**
+     * Create one data row from javascript object based on the datamodel. 
+     * NOTE! Data assumed to be unserialized i.e. of the native type (string, number, boolean, Buffer)
+     * 
+     * @param datamodel datamodel of the api
+     * @param data data as javascript object
+     * 
+     */
+    static createRowFromObject(datamodel:OINODbDataModel, data:any):OINODataRow {
+        const fields:OINODbDataField[] = datamodel.fields
+        let result:OINODataRow = new Array(fields.length)
+        for (let i=0; i < fields.length; i++) {
+            result[i] = data[fields[i].name]
+        }
+        return result
+    }
+
 }

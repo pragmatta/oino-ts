@@ -96,7 +96,13 @@ export class OINODbBunSqlite extends OINODb {
             return cellValue.toString()
 
         } else if (sqlType == "BLOB") {
-            return "X\'" + Buffer.from(cellValue as Uint8Array).toString('hex') + "\'"
+            if (cellValue instanceof Buffer) {
+                return "X'" + (cellValue as Buffer).toString("hex") + "'"
+            } else if (cellValue instanceof Uint8Array) {
+                return "X'" + Buffer.from(cellValue as Uint8Array).toString("hex") + "'"
+            } else {
+                return "'" + cellValue?.toString() + "'"
+            }
 
         } else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (cellValue instanceof Date)) {
             return "\'" + cellValue.toISOString() + "\'"
