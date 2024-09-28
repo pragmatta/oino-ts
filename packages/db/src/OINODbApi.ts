@@ -4,7 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINORequestParams, OINO_DEBUG_PREFIX, OINOLog, OINOResult } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINORequestParams, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINOResult } from "@oino-ts/types";
 import { OINOHashid } from "@oino-ts/hashid"
 
 const API_EMPTY_PARAMS:OINORequestParams = { sqlParams: {} }
@@ -207,19 +208,33 @@ export class OINODbApi {
      * 
      * @param method HTTP verb (uppercase)
      * @param id URL id of the REST request
-     * @param body HTTP body data as string
+     * @param body HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string, params:OINORequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
+    async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINORequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("doRequest")
-        let result:OINODbApiResult = new OINODbApiResult()
         OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
+        let result:OINODbApiResult = new OINODbApiResult()
+        let rows:OINODataRow[] = []
+        if ((method == "POST") || (method == "PUT")) {
+            if (Array.isArray(body)) {
+                rows = body
+                OINOLog.debug("OINODbApi.doRequest - OINODataRow rows", {rows:rows})        
+
+            } else if (typeof(body) == "object") {
+                rows = [OINODbFactory.createRowFromObject(this.datamodel, body)]
+                OINOLog.debug("OINODbApi.doRequest - object rows", {rows:rows})        
+
+            } else if (typeof(body) == "string") {
+                rows = OINODbFactory.createRows(this.datamodel, body, params)
+                OINOLog.debug("OINODbApi.doRequest - string rows", {rows:rows})        
+            }
+        }
         if (method == "GET") {
             await this._doGet(result, id, params)
     
         } else if (method == "PUT") {
-            const rows:OINODataRow[] = OINODbFactory.createRows(this.datamodel, body, params)
             if (!id) {
                 result.setError(400, "HTTP PUT method requires an URL ID for the row that is updated!", "DoRequest")
 
@@ -235,7 +250,6 @@ export class OINODbApi {
                 }             
             }
         } else if (method == "POST") {
-            const rows:OINODataRow[] = OINODbFactory.createRows(this.datamodel, body, params)
             if (id) {
                 result.setError(400, "HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!", "DoRequest")
 
