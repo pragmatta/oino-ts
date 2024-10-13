@@ -91,7 +91,7 @@ export type OINODbSqlParams = {
 }
 
 /** Request options */
-export type OINORequestParams = {
+export type OINODbRequestParams = {
     /** Content type of the request body */
     requestType?:OINOContentType
     /** Content type of the response body */
@@ -99,7 +99,7 @@ export type OINORequestParams = {
     /** Multipart boundary token */
     multipartBoundary?:string
     /** SQL parameters */
-    sqlParams:OINODbSqlParams
+    sqlParams?:OINODbSqlParams
 }
 
 /** A single column value of a data row */
