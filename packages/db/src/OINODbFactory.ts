@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINODbRequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbApiResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINODbRequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbApiResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOLog, OINODbSqlParams } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -61,8 +61,23 @@ export class OINODbFactory {
      * @param request HTTP Request 
      */
     static createParamsFromRequest(request:Request):OINODbRequestParams {
-        let result:OINODbRequestParams = { sqlParams: {}}
         const url:URL = new URL(request.url)
+        let sql_params:OINODbSqlParams = { }
+        const filter = url.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM)
+        if (filter) {
+            sql_params.filter = OINODbSqlFilter.parse(filter)
+        }
+        const order = url.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM)
+        if (order) {
+            sql_params.order = OINODbSqlOrder.parse(order)
+        }
+        const limit = url.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
+        if (limit) {
+            sql_params.limit = OINODbSqlLimit.parse(limit)
+        }
+
+        let result:OINODbRequestParams = { sqlParams: sql_params }
+
         const content_type = request.headers.get("content-type")
         if (content_type == OINOContentType.csv) {
             result.requestType = OINOContentType.csv
@@ -91,19 +106,7 @@ export class OINODbFactory {
             result.responseType = OINOContentType.json
         }
 
-        const filter = url.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM)
-        if (filter) {
-            result.sqlParams!.filter = OINODbSqlFilter.parse(filter)
-        }
-        const order = url.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM)
-        if (order) {
-            result.sqlParams!.order = new OINODbSqlOrder(order)
-        }
-        const limit = url.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
-        if (limit) {
-            result.sqlParams!.limit = new OINODbSqlLimit(limit)
-        }
-        // OINOLog.debug("createParamsFromRequest", {params:result})
+        OINOLog.debug("createParamsFromRequest", {params:result})
         return result
     }
 

@@ -214,7 +214,7 @@ export class OINODbApi {
      */
     async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("doRequest")
-        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
+        OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
         let result:OINODbApiResult = new OINODbApiResult()
         let rows:OINODataRow[] = []
         if ((method == "POST") || (method == "PUT")) {
