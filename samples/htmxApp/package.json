@@ -5,8 +5,10 @@
     "app": "bun run ./htmxApp.ts --watch"
   },
   "dependencies": {
-    "@oino-ts/core": "latest",
-    "@oino-ts/bunsqlite": "latest"
+    "@oino-ts/types": "latest",
+    "@oino-ts/db": "latest",
+    "@oino-ts/db-bunsqlite": "latest",
+    "@oino-ts/hashid": "latest"
   },
   "devDependencies": {
     "pg": "^8.11.3",
