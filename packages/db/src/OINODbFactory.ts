@@ -504,7 +504,7 @@ export class OINODbFactory {
             start = end 
             end = this._findMultipartBoundary(data, multipartBoundary, start)
         }
-        OINOLog.debug("createRowFromFormdata: next row", {row:row})
+        // OINOLog.debug("createRowFromFormdata: next row", {row:row})
         result.push(row)
 
         return result
@@ -516,7 +516,7 @@ export class OINODbFactory {
         const data_parts:string[] = data.trim().split('&')
         for (let i=0; i<data_parts.length; i++) {
             const param_parts = data_parts[i].split('=')
-            OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
+            // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
             if (param_parts.length == 2) {
                 const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
                 const field_index:number = datamodel.findFieldIndexByName(key)

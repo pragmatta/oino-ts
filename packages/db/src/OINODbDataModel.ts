@@ -250,7 +250,7 @@ export class OINODbDataModel {
             result += "\nLIMIT " + limit_sql 
         }
         result += ";"
-        OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
         return result;
     }
 

@@ -214,22 +214,20 @@ export class OINODbApi {
      */
     async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("doRequest")
-        OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
+        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
         let result:OINODbApiResult = new OINODbApiResult()
         let rows:OINODataRow[] = []
         if ((method == "POST") || (method == "PUT")) {
             if (Array.isArray(body)) {
                 rows = body
-                OINOLog.debug("OINODbApi.doRequest - OINODataRow rows", {rows:rows})        
 
             } else if (typeof(body) == "object") {
                 rows = [OINODbFactory.createRowFromObject(this.datamodel, body)]
-                OINOLog.debug("OINODbApi.doRequest - object rows", {rows:rows})        
 
             } else if (typeof(body) == "string") {
                 rows = OINODbFactory.createRows(this.datamodel, body, params)
-                OINOLog.debug("OINODbApi.doRequest - string rows", {rows:rows})        
             }
+            // OINOLog.debug("OINODbApi.doRequest - OINODataRow rows", {rows:rows})        
         }
         if (method == "GET") {
             await this._doGet(result, id, params)
