@@ -46,14 +46,14 @@ export class OINOResult {
     }
 
     /**
-     * Set HTTP error status using given code and message.
+     * Set HTTP error status using given code and message. Returns self reference for chaining.
      * 
      * @param statusCode HTTP status code
      * @param statusMessage HTTP status message
      * @param operation operation where error occured
      *
      */
-    setError(statusCode:number, statusMessage:string, operation:string) {
+    setError(statusCode:number, statusMessage:string, operation:string):OINOResult {
         this.success = false
         this.statusCode = statusCode
         if (this.statusMessage != "OK") {
@@ -64,48 +64,52 @@ export class OINOResult {
         } else {
             this.statusMessage = OINO_ERROR_PREFIX + " (" + operation + "): " + statusMessage
         }
+        return this
     }
 
     /**
-     * Add warning message.
+     * Add warning message. Returns self reference for chaining.
      *
      * @param message HTTP status message
      * @param operation operation where warning occured
      * 
      */
-    addWarning(message:string, operation:string) {
+    addWarning(message:string, operation:string):OINOResult {
         message = message.trim()
         if (message) {
             this.messages.push(OINO_WARNING_PREFIX + " (" + operation + "): " + message)
         }
+        return this
     }
 
     /**
-     * Add info message.
+     * Add info message. Returns self reference for chaining.
      *
      * @param message HTTP status message
      * @param operation operation where info occured
      *
      */
-    addInfo(message:string, operation:string) {
+    addInfo(message:string, operation:string):OINOResult {
         message = message.trim()
         if (message) {
             this.messages.push(OINO_INFO_PREFIX + " (" + operation + "): " + message)
         }
+        return this
     }
 
     /**
-     * Add debug message.
+     * Add debug message. Returns self reference for chaining.
      *
      * @param message HTTP status message
      * @param operation operation where debug occured
      *
      */
-    addDebug(message:string, operation:string) {
+    addDebug(message:string, operation:string):OINOResult {
         message = message.trim()
         if (message) {
             this.messages.push(OINO_DEBUG_PREFIX + " (" + operation + "): " + message)
         }
+        return this
     }
 
     /**

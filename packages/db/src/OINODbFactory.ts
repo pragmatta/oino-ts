@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINORequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbApiResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODbDataModel, OINODbDataField, OINODb, OINODataRow, OINODbConstructor, OINODbRequestParams, OINODbSqlFilter, OINOStr, OINOBlobDataField, OINODbApiResult, OINODbDataSet, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODataCell, OINODbSqlOrder, OINODbSqlLimit, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -60,8 +60,8 @@ export class OINODbFactory {
      *
      * @param request HTTP Request 
      */
-    static createParamsFromRequest(request:Request):OINORequestParams {
-        let result:OINORequestParams = { sqlParams: {}}
+    static createParamsFromRequest(request:Request):OINODbRequestParams {
+        let result:OINODbRequestParams = { sqlParams: {}}
         const url:URL = new URL(request.url)
         const content_type = request.headers.get("content-type")
         if (content_type == OINOContentType.csv) {
@@ -93,15 +93,15 @@ export class OINODbFactory {
 
         const filter = url.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM)
         if (filter) {
-            result.sqlParams.filter = OINODbSqlFilter.parse(filter)
+            result.sqlParams!.filter = OINODbSqlFilter.parse(filter)
         }
         const order = url.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM)
         if (order) {
-            result.sqlParams.order = new OINODbSqlOrder(order)
+            result.sqlParams!.order = new OINODbSqlOrder(order)
         }
         const limit = url.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
         if (limit) {
-            result.sqlParams.limit = new OINODbSqlLimit(limit)
+            result.sqlParams!.limit = new OINODbSqlLimit(limit)
         }
         // OINOLog.debug("createParamsFromRequest", {params:result})
         return result
@@ -115,7 +115,7 @@ export class OINODbFactory {
      * @param responseHeaders Headers to include in the response
      * 
      */
-    static createResponseFromApiResult(apiResult:OINODbApiResult, requestParams:OINORequestParams, responseHeaders:Record<string, string> = {}):Response {
+    static createResponseFromApiResult(apiResult:OINODbApiResult, requestParams:OINODbRequestParams, responseHeaders:Record<string, string> = {}):Response {
         let response:Response|null = null
         if (apiResult.success && apiResult.data) {
             response = new Response(apiResult.data.writeString(requestParams.responseType), {status:apiResult.statusCode, statusText: apiResult.statusMessage, headers: responseHeaders })
@@ -546,7 +546,7 @@ export class OINODbFactory {
      * @param requestParams parameters
      * 
      */
-    static createRows(datamodel:OINODbDataModel, data:string, requestParams:OINORequestParams ):OINODataRow[] {
+    static createRows(datamodel:OINODbDataModel, data:string, requestParams:OINODbRequestParams ):OINODataRow[] {
         if ((requestParams.requestType == OINOContentType.json) || (requestParams.requestType == undefined)) {
             return this._createRowFromJson(datamodel, data)
             

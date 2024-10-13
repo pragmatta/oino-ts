@@ -1,9 +1,8 @@
-import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINOSwagger, OINODbApiResult, OINORequestParams } from "@oino-ts/db";
-import { OINOLog, OINOLogLevel } from "@oino-ts/log"
-
+import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINODbSwagger, OINODbApiResult, OINORequestParams, OINOLog, OINOLogLevel } from "@oino-ts/db";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { BunFile } from "bun";
+import { existsSync, readFileSync } from "fs";
 
 const response_headers:HeadersInit = {
     'Access-Control-Allow-Headers': '*',
@@ -45,6 +44,17 @@ async function getTemplate(apiName:string, method:string, command:string, status
 	return ""
 }
 
+function hostFile(path: string, contentType: string, data?: any): Response {
+	if (existsSync("." + path)) {
+		let body: string = readFileSync("." + path, { encoding: "utf8" });
+		if (data) {
+			body = OINODbFactory.createHtmlFromObject(data, body);
+		}
+		return new Response(body, { status: 200, statusText: "OK", headers: { "Content-Type": contentType, "Content-Length": body.length.toString() } });
+	} else {
+		return new Response("", { status: 404, statusText: "File not found" });
+	}
+}
 
 try {
 
@@ -72,10 +82,13 @@ try {
 				return new Response("", {status:200, statusText:"OK", headers:response_headers})
 
 			} else if (url.pathname == "/swagger.json") {
-				response = new Response(JSON.stringify(OINOSwagger.getApiDefinition(api_array), null, 5));
+				response = new Response(JSON.stringify(OINODbSwagger.getApiDefinition(api_array), null, 5));
 				response.headers.set('Access-Control-Allow-Origin', '*');
 				response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 				return response
+
+			} else if (url.pathname == "/index.html") {
+				return hostFile("/index.html", "text-html")
 
 			} else if (url.pathname) {
 				const path_matches = API_PATH_REGEX.exec(url.pathname) || []

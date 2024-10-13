@@ -4,11 +4,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINORequestParams, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbRequestParams, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
 import { OINOResult } from "@oino-ts/types";
 import { OINOHashid } from "@oino-ts/hashid"
 
-const API_EMPTY_PARAMS:OINORequestParams = { sqlParams: {} }
+const API_EMPTY_PARAMS:OINODbRequestParams = { sqlParams: {} }
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 
@@ -105,9 +105,9 @@ export class OINODbApi {
         //logDebug("OINODbApi.validateHttpValues", {result:result})
     }
 
-    private async _doGet(result:OINODbApiResult, id:string, params:OINORequestParams):Promise<void> {
+    private async _doGet(result:OINODbApiResult, id:string, params:OINODbRequestParams):Promise<void> {
         OINOBenchmark.start("doGet")
-        const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams)
+        const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams || {})
         // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
         try {
             const sql_res:OINODbDataSet = await this.db.sqlSelect(sql)
@@ -212,9 +212,9 @@ export class OINODbApi {
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINORequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
+    async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("doRequest")
-        OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
+        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
         let result:OINODbApiResult = new OINODbApiResult()
         let rows:OINODataRow[] = []
         if ((method == "POST") || (method == "PUT")) {
