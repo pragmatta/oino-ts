@@ -1,6 +1,6 @@
 export { OINOBenchmark } from "./OINOBenchmark.js"
 export { OINOLog, OINOLogLevel, OINOConsoleLog } from "./OINOLog.js"
-export { OINOResult } from "./OINOResult.js"
+export { OINOResult, OINOHttpResult } from "./OINOResult.js"
 export { OINOStr } from "./OINOStr.js"
 
 /** OINO error message prefix */

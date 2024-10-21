@@ -104,15 +104,14 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     put_dataset.first()
     let put_body_formdata = put_modelset.writeString(OINOContentType.formdata)
     const multipart_boundary = put_body_formdata.substring(0, put_body_formdata.indexOf('\r'))
-    put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
+    put_body_formdata = put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
     OINOLog.info("HTTP PUT FORMDATA", {put_body_formdata:put_body_formdata})
     test(target_db + target_table + target_group + " update FORMDATA", async () => {
         apiDataset.requestParams.requestType = OINOContentType.formdata
-        apiDataset.requestParams.multipartBoundary = multipart_boundary
+        apiDataset.requestParams.multipartBoundary = "---------OINO999999999"
         expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT FORMDATA reset")
         expect((await api.doRequest("PUT", new_row_id, put_body_formdata, apiDataset.requestParams))).toMatchSnapshot("PUT FORMDATA")
         expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.formdata)).toMatchSnapshot("GET FORMDATA")
-        apiDataset.requestParams.multipartBoundary = undefined
     })
     
     put_dataset.first()
@@ -120,6 +119,7 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     OINOLog.info("HTTP PUT URLENCODE", {put_body_urlencode:put_body_urlencode})
     test(target_db + target_table + target_group + " update URLENCODE", async () => {
         apiDataset.requestParams.requestType = OINOContentType.urlencode
+        apiDataset.requestParams.multipartBoundary = undefined // for some reason this needs reset here so previous test value settings does not leak
         expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT URLENCODE reset")
         expect((await api.doRequest("PUT", new_row_id, put_body_urlencode, apiDataset.requestParams))).toMatchSnapshot("PUT URLENCODE")
         expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.urlencode)).toMatchSnapshot("GET URLENCODE")
@@ -164,7 +164,7 @@ type OINOTestApiParams = {
     putRow: OINODataRow
 }
 
-OINOLog.setLogLevel(OINOLogLevel.debug)
+// OINOLog.setLogLevel(OINOLogLevel.debug)
 OINOBenchmark.setEnabled(["doRequest"])
 OINOBenchmark.reset()
 

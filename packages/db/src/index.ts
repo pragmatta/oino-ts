@@ -1,7 +1,7 @@
 import { OINOContentType } from "@oino-ts/types"
 export { OINOContentType }
 
-export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult } from "@oino-ts/types"
+export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult, OINOHttpResult } from "@oino-ts/types"
 
 import { OINODb } from "./OINODb.js"
 import { OINODbDataField } from "./OINODbDataField.js"
@@ -91,7 +91,7 @@ export type OINODbSqlParams = {
 }
 
 /** Request options */
-export type OINODbRequestParams = {
+export type OINODbApiRequestParams = {
     /** Content type of the request body */
     requestType?:OINOContentType
     /** Content type of the response body */

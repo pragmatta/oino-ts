@@ -36,6 +36,17 @@ export class OINOResult {
     }
 
     /**
+     * Copy values from different result.
+     * 
+     */
+    copy(result: OINOResult) {
+        this.success = result.success
+        this.statusCode = result.statusCode
+        this.statusMessage = result.statusMessage
+        this.messages = result.messages.slice()
+    }
+
+    /**
      * Set HTTP OK status (does not reset messages).
      *
      */
@@ -144,4 +155,36 @@ export class OINOResult {
             } 
         }
     }
+}
+
+/**
+ * Specialized result for HTTP responses.
+ */
+export class OINOHttpResult extends OINOResult {
+    /** HTTP body data */
+    body: string
+
+    headers: HeadersInit
+
+    constructor(body:string, headers?:HeadersInit) {
+        super()
+        this.body = body
+        if (headers) {
+            this.headers = headers
+        } else {
+            this.headers = {}
+        }
+    }
+
+    getResponse(headers?:HeadersInit):Response {
+        if (!headers) {
+            headers = this.headers
+        }
+        headers['Content-Length'] = this.body.length.toString()
+        const result = new Response(this.body, {status:this.statusCode, statusText: this.statusMessage, headers: headers})
+        return result
+    }
+
+
+
 }
