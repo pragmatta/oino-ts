@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbApiRequestParams, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbApiRequestParams, OINOLog, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField, OINOContentType, OINOStr } from "./index.js"
 import { OINOResult } from "@oino-ts/types";
 import { OINOHashid } from "@oino-ts/hashid"
 
@@ -53,6 +53,50 @@ export class OINODbApiResult extends OINOResult {
         return response
     }
 }
+
+/**
+ * Specialized HTML template that can render ´OINODbApiResult´.
+ *
+ */
+export class OINODbHtmlTemplate extends OINOHtmlTemplate {
+
+    /**
+     * Creates HTML Response from API modelset.
+     *
+     * @param modelset OINO API dataset
+     * @param template HTML template
+     * 
+     */
+    renderdFromDbData(modelset:OINODbModelSet):OINOHttpResult {
+        let html:string = ""
+        const dataset:OINODbDataSet|undefined = modelset.dataset
+        const datamodel:OINODbDataModel = modelset.datamodel
+        while (!dataset.isEof()) {
+            const row:OINODataRow = dataset.getRow()
+            let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
+            let primary_key_values:string[] = []
+            let html_row:string = this.template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
+            for (let i=0; i<datamodel.fields.length; i++) {
+                const f:OINODbDataField = datamodel.fields[i]
+                let value:string|null|undefined = f.serializeCell(row[i])
+                if (f.fieldParams.isPrimaryKey) {
+                    if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
+                    }
+                    primary_key_values.push(value || "")
+                }
+                html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
+            }
+            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
+            html += html_row + "\r\n"
+            dataset.next()
+        }
+        const result:OINOHttpResult = new OINOHttpResult(html)
+        return result
+    }
+
+}
+
 
 /**
  * API class with method to process HTTP REST requests.

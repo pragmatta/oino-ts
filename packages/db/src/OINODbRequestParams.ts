@@ -166,7 +166,7 @@ export class OINODbSqlFilter {
                 result += this._rightSide
             }
         }
-        OINOLog.debug("OINOFilter.toSql", {result:result})
+        // OINOLog.debug("OINOFilter.toSql", {result:result})
         return "(" + result + ")"
     }
 }

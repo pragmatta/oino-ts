@@ -107,7 +107,7 @@ export class OINODbFactory {
             result.responseType = OINOContentType.json
         }
 
-        OINOLog.debug("createParamsFromRequest", {params:result})
+        // OINOLog.debug("createParamsFromRequest", {params:result})
         return result
     }
 
@@ -143,39 +143,6 @@ export class OINODbFactory {
             dataset.next()
         }
         const result:OINOHttpResult = new OINOHttpResult(html)
-        return result
-    }
-
-    /**
-     * Creates HTML Response from a row id.
-     *
-     * @param oinoId OINO id
-     * @param template HTML template
-     * 
-     */
-    static createHtmlFromOinoId(oinoId:string, template:string):OINOHttpResult {
-        const html:string = template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', OINOStr.encode(oinoId, OINOContentType.html))
-        const result:OINOHttpResult = new OINOHttpResult(html) 
-        return result
-    }
-    
-    /**
-     * Creates HTML Response from object properties.
-     *
-     * @param object object
-     * @param template HTML template
-     * 
-     */
-    static createHtmlFromObject(object:any, template:string):OINOHttpResult {
-        let html:string = template
-        for (let key in object) {
-            const value = object[key]
-            if (value) {
-                html = html.replaceAll('###' + key + '###', OINOStr.encode(value.toString(), OINOContentType.html))
-            }
-        }
-        html = html.replace(/###[^#]*###/g, "")
-        const result:OINOHttpResult = new OINOHttpResult(html) 
         return result
     }
 

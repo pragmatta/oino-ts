@@ -164,9 +164,9 @@ export class OINOHttpResult extends OINOResult {
     /** HTTP body data */
     body: string
 
-    headers: HeadersInit
+    headers: Record<string, string>
 
-    constructor(body:string, headers?:HeadersInit) {
+    constructor(body:string, headers?:Record<string, string>) {
         super()
         this.body = body
         if (headers) {
@@ -176,7 +176,7 @@ export class OINOHttpResult extends OINOResult {
         }
     }
 
-    getResponse(headers?:HeadersInit):Response {
+    getResponse(headers?:Record<string, string>):Response {
         if (!headers) {
             headers = this.headers
         }
