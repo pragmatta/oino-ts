@@ -4,11 +4,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbRequestParams, OINO_DEBUG_PREFIX, OINOLog } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbApiRequestParams, OINOLog, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField, OINOContentType, OINOStr } from "./index.js"
 import { OINOResult } from "@oino-ts/types";
 import { OINOHashid } from "@oino-ts/hashid"
 
-const API_EMPTY_PARAMS:OINODbRequestParams = { sqlParams: {} }
+const API_EMPTY_PARAMS:OINODbApiRequestParams = { sqlParams: {} }
 
 /**
  * OINO API request result object with returned data and/or http status code/message and 
@@ -16,6 +16,9 @@ const API_EMPTY_PARAMS:OINODbRequestParams = { sqlParams: {} }
  *
  */
 export class OINODbApiResult extends OINOResult {
+    /** DbApi request params */
+    params: OINODbApiRequestParams
+
     /** Returned data if any */
     data?: OINODbModelSet;
 
@@ -25,11 +28,75 @@ export class OINODbApiResult extends OINOResult {
      * @param data result data
      *
      */
-    constructor (data?:OINODbModelSet) {
+    constructor (params:OINODbApiRequestParams, data?:OINODbModelSet) {
         super()
+        this.params = params
         this.data = data
     }
+
+    /**
+     * Creates a HTTP Response from API results.
+     *
+     * @param headers Headers to include in the response
+     * 
+     */
+    getResponse(headers:HeadersInit = {}):Response {
+        let response:Response|null = null
+        if (this.success && this.data) {
+            response = new Response(this.data.writeString(this.params.responseType), {status:this.statusCode, statusText: this.statusMessage, headers: headers })
+        } else {
+            response = new Response(JSON.stringify(this), {status:this.statusCode, statusText: this.statusMessage, headers: headers })
+        }
+        for (let i=0; i<this.messages.length; i++) {
+            response.headers.set('X-OINO-MESSAGE-' + i, this.messages[i])
+        }         
+        return response
+    }
 }
+
+/**
+ * Specialized HTML template that can render ´OINODbApiResult´.
+ *
+ */
+export class OINODbHtmlTemplate extends OINOHtmlTemplate {
+
+    /**
+     * Creates HTML Response from API modelset.
+     *
+     * @param modelset OINO API dataset
+     * @param template HTML template
+     * 
+     */
+    renderdFromDbData(modelset:OINODbModelSet):OINOHttpResult {
+        let html:string = ""
+        const dataset:OINODbDataSet|undefined = modelset.dataset
+        const datamodel:OINODbDataModel = modelset.datamodel
+        while (!dataset.isEof()) {
+            const row:OINODataRow = dataset.getRow()
+            let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
+            let primary_key_values:string[] = []
+            let html_row:string = this.template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
+            for (let i=0; i<datamodel.fields.length; i++) {
+                const f:OINODbDataField = datamodel.fields[i]
+                let value:string|null|undefined = f.serializeCell(row[i])
+                if (f.fieldParams.isPrimaryKey) {
+                    if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
+                    }
+                    primary_key_values.push(value || "")
+                }
+                html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
+            }
+            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
+            html += html_row + "\r\n"
+            dataset.next()
+        }
+        const result:OINOHttpResult = new OINOHttpResult(html)
+        return result
+    }
+
+}
+
 
 /**
  * API class with method to process HTTP REST requests.
@@ -105,7 +172,7 @@ export class OINODbApi {
         //logDebug("OINODbApi.validateHttpValues", {result:result})
     }
 
-    private async _doGet(result:OINODbApiResult, id:string, params:OINODbRequestParams):Promise<void> {
+    private async _doGet(result:OINODbApiResult, id:string, params:OINODbApiRequestParams):Promise<void> {
         OINOBenchmark.start("doGet")
         const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams || {})
         // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
@@ -212,24 +279,22 @@ export class OINODbApi {
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
+    async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("doRequest")
-        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, searchParams:params})
-        let result:OINODbApiResult = new OINODbApiResult()
+        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
+        let result:OINODbApiResult = new OINODbApiResult(params)
         let rows:OINODataRow[] = []
         if ((method == "POST") || (method == "PUT")) {
             if (Array.isArray(body)) {
                 rows = body
-                OINOLog.debug("OINODbApi.doRequest - OINODataRow rows", {rows:rows})        
 
             } else if (typeof(body) == "object") {
                 rows = [OINODbFactory.createRowFromObject(this.datamodel, body)]
-                OINOLog.debug("OINODbApi.doRequest - object rows", {rows:rows})        
 
             } else if (typeof(body) == "string") {
                 rows = OINODbFactory.createRows(this.datamodel, body, params)
-                OINOLog.debug("OINODbApi.doRequest - string rows", {rows:rows})        
             }
+            // OINOLog.debug("OINODbApi.doRequest - OINODataRow rows", {rows:rows})        
         }
         if (method == "GET") {
             await this._doGet(result, id, params)

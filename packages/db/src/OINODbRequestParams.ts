@@ -166,7 +166,7 @@ export class OINODbSqlFilter {
                 result += this._rightSide
             }
         }
-        OINOLog.debug("OINOFilter.toSql", {result:result})
+        // OINOLog.debug("OINOFilter.toSql", {result:result})
         return "(" + result + ")"
     }
 }
@@ -178,8 +178,8 @@ export class OINODbSqlFilter {
 export class OINODbSqlOrder {
     private static _orderColumnRegex = /^\s*(\w+)\s?(ASC|DESC)?\s*?$/i
     
-    private _columns: string []
-    private _directions: string []
+    private _columns: string[]
+    private _descending: boolean[]
 
     /**
      * Constructor for `OINODbSqlOrder`.
@@ -187,20 +187,40 @@ export class OINODbSqlOrder {
      * @param orderString string representation of filter from HTTP-request
      *
      */
-    constructor(orderString: string) {
-        // OINOLog.debug("OINODbSqlOrder.constructor", {orderString:orderString})
-        this._columns = []
-        this._directions = []
+    constructor(column_or_array:string[]|string, descending_or_array:boolean[]|boolean) {
+        OINOLog.debug("OINODbSqlOrder.constructor", {columns:column_or_array, directions:descending_or_array})
+        if (Array.isArray(column_or_array)) {
+            this._columns = column_or_array
+        } else {
+            this._columns = [column_or_array]
+        }
+        if (Array.isArray(descending_or_array)) {
+            this._descending = descending_or_array
+        } else {
+            this._descending = [descending_or_array]
+        }
+    }
+
+    /**
+     * Constructor for `OINODbSqlOrder` as parser of http parameter.
+     * 
+     * @param orderString string representation of ordering from HTTP-request
+     *
+     */
+    static parse(orderString: string):OINODbSqlOrder {
+        let columns:string[] = []
+        let directions:boolean[] = []
 
         const column_strings = orderString.split(',')
+
         for (let i=0; i<column_strings.length; i++) {
             let match = OINODbSqlOrder._orderColumnRegex.exec(column_strings[i])
             if (match != null) {
-                this._columns.push(match[1])
-                this._directions.push((match[2] || "ASC").toUpperCase())
+                columns.push(match[1])
+                directions.push((match[2] || "DESC").toUpperCase() == "DESC")
             }
         }
-        // OINOLog.debug("OINODbSqlOrder.constructor", {columns:this._columns, directions:this._directions})
+        return new OINODbSqlOrder(columns, directions)
     }
 
     /**
@@ -229,7 +249,12 @@ export class OINODbSqlOrder {
                 if (result) {
                     result += ","
                 }
-                result += dataModel.api.db.printSqlColumnname(field.name) + " " + this._directions[i]
+                result += dataModel.api.db.printSqlColumnname(field.name) + " "
+                if (this._descending[i]) {
+                    result += "DESC"
+                } else {
+                    result += "ASC"
+                }
             }
         }
         // OINOLog.debug("OINODbSqlOrder.toSql", {result:result})
@@ -252,9 +277,21 @@ export class OINODbSqlLimit {
      * @param limitString string representation of filter from HTTP-request
      *
      */
-    constructor(limitString: string) {
-        this._limit = 0
-        this._limit = Number.parseInt(limitString)
+    constructor(limit: number) {
+        this._limit = limit
+    }
+    /**
+     * Constructor for `OINODbSqlLimit` as parser of http parameter.
+     * 
+     * @param orderString string representation of limit from HTTP-request
+     *
+     */
+    static parse(limitString: string):OINODbSqlLimit {
+        try {
+            return new OINODbSqlLimit(Number.parseInt(limitString))
+        } catch {
+            return new OINODbSqlLimit(-1)
+        }
     }
 
     /**

@@ -104,15 +104,14 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     put_dataset.first()
     let put_body_formdata = put_modelset.writeString(OINOContentType.formdata)
     const multipart_boundary = put_body_formdata.substring(0, put_body_formdata.indexOf('\r'))
-    put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
+    put_body_formdata = put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
     OINOLog.info("HTTP PUT FORMDATA", {put_body_formdata:put_body_formdata})
     test(target_db + target_table + target_group + " update FORMDATA", async () => {
         apiDataset.requestParams.requestType = OINOContentType.formdata
-        apiDataset.requestParams.multipartBoundary = multipart_boundary
+        apiDataset.requestParams.multipartBoundary = "---------OINO999999999"
         expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT FORMDATA reset")
         expect((await api.doRequest("PUT", new_row_id, put_body_formdata, apiDataset.requestParams))).toMatchSnapshot("PUT FORMDATA")
         expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.formdata)).toMatchSnapshot("GET FORMDATA")
-        apiDataset.requestParams.multipartBoundary = undefined
     })
     
     put_dataset.first()
@@ -120,6 +119,7 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     OINOLog.info("HTTP PUT URLENCODE", {put_body_urlencode:put_body_urlencode})
     test(target_db + target_table + target_group + " update URLENCODE", async () => {
         apiDataset.requestParams.requestType = OINOContentType.urlencode
+        apiDataset.requestParams.multipartBoundary = undefined // for some reason this needs reset here so previous test value settings does not leak
         expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT URLENCODE reset")
         expect((await api.doRequest("PUT", new_row_id, put_body_urlencode, apiDataset.requestParams))).toMatchSnapshot("PUT URLENCODE")
         expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.urlencode)).toMatchSnapshot("GET URLENCODE")
@@ -178,7 +178,7 @@ const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Orders" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: new OINODbSqlOrder("ShipPostalCode desc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: OINODbSqlOrder.parse("ShipPostalCode desc") }
         },
         postRow: [30000,"CACTU",1,new Date("2024-04-05"),new Date("2024-04-06"),new Date("2024-04-07"),2,"184.75","a'b\"c%d_e\tf\rg\nh\\i","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK"],
         putRow: [30000,"CACTU",1,new Date("2023-04-05"),new Date("2023-04-06"),new Date("2023-04-07"),2,"847.51","k'l\"m%n_o\tp\rq\nr\\s","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK"]
@@ -186,7 +186,7 @@ const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Products" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: new OINODbSqlOrder("UnitsInStock asc,UnitPrice asc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock asc,UnitPrice asc") }
         },
         postRow: [99, "Umeshu", 1, 1, "500 ml", 12.99, 2, 0, 20, 0],
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
@@ -194,7 +194,7 @@ const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Employees", hashidKey: "12345678901234567890123456789012" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: new OINODbSqlOrder("LastName") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: OINODbSqlOrder.parse("LastName asc") }
         },
         postRow: [99, "LastName", "FirstName", "Title", "TitleOfCourtesy", new Date("2024-04-06"), new Date("2024-04-07"), "Address", "City", "Region", 12345, "EU", "123 456 7890", "9876", Buffer.from("0001020304", "hex"), "Line1\nLine2", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
         putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("0506070809", "hex"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
@@ -202,7 +202,7 @@ const apis:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "OrderDetails" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(Quantity)-gt(100)"), order: new OINODbSqlOrder("Quantity desc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(Quantity)-gt(100)"), order: OINODbSqlOrder.parse("Quantity desc") }
         },
         postRow: [10249,77,12.34,56,0],
         putRow: [10249,77,23.45,67,0]
