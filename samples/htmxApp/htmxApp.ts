@@ -120,7 +120,7 @@ try {
 					OINOLog.debug("index.ts / template", {template:template}) 
 					let http_result:OINOHttpResult
 					if (api_result.data?.dataset) {
-						http_result = template.renderdFromDbData(api_result.data)
+						http_result = template.renderFromDbData(api_result.data)
 					} else {
 						http_result = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id)
 					}

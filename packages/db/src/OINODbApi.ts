@@ -25,6 +25,7 @@ export class OINODbApiResult extends OINOResult {
     /**
      * Constructor of OINODbApiResult.
      * 
+     * @param params DbApi request parameters
      * @param data result data
      *
      */
@@ -64,10 +65,9 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
      * Creates HTML Response from API modelset.
      *
      * @param modelset OINO API dataset
-     * @param template HTML template
      * 
      */
-    renderdFromDbData(modelset:OINODbModelSet):OINOHttpResult {
+    renderFromDbData(modelset:OINODbModelSet):OINOHttpResult {
         let html:string = ""
         const dataset:OINODbDataSet|undefined = modelset.dataset
         const datamodel:OINODbDataModel = modelset.datamodel

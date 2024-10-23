@@ -184,7 +184,8 @@ export class OINODbSqlOrder {
     /**
      * Constructor for `OINODbSqlOrder`.
      * 
-     * @param orderString string representation of filter from HTTP-request
+     * @param column_or_array single or array of columns to order on
+     * @param descending_or_array single or array of booleans if ordes is descending
      *
      */
     constructor(column_or_array:string[]|string, descending_or_array:boolean[]|boolean) {
@@ -274,7 +275,7 @@ export class OINODbSqlLimit {
     /**
      * Constructor for `OINODbSqlLimit`.
      * 
-     * @param limitString string representation of filter from HTTP-request
+     * @param limit maximum number of items to return
      *
      */
     constructor(limit: number) {
@@ -283,7 +284,7 @@ export class OINODbSqlLimit {
     /**
      * Constructor for `OINODbSqlLimit` as parser of http parameter.
      * 
-     * @param orderString string representation of limit from HTTP-request
+     * @param limitString string representation of limit from HTTP-request
      *
      */
     static parse(limitString: string):OINODbSqlLimit {
