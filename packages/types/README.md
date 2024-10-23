@@ -29,7 +29,7 @@
  OINOFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
  ```
 
- ### Create a database
+ ### Connect a database
  Creating a database connection [`OINODb`](https://pragmatta.github.io/oino-ts/classes/core_src_OINODb.OINODb.html) is done by passing [`OINODbParams`](https://pragmatta.github.io/oino-ts/types/core_src.OINODbParams.html) to the factory method. For [`OINODbBunSqlite`](https://pragmatta.github.io/oino-ts/classes/bunsqlite_OINODbBunSqlite.OINODbBunSqlite.html) that means a file url for the database file, for others network host, port, credentials etc.
  ```
  const db:OINODb = await OINOFactory.createDb( { type: "OINODbBunSqlite", url: "file://../localDb/northwind.sqlite" } )
@@ -178,8 +178,8 @@
  ### Batch updates
  Supporting batch updates similar to batch inserts is slightly bending the RESTfull principles but would still be a useful optional feature.
 
- ### Aggregation and limits
- Similar to filtering and ordering, aggregation and limits can be implemented as HTTP request parameters telling what column is aggregated or used for ordering or how many results to return.
+ ### Aggregation 
+ Similar to filtering, ordering and limits, aggregation can be implemented as HTTP request parameters telling what column is aggregated or used for ordering or how many results to return.
 
  ### Streaming
  One core idea is to be efficient in not making unnecessary copies of the data and minimizing garbage collection debt. This can be taken further by implementing streaming, allowing large dataset to be written to HTTP response as SQL result rows are received.
