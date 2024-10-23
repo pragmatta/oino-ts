@@ -27,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody id="categories-rows"  
-                            hx-get="http://localhost:3002/categories" 
+                            hx-get="http://localhost:8080/categories" 
                             hx-trigger="load, OINODbApiTrigger-Categories from:body"
                             hx-target="#categories-rows" 
                             hx-swap="innerHTML"
@@ -35,7 +35,7 @@
                         </tbody>
                     </table>
                     <div id="categories-insert" class="link-primary"
-                        hx-get="http://localhost:3002///insert_category" 
+                        hx-get="http://localhost:8080///insert_category" 
                         hx-trigger="click"
                         hx-target="this" 
                         hx-swap="outerHTML"

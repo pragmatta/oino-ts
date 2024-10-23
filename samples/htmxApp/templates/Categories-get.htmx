@@ -1,5 +1,5 @@
 <tr id="OINOApiRow-categories-###_OINOID_###"
-    hx-get="http://localhost:3002/categories/###_OINOID_###" 
+    hx-get="http://localhost:8080/categories/###_OINOID_###" 
     hx-trigger="OINOApiTrigger-categories-###_OINOID_### from:body"
     hx-target="this" 
     hx-swap="outerHTML"
@@ -8,10 +8,10 @@
     <td>###CategoryName###</td>
     <td>###Description###</td>
     <td>
-        <a hx-get="http://localhost:3002/categories/###_OINOID_###/edit" hx-target="#OINOApiRow-categories-###_OINOID_###" hx-swap="outerHTML">
+        <a hx-get="http://localhost:8080/categories/###_OINOID_###/edit" hx-target="#OINOApiRow-categories-###_OINOID_###" hx-swap="outerHTML">
             <i class="bi bi-pencil-square"></i>
         </a>
-        <a hx-delete="http://localhost:3002/categories/###_OINOID_###" hx-confirm="Delete row '###_OINOID_###', are you sure?">
+        <a hx-delete="http://localhost:8080/categories/###_OINOID_###" hx-confirm="Delete row '###_OINOID_###', are you sure?">
            <i class="bi bi-trash"></i>
         </a>
     </td>

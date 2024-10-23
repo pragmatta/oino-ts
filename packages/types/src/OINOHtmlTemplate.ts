@@ -4,14 +4,17 @@ import { OINOStr, OINOContentType, OINOResult, OINOHttpResult, OINO_ERROR_PREFIX
  * Class for rendering HTML from data. 
  */
 export class OINOHtmlTemplate {
+    /** HTML template string */
 	template: string;
+
+    /** Cache expiration value for template */
 	expires: number;
 
     /**
      * Creates HTML Response from a key-value-pair.
      *
      * @param template template string
-     * @param template cache expiration value
+     * @param expires cache expiration value
      * 
      */
 	constructor (template:string, expires?: number) {
@@ -23,6 +26,9 @@ export class OINOHtmlTemplate {
 		}
 	}
 
+    /**
+     * @returns whether template is empty
+     */
 	isEmpty():boolean {
 		return this.template == ""
 	}
@@ -30,7 +36,8 @@ export class OINOHtmlTemplate {
     /**
      * Creates HTML Response from a key-value-pair.
      *
-     * @param oinoId OINO id
+     * @param key key
+     * @param value value
      * 
      */
     renderFromKeyValue(key:string, value:string):OINOHttpResult {

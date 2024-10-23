@@ -38,6 +38,7 @@ export class OINOResult {
     /**
      * Copy values from different result.
      * 
+     * @param result source value
      */
     copy(result: OINOResult) {
         this.success = result.success
@@ -164,8 +165,15 @@ export class OINOHttpResult extends OINOResult {
     /** HTTP body data */
     body: string
 
+    /** HTTP header values */
     headers: Record<string, string>
 
+    /**
+     * Constructor for a `OINOHttpResult` 
+     * 
+     * @param body HTTP body
+     * @param headers HTTP headers
+     */
     constructor(body:string, headers?:Record<string, string>) {
         super()
         this.body = body
@@ -176,6 +184,11 @@ export class OINOHttpResult extends OINOResult {
         }
     }
 
+    /**
+     * Get a Response object from the result values.
+     * 
+     * @param headers HTTP headers (overrides existing values)
+     */
     getResponse(headers?:Record<string, string>):Response {
         if (!headers) {
             headers = this.headers
