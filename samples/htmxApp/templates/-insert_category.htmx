@@ -1,5 +1,5 @@
 <form id="OINOApiRow-categories-insert" class="bg-primary-subtle"
-    hx-post="http://localhost:3002/categories" 
+    hx-post="http://localhost:8080/categories" 
     hx-target="this" 
     hx-swap="outerHTML"
 >
@@ -22,7 +22,7 @@
             <br/>
             <input class="btn btn-outline-success" type="submit" value="Create API">
             <button class="btn btn-outline-secondary" 
-                hx-get="http://localhost:3002///insert_category_cancel" 
+                hx-get="http://localhost:8080///insert_category_cancel" 
                 hx-target="#OINOApiRow-categories-insert" 
                 hx-swap="outerHTML"
             >

@@ -1,7 +1,7 @@
 <tr id="OINOApiRow-categories-###_OINOID_###">
 <td colspan="100%" class="">
     <form class="container p-0"
-        hx-put="http://localhost:3002/categories/###_OINOID_###" 
+        hx-put="http://localhost:8080/categories/###_OINOID_###" 
         hx-target="#OINOApiRow-categories-###_OINOID_###" 
         hx-swap="outerHTML"
     >
@@ -23,7 +23,7 @@
         <div class="col">
             <input class="btn btn-outline-primary" type="submit" value="Update API">
             <button class="btn btn-outline-secondary" 
-                hx-get="http://localhost:3002/categories/###_OINOID_###" 
+                hx-get="http://localhost:8080/categories/###_OINOID_###" 
                 hx-target="#OINOApiRow-categories-###_OINOID_###" 
                 hx-swap="outerHTML"
             >
