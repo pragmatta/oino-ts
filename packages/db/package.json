@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/db",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "OINO TS library package for publishing an SQL database tables as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -20,7 +20,7 @@
   "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@types/node": "^20.14.10",
-    "@oino-ts/types": "0.0.11"
+    "@oino-ts/types": "0.0.12"
   },
   "devDependencies": {
     "@types/bun": "latest",
