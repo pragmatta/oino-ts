@@ -248,8 +248,10 @@ export class OINONumberDataField extends OINODbDataField {
      *
      */
     deserializeCell(value: string|null|undefined): OINODataCell {
-        if (!value) { 
-            return 0
+        if (value === undefined) { 
+            return undefined
+        } else if (value == "") {
+            return null
         } else {
             return Number.parseFloat(value)
         }
