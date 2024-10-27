@@ -7,6 +7,9 @@ export class OINOHtmlTemplate {
     /** HTML template string */
 	template: string;
 
+    /** Cache modified value for template */
+	modified: number;
+
     /** Cache expiration value for template */
 	expires: number;
 
@@ -14,16 +17,12 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from a key-value-pair.
      *
      * @param template template string
-     * @param expires cache expiration value
      * 
      */
-	constructor (template:string, expires?: number) {
+	constructor (template:string) {
 		this.template = template
-		if (expires) {
-			this.expires = expires
-		} else {
-			this.expires = -1
-		}
+		this.modified = 0
+		this.expires = 0
 	}
 
     /**
@@ -43,6 +42,12 @@ export class OINOHtmlTemplate {
     renderFromKeyValue(key:string, value:string):OINOHttpResult {
         const html:string = this.template.replaceAll('###' + key + '###', OINOStr.encode(value, OINOContentType.html))
         const result:OINOHttpResult = new OINOHttpResult(html) 
+		if (this.expires >= 1) {
+			result.expires = Math.round(this.expires)
+		}
+		if (this.modified >= 1) {
+			result.lastModified = this.modified
+		}
         return result
     }
 
@@ -65,7 +70,10 @@ export class OINOHtmlTemplate {
         html = html.replace(/###[^#]*###/g, "")
         const result:OINOHttpResult = new OINOHttpResult(html) 
 		if (this.expires >= 1) {
-			result.headers["Expires"] = Math.round(this.expires).toString()
+			result.expires = Math.round(this.expires)
+		}
+		if (this.modified >= 1) {
+			result.lastModified = this.modified
 		}
         return result
     }
@@ -105,6 +113,12 @@ export class OINOHtmlTemplate {
         }
         html = html.replace(/###[^#]*###/g, "")
         const http_result:OINOHttpResult = new OINOHttpResult(html) 
+		if (this.expires >= 1) {
+			http_result.expires = Math.round(this.expires)
+		}
+		if (this.modified >= 1) {
+			http_result.lastModified = this.modified
+		}
         return http_result
     }
 };
