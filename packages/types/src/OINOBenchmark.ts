@@ -55,6 +55,7 @@ export class OINOBenchmark {
      * Complete benchmark timing
      * 
      * @param name of the benchmark
+     * @param category optional subcategory of the benchmark
      */
     static end(name:string, category?:string):number {
         let result:number = 0
@@ -91,7 +92,6 @@ export class OINOBenchmark {
     /**
      * Get all benchmark data.
      * 
-     * @param name of the benchmark
      */
     static getAll():number {
         let result:any = {}

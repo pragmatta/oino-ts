@@ -78,7 +78,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
             if (modified_index >= 0) {
-                last_modified = Math.max(last_modified, new Date(row[modified_index]).getTime())
+                last_modified = Math.max(last_modified, new Date(row[modified_index] as Date).getTime())
             }
             let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
             let primary_key_values:string[] = []

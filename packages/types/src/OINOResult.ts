@@ -166,7 +166,7 @@ export class OINOHttpResult extends OINOResult {
     private _etag:string
 
     /** HTTP body data */
-    body: string
+    readonly body: string
 
     /** HTTP cache expiration value */
     expires: number
@@ -188,6 +188,10 @@ export class OINOHttpResult extends OINOResult {
         this._etag = ""
     }
 
+    /**
+     * Get the ETag value for the body opportunistically, i.e. don't calculate until requested and reuse value.
+     * 
+     */
     getEtag():string {
         if (this._etag == "") {
             const hash:Hash = createHash("sha256")
