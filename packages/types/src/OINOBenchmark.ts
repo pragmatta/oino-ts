@@ -55,13 +55,50 @@ export class OINOBenchmark {
      * Complete benchmark timing
      * 
      * @param name of the benchmark
+     * @param category optional subcategory of the benchmark
      */
-    static end(name:string):number {
+    static end(name:string, category?:string):number {
         let result:number = 0
         if (this._benchmarkEnabled[name]) {
+            const duration = performance.now() - this._benchmarkStart[name]
             this._benchmarkCount[name] += 1
-            this._benchmarkData[name] += performance.now() - this._benchmarkStart[name]
+            this._benchmarkData[name] += duration
+            if (category) {
+                const category_name = name + "." + category
+                if (this._benchmarkCount[category_name] == undefined) {
+                    this._benchmarkCount[category_name] = 0
+                    this._benchmarkData[category_name] = 0
+                }
+                this._benchmarkCount[category_name] += 1
+                this._benchmarkData[category_name] += duration
+            }
             result = this._benchmarkData[name] / this._benchmarkCount[name]
+        }
+        return result
+    }
+
+    /**
+     * Get given benchmark data.
+     * 
+     * @param name of the benchmark
+     */
+    static get(name:string):number {
+        if (this._benchmarkEnabled[name]) {
+            return this._benchmarkData[name] / this._benchmarkCount[name]
+        }
+        return -1
+    }
+
+    /**
+     * Get all benchmark data.
+     * 
+     */
+    static getAll():number {
+        let result:any = {}
+        for (const name in this._benchmarkData) {
+            if (this._benchmarkCount[name] > 0) {
+                result[name] = this._benchmarkData[name] / this._benchmarkCount[name]
+            }
         }
         return result
     }

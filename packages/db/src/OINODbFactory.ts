@@ -106,6 +106,14 @@ export class OINODbFactory {
         if (result.responseType === undefined) {
             result.responseType = OINOContentType.json
         }
+        const last_modified = request.headers.get("if-modified-since")
+        if (last_modified) {
+            result.lastModified =  new Date(last_modified).getTime()
+        }
+        const etags = request.headers.get("if-none-match")?.split(',').map(e => e.trim())
+        if (etags) {
+            result.etags = etags
+        }
 
         // OINOLog.debug("createParamsFromRequest", {params:result})
         return result

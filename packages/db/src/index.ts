@@ -39,7 +39,9 @@ export type OINODbApiParams = {
     /** Set (minimum) length (12-32 chars) of the hashids */
     hashidLength?:number,
     /** Make hashids static per row/table */
-    hashidRandomIds?: boolean
+    hashidRandomIds?: boolean,
+    /** Name of field that has the modified field */
+    cacheModifiedField?:string
 }
 
 /** 
@@ -98,6 +100,10 @@ export type OINODbApiRequestParams = {
     responseType?:OINOContentType
     /** Multipart boundary token */
     multipartBoundary?:string
+    /** Request last-modified value */
+    lastModified?:number
+    /** Request etag values */
+    etags?:string[]
     /** SQL parameters */
     sqlParams?:OINODbSqlParams
 }

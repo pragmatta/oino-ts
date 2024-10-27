@@ -4,6 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { createHash, Hash } from "node:crypto";
 import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX } from ".";
 
 /**
@@ -162,26 +163,41 @@ export class OINOResult {
  * Specialized result for HTTP responses.
  */
 export class OINOHttpResult extends OINOResult {
-    /** HTTP body data */
-    body: string
+    private _etag:string
 
-    /** HTTP header values */
-    headers: Record<string, string>
+    /** HTTP body data */
+    readonly body: string
+
+    /** HTTP cache expiration value */
+    expires: number
+
+    /** HTTP cache last-modified value */
+    lastModified: number
 
     /**
      * Constructor for a `OINOHttpResult` 
      * 
      * @param body HTTP body
-     * @param headers HTTP headers
+     * 
      */
-    constructor(body:string, headers?:Record<string, string>) {
+    constructor(body:string) {
         super()
         this.body = body
-        if (headers) {
-            this.headers = headers
-        } else {
-            this.headers = {}
+        this.expires = 0
+        this.lastModified = 0
+        this._etag = ""
+    }
+
+    /**
+     * Get the ETag value for the body opportunistically, i.e. don't calculate until requested and reuse value.
+     * 
+     */
+    getEtag():string {
+        if (this._etag == "") {
+            const hash:Hash = createHash("sha256")
+            this._etag = hash.update(this.body).digest("hex")
         }
+        return this._etag
     }
 
     /**
@@ -190,11 +206,18 @@ export class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getResponse(headers?:Record<string, string>):Response {
-        if (!headers) {
-            headers = this.headers
+        const result:Response = new Response(this.body, {status:this.statusCode, statusText: this.statusMessage, headers: headers})
+        result.headers.set('Content-Length', this.body.length.toString())
+        if (this.lastModified > 0) {
+            result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString())
         }
-        headers['Content-Length'] = this.body.length.toString()
-        const result = new Response(this.body, {status:this.statusCode, statusText: this.statusMessage, headers: headers})
+        if (this.expires >= 0) {
+            result.headers.set('Expires', Math.round(this.expires).toString())
+            if (this.expires == 0) {
+                result.headers.set('Pragma', 'no-cache')
+            }
+        }
+        result.headers.set("ETag", this.getEtag())
         return result
     }
 

@@ -71,8 +71,15 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
         let html:string = ""
         const dataset:OINODbDataSet|undefined = modelset.dataset
         const datamodel:OINODbDataModel = modelset.datamodel
+        const api:OINODbApi = modelset.datamodel.api
+        const modified_index = datamodel.findFieldIndexByName(api.params.cacheModifiedField || "")
+        let last_modified:number = this.modified
+        
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
+            if (modified_index >= 0) {
+                last_modified = Math.max(last_modified, new Date(row[modified_index] as Date).getTime())
+            }
             let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
             let primary_key_values:string[] = []
             let html_row:string = this.template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
@@ -85,6 +92,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
                     }
                     primary_key_values.push(value || "")
                 }
+                // OINOLog.debug("renderFromDbData replace field value", {field:f.name, value:value }) 
                 html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
             }
             html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
@@ -92,6 +100,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             dataset.next()
         }
         const result:OINOHttpResult = new OINOHttpResult(html)
+        result.lastModified = last_modified
         return result
     }
 
