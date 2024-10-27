@@ -143,7 +143,7 @@ export class OINODbApi {
         this.params = params
         this.datamodel = new OINODbDataModel(this)
         if (this.params.hashidKey) {
-            this.hashid = new OINOHashid(this.params.hashidKey, this.db.name, this.params.hashidLength, this.params.hashidRandomIds)
+            this.hashid = new OINOHashid(this.params.hashidKey, this.db.name, this.params.hashidLength, this.params.hashidStaticIds)
         } else {
             this.hashid = null
         }

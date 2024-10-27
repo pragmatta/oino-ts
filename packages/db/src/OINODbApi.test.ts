@@ -192,7 +192,7 @@ const apis:OINOTestApiParams[] = [
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
     },
     {
-        apiParams: { tableName: "Employees", hashidKey: "12345678901234567890123456789012" },
+        apiParams: { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidStaticIds:true },
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: OINODbSqlOrder.parse("LastName asc") }
         },

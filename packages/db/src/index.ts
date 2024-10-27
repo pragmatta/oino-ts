@@ -39,7 +39,7 @@ export type OINODbApiParams = {
     /** Set (minimum) length (12-32 chars) of the hashids */
     hashidLength?:number,
     /** Make hashids static per row/table */
-    hashidRandomIds?: boolean,
+    hashidStaticIds?: boolean,
     /** Name of field that has the modified field */
     cacheModifiedField?:string
 }
