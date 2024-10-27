@@ -68,6 +68,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
      * 
      */
     renderFromDbData(modelset:OINODbModelSet):OINOHttpResult {
+        OINOBenchmark.start("OINOHtmlTemplate", "renderFromDbData")
         let html:string = ""
         const dataset:OINODbDataSet|undefined = modelset.dataset
         const datamodel:OINODbDataModel = modelset.datamodel
@@ -101,6 +102,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
         }
         const result:OINOHttpResult = new OINOHttpResult(html)
         result.lastModified = last_modified
+        OINOBenchmark.end("OINOHtmlTemplate", "renderFromDbData")
         return result
     }
 
@@ -182,7 +184,6 @@ export class OINODbApi {
     }
 
     private async _doGet(result:OINODbApiResult, id:string, params:OINODbApiRequestParams):Promise<void> {
-        OINOBenchmark.start("doGet")
         const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams || {})
         // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
         try {
@@ -198,11 +199,9 @@ export class OINODbApi {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet")
             result.addDebug("OINO GET SQL [" + sql + "]", "DoGet")
         }
-        OINOBenchmark.end("doGet")
     }
     
     private async _doPost(result:OINODbApiResult, rows:OINODataRow[]):Promise<void> {
-        OINOBenchmark.start("doPost")
         let sql:string = "" 
         try {
             let i:number = 0
@@ -232,11 +231,9 @@ export class OINODbApi {
             result.setError(500, "Unhandled exception in doPost: " + e.message, "DoPost")
             result.addDebug("OINO POST SQL [" + sql + "]", "DoPost")
         }
-        OINOBenchmark.end("doPost")
     }
 
     private async _doPut(result:OINODbApiResult, id:string, row:OINODataRow):Promise<void> {
-        OINOBenchmark.start("doPut")
         let sql:string = ""
         try {
             this._validateRowValues(result, row, false)
@@ -255,11 +252,9 @@ export class OINODbApi {
             result.setError(500, "Unhandled exception: " + e.message, "DoPut")
             result.addDebug("OINO POST SQL [" + sql + "]", "DoPut")
         }
-        OINOBenchmark.end("doPut")
     }
 
     private async _doDelete(result:OINODbApiResult, id:string):Promise<void> {
-        OINOBenchmark.start("doDelete")
         let sql:string = ""
         try {
             sql = this.datamodel.printSqlDelete(id)
@@ -275,7 +270,6 @@ export class OINODbApi {
             result.setError(500, "Unhandled exception: " + e.message, "DoDelete")
             result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete")
         }
-        OINOBenchmark.end("doDelete")
     }
 
     /**
@@ -289,7 +283,7 @@ export class OINODbApi {
      *
      */
     async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
-        OINOBenchmark.start("doRequest")
+        OINOBenchmark.start("OINODbApi", "doRequest")
         // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
         let result:OINODbApiResult = new OINODbApiResult(params)
         let rows:OINODataRow[] = []
@@ -354,7 +348,7 @@ export class OINODbApi {
         } else {
             result.setError(405, "Unsupported HTTP method '" + method + "'", "DoRequest")
         }
-        OINOBenchmark.end("doRequest")
+        OINOBenchmark.end("OINODbApi", "doRequest", method)
         return result
     }
 }

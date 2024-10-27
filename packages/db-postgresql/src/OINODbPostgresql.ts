@@ -257,7 +257,7 @@ WHERE table_name = `
      *
      */
     async sqlSelect(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.start("sqlSelect")
+        OINOBenchmark.start("OINODb", "sqlSelect")
         let result:OINODbDataSet
         try {
             const rows:OINODataRow[] = await this._query(sql)
@@ -267,7 +267,7 @@ WHERE table_name = `
         } catch (e:any) {
             result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"])
         }
-        OINOBenchmark.end("sqlSelect")
+        OINOBenchmark.end("OINODb", "sqlSelect")
         return result
     }
 
@@ -278,7 +278,7 @@ WHERE table_name = `
      *
      */
     async sqlExec(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.start("sqlExec")
+        OINOBenchmark.start("OINODb", "sqlExec")
         let result:OINODbDataSet
         try {
             const rows:OINODataRow[] = await this._exec(sql)
@@ -288,7 +288,7 @@ WHERE table_name = `
         } catch (e:any) {
             result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
         }
-        OINOBenchmark.end("sqlExec")
+        OINOBenchmark.end("OINODb", "sqlExec")
         return result
     }
 

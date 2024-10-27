@@ -27,22 +27,24 @@ export class OINOBenchmark {
     /**
      *  Set benchmark names that are enabled.
      *
-     *  @param names array of those benchmarks that are enabled 
+     *  @param module array of those benchmarks that are enabled 
      */
-    static setEnabled(names:string[]):void {
+    static setEnabled(module:string[]):void {
         this._benchmarkEnabled = {}
-        names.forEach(name => {
-            this._benchmarkEnabled[name] = true        
+        module.forEach(module_name => {
+            this._benchmarkEnabled[module_name] = true        
         });
     }
 
     /**
      * Start benchmark timing.
      *
-     * @param name of the benchmark
+     * @param module of the benchmark
+     * @param method of the benchmark
      */
-    static start(name:string):void {
-        if (this._benchmarkEnabled[name]) {
+    static start(module:string, method:string):void {
+        const name:string = module + "." + method
+        if (this._benchmarkEnabled[module]) {
             if (this._benchmarkCount[name] == undefined) {
                 this._benchmarkCount[name] = 0
                 this._benchmarkData[name] = 0
@@ -54,12 +56,14 @@ export class OINOBenchmark {
     /**
      * Complete benchmark timing
      * 
-     * @param name of the benchmark
+     * @param module of the benchmark
+     * @param method of the benchmark
      * @param category optional subcategory of the benchmark
      */
-    static end(name:string, category?:string):number {
+    static end(module:string, method:string, category?:string):number {
+        const name:string = module + "." + method
         let result:number = 0
-        if (this._benchmarkEnabled[name]) {
+        if (this._benchmarkEnabled[module]) {
             const duration = performance.now() - this._benchmarkStart[name]
             this._benchmarkCount[name] += 1
             this._benchmarkData[name] += duration
@@ -80,11 +84,14 @@ export class OINOBenchmark {
     /**
      * Get given benchmark data.
      * 
-     * @param name of the benchmark
+     * @param module of the benchmark
+     * @param method of the benchmark
+     * @param category optional subcategory of the benchmark
      */
-    static get(name:string):number {
-        if (this._benchmarkEnabled[name]) {
-            return this._benchmarkData[name] / this._benchmarkCount[name]
+    static get(module:string, method:string):number {
+        const name:string = module + "." + method
+        if (this._benchmarkEnabled[module]) {
+            return this._benchmarkData[module] / this._benchmarkCount[module]
         }
         return -1
     }
