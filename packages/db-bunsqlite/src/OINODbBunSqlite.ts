@@ -160,7 +160,7 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async sqlSelect(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.start("sqlSelect")
+        OINOBenchmark.start("OINODb", "sqlSelect")
         let result:OINODbDataSet
         try {
             result = new OINOBunSqliteDataset(this._db?.query(sql).values(), [])
@@ -169,7 +169,7 @@ export class OINODbBunSqlite extends OINODb {
         } catch (e:any) {
             result = new OINOBunSqliteDataset([[]], ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message])
         }
-        OINOBenchmark.end("sqlSelect")
+        OINOBenchmark.end("OINODb", "sqlSelect")
         return Promise.resolve(result)
     }
 
@@ -180,7 +180,7 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async sqlExec(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.start("sqlExec")
+        OINOBenchmark.start("OINODb", "sqlExec")
         let result:OINODbDataSet
         try {
             this._db?.exec(sql)
@@ -189,7 +189,7 @@ export class OINODbBunSqlite extends OINODb {
         } catch (e:any) {
             result = new OINOBunSqliteDataset([[]], [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"])
         }
-        OINOBenchmark.end("sqlExec")
+        OINOBenchmark.end("OINODb", "sqlExec")
         return Promise.resolve(result)
     }
 

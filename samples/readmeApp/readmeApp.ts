@@ -14,7 +14,7 @@ const response_headers:HeadersInit = {
 
 const db:OINODb = await OINODbFactory.createDb( { database: "northwind", type: "OINODbBunSqlite", url: "file://./northwind.sqlite" } )
 const apis:Record<string, OINODbApi> = {
-    "Employees": await OINODbFactory.createApi(db, { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidLength:16, hashidRandomIds:true }),
+    "Employees": await OINODbFactory.createApi(db, { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidLength:16 }),
     "Orders": await OINODbFactory.createApi(db, { tableName: "Orders" }),
     "OrderDetails": await OINODbFactory.createApi(db, { tableName: "OrderDetails" }),
     "Products": await OINODbFactory.createApi(db, { tableName: "Products" }),
