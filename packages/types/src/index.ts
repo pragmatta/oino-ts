@@ -13,7 +13,9 @@ export const OINO_INFO_PREFIX = "OINO INFO"
 /** OINO debug message prefix */
 export const OINO_DEBUG_PREFIX = "OINO DEBUG"
 
-/** Supported content format mime-types */
+/** 
+ * Supported content format mime-types 
+ */
 export enum OINOContentType { 
     /** JSON encoded data */
     json='application/json', 

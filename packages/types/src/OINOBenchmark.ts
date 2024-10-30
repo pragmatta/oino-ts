@@ -86,7 +86,7 @@ export class OINOBenchmark {
      * 
      * @param module of the benchmark
      * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
+     * 
      */
     static get(module:string, method:string):number {
         const name:string = module + "." + method
