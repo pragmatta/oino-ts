@@ -41,7 +41,7 @@ export class OINODbApiResult extends OINOResult {
      * @param headers Headers to include in the response
      * 
      */
-    getResponse(headers:HeadersInit = {}):Response {
+    getResponse(headers:Record<string, string> = {}):Response {
         let response:Response|null = null
         if (this.success && this.data) {
             response = new Response(this.data.writeString(this.params.responseType), {status:this.statusCode, statusText: this.statusMessage, headers: headers })
