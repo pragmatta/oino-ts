@@ -236,9 +236,9 @@ export class OINODbDataModel {
         const order_sql = params.order?.toSql(this) || ""
         const limit_sql = params.limit?.toSql(this) || ""
         // OINOLog.debug("OINODbDataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
-        if ((id != "") && (filter_sql != ""))  {
+        if ((id != null) && (id != "") && (filter_sql != ""))  {
             result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
-        } else if (id != "") {
+        } else if ((id != null) && (id != "")) {
             result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id);
         } else if (filter_sql != "") {
             result += "\nWHERE " + filter_sql;
