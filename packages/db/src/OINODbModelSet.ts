@@ -271,13 +271,16 @@ export class OINODbModelSet {
      * @param fieldName name of the field
      * 
      */
-    getValueByFieldName(fieldName:string):OINODataCell {
+    getValueByFieldName(fieldName:string, serialize:boolean = false):OINODataCell {
         let result:OINODataCell = undefined
         if (!this.dataset.isEof()) {
             const current_row:OINODataRow = this.dataset.getRow()
             const field_index:number = this.datamodel.findFieldIndexByName(fieldName)
             if (field_index >= 0) {
                 result = current_row[field_index]
+                if (serialize) {
+                    result = this.datamodel.fields[field_index].serializeCell(result)            
+                }
             }
         }
         return result
