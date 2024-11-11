@@ -75,16 +75,19 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
         const api:OINODbApi = modelset.datamodel.api
         const modified_index = datamodel.findFieldIndexByName(api.params.cacheModifiedField || "")
         let last_modified:number = this.modified
+        // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
         
         while (!dataset.isEof()) {
             const row:OINODataRow = dataset.getRow()
             if (modified_index >= 0) {
                 last_modified = Math.max(last_modified, new Date(row[modified_index] as Date).getTime())
+                // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
             }
             let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
             let primary_key_values:string[] = []
-            let html_row:string = this.template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
-            html_row = this._renderProperties(html_row, overrideValues)
+            this.clearVariables()
+            this.setVariableFromValue(OINODbConfig.OINODB_ID_FIELD, "")
+            // let html_row:string = this.template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
             for (let i=0; i<datamodel.fields.length; i++) {
                 const f:OINODbDataField = datamodel.fields[i]
                 let value:string|null|undefined = f.serializeCell(row[i])
@@ -95,12 +98,15 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
                     primary_key_values.push(value || "")
                 }
                 // OINOLog.debug("renderFromDbData replace field value", {field:f.name, value:value }) 
-                html_row = this._renderKeyValue(html_row, f.name, value || "")
+                this.setVariableFromValue(f.name, value || "")
             }
-            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
-            html += html_row + "\r\n"
+            this.setVariableFromProperties(overrideValues)
+            this.setVariableFromValue(OINODbConfig.OINODB_ID_FIELD, OINODbConfig.printOINOId(primary_key_values))
+            // html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
+            html += this._renderHtml() + "\r\n"
             dataset.next()
         }
+        // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
         this.lastModified = last_modified
         const result:OINOHttpResult = this._createHttpResult(html)
         OINOBenchmark.end("OINOHtmlTemplate", "renderFromDbData")
