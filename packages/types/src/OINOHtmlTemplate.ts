@@ -4,6 +4,9 @@ import { OINOStr, OINOContentType, OINOResult, OINOHttpResult, OINO_ERROR_PREFIX
  * Class for rendering HTML from data. 
  */
 export class OINOHtmlTemplate {
+    private _tag:string
+    private _tagCleanRegex:RegExp 
+    private _variables:Record<string, string> = {}
     /** HTML template string */
 	template: string;
 
@@ -17,12 +20,15 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from a key-value-pair.
      *
      * @param template template string
+     * @param tag tag to identify variables in template
      * 
      */
-	constructor (template:string) {
+	constructor (template:string, tag:string = "###") {
 		this.template = template
 		this.modified = 0
 		this.expires = 0
+        this._tag = tag
+        this._tagCleanRegex = new RegExp(tag + ".*" + tag, "g")
 	}
 
     /**
@@ -32,23 +38,93 @@ export class OINOHtmlTemplate {
 		return this.template == ""
 	}
 
+    protected _createHttpResult(html:string, removeUnusedTags:boolean):OINOHttpResult {
+        if (removeUnusedTags) {
+            html = html.replace(this._tagCleanRegex, "")
+        }
+        const result:OINOHttpResult = new OINOHttpResult(html)
+        if (this.expires >= 1) {
+            result.expires = Math.round(this.expires)
+        }
+        if (this.modified >= 1) {
+            result.lastModified = this.modified
+        }
+        return result
+    }
+
+    protected _renderHtml():string {
+        let html:string = this.template
+        for (let key in this._variables) {
+            const value = this._variables[key]
+            html = html.replaceAll(this._tag + key + this._tag, value)
+        }
+        return html
+    }
+
+    /**
+     * Clear template variables.
+     *
+     */
+    clearVariables() {
+        this._variables = {}
+    }
+
+    /**
+     * Sets template variable from a key-value-pair.
+     *
+     * @param variable key
+     * @param value value
+     * @param escapeValue whether to escape value
+     * 
+     */
+    setVariableFromValue(variable:string, value:string, escapeValue:boolean = true) {
+        if (escapeValue) {
+            value = OINOStr.encode(value, OINOContentType.html)
+        }
+        this._variables[variable] = value
+    }
+
+    /**
+     * Sets template variables from object properties.
+     *
+     * @param object any object
+     * @param escapeValue whether to escape value
+     * 
+     */
+    setVariableFromProperties(object:any, escapeValue:boolean = true) {
+        if (object) {
+            for (let key in object) {
+                if (escapeValue) {
+                    this._variables[key] = OINOStr.encode(object[key], OINOContentType.html)
+                } else {
+                    this._variables[key] = object[key]
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates HTML Response from set variables.
+     *
+     * @param removeUnusedTags whether to remove unused tags
+     * 
+     */
+    render(removeUnusedTags:boolean = true):OINOHttpResult {
+        return this._createHttpResult(this._renderHtml(), removeUnusedTags)
+    }
+
     /**
      * Creates HTML Response from a key-value-pair.
      *
      * @param key key
      * @param value value
+     * @param removeUnusedTags whether to remove unused tags
      * 
      */
-    renderFromKeyValue(key:string, value:string):OINOHttpResult {
+    renderFromKeyValue(key:string, value:string, removeUnusedTags:boolean = true):OINOHttpResult {
         OINOBenchmark.start("OINOHtmlTemplate", "renderFromKeyValue")
-        const html:string = this.template.replaceAll('###' + key + '###', OINOStr.encode(value, OINOContentType.html))
-        const result:OINOHttpResult = new OINOHttpResult(html) 
-		if (this.expires >= 1) {
-			result.expires = Math.round(this.expires)
-		}
-		if (this.modified >= 1) {
-			result.lastModified = this.modified
-		}
+        this.setVariableFromValue(key, value)
+        const result:OINOHttpResult = this.render(removeUnusedTags)
         OINOBenchmark.end("OINOHtmlTemplate", "renderFromKeyValue")
         return result
     }
@@ -57,27 +133,13 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from object properties.
      *
      * @param object object
+     * @param removeUnusedTags whether to remove unused tags
      * 
      */
-    renderFromObject(object:any):OINOHttpResult {
+    renderFromObject(object:any, removeUnusedTags:boolean = true):OINOHttpResult {
         OINOBenchmark.start("OINOHtmlTemplate", "renderFromObject")
-        let html:string = this.template
-        if (object) {
-            for (let key in object) {
-                const value = object[key]
-                if (value) {
-                    html = html.replaceAll('###' + key + '###', OINOStr.encode(value.toString(), OINOContentType.html))
-                }
-            }
-        }
-        html = html.replace(/###[^#]*###/g, "")
-        const result:OINOHttpResult = new OINOHttpResult(html) 
-		if (this.expires >= 1) {
-			result.expires = Math.round(this.expires)
-		}
-		if (this.modified >= 1) {
-			result.lastModified = this.modified
-		}
+        this.setVariableFromProperties(object)
+        const result:OINOHttpResult = this.render(removeUnusedTags)
         OINOBenchmark.end("OINOHtmlTemplate", "renderFromObject")
         return result
     }
@@ -86,44 +148,38 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from API result.
      *
      * @param result OINOResult-object
+     * @param removeUnusedTags whether to remove unused tags
+     * @param messageSeparator HTML separator for messages
      * @param includeErrorMessages include debug messages in result
      * @param includeWarningMessages include debug messages in result
      * @param includeInfoMessages include debug messages in result
      * @param includeDebugMessages include debug messages in result
      * 
      */
-    renderFromResult(result:OINOResult, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
+    renderFromResult(result:OINOResult, removeUnusedTags:boolean=true, messageSeparator:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
         OINOBenchmark.start("OINOHtmlTemplate", "renderFromResult")
-        let html:string = this.template
-        html = html.replaceAll('###statusCode###', OINOStr.encode(result.statusCode.toString(), OINOContentType.html))
-        html = html.replaceAll('###statusMessage###', OINOStr.encode(result.statusMessage.toString(), OINOContentType.html))
-        let messages = ""
+        this.setVariableFromValue("statusCode", result.statusCode.toString())
+        this.setVariableFromValue("statusMessage", result.statusMessage.toString())
+        let messages:string[] = []
         for (let i:number = 0; i<result.messages.length; i++) {
             if (includeErrorMessages && result.messages[i].startsWith(OINO_ERROR_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
+                messages.push(OINOStr.encode(result.messages[i], OINOContentType.html))
             } 
             if (includeWarningMessages && result.messages[i].startsWith(OINO_WARNING_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
+                messages.push(OINOStr.encode(result.messages[i], OINOContentType.html))
             } 
             if (includeInfoMessages && result.messages[i].startsWith(OINO_INFO_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
+                messages.push(OINOStr.encode(result.messages[i], OINOContentType.html))
             } 
             if (includeDebugMessages && result.messages[i].startsWith(OINO_DEBUG_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
+                messages.push(OINOStr.encode(result.messages[i], OINOContentType.html))
             } 
             
         }
-        if (messages) {
-            html = html.replaceAll('###messages###', "<ul>" + messages + "</ul>")
-        }
-        html = html.replace(/###[^#]*###/g, "")
-        const http_result:OINOHttpResult = new OINOHttpResult(html) 
-		if (this.expires >= 1) {
-			http_result.expires = Math.round(this.expires)
-		}
-		if (this.modified >= 1) {
-			http_result.lastModified = this.modified
-		}
+        if (messages.length > 0) {
+            this.setVariableFromValue("messages", messages.join(messageSeparator), false) // messages have been escaped already
+        }        
+        const http_result:OINOHttpResult = this.render(removeUnusedTags)
         OINOBenchmark.end("OINOHtmlTemplate", "renderFromResult")
         return http_result
     }
