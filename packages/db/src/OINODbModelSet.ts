@@ -269,6 +269,7 @@ export class OINODbModelSet {
      * field not found or value does not exist.
      * 
      * @param fieldName name of the field
+     * @param serialize serialize the value
      * 
      */
     getValueByFieldName(fieldName:string, serialize:boolean = false):OINODataCell {

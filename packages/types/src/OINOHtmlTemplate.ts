@@ -20,6 +20,7 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from a key-value-pair.
      *
      * @param template template string
+     * @param tag tag to identify variables in template
      * 
      */
 	constructor (template:string, tag:string = "###") {
@@ -37,7 +38,7 @@ export class OINOHtmlTemplate {
 		return this.template == ""
 	}
 
-    private _createHttpResult(html:string, removeUnusedTags:boolean):OINOHttpResult {
+    protected _createHttpResult(html:string, removeUnusedTags:boolean):OINOHttpResult {
         if (removeUnusedTags) {
             html = html.replace(this._tagCleanRegex, "")
         }
@@ -51,7 +52,7 @@ export class OINOHtmlTemplate {
         return result
     }
 
-    _renderHtml():string {
+    protected _renderHtml():string {
         let html:string = this.template
         for (let key in this._variables) {
             const value = this._variables[key]
@@ -71,21 +72,23 @@ export class OINOHtmlTemplate {
     /**
      * Sets template variable from a key-value-pair.
      *
-     * @param key key
+     * @param variable key
      * @param value value
+     * @param escapeValue whether to escape value
      * 
      */
-    setVariableFromValue(key:string, value:string, escapeValue:boolean = true) {
+    setVariableFromValue(variable:string, value:string, escapeValue:boolean = true) {
         if (escapeValue) {
             value = OINOStr.encode(value, OINOContentType.html)
         }
-        this._variables[key] = value
+        this._variables[variable] = value
     }
 
     /**
      * Sets template variables from object properties.
      *
      * @param object any object
+     * @param escapeValue whether to escape value
      * 
      */
     setVariableFromProperties(object:any, escapeValue:boolean = true) {
@@ -115,6 +118,7 @@ export class OINOHtmlTemplate {
      *
      * @param key key
      * @param value value
+     * @param removeUnusedTags whether to remove unused tags
      * 
      */
     renderFromKeyValue(key:string, value:string, removeUnusedTags:boolean = true):OINOHttpResult {
@@ -129,6 +133,7 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from object properties.
      *
      * @param object object
+     * @param removeUnusedTags whether to remove unused tags
      * 
      */
     renderFromObject(object:any, removeUnusedTags:boolean = true):OINOHttpResult {
@@ -143,6 +148,8 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from API result.
      *
      * @param result OINOResult-object
+     * @param removeUnusedTags whether to remove unused tags
+     * @param messageSeparator HTML separator for messages
      * @param includeErrorMessages include debug messages in result
      * @param includeWarningMessages include debug messages in result
      * @param includeInfoMessages include debug messages in result
@@ -153,7 +160,7 @@ export class OINOHtmlTemplate {
         OINOBenchmark.start("OINOHtmlTemplate", "renderFromResult")
         this.setVariableFromValue("statusCode", result.statusCode.toString())
         this.setVariableFromValue("statusMessage", result.statusMessage.toString())
-        let messages = []
+        let messages:string[] = []
         for (let i:number = 0; i<result.messages.length; i++) {
             if (includeErrorMessages && result.messages[i].startsWith(OINO_ERROR_PREFIX)) {
                 messages.push(OINOStr.encode(result.messages[i], OINOContentType.html))

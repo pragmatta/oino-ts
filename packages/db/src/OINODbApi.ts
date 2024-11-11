@@ -65,6 +65,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
      * Creates HTML Response from API modelset.
      *
      * @param modelset OINO API dataset
+     * @param overrideValues values to override in the data
      * 
      */
     renderFromDbData(modelset:OINODbModelSet, overrideValues?:any):OINOHttpResult {
@@ -107,8 +108,8 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             dataset.next()
         }
         // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
-        this.lastModified = last_modified
-        const result:OINOHttpResult = this._createHttpResult(html)
+        this.modified = last_modified
+        const result:OINOHttpResult = this._createHttpResult(html, false)
         OINOBenchmark.end("OINOHtmlTemplate", "renderFromDbData")
         return result
     }
