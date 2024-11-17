@@ -1,6 +1,6 @@
 {
   "name": "OinoReadmeApp",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "scripts": {
     "dev": "/_GIT/oino-ts/update_src.cmd /_GIT/oino-ts/samples/readmeApp && bun run ./readmeApp.ts --watch",
     "app": "bun run ./readmeApp.ts"
