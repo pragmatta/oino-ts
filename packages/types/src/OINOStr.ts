@@ -109,7 +109,7 @@ export class OINOStr {
      * 
      * @param str string to decode
      */
-    static decodeJSON(str:string):string|null|undefined {
+    static decodeJSON(str:string):string {
         return str // JSON parsing using JS methods, no need to decode anything
     }
 
@@ -133,7 +133,7 @@ export class OINOStr {
      * 
      * @param str string to decode
      */
-    static decodeCSV(str:string):string|null|undefined {
+    static decodeCSV(str:string):string {
         return str.replaceAll("\"\"", "\"")
     }
     
@@ -157,7 +157,7 @@ export class OINOStr {
      * 
      * @param str string to decode
      */
-    static decodeFormdata(str:string):string|null|undefined {
+    static decodeFormdata(str:string):string {
         return str
     }
     /**
@@ -180,7 +180,7 @@ export class OINOStr {
      * 
      * @param str string to decode
      */
-    static decodeUrlencode(str:string):string|null|undefined {
+    static decodeUrlencode(str:string):string {
         return decodeURIComponent(str)
     }
 
@@ -204,7 +204,7 @@ export class OINOStr {
      * 
      * @param str string to encode
      */
-    static decodeHtml(str:string):string|null|undefined {
+    static decodeHtml(str:string):string {
         return str.replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#039;', "'")
     }
     /**
@@ -214,7 +214,7 @@ export class OINOStr {
      * @param contentType content type for serialization
      * 
      */
-    static decode(str:string, contentType:OINOContentType):string|null|undefined {
+    static decode(str:string, contentType:OINOContentType):string {
         if (contentType == OINOContentType.csv) {
             return this.decodeCSV(str)
         } else if (contentType == OINOContentType.json) {
