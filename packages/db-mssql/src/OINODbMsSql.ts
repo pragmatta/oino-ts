@@ -313,7 +313,7 @@ export class OINODbMsSql extends OINODb {
         return result
     }
 
-    _getSchemaSql(dbName:string, tableName:string):string {
+    private _getSchemaSql(dbName:string, tableName:string):string {
         const sql =
 //      0              1              2            3                           4                    5                          6                       7                                                                                                                 8
 `SELECT C.COLUMN_NAME, C.IS_NULLABLE, C.DATA_TYPE, C.CHARACTER_MAXIMUM_LENGTH, C.NUMERIC_PRECISION, C.NUMERIC_PRECISION_RADIX, CONST.CONSTRAINT_TYPES, COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsIdentity') AS IS_AUTO_INCREMENT, COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsComputed') AS IS_COMPUTED
@@ -385,7 +385,7 @@ WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}';`
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }   
             }
-            res.next()
+            await res.next()
         }
         OINOLog.debug("OINODbMsSql.initializeDatasetModel:\n" + api.datamodel.printDebug("\n"))
         return Promise.resolve()

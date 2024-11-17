@@ -88,31 +88,6 @@ class OINOPostgresqlData extends OINODbDataSet {
  */
 export class OINODbPostgresql extends OINODb {
     
-    private static table_schema_sql:string =
-`SELECT 
-    col.column_name, 
-    col.data_type, 
-    col.character_maximum_length, 
-    col.is_nullable, 
-    pk.primary_key,
-    col.numeric_precision,
-    col.numeric_scale,
-    col.column_default
-FROM information_schema.columns col
-LEFT JOIN LATERAL
-	(select kcu.column_name, 'YES' as primary_key
-	from 
-		information_schema.table_constraints tco,
-		information_schema.key_column_usage kcu 	 
-	where 
-		kcu.constraint_name = tco.constraint_name
-		and kcu.constraint_schema = tco.constraint_schema
-		and tco.table_name = col.table_name
-		and tco.constraint_type = 'PRIMARY KEY'
-	) pk on col.column_name = pk.column_name
-WHERE table_name = `
-    
-    // private _client:Client
     private _pool:Pool
 
     /**
@@ -308,6 +283,33 @@ WHERE table_name = `
         return result
     }
 
+    private _getSchemaSql(dbName:string, tableName:string):string {
+        const sql = 
+`SELECT 
+    col.column_name, 
+    col.data_type, 
+    col.character_maximum_length, 
+    col.is_nullable, 
+    pk.primary_key,
+    col.numeric_precision,
+    col.numeric_scale,
+    col.column_default
+FROM information_schema.columns col
+LEFT JOIN LATERAL
+    (select kcu.column_name, 'YES' as primary_key
+    from 
+        information_schema.table_constraints tco,
+        information_schema.key_column_usage kcu 	 
+    where 
+        kcu.constraint_name = tco.constraint_name
+        and kcu.constraint_schema = tco.constraint_schema
+        and tco.table_name = col.table_name
+        and tco.constraint_type = 'PRIMARY KEY'
+    ) pk on col.column_name = pk.column_name
+WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
+        return sql
+    }
+
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
@@ -317,7 +319,7 @@ WHERE table_name = `
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const res:OINODbDataSet = await this.sqlSelect(OINODbPostgresql.table_schema_sql + "'" + api.params.tableName.toLowerCase() + "';")
+        const res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()))
         // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: table description ", {res: res })
         while (!res.isEof()) {
             const row:OINODataRow = res.getRow()

@@ -92,7 +92,6 @@ export class OINODbMariadb extends OINODb {
     
     private static _fieldLengthRegex = /([^\(\)]+)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
     private static _exceptionMessageRegex = /\(([^\)]*)\) (.*)\nsql\:(.*)?/i
-    private static _tableSchemaSql:string = `SHOW COLUMNS from ` 
     
     private _pool:mariadb.Pool
 
@@ -330,6 +329,11 @@ export class OINODbMariadb extends OINODb {
         return result
     }
 
+    private _getSchemaSql(dbName:string, tableName:string):string {
+        const sql = `SHOW COLUMNS from ${dbName}.${tableName};`
+        return sql
+    }
+
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
@@ -339,7 +343,7 @@ export class OINODbMariadb extends OINODb {
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const res:OINODbDataSet = await this.sqlSelect(OINODbMariadb._tableSchemaSql + this._params.database + "." + api.params.tableName + ";")
+        const res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName))
         while (!res.isEof()) {
             const row:OINODataRow = res.getRow()
             // OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { description:row })
