@@ -41,25 +41,40 @@ class OINOMariadbData extends OINODbDataSet {
     private _currentRow: number
     private _eof: boolean
     
+    /**
+     * Is data set empty.
+     *
+     */
     isEmpty():boolean {
         return (this._rows.length == 0)
     }
 
-    // EOF means "there is no more content", i.e. either dataset is empty or we have moved beyond last line
+    /**
+     * Is there no more content, i.e. either dataset is empty or we have moved beyond last line
+     *
+     */
     isEof():boolean {
         return (this._eof)
     }
 
-    next():boolean {
+    /**
+     * Attempts to moves dataset to the next row, possibly waiting for more data to become available. Returns !isEof().
+     *
+     */
+    async next():Promise<boolean> {
         // OINOLog.debug("OINODbDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length-1) {
             this._currentRow = this._currentRow + 1
         } else {
             this._eof = true
         }
-        return !this._eof
+        return Promise.resolve(!this._eof)
     }
 
+    /**
+     * Gets current row of data.
+     *
+     */
     getRow(): OINODataRow {
         if ((this._currentRow >=0) && (this._currentRow < this._rows.length)) {
             return this._rows[this._currentRow]
@@ -375,7 +390,7 @@ export class OINODbMariadb extends OINODb {
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }   
             }
-            res.next()
+            await res.next()
         }
         OINOLog.debug("OINODbMariadb.initializeDatasetModel:\n" + api.datamodel.printDebug("\n"))
         return Promise.resolve()

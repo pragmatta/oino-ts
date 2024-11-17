@@ -41,17 +41,18 @@ export class OINODbApiResult extends OINOResult {
      * @param headers Headers to include in the response
      * 
      */
-    getResponse(headers:Record<string, string> = {}):Response {
+    async createResponseFromResult(headers:Record<string, string> = {}):Promise<Response> {
         let response:Response|null = null
         if (this.success && this.data) {
-            response = new Response(this.data.writeString(this.params.responseType), {status:this.statusCode, statusText: this.statusMessage, headers: headers })
+            const body = await this.data.writeString(this.params.responseType)
+            response = new Response(body, {status:this.statusCode, statusText: this.statusMessage, headers: headers })
         } else {
-            response = new Response(JSON.stringify(this), {status:this.statusCode, statusText: this.statusMessage, headers: headers })
+            response = new Response(JSON.stringify(this, null, 3), {status:this.statusCode, statusText: this.statusMessage, headers: headers })
         }
         for (let i=0; i<this.messages.length; i++) {
             response.headers.set('X-OINO-MESSAGE-' + i, this.messages[i])
         }         
-        return response
+        return Promise.resolve(response)
     }
 }
 
@@ -68,7 +69,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
      * @param overrideValues values to override in the data
      * 
      */
-    renderFromDbData(modelset:OINODbModelSet, overrideValues?:any):OINOHttpResult {
+    async renderFromDbData(modelset:OINODbModelSet, overrideValues?:any):Promise<OINOHttpResult> {
         OINOBenchmark.start("OINOHtmlTemplate", "renderFromDbData")
         let html:string = ""
         const dataset:OINODbDataSet|undefined = modelset.dataset
@@ -105,7 +106,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             this.setVariableFromValue(OINODbConfig.OINODB_ID_FIELD, OINODbConfig.printOINOId(primary_key_values))
             // html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
             html += this._renderHtml() + "\r\n"
-            dataset.next()
+            await dataset.next()
         }
         // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
         this.modified = last_modified
@@ -357,6 +358,6 @@ export class OINODbApi {
             result.setError(405, "Unsupported HTTP method '" + method + "'", "DoRequest")
         }
         OINOBenchmark.end("OINODbApi", "doRequest", method)
-        return result
+        return Promise.resolve(result)
     }
 }

@@ -45,10 +45,10 @@ export abstract class OINODbDataSet {
     abstract isEof(): boolean;
 
     /**
-     * Moves dataset to the next row, returns !isEof().
+     * Attempts to moves dataset to the next row, possibly waiting for more data to become available. Returns !isEof().
      *
      */
-    abstract next(): boolean;
+    abstract next(): Promise<boolean>;
 
     /**
      * Gets current row of data.
@@ -114,10 +114,7 @@ export class OINODbMemoryDataSet extends OINODbDataSet {
         }
     }
 
-
-
-
-   /**
+    /**
      * Is data set empty.
      *
      */
@@ -134,16 +131,16 @@ export class OINODbMemoryDataSet extends OINODbDataSet {
     }
 
     /**
-     * Moves dataset to the next row, returns !isEof().
+     * Attempts to moves dataset to the next row, possibly waiting for more data to become available. Returns !isEof().
      *
      */
-    next(): boolean {
+    async next(): Promise<boolean> {
         if (this._currentRow < this._rows.length - 1) {
             this._currentRow = this._currentRow + 1;
         } else {
             this._eof = true;
         }
-        return !this._eof;
+        return Promise.resolve(!this._eof);
     }
 
     /**

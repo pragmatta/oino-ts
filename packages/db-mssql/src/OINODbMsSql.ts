@@ -48,16 +48,27 @@ class OINOMsSqlData extends OINODbDataSet {
         }
     }
     
+    /**
+     * Is data set empty.
+     *
+     */
     isEmpty():boolean {
         return (this._rows.length == 0)
     }
 
-    // EOF means "there is no more content", i.e. either dataset is empty or we have moved beyond last line
+    /**
+     * Is there no more content, i.e. either dataset is empty or we have moved beyond last line
+     *
+     */
     isEof():boolean {
         return (this._eof)
     }
 
-    next():boolean {
+    /**
+     * Attempts to moves dataset to the next row, possibly waiting for more data to become available. Returns !isEof().
+     *
+     */
+    async next():Promise<boolean> {
         // OINOLog.debug("OINODbDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length-1) {
             this._currentRow = this._currentRow + 1
@@ -70,9 +81,13 @@ class OINOMsSqlData extends OINODbDataSet {
         } else {
             this._eof = true
         }
-        return !this._eof
+        return Promise.resolve(!this._eof)
     }
 
+    /**
+     * Gets current row of data.
+     *
+     */
     getRow(): OINODataRow {
         if ((this._currentRow >=0) && (this._currentRow < this._rows.length)) {
             return this._rows[this._currentRow]
