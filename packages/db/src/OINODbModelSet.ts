@@ -36,15 +36,16 @@ export class OINODbModelSet {
         this.errors = this.dataset.messages
     }
 
-    private _encodeAndHashFieldValue(field:OINODbDataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string) {
+    private _encodeAndHashFieldValue(field:OINODbDataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string):string {
+        let result:string
         if (field.fieldParams.isPrimaryKey) {
             if (value && (field instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed)
             }
             primaryKeyValues.push(value || "")
         }  
-        value = OINOStr.encode(value, contentType)
-        return value
+        result = OINOStr.encode(value, contentType)
+        return result
     }
 
     private _writeRowJson(row:OINODataRow):string {
@@ -79,14 +80,16 @@ export class OINODbModelSet {
         return "{" + json_row + "}"
     }
 
-    private _writeStringJson():string {
+    private async _writeStringJson():Promise<string> {
         let result:string = ""
         while (!this.dataset.isEof()) {
             if (result != "") {
                 result += ",\r\n"
             }
-            result += this._writeRowJson(this.dataset.getRow())
-            this.dataset.next()
+            const row:OINODataRow = this.dataset.getRow()
+            // OINOLog.debug("OINODbModelSet._writeStringJson: row", {row:row})
+            result += this._writeRowJson(row)
+            await this.dataset.next()
         }
         result = "[\r\n" + result + "\r\n]"
         // OINOLog_debug("OINODbModelSet._writeStringJson="+result)
@@ -127,14 +130,16 @@ export class OINODbModelSet {
         return csv_row
     }
 
-    private _writeStringCsv():string {
+    private async _writeStringCsv():Promise<string> {
         let result:string = this._writeHeaderCsv()
         while (!this.dataset.isEof()) {
             if (result != "") {
                 result += "\r\n"
             }
-            result += this._writeRowCsv(this.dataset.getRow())
-            this.dataset.next()
+            const row:OINODataRow = this.dataset.getRow()
+            // OINOLog.debug("OINODbModelSet._writeStringCsv: row", {row:row})
+            result += this._writeRowCsv(row)
+            await this.dataset.next()
         }
         // OINOLog_debug("OINODbModelSet._writeStringCsv="+result)
         return result
@@ -153,6 +158,7 @@ export class OINODbModelSet {
     }
 
     private _writeRowFormdata(row:OINODataRow):string {
+        // console.log("OINODbModelSet._writeRowFormdata: row", row)
         const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // this method is just used for test data generation and we want it to be static
         const model:OINODbDataModel = this.datamodel
         const fields:OINODbDataField[] = model.fields
@@ -189,17 +195,15 @@ export class OINODbModelSet {
     }
 
     private _writeStringFormdata():string {
-        let result:string = this._writeRowFormdata(this.dataset.getRow())
-        this.dataset.next()
-        if (!this.dataset.isEof()) {
-            OINOLog.warning("OINODbModelSet._writeStringUrlencode: content type " + OINOContentType.formdata + " does not mixed part content and only first row has been written!")
-        }
+        const row:OINODataRow = this.dataset.getRow()
+        // OINOLog.debug("OINODbModelSet._writeStringFormdata: row", {row:row})
+        let result:string = this._writeRowFormdata(row)
         return result
     }
 
 
     private _writeRowUrlencode(row:OINODataRow):string {
-        // console.log("OINODbModelSet._writeRowCsv row=" + row)
+        // console.log("OINODbModelSet._writeRowUrlencode row=" + row)
         const model:OINODbDataModel = this.datamodel
         const fields:OINODbDataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
@@ -223,12 +227,14 @@ export class OINODbModelSet {
         return urlencode_row
     }
 
-    private _writeStringUrlencode():string {
+    private async _writeStringUrlencode():Promise<string> {
         let result:string = ""
         let line_count = 0
         while (!this.dataset.isEof()) {
-            result += this._writeRowUrlencode(this.dataset.getRow()) + "\r\n"
-            this.dataset.next()
+            const row:OINODataRow = this.dataset.getRow()
+            // OINOLog.debug("OINODbModelSet._writeStringUrlencode: row", {row:row})
+            result += this._writeRowUrlencode(row) + "\r\n"
+            await this.dataset.next()
             line_count += 1
         }
         // OINOLog_debug("OINODbModelSet._writeStringCsv="+result)
@@ -244,19 +250,19 @@ export class OINODbModelSet {
      * @param [contentType=OINOContentType.json] serialization content type
      *
      */
-    writeString(contentType:OINOContentType = OINOContentType.json):string {
+    async writeString(contentType:OINOContentType = OINOContentType.json):Promise<string> {
         let result:string = ""
         if (contentType == OINOContentType.csv) {
-            result += this._writeStringCsv()
+            result += await this._writeStringCsv()
 
         } else if (contentType == OINOContentType.json) {
-            result += this._writeStringJson()
+            result += await this._writeStringJson()
             
         } else if (contentType == OINOContentType.formdata) {
-            result += this._writeStringFormdata()
+            result += await this._writeStringFormdata()
             
         } else if (contentType == OINOContentType.urlencode) {
-            result += this._writeStringUrlencode()
+            result += await this._writeStringUrlencode()
             
         } else {
             OINOLog.error("OINODbModelSet.writeString: content type is only for input!", {contentType:contentType})

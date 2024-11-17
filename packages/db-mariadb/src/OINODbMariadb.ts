@@ -41,25 +41,40 @@ class OINOMariadbData extends OINODbDataSet {
     private _currentRow: number
     private _eof: boolean
     
+    /**
+     * Is data set empty.
+     *
+     */
     isEmpty():boolean {
         return (this._rows.length == 0)
     }
 
-    // EOF means "there is no more content", i.e. either dataset is empty or we have moved beyond last line
+    /**
+     * Is there no more content, i.e. either dataset is empty or we have moved beyond last line
+     *
+     */
     isEof():boolean {
         return (this._eof)
     }
 
-    next():boolean {
+    /**
+     * Attempts to moves dataset to the next row, possibly waiting for more data to become available. Returns !isEof().
+     *
+     */
+    async next():Promise<boolean> {
         // OINOLog.debug("OINODbDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length-1) {
             this._currentRow = this._currentRow + 1
         } else {
             this._eof = true
         }
-        return !this._eof
+        return Promise.resolve(!this._eof)
     }
 
+    /**
+     * Gets current row of data.
+     *
+     */
     getRow(): OINODataRow {
         if ((this._currentRow >=0) && (this._currentRow < this._rows.length)) {
             return this._rows[this._currentRow]
@@ -77,7 +92,6 @@ export class OINODbMariadb extends OINODb {
     
     private static _fieldLengthRegex = /([^\(\)]+)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
     private static _exceptionMessageRegex = /\(([^\)]*)\) (.*)\nsql\:(.*)?/i
-    private static _tableSchemaSql:string = `SHOW COLUMNS from ` 
     
     private _pool:mariadb.Pool
 
@@ -269,7 +283,7 @@ export class OINODbMariadb extends OINODb {
             return Promise.resolve(true)
         } catch (err) {
             // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
+            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to OINODbMariadb server: " + err)
         }        
     }
 
@@ -315,6 +329,11 @@ export class OINODbMariadb extends OINODb {
         return result
     }
 
+    private _getSchemaSql(dbName:string, tableName:string):string {
+        const sql = `SHOW COLUMNS from ${dbName}.${tableName};`
+        return sql
+    }
+
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
@@ -324,7 +343,7 @@ export class OINODbMariadb extends OINODb {
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const res:OINODbDataSet = await this.sqlSelect(OINODbMariadb._tableSchemaSql + this._params.database + "." + api.params.tableName + ";")
+        const res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName))
         while (!res.isEof()) {
             const row:OINODataRow = res.getRow()
             // OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { description:row })
@@ -375,7 +394,7 @@ export class OINODbMariadb extends OINODb {
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }   
             }
-            res.next()
+            await res.next()
         }
         OINOLog.debug("OINODbMariadb.initializeDatasetModel:\n" + api.datamodel.printDebug("\n"))
         return Promise.resolve()

@@ -1,6 +1,6 @@
 {
   "name": "OinoHtmxApp",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "scripts": {
     "dev": "/_GIT/oino-ts/update_src.cmd /_GIT/oino-ts/samples/htmxApp && bun run ./htmxApp.ts",
     "app": "bun run ./htmxApp.ts"

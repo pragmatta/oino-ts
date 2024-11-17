@@ -10,15 +10,15 @@
  # GETTING STARTED
  
  ### Setup
- Install the `@oino-ts/core` npm package and necessary database packages and import them in your code.
+ Install the `@oino-ts/db` npm package and necessary database packages and import them in your code.
  ```
- bun install @oino-ts/core
- bun install @oino-ts/bunsqlite
+ bun install @oino-ts/db
+ bun install @oino-ts/db-bunsqlite
  ```
  
  ```
- import { OINODb, OINOApi, OINOFactory } from "@oino-ts/core";
- import { OINODbBunSqlite } from "@oino-ts/bunsqlite"
+ import { OINODb, OINOApi, OINOFactory } from "@oino-ts/db";
+ import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
  ```
  
  ### Register database and logger
@@ -51,7 +51,7 @@
  ### Write results back to HTTP Response
  The results for a GET request will contain [`OINOModelSet`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbModelSet.html) data that can be written out as JSON or CSV as needed. For other requests result is just success or error with messages.
  ```
- return new Response(result.modelset.writeString(OINOContentType.json))
+ return new Response(result.data.writeString(OINOContentType.json))
  ```
  
  
@@ -129,12 +129,13 @@
  - Bun Sqlite through Bun native implementation
  - Postgresql through [pg](https://www.npmjs.com/package/pg)-package
  - Mariadb / Mysql-support through [mariadb](https://www.npmjs.com/package/mariadb)-package
+ - Sql Server through [mssql](https://www.npmjs.com/package/mssql)-package
 
  ## Complex Keys
  To support tables with multipart primary keys OINO generates a composite key `_OINOID_` that is included in the result and can be used as the REST ID. For example in the example above table `OrderDetails` has two primary keys `OrderID` and `ProductID` making the `_OINOID_` of form `11077:99`. 
 
  ## Power Of SQL
- Since OINO controls the SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html) and order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
+ Since OINO is just generating SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html) and order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
 
  ## Swagger Support
  Swagger is great as long as the definitions are updated and with OINO you can automatically get a Swagger definition including a data model schema.
@@ -158,7 +159,7 @@
  # STATUS
  OINO is currently a hobby project which should and should considered in alpha status. That also means compatibility breaking changes can be made without prior notice when architectual issues are discovered.
 
- ## Beta
+ ## Beta 
  For a beta status following milestones are planned:
 
  ### Realistic app
@@ -205,14 +206,16 @@
  # LINKS
  - [Github repository](https://github.com/pragmatta/oino-ts)
  - [NPM repository](https://www.npmjs.com/org/oino-ts) 
-
+ 
  
  # ACKNOWLEDGEMENTS
  
  ## Libraries
  OINO uses the following open source libraries and npm packages and I would like to thank everyone for their contributions:
- - Postgresql support by [node-postgres package](https://www.npmjs.com/package/pg)
- - Mariadb / Mysql-support by [mariadb package](https://www.npmjs.com/package/mariadb)
+ - Postgresql [node-postgres package](https://www.npmjs.com/package/pg)
+ - Mariadb / Mysql [mariadb package](https://www.npmjs.com/package/mariadb)
+ - Sql Server [mssql package](https://www.npmjs.com/package/mssql)
+ - Custom base encoding [base-x package](https://www.npmjs.com/package/base-x)
 
  ## Bun
  OINO has been developed using the Bun runtime, not because of the speed improvements but for the first class Typescript support and integrated developper experience. Kudos on the bun team for making Typescript work more exiting again.

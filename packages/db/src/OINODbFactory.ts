@@ -118,80 +118,6 @@ export class OINODbFactory {
         return result
     }
 
-    /**
-     * Creates HTML Response from API modelset.
-     *
-     * @param modelset OINO API dataset
-     * @param template HTML template
-     * 
-     */
-    static createHtmlFromData(modelset:OINODbModelSet, template:string):OINOHttpResult {
-        let html:string = ""
-        const dataset:OINODbDataSet|undefined = modelset.dataset
-        const datamodel:OINODbDataModel = modelset.datamodel
-        while (!dataset.isEof()) {
-            const row:OINODataRow = dataset.getRow()
-            let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
-            let primary_key_values:string[] = []
-            let html_row:string = template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
-            for (let i=0; i<datamodel.fields.length; i++) {
-                const f:OINODbDataField = datamodel.fields[i]
-                let value:string|null|undefined = f.serializeCell(row[i])
-                if (f.fieldParams.isPrimaryKey) {
-                    if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
-                        value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
-                    }
-                    primary_key_values.push(value || "")
-                }
-                html_row = html_row.replaceAll('###' + f.name + '###', OINOStr.encode(value, OINOContentType.html))
-            }
-            html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
-            html += html_row + "\r\n"
-            dataset.next()
-        }
-        const result:OINOHttpResult = new OINOHttpResult(html)
-        return result
-    }
-
-    /**
-     * Creates HTML Response from API result.
-     *
-     * @param result OINOResult-object
-     * @param template HTML template
-     * @param includeErrorMessages include debug messages in result
-     * @param includeWarningMessages include debug messages in result
-     * @param includeInfoMessages include debug messages in result
-     * @param includeDebugMessages include debug messages in result
-     * 
-     */
-    static createHtmlNotificationFromResult(result:OINOResult, template:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
-        let html:string = template
-        html = html.replaceAll('###statusCode###', OINOStr.encode(result.statusCode.toString(), OINOContentType.html))
-        html = html.replaceAll('###statusMessage###', OINOStr.encode(result.statusMessage.toString(), OINOContentType.html))
-        let messages = ""
-        for (let i:number = 0; i<result.messages.length; i++) {
-            if (includeErrorMessages && result.messages[i].startsWith(OINO_ERROR_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
-            } 
-            if (includeWarningMessages && result.messages[i].startsWith(OINO_WARNING_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
-            } 
-            if (includeInfoMessages && result.messages[i].startsWith(OINO_INFO_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
-            } 
-            if (includeDebugMessages && result.messages[i].startsWith(OINO_DEBUG_PREFIX)) {
-                messages += "<li>" + OINOStr.encode(result.messages[i], OINOContentType.html) + "</li>"
-            } 
-            
-        }
-        if (messages) {
-            html = html.replaceAll('###messages###', "<ul>" + messages + "</ul>")
-        }
-        html = html.replace(/###[^#]*###/g, "")
-        const http_result:OINOHttpResult = new OINOHttpResult(html) 
-        return http_result
-    }
-
     private static _findCsvLineEnd(csvData:string, start:number):number {
         const n:number = csvData.length
         if (start >= n) {
@@ -299,7 +225,7 @@ export class OINODbFactory {
             for (let i=0; i<datamodel.fields.length; i++) {
                 const field:OINODbDataField = datamodel.fields[i]
                 let j:number = field_to_header_mapping[i]
-                let value:OINODataCell = row_data[j] 
+                let value:string|null|undefined = row_data[j] 
                 if ((value === undefined) || (value === null)) { // null/undefined-decoding built into the parser
                     row[i] = value
 
@@ -330,20 +256,23 @@ export class OINODbFactory {
         //  console.log("createRowFromJsonObj: " + result)
         for (let i=0; i < fields.length; i++) {
             const field = fields[i]
-            let value:OINODataCell = OINOStr.decode(obj[field.name], OINOContentType.json)
+            let value:any = obj[field.name]
             // console.log("createRowFromJsonObj: key=" + field.name + ", val=" + val)
-            if ((value === undefined) || (value === null)) {
+            if ((value === null) || (value === undefined)) { // must be checed first as null is an object
                 result[i] = value
-            } else {
-                if (Array.isArray(value) || typeof value === "object") { // only single level deep object, rest is handled as JSON-strings
-                    result[i] = JSON.stringify(value).replaceAll("\"","\\\"")
+            
+            } else if (Array.isArray(value) || typeof value === "object") {
+                result[i] = JSON.stringify(value).replaceAll("\"","\\\"") // only single level deep objects, rest is handled as JSON-strings
 
-                } else {
-                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
-                        value = datamodel.api.hashid.decode(value)
-                    }
-                    result[i] = field.deserializeCell(value)
+            } else if (typeof value === "string") {
+                value = OINOStr.decode(value, OINOContentType.json)
+                if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                    value = datamodel.api.hashid.decode(value)
                 }
+                result[i] = field.deserializeCell(value)
+
+            } else { 
+                result[i] = value // value types are passed as-is
             }
             // console.log("createRowFromJsonObj: result["+i+"]=" + result[i])
         }
@@ -450,7 +379,7 @@ export class OINODbFactory {
                             row[field_index] = Buffer.from(value, "binary")
                         }
                     } else {
-                        let value:OINODataCell = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
+                        let value:string = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
                         // OINOLog.debug("OINODbFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
                         if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                             value = datamodel.api.hashid.decode(value)
@@ -483,7 +412,7 @@ export class OINODbFactory {
 
                 } else {
                     const field:OINODbDataField = datamodel.fields[field_index]
-                    let value:OINODataCell=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
+                    let value:string=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
                     if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                         value = datamodel.api.hashid.decode(value)
                     }

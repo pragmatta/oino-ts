@@ -1,7 +1,7 @@
 {
-  "name": "@oino-ts/db-bunsqlite",
+  "name": "@oino-ts/db-mssql",
   "version": "0.0.16",
-  "description": "OINO TS package for using Bun Sqlite databases.",
+  "description": "OINO TS package for using Microsoft Sql databases.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
   "repository": {
@@ -14,17 +14,21 @@
     "rest-api",
     "typescript",
     "library",
-    "sqlite"
+    "mssql",
+    "sql-server",
+    "azure-sql"
   ],
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/db": "^0.0.16"
+    "@oino-ts/db": "latest",
+    "mssql": "^11.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/mssql": "^9.1.5",
+    "@types/node": "^20.12.7"
   },
   "files": [
     "src/*.ts",
