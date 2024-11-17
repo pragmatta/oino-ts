@@ -11,151 +11,8 @@ import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataFie
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { OINODbMariadb } from "@oino-ts/db-mariadb"
+import { OINODbMsSql } from "@oino-ts/db-mssql"
 
-Math.random()
-
-OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
-OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
-OINODbFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
-OINODbFactory.registerDb("OINODbMariadb", OINODbMariadb)
-
-export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApiParams) {
-    // OINOLog.info("OINOTestApi", {dbParams:dbParams, apiDataset:apiDataset})
-    const db:OINODb = await OINODbFactory.createDb( dbParams )
-    const api:OINODbApi = await OINODbFactory.createApi(db, apiDataset.apiParams)
-    
-    const post_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([apiDataset.postRow])
-    const post_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, post_dataset)
-    
-    const put_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([apiDataset.putRow])
-    const put_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, put_dataset)
-    
-    // const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
-    const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow, true))
-    OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
-
-    const empty_params:OINORequestParams = { sqlParams: {}}
-    
-    const target_db:string = "[" + dbParams.type + "]"
-    let target_table:string = "[" + apiDataset.apiParams.tableName + "]"
-    let target_group:string = "[SCHEMA]"
-
-    // test("dummy", () => {
-    //     expect({foo:"h\\i"}).toMatchSnapshot()
-    // })
-
-    test(target_db + target_table + target_group + " public properties", async () => {
-        expect(api.datamodel.printFieldPublicPropertiesJson()).toMatchSnapshot()
-    })
-    
-    target_group = "[HTTP GET]"
-    test(target_db + target_table + target_group + " select *", async () => {
-        expect((await api.doRequest("GET", "", "", empty_params)).data?.writeString()).toMatchSnapshot("GET JSON")
-    })
-    
-    test(target_db + target_table + target_group + " select *", async () => {
-        expect((await api.doRequest("GET", "", "", empty_params)).data?.writeString(OINOContentType.csv)).toMatchSnapshot("GET CSV")
-    })
-
-
-    test(target_db + target_table + target_group + " select * with filter", async () => {
-        expect((await api.doRequest("GET", "", "", apiDataset.requestParams)).data?.writeString()).toMatchSnapshot("GET JSON FILTER")
-        apiDataset.requestParams.sqlParams.filter = undefined // remove filter so it does not affect rest of the tests
-    })
-    
-    target_group = "[HTTP POST]"
-    const post_body_json:string = post_modelset.writeString(OINOContentType.json)
-    OINOLog.info("HTTP POST json", {post_body_json:post_body_json})
-    test(target_db + target_table + target_group + " insert with id", async () => {
-        expect((await api.doRequest("POST", new_row_id, post_body_json, empty_params))).toMatchSnapshot("POST")
-    })
-    test(target_db + target_table + target_group + " insert", async () => {
-        expect((await api.doRequest("POST", "", post_body_json, empty_params))).toMatchSnapshot("POST")
-        expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString()).toMatchSnapshot("GET JSON")
-        expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.csv)).toMatchSnapshot("GET CSV")
-    })
-    test(target_db + target_table + target_group + " insert no data", async () => {
-        expect((await api.doRequest("POST", "", "", empty_params))).toMatchSnapshot("POST")
-    })
-    test(target_db + target_table + target_group + " insert duplicate", async () => {
-        expect((await api.doRequest("POST", "", post_body_json, empty_params))).toMatchSnapshot("POST")
-    })
-    
-    target_group = "[HTTP PUT]"
-    const put_body_json = put_modelset.writeString(OINOContentType.json)
-    OINOLog.info("HTTP PUT JSON", {put_body_json:put_body_json})
-    test(target_db + target_table + target_group + " update JSON", async () => {
-        apiDataset.requestParams.requestType = OINOContentType.json
-        expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT JSON reset")
-        expect((await api.doRequest("PUT", new_row_id, put_body_json, empty_params))).toMatchSnapshot("PUT JSON")
-        expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString()).toMatchSnapshot("GET JSON")
-    })
-
-    put_dataset.first()
-    const put_body_csv = put_modelset.writeString(OINOContentType.csv)
-    OINOLog.info("HTTP PUT csv", {put_body_csv:put_body_csv})
-    test(target_db + target_table + target_group + " update CSV", async () => {
-        apiDataset.requestParams.requestType = OINOContentType.csv
-        expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT CSV reset")
-        expect((await api.doRequest("PUT", new_row_id, put_body_csv, apiDataset.requestParams))).toMatchSnapshot("PUT CSV")
-        expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.csv)).toMatchSnapshot("GET CSV")
-    })
-    
-    put_dataset.first()
-    let put_body_formdata = put_modelset.writeString(OINOContentType.formdata)
-    const multipart_boundary = put_body_formdata.substring(0, put_body_formdata.indexOf('\r'))
-    put_body_formdata = put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
-    OINOLog.info("HTTP PUT FORMDATA", {put_body_formdata:put_body_formdata})
-    test(target_db + target_table + target_group + " update FORMDATA", async () => {
-        apiDataset.requestParams.requestType = OINOContentType.formdata
-        apiDataset.requestParams.multipartBoundary = "---------OINO999999999"
-        expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT FORMDATA reset")
-        expect((await api.doRequest("PUT", new_row_id, put_body_formdata, apiDataset.requestParams))).toMatchSnapshot("PUT FORMDATA")
-        expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.formdata)).toMatchSnapshot("GET FORMDATA")
-    })
-    
-    put_dataset.first()
-    const put_body_urlencode = put_modelset.writeString(OINOContentType.urlencode)
-    OINOLog.info("HTTP PUT URLENCODE", {put_body_urlencode:put_body_urlencode})
-    test(target_db + target_table + target_group + " update URLENCODE", async () => {
-        apiDataset.requestParams.requestType = OINOContentType.urlencode
-        apiDataset.requestParams.multipartBoundary = undefined // for some reason this needs reset here so previous test value settings does not leak
-        expect((await api.doRequest("PUT", new_row_id, post_body_json, empty_params))).toMatchSnapshot("PUT URLENCODE reset")
-        expect((await api.doRequest("PUT", new_row_id, put_body_urlencode, apiDataset.requestParams))).toMatchSnapshot("PUT URLENCODE")
-        expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.urlencode)).toMatchSnapshot("GET URLENCODE")
-    })
-    
-    test(target_db + target_table + target_group + " update no data", async () => {
-        expect((await api.doRequest("PUT", new_row_id, "", empty_params))).toMatchSnapshot("PUT")
-    })
-
-    const primary_keys:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return field.fieldParams.isPrimaryKey })
-    if (primary_keys.length != 1) {
-        OINOLog.info("HTTP PUT table " + apiDataset.apiParams.tableName + " does not have an individual primary key so 'invalid null' and 'oversized data' tests are skipped")
-    } else {
-        const id_field:string = primary_keys[0].name 
-        const notnull_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isNotNull == true) })
-        if (notnull_fields.length > 0) {
-            const invalid_null_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + notnull_fields[0].name + "\":null}]"
-            test(target_db + target_table + target_group + " update with invalid null value", async () => {
-                expect((await api.doRequest("PUT", new_row_id, invalid_null_value, empty_params))).toMatchSnapshot("PUT")
-            })
-        }
-        const maxsize_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINOStringDataField) && (field.fieldParams.isPrimaryKey == false) && (field.maxLength > 0) })
-        if (maxsize_fields.length > 0) {
-            const oversized_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + maxsize_fields[0].name + "\":\"" + "".padEnd(maxsize_fields[0].maxLength+1, "z") + "\"}]"
-            test(target_db + target_table + target_group + " update with oversized data", async () => {
-                expect((await api.doRequest("PUT", new_row_id, oversized_value, empty_params))).toMatchSnapshot("PUT")
-            })
-        }
-    }
-    
-    target_group = "[HTTP DELETE]"
-    test(target_db + target_table + target_group + " remove", async () => {
-        expect((await api.doRequest("DELETE", new_row_id, "", empty_params))).toMatchSnapshot("DELETE")
-        expect((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString()).toMatchSnapshot("GET JSON")
-    })
-}
 
 type OINOTestApiParams = {
     apiParams: OINODbApiParams
@@ -164,17 +21,14 @@ type OINOTestApiParams = {
     putRow: OINODataRow
 }
 
-// OINOLog.setLogLevel(OINOLogLevel.debug)
-OINOBenchmark.setEnabled(["doRequest"])
-OINOBenchmark.reset()
-
 const dbs:OINODbParams[] = [
     { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite", database: "Northwind" }, 
     { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: Bun.env.OINODB_POSTGRESQL_TOKEN },
-    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: Bun.env.OINODB_MARIADB_TOKEN } 
+    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: Bun.env.OINODB_MARIADB_TOKEN }, 
+    { type: "OINODbMsSql", url: "oinocloud-poc-db-srv.database.windows.net", database: "Northwind", port:1433, user: "oinocloud-poc-db-srv-admin", password: Bun.env.OINOCLOUD_POC_DB_SRV } 
 ]
 
-const apis:OINOTestApiParams[] = [
+const api_tests:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Orders" },
         requestParams: {
@@ -184,7 +38,7 @@ const apis:OINOTestApiParams[] = [
         putRow: [30000,"CACTU",1,new Date("2023-04-05"),new Date("2023-04-06"),new Date("2023-04-07"),2,"847.51","k'l\"m%n_o\tp\rq\nr\\s","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK"]
     },
     {
-        apiParams: { tableName: "Products" },
+        apiParams: { tableName: "Products", failOnOversizedValues: true },
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock asc,UnitPrice asc") }
         },
@@ -209,9 +63,181 @@ const apis:OINOTestApiParams[] = [
     }
 
 ]
+
+Math.random()
+
+OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
+OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
+OINODbFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
+OINODbFactory.registerDb("OINODbMariadb", OINODbMariadb)
+OINODbFactory.registerDb("OINODbMsSql", OINODbMsSql)
+
+OINOLog.setLogLevel(OINOLogLevel.debug)
+OINOBenchmark.setEnabled(["doRequest"])
+OINOBenchmark.reset()
+
+function encodeData(s:string|undefined):string {
+    return s?.replaceAll(/(\\[nrt\"\`\\]?)/g, (match, p1) => {
+        // return "\\" + p1;
+        return encodeURIComponent(p1);
+    }) || ""
+}
+
+function encodeResult(o:any|undefined):string {
+    return JSON.stringify(o || {}, null, 3).replaceAll(/\`/g, "'").replaceAll(/(\\[nrt\"\\]?)/g, (match, p1) => {
+        return encodeURIComponent(p1);
+    })
+}
+
+export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApiParams) {
+    // OINOLog.info("OINOTestApi", {dbParams:dbParams, apiDataset:apiDataset})
+    const db:OINODb = await OINODbFactory.createDb( dbParams )
+    const api:OINODbApi = await OINODbFactory.createApi(db, apiDataset.apiParams)
+    
+    const post_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([apiDataset.postRow])
+    const post_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, post_dataset)
+    
+    const put_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([apiDataset.putRow])
+    const put_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, put_dataset)
+    
+    // const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
+    const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow, true))
+    // OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
+
+    const empty_params:OINORequestParams = { sqlParams: {}}
+    const request_params:OINORequestParams = Object.assign({}, apiDataset.requestParams)
+    request_params.sqlParams = {}
+    const request_params_with_filters:OINORequestParams = Object.assign({}, request_params)
+    request_params_with_filters.sqlParams = apiDataset.requestParams.sqlParams
+    // OINOLog.debug("OINOTestApi", {request_params:request_params, request_params_with_filters:request_params_with_filters})
+    
+    const target_db:string = "[" + dbParams.type + "]"
+    let target_table:string = "[" + apiDataset.apiParams.tableName + "]"
+    let target_group:string = "[SCHEMA]"
+
+    // test("dummy", () => {
+    //     expect({foo:"h\\i"}).toMatchSnapshot()
+    // })
+
+    test(target_db + target_table + target_group + " public properties", async () => {
+        expect(api.datamodel.printFieldPublicPropertiesJson()).toMatchSnapshot()
+    })
+    
+    target_group = "[HTTP GET]"
+    test(target_db + target_table + target_group + " select *", async () => {
+        expect(encodeData((await api.doRequest("GET", "", "", empty_params)).data?.writeString())).toMatchSnapshot("GET JSON")
+    })
+    
+    test(target_db + target_table + target_group + " select *", async () => {
+        expect(encodeData((await api.doRequest("GET", "", "", empty_params)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+    })
+
+    test(target_db + target_table + target_group + " select * with filter", async () => {
+        expect(encodeData((await api.doRequest("GET", "", "", request_params_with_filters)).data?.writeString())).toMatchSnapshot("GET JSON FILTER")
+    })
+    
+    // remove filter so it does not affect rest of the tests
+    request_params.sqlParams.filter = undefined 
+    request_params.sqlParams.order = undefined 
+
+    target_group = "[HTTP POST]"
+    const post_body_json:string = post_modelset.writeString(OINOContentType.json)
+    // OINOLog.info("HTTP POST json", {post_body_json:post_body_json})
+    test(target_db + target_table + target_group + " insert with id", async () => {
+        expect(encodeResult((await api.doRequest("POST", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("POST")
+    })
+    test(target_db + target_table + target_group + " insert", async () => {
+        expect(encodeResult((await api.doRequest("POST", "", post_body_json, empty_params)))).toMatchSnapshot("POST")
+        expect(encodeData((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString())).toMatchSnapshot("GET JSON")
+        expect(encodeData((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+    })
+    test(target_db + target_table + target_group + " insert no data", async () => {
+        expect(encodeResult((await api.doRequest("POST", "", "", empty_params)))).toMatchSnapshot("POST")
+    })
+    test(target_db + target_table + target_group + " insert duplicate", async () => {
+        expect(encodeResult((await api.doRequest("POST", "", post_body_json, empty_params)))).toMatchSnapshot("POST")
+    })
+    
+    target_group = "[HTTP PUT]"
+    const put_body_json = put_modelset.writeString(OINOContentType.json)
+    // OINOLog.info("HTTP PUT JSON", {put_body_json:put_body_json})
+    test(target_db + target_table + target_group + " update JSON", async () => {
+        request_params.requestType = OINOContentType.json
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("PUT JSON reset")
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, put_body_json, request_params)))).toMatchSnapshot("PUT JSON")
+        expect(encodeData((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString())).toMatchSnapshot("GET JSON")
+    })
+
+    put_dataset.first()
+    const put_body_csv = put_modelset.writeString(OINOContentType.csv)
+    // OINOLog.info("HTTP PUT csv", {put_body_csv:put_body_csv})
+    test(target_db + target_table + target_group + " update CSV", async () => {
+        request_params.requestType = OINOContentType.csv
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("PUT CSV reset")
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, put_body_csv, request_params)))).toMatchSnapshot("PUT CSV")
+        expect(encodeData((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+    })
+    
+    put_dataset.first()
+    let put_body_formdata = put_modelset.writeString(OINOContentType.formdata)
+    const multipart_boundary = put_body_formdata.substring(0, put_body_formdata.indexOf('\r'))
+    put_body_formdata = put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
+    // OINOLog.info("HTTP PUT FORMDATA", {put_body_formdata:put_body_formdata})
+    test(target_db + target_table + target_group + " update FORMDATA", async () => {
+        request_params.requestType = OINOContentType.formdata
+        request_params.multipartBoundary = "---------OINO999999999"
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("PUT FORMDATA reset")
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, put_body_formdata, request_params)))).toMatchSnapshot("PUT FORMDATA")
+        expect(encodeData((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.formdata))).toMatchSnapshot("GET FORMDATA")
+        request_params.multipartBoundary = undefined
+    })
+    
+    put_dataset.first()
+    const put_body_urlencode = put_modelset.writeString(OINOContentType.urlencode)
+    // OINOLog.info("HTTP PUT URLENCODE", {put_body_urlencode:put_body_urlencode})
+    test(target_db + target_table + target_group + " update URLENCODE", async () => {
+        request_params.requestType = OINOContentType.urlencode
+        request_params.multipartBoundary = undefined // for some reason this needs reset here so previous test value settings does not leak
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("PUT URLENCODE reset")
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, put_body_urlencode, request_params)))).toMatchSnapshot("PUT URLENCODE")
+        expect(encodeData((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString(OINOContentType.urlencode))).toMatchSnapshot("GET URLENCODE")
+    })
+    
+    test(target_db + target_table + target_group + " update no data", async () => {
+        expect(encodeResult((await api.doRequest("PUT", new_row_id, "", empty_params)))).toMatchSnapshot("PUT")
+    })
+
+    const primary_keys:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return field.fieldParams.isPrimaryKey })
+    if (primary_keys.length != 1) {
+        OINOLog.info("HTTP PUT table " + apiDataset.apiParams.tableName + " does not have an individual primary key so 'invalid null' and 'oversized data' tests are skipped")
+    } else {
+        const id_field:string = primary_keys[0].name 
+        const notnull_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isNotNull == true) })
+        if (notnull_fields.length > 0) {
+            const invalid_null_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + notnull_fields[0].name + "\":null}]"
+            test(target_db + target_table + target_group + " update with invalid null value", async () => {
+                expect(encodeResult((await api.doRequest("PUT", new_row_id, invalid_null_value, empty_params)))).toMatchSnapshot("PUT")
+            })
+        }
+        const maxsize_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINOStringDataField) && (field.fieldParams.isPrimaryKey == false) && (field.maxLength > 0) })
+        if (maxsize_fields.length > 0) {
+            const oversized_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + maxsize_fields[0].name + "\":\"" + "".padEnd(maxsize_fields[0].maxLength+1, "z") + "\"}]"
+            test(target_db + target_table + target_group + " update with oversized data", async () => {
+                expect(encodeResult((await api.doRequest("PUT", new_row_id, oversized_value, empty_params)))).toMatchSnapshot("PUT")
+            })
+        }
+    }
+    
+    target_group = "[HTTP DELETE]"
+    test(target_db + target_table + target_group + " remove", async () => {
+        expect(encodeResult((await api.doRequest("DELETE", new_row_id, "", empty_params)))).toMatchSnapshot("DELETE")
+        expect(encodeData((await api.doRequest("GET", new_row_id, "", empty_params)).data?.writeString())).toMatchSnapshot("GET JSON")
+    })
+}
+
 for (let db of dbs) {
-    for (let api of apis) {
-        await OINOTestApi(db, api)
+    for (let api_test of api_tests) {
+        await OINOTestApi(db, api_test)
     }
 }
 
@@ -232,7 +258,7 @@ const crosscheck_tests:string[] = [
 for (let i=0; i<dbs.length-1; i++) {
     const db1:string = dbs[i].type
     const db2:string = dbs[i+1].type
-    for (let api of apis) {
+    for (let api of api_tests) {
         const table_name = api.apiParams.tableName
         for (let test_name of crosscheck_tests) {
             test("cross check {" + db1 + "} and {" + db2 + "} table {" + table_name + "} snapshots on {" + test_name + "}", () => {

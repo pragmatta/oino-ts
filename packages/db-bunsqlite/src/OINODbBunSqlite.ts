@@ -39,7 +39,7 @@ export class OINODbBunSqlite extends OINODb {
         if (!this._params.url.startsWith("file://")) {
             throw new Error(OINO_ERROR_PREFIX + ": OINODbBunSqlite url must be a file://-url!")
         }
-        OINOLog.debug("OINODbBunSqlite.constructor", {params:params})
+        // OINOLog.debug("OINODbBunSqlite.constructor", {params:params})
         
         if (this._params.type !== "OINODbBunSqlite") {
             throw new Error(OINO_ERROR_PREFIX + ": Not OINODbBunSqlite-type: " + this._params.type)
@@ -144,7 +144,7 @@ export class OINODbBunSqlite extends OINODb {
     connect(): Promise<boolean> {
         const filepath:string = this._params.url.substring(7)
         try {
-            OINOLog.debug("OINODbBunSqlite.connect", {params:this._params})
+            // OINOLog.debug("OINODbBunSqlite.connect", {params:this._params})
             this._db = BunSqliteDb.open(filepath, { create: true, readonly: false, readwrite: true })        
             // OINOLog.debug("OINODbBunSqlite.connect done")
             return Promise.resolve(true)

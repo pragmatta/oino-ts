@@ -334,7 +334,7 @@ export class OINODbApi {
 
             } else {
                 try {
-                    OINOLog.debug("OINODbApi.doRequest / POST", {rows:rows})
+                    // OINOLog.debug("OINODbApi.doRequest / POST", {rows:rows})
                     await this._doPost(result, rows)
 
                 } catch (e:any) {

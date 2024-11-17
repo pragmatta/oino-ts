@@ -85,7 +85,9 @@ export class OINODbModelSet {
             if (result != "") {
                 result += ",\r\n"
             }
-            result += this._writeRowJson(this.dataset.getRow())
+            const row:OINODataRow = this.dataset.getRow()
+            // OINOLog.debug("OINODbModelSet._writeStringJson: row", {row:row})
+            result += this._writeRowJson(row)
             this.dataset.next()
         }
         result = "[\r\n" + result + "\r\n]"
@@ -133,7 +135,9 @@ export class OINODbModelSet {
             if (result != "") {
                 result += "\r\n"
             }
-            result += this._writeRowCsv(this.dataset.getRow())
+            const row:OINODataRow = this.dataset.getRow()
+            // OINOLog.debug("OINODbModelSet._writeStringCsv: row", {row:row})
+            result += this._writeRowCsv(row)
             this.dataset.next()
         }
         // OINOLog_debug("OINODbModelSet._writeStringCsv="+result)
@@ -153,6 +157,7 @@ export class OINODbModelSet {
     }
 
     private _writeRowFormdata(row:OINODataRow):string {
+        // console.log("OINODbModelSet._writeRowFormdata: row", row)
         const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // this method is just used for test data generation and we want it to be static
         const model:OINODbDataModel = this.datamodel
         const fields:OINODbDataField[] = model.fields
@@ -189,7 +194,9 @@ export class OINODbModelSet {
     }
 
     private _writeStringFormdata():string {
-        let result:string = this._writeRowFormdata(this.dataset.getRow())
+        const row:OINODataRow = this.dataset.getRow()
+        // OINOLog.debug("OINODbModelSet._writeStringFormdata: row", {row:row})
+        let result:string = this._writeRowFormdata(row)
         this.dataset.next()
         if (!this.dataset.isEof()) {
             OINOLog.warning("OINODbModelSet._writeStringUrlencode: content type " + OINOContentType.formdata + " does not mixed part content and only first row has been written!")
@@ -199,7 +206,7 @@ export class OINODbModelSet {
 
 
     private _writeRowUrlencode(row:OINODataRow):string {
-        // console.log("OINODbModelSet._writeRowCsv row=" + row)
+        // console.log("OINODbModelSet._writeRowUrlencode row=" + row)
         const model:OINODbDataModel = this.datamodel
         const fields:OINODbDataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
@@ -227,7 +234,9 @@ export class OINODbModelSet {
         let result:string = ""
         let line_count = 0
         while (!this.dataset.isEof()) {
-            result += this._writeRowUrlencode(this.dataset.getRow()) + "\r\n"
+            const row:OINODataRow = this.dataset.getRow()
+            // OINOLog.debug("OINODbModelSet._writeStringUrlencode: row", {row:row})
+            result += this._writeRowUrlencode(row) + "\r\n"
             this.dataset.next()
             line_count += 1
         }

@@ -269,7 +269,7 @@ export class OINODbMariadb extends OINODb {
             return Promise.resolve(true)
         } catch (err) {
             // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
+            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to OINODbMariadb server: " + err)
         }        
     }
 
