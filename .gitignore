@@ -45,3 +45,6 @@ samples/readmeApp/package-lock.json
 /packages/types/dist
 samples/htmxApp/package-lock.json
 update_src.cmd
+/packages/db-mssql/node_modules
+/packages/db-mssql/dist
+packages/db-mssql/package-lock.json

@@ -1,0 +1,38 @@
+{
+  "name": "@oino-ts/db-mssql",
+  "version": "0.0.15",
+  "description": "OINO TS package for using Microsoft Sql databases.",
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
+  "keywords": [
+    "sql",
+    "database",
+    "rest-api",
+    "typescript",
+    "library",
+    "mssql",
+    "sql-server",
+    "azure-sql"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "dependencies": {
+    "@oino-ts/db": "latest",
+    "mssql": "^11.0.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^20.12.7"
+  },
+  "files": [
+    "src/*.ts",
+    "dist/cjs/*.js",
+    "dist/esm/*.js",
+    "dist/types/*.d.ts"
+  ]
+}
