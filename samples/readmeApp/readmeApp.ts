@@ -47,7 +47,7 @@ const server = Bun.serve({
             const body:string = await request.text()
             const params:OINORequestParams = OINODbFactory.createParamsFromRequest(request)
             const api_result:OINODbApiResult = await api.doRequest(request.method, id, body, params)
-            response = api_result.getResponse(response_headers)
+            response = await api_result.createResponseFromResult(response_headers)
         }
         return response
     },

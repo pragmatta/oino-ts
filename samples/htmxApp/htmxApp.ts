@@ -118,13 +118,12 @@ try {
 					api_result = await api.doRequest(request.method, id, body, params)
 					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
 					OINOLog.debug("index.ts / template", {template:template}) 
-					let http_result:OINOHttpResult
 					if (api_result.data?.dataset) {
-						http_result = template.renderFromDbData(api_result.data)
+						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
+						response = await http_result.getResponse(response_headers)
 					} else {
-						http_result = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id)
+						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getResponse(response_headers)
 					}
-					response = http_result.getResponse(response_headers)
 					if (request.method == "POST") {
 						response.headers.set('HX-Trigger', 'OINODbApiTrigger-' + api.params.tableName)
 					} else if ((request.method == "PUT") || (request.method == "DELETE")) {
