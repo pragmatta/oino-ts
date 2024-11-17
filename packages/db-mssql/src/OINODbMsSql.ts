@@ -128,15 +128,14 @@ export class OINODbMsSql extends OINODb {
                 rowCollectionOnRequestCompletion:false,
                 rowCollectionOnDone:false,
                 trustServerCertificate: true // Change to false for production
-            },
-            debug: true
+            }
         })
         //this._pool = new ConnectionPool({connectionString: "Server=localhost,1433;Database=database;User Id=username;Password=" + params.password + ";Encrypt=true"})
        
-        this._pool.on("error", (conn) => {
-            console.log("OINODbMsSql error", conn)
+        this._pool.on("error", (conn:any) => {
+            // console.log("OINODbMsSql error", conn)
         })
-        this._pool.on("debug", (event) => {
+        this._pool.on("debug", (event:any) => {
             // console.log("OINODbMsSql debug",event)
         })
     }
@@ -146,7 +145,7 @@ export class OINODbMsSql extends OINODb {
         try {
             const sql_res = await this._pool.request().query(sql);
             // console.log("OINODbMsSql._query result:" + JSON.stringify(sql_res.recordsets))
-            const result:OINOMsSqlData = new OINOMsSqlData(sql_res.recordsets, sql_res.messages)
+            const result:OINOMsSqlData = new OINOMsSqlData(sql_res.recordsets)
             return Promise.resolve(result)
         
         } catch (err) {
@@ -164,11 +163,11 @@ export class OINODbMsSql extends OINODb {
         try {
             const sql_res = await this._pool.request().query(sql);
             // console.log("OINODbMsSql._exec result", sql_res); 
-            return Promise.resolve(new OINOMsSqlData([[]], sql_res.messages))
+            return Promise.resolve(new OINOMsSqlData([[]]))
         
         } catch (err) {
             OINOLog.error("OINODbMsSql._exec exception", {err:err}) 
-            throw new Error(err);
+            throw err;
         } finally {
         }
         // OINOLog.debug("OINODbMsSql._exec", {result:query_result})

@@ -3,6 +3,7 @@
     "entryPoints": [
         "./db-bunsqlite/src/index.ts",
         "./db-mariadb/src/index.ts",
+        "./db-mssql/src/index.ts",
         "./db-postgresql/src/index.ts",
         "./db/src/index.ts",
         "./types/src/index.ts"
