@@ -330,7 +330,19 @@ export class OINODbMariadb extends OINODb {
     }
 
     private _getSchemaSql(dbName:string, tableName:string):string {
-        const sql = `SHOW COLUMNS from ${dbName}.${tableName};`
+        const sql = 
+`SELECT
+    c.COLUMN_NAME,
+    c.COLUMN_TYPE,
+    c.IS_NULLABLE,
+    c.COLUMN_KEY,
+    c.COLUMN_DEFAULT,
+    c.EXTRA,
+    KCU.CONSTRAINT_NAME AS ForeignKeyName 
+FROM information_schema.COLUMNS C
+	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
+WHERE C.TABLE_SCHEMA = '${dbName}' AND C.TABLE_NAME = '${tableName}'
+ORDER BY C.ORDINAL_POSITION;`
         return sql
     }
 
@@ -356,6 +368,7 @@ export class OINODbMariadb extends OINODb {
             const extra:string = row[5]?.toString() || ""
             const field_params:OINODbDataFieldParams = {
                 isPrimaryKey: row[3] == "PRI",
+                isForeignKey: row[6] != null,
                 isAutoInc: extra.indexOf('auto_increment') >= 0,
                 isNotNull: row[2] == "NO"
             }            

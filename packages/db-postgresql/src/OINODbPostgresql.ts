@@ -290,22 +290,23 @@ export class OINODbPostgresql extends OINODb {
     col.data_type, 
     col.character_maximum_length, 
     col.is_nullable, 
-    pk.primary_key,
+    con.constraint_type,
     col.numeric_precision,
     col.numeric_scale,
     col.column_default
 FROM information_schema.columns col
 LEFT JOIN LATERAL
-    (select kcu.column_name, 'YES' as primary_key
+    (select kcu.column_name, STRING_AGG(tco.constraint_type,',') as constraint_type
     from 
         information_schema.table_constraints tco,
         information_schema.key_column_usage kcu 	 
     where 
         kcu.constraint_name = tco.constraint_name
         and kcu.constraint_schema = tco.constraint_schema
-        and tco.table_name = col.table_name
-        and tco.constraint_type = 'PRIMARY KEY'
-    ) pk on col.column_name = pk.column_name
+		and tco.table_catalog = col.table_catalog
+		and tco.table_name = col.table_name
+        and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
+	group by kcu.column_name) con on col.column_name = con.column_name
 WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
         return sql
     }
@@ -331,7 +332,8 @@ WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
             const numeric_scale:number = this._parseFieldLength(row[6])
             const default_val:string = row[7]?.toString() || ""
             const field_params:OINODbDataFieldParams = {
-                isPrimaryKey: row[4] == "YES",
+                isPrimaryKey: row[4]?.indexOf('PRIMARY KEY') >= 0 || false,
+                isForeignKey: row[4]?.indexOf('FOREIGN KEY') >= 0 || false,
                 isNotNull: row[3] == "NO",
                 isAutoInc: default_val.startsWith("nextval(")
             }            

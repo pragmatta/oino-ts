@@ -25,6 +25,7 @@ class OINOBunSqliteDataset extends OINODbMemoryDataSet {
 export class OINODbBunSqlite extends OINODb {
     private static _tableDescriptionRegex = /^CREATE TABLE\s*[\"\[]?\w+[\"\]]?\s*\(\s*(.*)\s*\)\s*(WITHOUT ROWID)?$/msi
     private static _tablePrimarykeyRegex = /PRIMARY KEY \(([^\)]+)\)/i
+    private static _tableForeignkeyRegex = /FOREIGN KEY \(\[([^\)]+)\]\)/i
     private static _tableFieldTypeRegex = /[\"\[\s]?(\w+)[\"\]\s]\s?(INTEGER|REAL|DOUBLE|NUMERIC|DECIMAL|TEXT|BLOB|VARCHAR|DATETIME|DATE|BOOLEAN)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
 
     private _db:BunSqliteDb|null
@@ -49,6 +50,7 @@ export class OINODbBunSqlite extends OINODb {
     private _parseDbFieldParams(fieldStr:string): OINODbDataFieldParams {
         const result:OINODbDataFieldParams = {
             isPrimaryKey: fieldStr.indexOf("PRIMARY KEY") >= 0,
+            isForeignKey: false, 
             isAutoInc: fieldStr.indexOf("AUTOINCREMENT") >= 0,
             isNotNull: fieldStr.indexOf("NOT NULL") >= 0
         }
@@ -203,6 +205,7 @@ export class OINODbBunSqlite extends OINODb {
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         const res:OINODbDataSet|null = await this.sqlSelect("select sql from sqlite_schema WHERE name='" + api.params.tableName + "'")
         const sql_desc:string = (res?.getRow()[0]) as string
+        const foreign_keys:string[] = []
         // OINOLog.debug("OINODbBunSqlite.initDatamodel.sql_desc=" + sql_desc)
         let table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc)
         // OINOLog.debug("OINODbBunSqlite.initDatamodel", {table_matches:table_matches})
@@ -220,7 +223,8 @@ export class OINODbBunSqlite extends OINODb {
                 // OINOLog.debug("initDatamodel next field", {field_str:field_str, field_match:field_match, field_params:field_params})
                 if ((!field_match) || (field_match.length < 3))  {
                     let primarykey_match = OINODbBunSqlite._tablePrimarykeyRegex.exec(field_str)
-                    // OINOLog.debug("initDatamodel non-field definition", {primarykey_match:primarykey_match})
+                    let foreignkey_match = OINODbBunSqlite._tableForeignkeyRegex.exec(field_str)
+                    OINOLog.debug("initDatamodel non-field definition", {primarykey_match:primarykey_match, foreignkey_match:foreignkey_match})
                     if (primarykey_match && primarykey_match.length >= 2) {
                         const primary_keys:string[] = primarykey_match[1].replaceAll("\"", "").split(',') // not sure if will have space or not so split by comma and trim later
                         for (let i:number=0; i<primary_keys.length; i++) {
@@ -229,6 +233,14 @@ export class OINODbBunSqlite extends OINODb {
                                 if (api.datamodel.fields[j].name == pk) {
                                     api.datamodel.fields[j].fieldParams.isPrimaryKey = true
                                 }
+                            }
+                        }
+
+                    } else if (foreignkey_match && foreignkey_match.length >= 2) {
+                        const fk:string = foreignkey_match[1].trim() 
+                        for (let j:number=0; j<api.datamodel.fields.length; j++) {
+                            if (api.datamodel.fields[j].name == fk) {
+                                api.datamodel.fields[j].fieldParams.isForeignKey = true
                             }
                         }
 
