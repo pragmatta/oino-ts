@@ -276,7 +276,7 @@ CREATE TABLE [Employees]
        [Notes] TEXT,
        [ReportsTo] INTEGER,
        [PhotoPath] TEXT,
-	   FOREIGN KEY ([EmployeeID]) REFERENCES [Employees] ([EmployeeID]) 
+	   FOREIGN KEY ([ReportsTo]) REFERENCES [Employees] ([EmployeeID]) 
 		ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 --

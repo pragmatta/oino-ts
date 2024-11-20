@@ -3772,7 +3772,6 @@ ALTER TABLE ONLY customers
 ALTER TABLE ONLY employees
     ADD CONSTRAINT pk_employees PRIMARY KEY ("EmployeeID");
 
-
 --
 -- Name: pk_employeeterritories; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
@@ -3795,7 +3794,6 @@ ALTER TABLE ONLY orderdetails
 
 ALTER TABLE ONLY orders
     ADD CONSTRAINT pk_orders PRIMARY KEY ("OrderID");
-
 
 --
 -- Name: pk_products; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
@@ -3844,6 +3842,15 @@ ALTER TABLE ONLY suppliers
 ALTER TABLE ONLY territories
     ADD CONSTRAINT pk_territories PRIMARY KEY ("TerritoryID");
 
+
+ALTER TABLE ONLY employees
+    ADD CONSTRAINT FK_Employees_Employees FOREIGN KEY ("ReportsTo") REFERENCES employees("EmployeeID");
+ALTER TABLE ONLY orderdetails
+    ADD CONSTRAINT FK_OrderDetails_Orders FOREIGN KEY ("OrderID") REFERENCES orders("OrderID");
+ALTER TABLE ONLY orderdetails
+    ADD CONSTRAINT FK_OrderDetails_Products FOREIGN KEY ("ProductID") REFERENCES products("ProductID");
+ALTER TABLE ONLY orders
+    ADD CONSTRAINT FK_Orders_Employees FOREIGN KEY ("EmployeeID") REFERENCES employees("EmployeeID");
 
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres

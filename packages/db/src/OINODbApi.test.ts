@@ -120,7 +120,7 @@ export async function OINOTestApi(dbParams:OINODbParams, apiDataset: OINOTestApi
     // })
 
     test(target_db + target_table + target_group + " public properties", async () => {
-        expect(api.datamodel.printFieldPublicPropertiesJson()).toMatchSnapshot()
+        expect(api.datamodel.printFieldPublicPropertiesJson()).toMatchSnapshot("SCHEMA")
     })
     
     target_group = "[HTTP GET]"
