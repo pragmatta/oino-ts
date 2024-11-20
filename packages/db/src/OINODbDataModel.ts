@@ -235,19 +235,19 @@ export class OINODbDataModel {
         const filter_sql = params.filter?.toSql(this) || ""
         const order_sql = params.order?.toSql(this) || ""
         const limit_sql = params.limit?.toSql(this) || ""
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {id:id, select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
         if ((id != null) && (id != "") && (filter_sql != ""))  {
-            result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
+            result += " WHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
         } else if ((id != null) && (id != "")) {
-            result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id);
+            result += " WHERE " + this._printSqlPrimaryKeyCondition(id);
         } else if (filter_sql != "") {
-            result += "\nWHERE " + filter_sql;
+            result += " WHERE " + filter_sql;
         }
         if (order_sql) {
-            result += "\nORDER BY " + order_sql 
+            result += " ORDER BY " + order_sql 
         }
         if (limit_sql) {
-            result += "\nLIMIT " + limit_sql 
+            result += " LIMIT " + limit_sql 
         }
         result += ";"
         // OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})

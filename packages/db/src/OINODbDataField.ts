@@ -62,6 +62,9 @@ export class OINODbDataField {
         if (this.fieldParams.isPrimaryKey) {
             params += "PK ";
         }
+        if (this.fieldParams.isForeignKey) {
+            params += "FK ";
+        }
         if (this.fieldParams.isAutoInc) {
             params += "AUTOINC ";
         }
