@@ -222,7 +222,7 @@ export class OINODbMsSql extends OINODb {
                 return "'" + cellValue?.toString() + "'"
             }
 
-        } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
+        } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
             return "'" + cellValue.toISOString().substring(0, 23) + "'"
 
         } else {
@@ -247,7 +247,7 @@ export class OINODbMsSql extends OINODb {
         } else if (sqlValue === undefined) {
             return undefined
 
-        } else if (((sqlType == "date")) && (typeof(sqlValue) == "string")) {
+        } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2")) && (typeof(sqlValue) == "string")) {
             return new Date(sqlValue)
 
         } else {
