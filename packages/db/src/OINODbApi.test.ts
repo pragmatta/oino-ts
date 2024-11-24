@@ -23,9 +23,9 @@ type OINOTestApiParams = {
 
 const dbs:OINODbParams[] = [
     { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite", database: "Northwind" }, 
-    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: Bun.env.OINODB_POSTGRESQL_TOKEN },
-    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: Bun.env.OINODB_MARIADB_TOKEN }, 
-    { type: "OINODbMsSql", url: "oinocloud-poc-db-srv.database.windows.net", database: "Northwind", port:1433, user: "oinocloud-poc-db-srv-admin", password: Bun.env.OINOCLOUD_POC_DB_SRV } 
+    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: process.env.OINODB_POSTGRESQL_TOKEN },
+    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: process.env.OINODB_MARIADB_TOKEN }, 
+    { type: "OINODbMsSql", url: "oinocloud-poc-db-srv.database.windows.net", database: "Northwind", port:1433, user: "oinocloud-poc-db-srv-admin", password: process.env.OINOCLOUD_POC_DB_SRV } 
 ]
 
 const api_tests:OINOTestApiParams[] = [
