@@ -157,6 +157,14 @@ export class OINOResult {
             } 
         }
     }
+
+    /**
+     * Print result for logging.
+     * 
+     */
+    printLog() {
+        return "OINOResult: statusCode=" + this.statusCode + ", statusMessage=" + this.statusMessage + ", messages=[" + this.messages.join(", ") + "]"
+    }
 }
 
 /**
