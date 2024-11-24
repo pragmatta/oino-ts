@@ -6,7 +6,7 @@
 
 import { expect, test } from "bun:test";
 
-import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
@@ -32,7 +32,7 @@ const api_tests:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Orders" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: OINODbSqlOrder.parse("ShipPostalCode desc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: OINODbSqlOrder.parse("ShipPostalCode desc,Freight asc"), limit: OINODbSqlLimit.parse("5") }
         },
         postRow: [30000,"CACTU",1,new Date("2024-04-05"),new Date("2024-04-06"),new Date("2024-04-07"),2,"184.75","a'b\"c%d_e\tf\rg\nh\\i","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK"],
         putRow: [30000,"CACTU",1,new Date("2023-04-05"),new Date("2023-04-06"),new Date("2023-04-07"),2,"847.51","k'l\"m%n_o\tp\rq\nr\\s","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK"]
@@ -40,7 +40,7 @@ const api_tests:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Products", failOnOversizedValues: true },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock asc,UnitPrice asc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock asc,UnitPrice asc"), limit: OINODbSqlLimit.parse("7") }
         },
         postRow: [99, "Umeshu", 1, 1, "500 ml", 12.99, 2, 0, 20, 0],
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
@@ -48,7 +48,7 @@ const api_tests:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidStaticIds:true },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: OINODbSqlOrder.parse("LastName asc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: OINODbSqlOrder.parse("LastName asc"), limit: OINODbSqlLimit.parse("5") }
         },
         postRow: [99, "LastName", "FirstName", "Title", "TitleOfCourtesy", new Date("2024-04-06"), new Date("2024-04-07"), "Address", "City", "Region", 12345, "EU", "123 456 7890", "9876", Buffer.from("0001020304", "hex"), "Line1\nLine2", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
         putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("0506070809", "hex"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
@@ -56,7 +56,7 @@ const api_tests:OINOTestApiParams[] = [
     {
         apiParams: { tableName: "OrderDetails" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(Quantity)-gt(100)"), order: OINODbSqlOrder.parse("Quantity desc") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(Quantity)-gt(100)"), order: OINODbSqlOrder.parse("Quantity desc,UnitPrice asc"), limit: OINODbSqlLimit.parse("5") }
         },
         postRow: [10249,77,12.34,56,0],
         putRow: [10249,77,23.45,67,0]
