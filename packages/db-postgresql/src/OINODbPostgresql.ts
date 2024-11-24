@@ -328,12 +328,13 @@ WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
             const field_name:string = row[0]?.toString() || ""
             const sql_type:string = row[1]?.toString() || ""
             const field_length:number = this._parseFieldLength(row[2])
+            const constraints = row[4]?.toString() || ""
             const numeric_precision:number = this._parseFieldLength(row[5])
             const numeric_scale:number = this._parseFieldLength(row[6])
             const default_val:string = row[7]?.toString() || ""
             const field_params:OINODbDataFieldParams = {
-                isPrimaryKey: row[4]?.indexOf('PRIMARY KEY') >= 0 || false,
-                isForeignKey: row[4]?.indexOf('FOREIGN KEY') >= 0 || false,
+                isPrimaryKey: constraints.indexOf('PRIMARY KEY') >= 0 || false,
+                isForeignKey: constraints.indexOf('FOREIGN KEY') >= 0 || false,
                 isNotNull: row[3] == "NO",
                 isAutoInc: default_val.startsWith("nextval(")
             }            
