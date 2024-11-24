@@ -267,9 +267,10 @@ export class OINODbMsSql extends OINODb {
      * 
      */
     printSqlSelect(tableName:string, columnNames:string, whereCondition:string, orderCondition:string, limitCondition:string): string {
+        const limit_parts = limitCondition.split(" OFFSET ")
         let result:string = "SELECT " 
-        if (limitCondition != "") {
-            result += "TOP " + limitCondition + " "
+        if ((limitCondition != "") && (limit_parts.length == 1)) {
+            result += "TOP " + limit_parts[0] + " "
         }
         result += columnNames + " FROM " + tableName
         // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
@@ -278,6 +279,13 @@ export class OINODbMsSql extends OINODb {
         }
         if (orderCondition != "") {
             result += " ORDER BY " + orderCondition 
+        }
+        if ((limitCondition != "") && (limit_parts.length == 2)) {
+            if (orderCondition == "") {
+                OINOLog.error("OINODbMsSql.printSqlSelect: LIMIT without ORDER BY is not supported in MS SQL Server")
+            } else {
+                result += " OFFSET " + limit_parts[1] + " ROWS FETCH NEXT " + limit_parts[0] + " ROWS ONLY"
+            }
         }
         result += ";"
         // OINOLog.debug("OINODb.printSqlSelect", {result:result})
