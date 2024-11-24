@@ -48,7 +48,7 @@ export class OINOHashid {
         }
         this._staticIds = staticIds
         this._key = Buffer.from(key, 'hex')
-        this._iv = new Buffer(16)
+        this._iv = Buffer.alloc(16)
     }
 
     /**
@@ -102,7 +102,7 @@ export class OINOHashid {
         hash.copy(this._iv, 0, 0, 16)
 
         const cryptotext:string = hashid.substring(this._minLength)
-        const cryptobytes:Buffer = new Buffer(hashidEncoder.decode(cryptotext))
+        const cryptobytes:Buffer = Buffer.from(hashidEncoder.decode(cryptotext))
         const decipher = createDecipheriv('aes-128-gcm', this._key, this._iv)
         const plaintext = decipher.update(cryptobytes, undefined, 'utf8') //, cryptotext, 'base64url', 'utf8') 
         

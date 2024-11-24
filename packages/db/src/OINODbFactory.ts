@@ -231,7 +231,7 @@ export class OINODbFactory {
 
                 } else if ((j >= 0) && (j < row_data.length)) {
                     value = OINOStr.decode(value, OINOContentType.csv)
-                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                    if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                         value = datamodel.api.hashid.decode(value)
                     }
                     row[i] = field.deserializeCell(value)
@@ -266,7 +266,7 @@ export class OINODbFactory {
 
             } else if (typeof value === "string") {
                 value = OINOStr.decode(value, OINOContentType.json)
-                if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                     value = datamodel.api.hashid.decode(value)
                 }
                 result[i] = field.deserializeCell(value)
@@ -381,7 +381,7 @@ export class OINODbFactory {
                     } else {
                         let value:string = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
                         // OINOLog.debug("OINODbFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
-                        if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                             value = datamodel.api.hashid.decode(value)
                         }
                         row[field_index] = field.deserializeCell(value)
@@ -413,7 +413,7 @@ export class OINODbFactory {
                 } else {
                     const field:OINODbDataField = datamodel.fields[field_index]
                     let value:string=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
-                    if (value && field.fieldParams.isPrimaryKey && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                    if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                         value = datamodel.api.hashid.decode(value)
                     }
                     row[field_index] = field.deserializeCell(value)

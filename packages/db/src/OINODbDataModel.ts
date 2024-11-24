@@ -231,26 +231,21 @@ export class OINODbDataModel {
      *
      */
     printSqlSelect(id: string, params:OINODbSqlParams): string {
-        let result:string = "SELECT " + this._printSqlColumnNames() + " FROM " + this.api.db.printSqlTablename(this.api.params.tableName);
-        const filter_sql = params.filter?.toSql(this) || ""
+        const column_names = this._printSqlColumnNames()
         const order_sql = params.order?.toSql(this) || ""
         const limit_sql = params.limit?.toSql(this) || ""
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
+        const filter_sql = params.filter?.toSql(this) || ""
+        let where_sql = ""
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {id:id, select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
         if ((id != null) && (id != "") && (filter_sql != ""))  {
-            result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
+            where_sql = this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql
         } else if ((id != null) && (id != "")) {
-            result += "\nWHERE " + this._printSqlPrimaryKeyCondition(id);
+            where_sql = this._printSqlPrimaryKeyCondition(id)
         } else if (filter_sql != "") {
-            result += "\nWHERE " + filter_sql;
+            where_sql = filter_sql
         }
-        if (order_sql) {
-            result += "\nORDER BY " + order_sql 
-        }
-        if (limit_sql) {
-            result += "\nLIMIT " + limit_sql 
-        }
-        result += ";"
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
+        const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql)
+        OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
         return result;
     }
 

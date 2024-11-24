@@ -62,6 +62,9 @@ export class OINODbDataField {
         if (this.fieldParams.isPrimaryKey) {
             params += "PK ";
         }
+        if (this.fieldParams.isForeignKey) {
+            params += "FK ";
+        }
         if (this.fieldParams.isAutoInc) {
             params += "AUTOINC ";
         }
@@ -305,7 +308,7 @@ export class OINOBlobDataField extends OINODbDataField {
      */
     deserializeCell(value: string|null|undefined): OINODataCell {
         if (value == null) {
-            return new Buffer(0)
+            return Buffer.alloc(0)
 
         } else {
             return Buffer.from(value, 'base64') // Blob-field data is base64 encoded and converted internally to UInt8Array / Buffer

@@ -93,11 +93,13 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             for (let i=0; i<datamodel.fields.length; i++) {
                 const f:OINODbDataField = datamodel.fields[i]
                 let value:string|null|undefined = f.serializeCell(row[i])
-                if (f.fieldParams.isPrimaryKey) {
+                if (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) {
                     if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                         value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
                     }
-                    primary_key_values.push(value || "")
+                    if (f.fieldParams.isPrimaryKey) {
+                        primary_key_values.push(value || "")
+                    }
                 }
                 // OINOLog.debug("renderFromDbData replace field value", {field:f.name, value:value }) 
                 this.setVariableFromValue(f.name, value || "")

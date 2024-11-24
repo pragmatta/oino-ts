@@ -1,1422 +1,6 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[OINODbBunSqlite][Employees][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":true,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"BLOB","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP GET] select *: GET JSON 1`] = `
-"[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"}
-]"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP GET] select *: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","2","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","2","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","2","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","2","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","5","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","5","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","2","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","5","http://accweb/emmployees/davolio.bmp""
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
-"[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"}
-]"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert with id: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: POST 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert no data: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert duplicate: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR(sqlExec): exception in _db.exec [UNIQUE constraint failed: Employees.EmployeeID]",
-   "messages": [
-      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR(sqlExec): exception in _db.exec [UNIQUE constraint failed: Employees.EmployeeID]]",
-      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO [Employees] (%5C%22EmployeeID%5C%22,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,%5C%22BirthDate%5C%22,%5C%22HireDate%5C%22,%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%22PostalCode%5C%22,%5C%22Country%5C%22,%5C%22HomePhone%5C%22,%5C%22Extension%5C%22,%5C%22Photo%5C%22,%5C%22Notes%5C%22,%5C%22ReportsTo%5C%22,%5C%22PhotoPath%5C%22) VALUES (99,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,'2024-04-06T00:00:00.000Z','2024-04-07T00:00:00.000Z',%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%2212345%5C%22,%5C%22EU%5C%22,%5C%22123 456 7890%5C%22,%5C%229876%5C%22,X'0001020304',%5C%22Line1%5CnLine2%5C%22,1,%5C%22http://accweb/emmployees/lastnamefirstname.bmp%5C%22);]"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/json"
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "text/csv"
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "multipart/form-data",
-      "multipartBoundary": "---------OINO999999999"
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
-"---------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="_OINOID_"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="EmployeeID"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="LastName"
-
-LastName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="FirstName"
-
-FirstName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Title"
-
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="TitleOfCourtesy"
-
-TitleOfCourtesy2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="BirthDate"
-
-2023-04-06T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HireDate"
-
-2023-04-07T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Address"
-
-Address2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="City"
-
-City2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Region"
-
-Region2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PostalCode"
-
-54321
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Country"
-
-EU2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HomePhone"
-
-234 567 8901
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Extension"
-
-8765
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Photo"; filename=Photo"
-Content-Type: application/octet-stream
-Content-Transfer-Encoding: BASE64
-
-BQYHCAk=
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Notes"
-
-Line3
-Line4
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="ReportsTo"
-
-1
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PhotoPath"
-
-http://accweb/emmployees/lastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/x-www-form-urlencoded"
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=1&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update no data: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP DELETE] remove: DELETE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbBunSqlite][Employees][HTTP DELETE] remove: GET JSON 1`] = `
-"[
-
-]"
-`;
-
-exports[`[OINODbPostgresql][Employees][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"integer","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isNotNull":true,"isAutoInc":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"character varying","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"character varying","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"character varying","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"character varying","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"bytea","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"text","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"character varying","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
-
-exports[`[OINODbPostgresql][Employees][HTTP GET] select *: GET JSON 1`] = `
-"[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"}
-]"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP GET] select *: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","2","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","2","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","2","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","2","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","5","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","5","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","2","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","5","http://accweb/emmployees/davolio.bmp""
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
-"[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"}
-]"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert with id: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert: POST 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert no data: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert duplicate: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [duplicate key value violates unique constraint %5C%22pk_employees%5C%22]",
-   "messages": [
-      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [duplicate key value violates unique constraint %5C%22pk_employees%5C%22]]",
-      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO %5C%22employees%5C%22 (%5C%22EmployeeID%5C%22,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,%5C%22BirthDate%5C%22,%5C%22HireDate%5C%22,%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%22PostalCode%5C%22,%5C%22Country%5C%22,%5C%22HomePhone%5C%22,%5C%22Extension%5C%22,%5C%22Photo%5C%22,%5C%22Notes%5C%22,%5C%22ReportsTo%5C%22,%5C%22PhotoPath%5C%22) VALUES (99,'LastName','FirstName','Title','TitleOfCourtesy','2024-04-06T00:00:00.000Z','2024-04-07T00:00:00.000Z','Address','City','Region','12345','EU','123 456 7890','9876','%5C%5Cx0001020304','Line1%5CnLine2',1,'http://accweb/emmployees/lastnamefirstname.bmp');]"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/json"
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "text/csv"
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "multipart/form-data",
-      "multipartBoundary": "---------OINO999999999"
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
-"---------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="_OINOID_"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="EmployeeID"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="LastName"
-
-LastName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="FirstName"
-
-FirstName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Title"
-
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="TitleOfCourtesy"
-
-TitleOfCourtesy2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="BirthDate"
-
-2023-04-06T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HireDate"
-
-2023-04-07T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Address"
-
-Address2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="City"
-
-City2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Region"
-
-Region2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PostalCode"
-
-54321
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Country"
-
-EU2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HomePhone"
-
-234 567 8901
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Extension"
-
-8765
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Photo"; filename=Photo"
-Content-Type: application/octet-stream
-Content-Transfer-Encoding: BASE64
-
-BQYHCAk=
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Notes"
-
-Line3
-Line4
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="ReportsTo"
-
-1
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PhotoPath"
-
-http://accweb/emmployees/lastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/x-www-form-urlencoded"
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=1&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update no data: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 405,
-   "statusMessage": "OINO ERROR (ValidateRowValues): Field 'LastName' is not allowed to be NULL!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [value too long for type character varying(20)]",
-   "messages": [
-      "OINO WARNING (ValidateRowValues): Field 'LastName' length (21) exceeds maximum (20) and might truncate or fail.",
-      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [value too long for type character varying(20)]]",
-      "OINO DEBUG (DoPut): OINO PUT SQL [UPDATE %5C%22employees%5C%22 SET %5C%22LastName%5C%22='zzzzzzzzzzzzzzzzzzzzz' WHERE (%5C%22EmployeeID%5C%22=99);]"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP DELETE] remove: DELETE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbPostgresql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
-"[
-
-]"
-`;
-
-exports[`[OINODbMariadb][Employees][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"varchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"varchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"varchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"varchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"longblob","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"mediumtext","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"varchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
-
-exports[`[OINODbMariadb][Employees][HTTP GET] select *: GET JSON 1`] = `
-"[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"}
-]"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP GET] select *: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","2","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","2","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","2","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","2","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","5","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","5","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","2","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","5","http://accweb/emmployees/davolio.bmp""
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
-"[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"}
-]"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP POST] insert with id: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP POST] insert: POST 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP POST] insert: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP POST] insert: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP POST] insert no data: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP POST] insert duplicate: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Duplicate entry '99' for key 'PRIMARY']",
-   "messages": [
-      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Duplicate entry '99' for key 'PRIMARY']]",
-      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO 'Employees' ('EmployeeID','LastName','FirstName','Title','TitleOfCourtesy','BirthDate','HireDate','Address','City','Region','PostalCode','Country','HomePhone','Extension','Photo','Notes','ReportsTo','PhotoPath') VALUES (99,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,%5C%222024-04-06 00:00:00.000%5C%22,%5C%222024-04-07 00:00:00.000%5C%22,%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%2212345%5C%22,%5C%22EU%5C%22,%5C%22123 456 7890%5C%22,%5C%229876%5C%22,x'0001020304',%5C%22Line1%5C%5CnLine2%5C%22,1,%5C%22http://accweb/emmployees/lastnamefirstname.bmp%5C%22);]"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/json"
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "text/csv"
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "multipart/form-data",
-      "multipartBoundary": "---------OINO999999999"
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
-"---------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="_OINOID_"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="EmployeeID"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="LastName"
-
-LastName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="FirstName"
-
-FirstName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Title"
-
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="TitleOfCourtesy"
-
-TitleOfCourtesy2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="BirthDate"
-
-2023-04-06T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HireDate"
-
-2023-04-07T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Address"
-
-Address2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="City"
-
-City2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Region"
-
-Region2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PostalCode"
-
-54321
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Country"
-
-EU2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HomePhone"
-
-234 567 8901
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Extension"
-
-8765
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Photo"; filename=Photo"
-Content-Type: application/octet-stream
-Content-Transfer-Encoding: BASE64
-
-BQYHCAk=
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Notes"
-
-Line3
-Line4
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="ReportsTo"
-
-1
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PhotoPath"
-
-http://accweb/emmployees/lastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/x-www-form-urlencoded"
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=1&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update no data: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 405,
-   "statusMessage": "OINO ERROR (ValidateRowValues): Field 'LastName' is not allowed to be NULL!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Data too long for column 'LastName' at row 1]",
-   "messages": [
-      "OINO WARNING (ValidateRowValues): Field 'LastName' length (21) exceeds maximum (20) and might truncate or fail.",
-      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Data too long for column 'LastName' at row 1]]",
-      "OINO DEBUG (DoPut): OINO PUT SQL [UPDATE 'Employees' SET 'LastName'=%5C%22zzzzzzzzzzzzzzzzzzzzz%5C%22 WHERE ('EmployeeID'=99);]"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP DELETE] remove: DELETE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMariadb][Employees][HTTP DELETE] remove: GET JSON 1`] = `
-"[
-
-]"
-`;
-
-exports[`[OINODbMsSql][Employees][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"nvarchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"nvarchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"nvarchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"nvarchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"image","maxLength":2147483647,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"ntext","maxLength":1073741823,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"nvarchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
-
-exports[`[OINODbMsSql][Employees][HTTP GET] select *: GET JSON 1`] = `
-"[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"}
-]"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP GET] select *: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","2","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","2","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","2","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","2","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","5","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","5","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","2","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","5","http://accweb/emmployees/davolio.bmp""
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
-"[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":5,"PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":2,"PhotoPath":"http://accweb/emmployees/leverling.bmp"}
-]"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP POST] insert with id: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP POST] insert: POST 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP POST] insert: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP POST] insert: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP POST] insert no data: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP POST] insert duplicate: POST 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Employees'. Cannot insert duplicate key in object 'dbo.Employees'. The duplicate key value is (99).]",
-   "messages": [
-      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Employees'. Cannot insert duplicate key in object 'dbo.Employees'. The duplicate key value is (99).]]",
-      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO [Employees] ([EmployeeID],[LastName],[FirstName],[Title],[TitleOfCourtesy],[BirthDate],[HireDate],[Address],[City],[Region],[PostalCode],[Country],[HomePhone],[Extension],[Photo],[Notes],[ReportsTo],[PhotoPath]) VALUES (99,'LastName','FirstName','Title','TitleOfCourtesy','2024-04-06T00:00:00.000','2024-04-07T00:00:00.000','Address','City','Region','12345','EU','123 456 7890','9876','%5Cu0000%5Cu0001%5Cu0002%5Cu0003%5Cu0004','Line1%5CnLine2',1,'http://accweb/emmployees/lastnamefirstname.bmp');]"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/json"
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
-"[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":1,"PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
-]"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "text/csv"
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
-""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","1","http://accweb/emmployees/lastnamefirstname.bmp""
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "multipart/form-data",
-      "multipartBoundary": "---------OINO999999999"
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
-"---------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="_OINOID_"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="EmployeeID"
-
-5EI1V6czK6RUPP
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="LastName"
-
-LastName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="FirstName"
-
-FirstName2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Title"
-
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="TitleOfCourtesy"
-
-TitleOfCourtesy2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="BirthDate"
-
-2023-04-06T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HireDate"
-
-2023-04-07T00:00:00.000Z
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Address"
-
-Address2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="City"
-
-City2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Region"
-
-Region2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PostalCode"
-
-54321
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Country"
-
-EU2
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="HomePhone"
-
-234 567 8901
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Extension"
-
-8765
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Photo"; filename=Photo"
-Content-Type: application/octet-stream
-Content-Transfer-Encoding: BASE64
-
-BQYHCAk=
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="Notes"
-
-Line3
-Line4
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="ReportsTo"
-
-1
----------OINOMultipartBoundary35424568
-Content-Disposition: form-data; name="PhotoPath"
-
-http://accweb/emmployees/lastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {},
-      "requestType": "application/x-www-form-urlencoded"
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=1&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
-"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update no data: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 400,
-   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 405,
-   "statusMessage": "OINO ERROR (ValidateRowValues): Field 'LastName' is not allowed to be NULL!",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [RequestError: String or binary data would be truncated in table 'Northwind.dbo.Employees', column 'LastName'. Truncated value: 'zzzzzzzzzzzzzzzzzzzz'.]",
-   "messages": [
-      "OINO WARNING (ValidateRowValues): Field 'LastName' length (21) exceeds maximum (20) and might truncate or fail.",
-      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [RequestError: String or binary data would be truncated in table 'Northwind.dbo.Employees', column 'LastName'. Truncated value: 'zzzzzzzzzzzzzzzzzzzz'.]]",
-      "OINO DEBUG (DoPut): OINO PUT SQL [UPDATE [Employees] SET [LastName]='zzzzzzzzzzzzzzzzzzzzz' WHERE ([EmployeeID]=99);]"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP DELETE] remove: DELETE 1`] = `
-"{
-   "success": true,
-   "statusCode": 200,
-   "statusMessage": "OK",
-   "messages": [],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[OINODbMsSql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
-"[
-
-]"
-`;
-
-exports[`[OINODbBunSqlite][Orders][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[OINODbBunSqlite][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
 exports[`[OINODbBunSqlite][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -3089,16 +1673,9 @@ exports[`[OINODbBunSqlite][Orders][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbBunSqlite][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"10365","OrderID":10365,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1996-11-27T00:00:00.000Z","RequiredDate":"1996-12-25T00:00:00.000Z","ShippedDate":"1996-12-02T00:00:00.000Z","ShipVia":2,"Freight":22,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10507","OrderID":10507,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-04-15T00:00:00.000Z","RequiredDate":"1997-05-13T00:00:00.000Z","ShippedDate":"1997-04-22T00:00:00.000Z","ShipVia":1,"Freight":47.45,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10535","OrderID":10535,"CustomerID":"ANTON","EmployeeID":4,"OrderDate":"1997-05-13T00:00:00.000Z","RequiredDate":"1997-06-10T00:00:00.000Z","ShippedDate":"1997-05-21T00:00:00.000Z","ShipVia":1,"Freight":15.64,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10677","OrderID":10677,"CustomerID":"ANTON","EmployeeID":1,"OrderDate":"1997-09-22T00:00:00.000Z","RequiredDate":"1997-10-20T00:00:00.000Z","ShippedDate":"1997-09-26T00:00:00.000Z","ShipVia":3,"Freight":4.03,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10682","OrderID":10682,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1997-09-25T00:00:00.000Z","RequiredDate":"1997-10-23T00:00:00.000Z","ShippedDate":"1997-10-01T00:00:00.000Z","ShipVia":2,"Freight":36.13,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10856","OrderID":10856,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1998-01-28T00:00:00.000Z","RequiredDate":"1998-02-25T00:00:00.000Z","ShippedDate":"1998-02-10T00:00:00.000Z","ShipVia":2,"Freight":58.43,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
 {"_OINOID_":"10308","OrderID":10308,"CustomerID":"ANATR","EmployeeID":7,"OrderDate":"1996-09-18T00:00:00.000Z","RequiredDate":"1996-10-16T00:00:00.000Z","ShippedDate":"1996-09-24T00:00:00.000Z","ShipVia":3,"Freight":1.61,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
-{"_OINOID_":"10625","OrderID":10625,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-08-08T00:00:00.000Z","RequiredDate":"1997-09-05T00:00:00.000Z","ShippedDate":"1997-08-14T00:00:00.000Z","ShipVia":1,"Freight":43.9,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
 {"_OINOID_":"10759","OrderID":10759,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-11-28T00:00:00.000Z","RequiredDate":"1997-12-26T00:00:00.000Z","ShippedDate":"1997-12-12T00:00:00.000Z","ShipVia":3,"Freight":11.99,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
 {"_OINOID_":"10926","OrderID":10926,"CustomerID":"ANATR","EmployeeID":4,"OrderDate":"1998-03-04T00:00:00.000Z","RequiredDate":"1998-04-01T00:00:00.000Z","ShippedDate":"1998-03-11T00:00:00.000Z","ShipVia":3,"Freight":39.92,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"}
 ]"
@@ -3383,7 +1960,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Products][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"BOOLEAN","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[OINODbBunSqlite][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"BOOLEAN","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
 exports[`[OINODbBunSqlite][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -3556,9 +2133,7 @@ exports[`[OINODbBunSqlite][Products][HTTP GET] select * with filter: GET JSON FI
 {"_OINOID_":"17","ProductID":17,"ProductName":"Alice Mutton","SupplierID":7,"CategoryID":6,"QuantityPerUnit":"20 - 1 kg tins","UnitPrice":39.09,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"29","ProductID":29,"ProductName":"Thüringer Rostbratwurst","SupplierID":12,"CategoryID":6,"QuantityPerUnit":"50 bags x 30 sausgs.","UnitPrice":123.79,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"21","ProductID":21,"ProductName":"Sir Rodney's Scones","SupplierID":8,"CategoryID":3,"QuantityPerUnit":"24 pkgs. x 4 pieces","UnitPrice":10.09,"UnitsInStock":3,"UnitsOnOrder":40,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"66","ProductID":66,"ProductName":"Louisiana Hot Spiced Okra","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"24 - 8 oz jars","UnitPrice":17.09,"UnitsInStock":4,"UnitsOnOrder":100,"ReorderLevel":20,"Discontinued":false},
-{"_OINOID_":"45","ProductID":45,"ProductName":"Rogede sild","SupplierID":21,"CategoryID":8,"QuantityPerUnit":"1k pkg.","UnitPrice":9.59,"UnitsInStock":5,"UnitsOnOrder":70,"ReorderLevel":15,"Discontinued":false}
+{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false}
 ]"
 `;
 
@@ -3831,7 +2406,340 @@ exports[`[OINODbBunSqlite][Products][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[OINODbBunSqlite][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"BLOB","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP GET] select *: GET JSON 1`] = `
+"[
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+]"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP GET] select *: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
+"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
+"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
+"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
+"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
+"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
+"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
+"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+"[
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+]"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP POST] insert with id: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: POST 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP POST] insert no data: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP POST] insert duplicate: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR(sqlExec): exception in _db.exec [UNIQUE constraint failed: Employees.EmployeeID]",
+   "messages": [
+      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR(sqlExec): exception in _db.exec [UNIQUE constraint failed: Employees.EmployeeID]]",
+      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO [Employees] (%5C%22EmployeeID%5C%22,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,%5C%22BirthDate%5C%22,%5C%22HireDate%5C%22,%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%22PostalCode%5C%22,%5C%22Country%5C%22,%5C%22HomePhone%5C%22,%5C%22Extension%5C%22,%5C%22Photo%5C%22,%5C%22Notes%5C%22,%5C%22ReportsTo%5C%22,%5C%22PhotoPath%5C%22) VALUES (99,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,'2024-04-06T00:00:00.000Z','2024-04-07T00:00:00.000Z',%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%2212345%5C%22,%5C%22EU%5C%22,%5C%22123 456 7890%5C%22,%5C%229876%5C%22,X'0001020304',%5C%22Line1%5CnLine2%5C%22,1,%5C%22http://accweb/emmployees/lastnamefirstname.bmp%5C%22);]"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/json"
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "text/csv"
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "multipart/form-data",
+      "multipartBoundary": "---------OINO999999999"
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+"---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="_OINOID_"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="EmployeeID"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="LastName"
+
+LastName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="FirstName"
+
+FirstName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Title"
+
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="TitleOfCourtesy"
+
+TitleOfCourtesy2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="BirthDate"
+
+2023-04-06T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HireDate"
+
+2023-04-07T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Address"
+
+Address2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="City"
+
+City2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Region"
+
+Region2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PostalCode"
+
+54321
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Country"
+
+EU2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HomePhone"
+
+234 567 8901
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Extension"
+
+8765
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Photo"; filename=Photo"
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: BASE64
+
+BQYHCAk=
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Notes"
+
+Line3
+Line4
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="ReportsTo"
+
+c7Ew4RtiDbPYXk
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PhotoPath"
+
+http://accweb/emmployees/lastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/x-www-form-urlencoded"
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP PUT] update no data: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbBunSqlite][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OINODbBunSqlite][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
 exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -8154,19 +7062,11 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"10764_39","OrderID":10764,"ProductID":39,"UnitPrice":18,"Quantity":130,"Discount":0.1},
-{"_OINOID_":"11072_64","OrderID":11072,"ProductID":64,"UnitPrice":33.25,"Quantity":130,"Discount":0},
-{"_OINOID_":"10398_55","OrderID":10398,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10451_55","OrderID":10451,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10515_27","OrderID":10515,"ProductID":27,"UnitPrice":43.9,"Quantity":120,"Discount":0},
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
-{"_OINOID_":"10678_41","OrderID":10678,"ProductID":41,"UnitPrice":9.65,"Quantity":120,"Discount":0},
 {"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
+{"_OINOID_":"10515_27","OrderID":10515,"ProductID":27,"UnitPrice":43.9,"Quantity":120,"Discount":0},
 {"_OINOID_":"10776_51","OrderID":10776,"ProductID":51,"UnitPrice":53,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10894_75","OrderID":10894,"ProductID":75,"UnitPrice":7.75,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10713_45","OrderID":10713,"ProductID":45,"UnitPrice":9.5,"Quantity":110,"Discount":0},
-{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0},
-{"_OINOID_":"11017_59","OrderID":11017,"ProductID":59,"UnitPrice":55,"Quantity":110,"Discount":0}
+{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0}
 ]"
 `;
 
@@ -8407,7 +7307,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbPostgresql][Orders][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"character","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
+exports[`[OINODbPostgresql][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"character","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
 
 exports[`[OINODbPostgresql][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -10080,18 +8980,11 @@ exports[`[OINODbPostgresql][Orders][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbPostgresql][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"10677","OrderID":10677,"CustomerID":"ANTON","EmployeeID":1,"OrderDate":"1997-09-22T00:00:00.000Z","RequiredDate":"1997-10-20T00:00:00.000Z","ShippedDate":"1997-09-26T00:00:00.000Z","ShipVia":3,"Freight":4.03,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10507","OrderID":10507,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-04-15T00:00:00.000Z","RequiredDate":"1997-05-13T00:00:00.000Z","ShippedDate":"1997-04-22T00:00:00.000Z","ShipVia":1,"Freight":47.45,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10856","OrderID":10856,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1998-01-28T00:00:00.000Z","RequiredDate":"1998-02-25T00:00:00.000Z","ShippedDate":"1998-02-10T00:00:00.000Z","ShipVia":2,"Freight":58.43,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10682","OrderID":10682,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1997-09-25T00:00:00.000Z","RequiredDate":"1997-10-23T00:00:00.000Z","ShippedDate":"1997-10-01T00:00:00.000Z","ShipVia":2,"Freight":36.13,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10535","OrderID":10535,"CustomerID":"ANTON","EmployeeID":4,"OrderDate":"1997-05-13T00:00:00.000Z","RequiredDate":"1997-06-10T00:00:00.000Z","ShippedDate":"1997-05-21T00:00:00.000Z","ShipVia":1,"Freight":15.64,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10365","OrderID":10365,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1996-11-27T00:00:00.000Z","RequiredDate":"1996-12-25T00:00:00.000Z","ShippedDate":"1996-12-02T00:00:00.000Z","ShipVia":2,"Freight":22,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
-{"_OINOID_":"10926","OrderID":10926,"CustomerID":"ANATR","EmployeeID":4,"OrderDate":"1998-03-04T00:00:00.000Z","RequiredDate":"1998-04-01T00:00:00.000Z","ShippedDate":"1998-03-11T00:00:00.000Z","ShipVia":3,"Freight":39.92,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
 {"_OINOID_":"10308","OrderID":10308,"CustomerID":"ANATR","EmployeeID":7,"OrderDate":"1996-09-18T00:00:00.000Z","RequiredDate":"1996-10-16T00:00:00.000Z","ShippedDate":"1996-09-24T00:00:00.000Z","ShipVia":3,"Freight":1.61,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
-{"_OINOID_":"10625","OrderID":10625,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-08-08T00:00:00.000Z","RequiredDate":"1997-09-05T00:00:00.000Z","ShippedDate":"1997-08-14T00:00:00.000Z","ShipVia":1,"Freight":43.9,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
-{"_OINOID_":"10759","OrderID":10759,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-11-28T00:00:00.000Z","RequiredDate":"1997-12-26T00:00:00.000Z","ShippedDate":"1997-12-12T00:00:00.000Z","ShipVia":3,"Freight":11.99,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"}
+{"_OINOID_":"10759","OrderID":10759,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-11-28T00:00:00.000Z","RequiredDate":"1997-12-26T00:00:00.000Z","ShippedDate":"1997-12-12T00:00:00.000Z","ShipVia":3,"Freight":11.99,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
+{"_OINOID_":"10926","OrderID":10926,"CustomerID":"ANATR","EmployeeID":4,"OrderDate":"1998-03-04T00:00:00.000Z","RequiredDate":"1998-04-01T00:00:00.000Z","ShippedDate":"1998-03-11T00:00:00.000Z","ShipVia":3,"Freight":39.92,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"}
 ]"
 `;
 
@@ -10390,7 +9283,7 @@ exports[`[OINODbPostgresql][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbPostgresql][Products][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"boolean","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
+exports[`[OINODbPostgresql][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"boolean","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
 
 exports[`[OINODbPostgresql][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -10563,9 +9456,7 @@ exports[`[OINODbPostgresql][Products][HTTP GET] select * with filter: GET JSON F
 {"_OINOID_":"17","ProductID":17,"ProductName":"Alice Mutton","SupplierID":7,"CategoryID":6,"QuantityPerUnit":"20 - 1 kg tins","UnitPrice":39.09,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"29","ProductID":29,"ProductName":"Thüringer Rostbratwurst","SupplierID":12,"CategoryID":6,"QuantityPerUnit":"50 bags x 30 sausgs.","UnitPrice":123.79,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"21","ProductID":21,"ProductName":"Sir Rodney's Scones","SupplierID":8,"CategoryID":3,"QuantityPerUnit":"24 pkgs. x 4 pieces","UnitPrice":10.09,"UnitsInStock":3,"UnitsOnOrder":40,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"66","ProductID":66,"ProductName":"Louisiana Hot Spiced Okra","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"24 - 8 oz jars","UnitPrice":17.09,"UnitsInStock":4,"UnitsOnOrder":100,"ReorderLevel":20,"Discontinued":false},
-{"_OINOID_":"45","ProductID":45,"ProductName":"Rogede sild","SupplierID":21,"CategoryID":8,"QuantityPerUnit":"1k pkg.","UnitPrice":9.59,"UnitsInStock":5,"UnitsOnOrder":70,"ReorderLevel":15,"Discontinued":false}
+{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false}
 ]"
 `;
 
@@ -10850,7 +9741,368 @@ exports[`[OINODbPostgresql][Products][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
+exports[`[OINODbPostgresql][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"integer","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"character varying","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"character varying","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"character varying","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"character varying","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"bytea","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"text","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"character varying","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
+
+exports[`[OINODbPostgresql][Employees][HTTP GET] select *: GET JSON 1`] = `
+"[
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+]"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP GET] select *: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
+"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
+"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
+"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
+"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
+"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
+"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
+"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+"[
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+]"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP POST] insert with id: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP POST] insert: POST 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP POST] insert: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP POST] insert: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP POST] insert no data: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP POST] insert duplicate: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [duplicate key value violates unique constraint %5C%22pk_employees%5C%22]",
+   "messages": [
+      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [duplicate key value violates unique constraint %5C%22pk_employees%5C%22]]",
+      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO %5C%22employees%5C%22 (%5C%22EmployeeID%5C%22,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,%5C%22BirthDate%5C%22,%5C%22HireDate%5C%22,%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%22PostalCode%5C%22,%5C%22Country%5C%22,%5C%22HomePhone%5C%22,%5C%22Extension%5C%22,%5C%22Photo%5C%22,%5C%22Notes%5C%22,%5C%22ReportsTo%5C%22,%5C%22PhotoPath%5C%22) VALUES (99,'LastName','FirstName','Title','TitleOfCourtesy','2024-04-06T00:00:00.000Z','2024-04-07T00:00:00.000Z','Address','City','Region','12345','EU','123 456 7890','9876','%5C%5Cx0001020304','Line1%5CnLine2',1,'http://accweb/emmployees/lastnamefirstname.bmp');]"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/json"
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "text/csv"
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "multipart/form-data",
+      "multipartBoundary": "---------OINO999999999"
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+"---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="_OINOID_"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="EmployeeID"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="LastName"
+
+LastName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="FirstName"
+
+FirstName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Title"
+
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="TitleOfCourtesy"
+
+TitleOfCourtesy2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="BirthDate"
+
+2023-04-06T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HireDate"
+
+2023-04-07T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Address"
+
+Address2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="City"
+
+City2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Region"
+
+Region2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PostalCode"
+
+54321
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Country"
+
+EU2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HomePhone"
+
+234 567 8901
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Extension"
+
+8765
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Photo"; filename=Photo"
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: BASE64
+
+BQYHCAk=
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Notes"
+
+Line3
+Line4
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="ReportsTo"
+
+c7Ew4RtiDbPYXk
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PhotoPath"
+
+http://accweb/emmployees/lastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/x-www-form-urlencoded"
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update no data: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 405,
+   "statusMessage": "OINO ERROR (ValidateRowValues): Field 'LastName' is not allowed to be NULL!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [value too long for type character varying(20)]",
+   "messages": [
+      "OINO WARNING (ValidateRowValues): Field 'LastName' length (21) exceeds maximum (20) and might truncate or fail.",
+      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [value too long for type character varying(20)]]",
+      "OINO DEBUG (DoPut): OINO PUT SQL [UPDATE %5C%22employees%5C%22 SET %5C%22LastName%5C%22='zzzzzzzzzzzzzzzzzzzzz' WHERE (%5C%22EmployeeID%5C%22=99);]"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbPostgresql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OINODbPostgresql][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
 
 exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -15173,19 +14425,11 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"11072_64","OrderID":11072,"ProductID":64,"UnitPrice":33.25,"Quantity":130,"Discount":0},
-{"_OINOID_":"10764_39","OrderID":10764,"ProductID":39,"UnitPrice":18,"Quantity":130,"Discount":0.1},
-{"_OINOID_":"10515_27","OrderID":10515,"ProductID":27,"UnitPrice":43.9,"Quantity":120,"Discount":0},
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
-{"_OINOID_":"10678_41","OrderID":10678,"ProductID":41,"UnitPrice":9.65,"Quantity":120,"Discount":0},
 {"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
+{"_OINOID_":"10515_27","OrderID":10515,"ProductID":27,"UnitPrice":43.9,"Quantity":120,"Discount":0},
 {"_OINOID_":"10776_51","OrderID":10776,"ProductID":51,"UnitPrice":53,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10894_75","OrderID":10894,"ProductID":75,"UnitPrice":7.75,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10398_55","OrderID":10398,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10451_55","OrderID":10451,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0},
-{"_OINOID_":"11017_59","OrderID":11017,"ProductID":59,"UnitPrice":55,"Quantity":110,"Discount":0},
-{"_OINOID_":"10713_45","OrderID":10713,"ProductID":45,"UnitPrice":9.5,"Quantity":110,"Discount":0}
+{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0}
 ]"
 `;
 
@@ -15426,7 +14670,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMariadb][Orders][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"varchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[OINODbMariadb][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"varchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
 exports[`[OINODbMariadb][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -17099,18 +16343,11 @@ exports[`[OINODbMariadb][Orders][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbMariadb][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"10856","OrderID":10856,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1998-01-28T00:00:00.000Z","RequiredDate":"1998-02-25T00:00:00.000Z","ShippedDate":"1998-02-10T00:00:00.000Z","ShipVia":2,"Freight":58.43,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10682","OrderID":10682,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1997-09-25T00:00:00.000Z","RequiredDate":"1997-10-23T00:00:00.000Z","ShippedDate":"1997-10-01T00:00:00.000Z","ShipVia":2,"Freight":36.13,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10677","OrderID":10677,"CustomerID":"ANTON","EmployeeID":1,"OrderDate":"1997-09-22T00:00:00.000Z","RequiredDate":"1997-10-20T00:00:00.000Z","ShippedDate":"1997-09-26T00:00:00.000Z","ShipVia":3,"Freight":4.03,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10535","OrderID":10535,"CustomerID":"ANTON","EmployeeID":4,"OrderDate":"1997-05-13T00:00:00.000Z","RequiredDate":"1997-06-10T00:00:00.000Z","ShippedDate":"1997-05-21T00:00:00.000Z","ShipVia":1,"Freight":15.64,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10507","OrderID":10507,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-04-15T00:00:00.000Z","RequiredDate":"1997-05-13T00:00:00.000Z","ShippedDate":"1997-04-22T00:00:00.000Z","ShipVia":1,"Freight":47.45,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10365","OrderID":10365,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1996-11-27T00:00:00.000Z","RequiredDate":"1996-12-25T00:00:00.000Z","ShippedDate":"1996-12-02T00:00:00.000Z","ShipVia":2,"Freight":22,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
-{"_OINOID_":"10926","OrderID":10926,"CustomerID":"ANATR","EmployeeID":4,"OrderDate":"1998-03-04T00:00:00.000Z","RequiredDate":"1998-04-01T00:00:00.000Z","ShippedDate":"1998-03-11T00:00:00.000Z","ShipVia":3,"Freight":39.92,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
+{"_OINOID_":"10308","OrderID":10308,"CustomerID":"ANATR","EmployeeID":7,"OrderDate":"1996-09-18T00:00:00.000Z","RequiredDate":"1996-10-16T00:00:00.000Z","ShippedDate":"1996-09-24T00:00:00.000Z","ShipVia":3,"Freight":1.61,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
 {"_OINOID_":"10759","OrderID":10759,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-11-28T00:00:00.000Z","RequiredDate":"1997-12-26T00:00:00.000Z","ShippedDate":"1997-12-12T00:00:00.000Z","ShipVia":3,"Freight":11.99,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
-{"_OINOID_":"10625","OrderID":10625,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-08-08T00:00:00.000Z","RequiredDate":"1997-09-05T00:00:00.000Z","ShippedDate":"1997-08-14T00:00:00.000Z","ShipVia":1,"Freight":43.9,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
-{"_OINOID_":"10308","OrderID":10308,"CustomerID":"ANATR","EmployeeID":7,"OrderDate":"1996-09-18T00:00:00.000Z","RequiredDate":"1996-10-16T00:00:00.000Z","ShippedDate":"1996-09-24T00:00:00.000Z","ShipVia":3,"Freight":1.61,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"}
+{"_OINOID_":"10926","OrderID":10926,"CustomerID":"ANATR","EmployeeID":4,"OrderDate":"1998-03-04T00:00:00.000Z","RequiredDate":"1998-04-01T00:00:00.000Z","ShippedDate":"1998-03-11T00:00:00.000Z","ShipVia":3,"Freight":39.92,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"}
 ]"
 `;
 
@@ -17409,7 +16646,7 @@ exports[`[OINODbMariadb][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMariadb][Products][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[OINODbMariadb][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
 exports[`[OINODbMariadb][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -17582,9 +16819,7 @@ exports[`[OINODbMariadb][Products][HTTP GET] select * with filter: GET JSON FILT
 {"_OINOID_":"17","ProductID":17,"ProductName":"Alice Mutton","SupplierID":7,"CategoryID":6,"QuantityPerUnit":"20 - 1 kg tins","UnitPrice":39.09,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"29","ProductID":29,"ProductName":"Thüringer Rostbratwurst","SupplierID":12,"CategoryID":6,"QuantityPerUnit":"50 bags x 30 sausgs.","UnitPrice":123.79,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"21","ProductID":21,"ProductName":"Sir Rodney's Scones","SupplierID":8,"CategoryID":3,"QuantityPerUnit":"24 pkgs. x 4 pieces","UnitPrice":10.09,"UnitsInStock":3,"UnitsOnOrder":40,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"66","ProductID":66,"ProductName":"Louisiana Hot Spiced Okra","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"24 - 8 oz jars","UnitPrice":17.09,"UnitsInStock":4,"UnitsOnOrder":100,"ReorderLevel":20,"Discontinued":false},
-{"_OINOID_":"45","ProductID":45,"ProductName":"Rogede sild","SupplierID":21,"CategoryID":8,"QuantityPerUnit":"1k pkg.","UnitPrice":9.59,"UnitsInStock":5,"UnitsOnOrder":70,"ReorderLevel":15,"Discontinued":false}
+{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false}
 ]"
 `;
 
@@ -17869,7 +17104,368 @@ exports[`[OINODbMariadb][Products][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[OINODbMariadb][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"varchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"varchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"varchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"varchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"longblob","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"mediumtext","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"varchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+
+exports[`[OINODbMariadb][Employees][HTTP GET] select *: GET JSON 1`] = `
+"[
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+]"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP GET] select *: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
+"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
+"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
+"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
+"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
+"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
+"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
+"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+"[
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+]"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP POST] insert with id: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP POST] insert: POST 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP POST] insert: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP POST] insert: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP POST] insert no data: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP POST] insert duplicate: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Duplicate entry '99' for key 'PRIMARY']",
+   "messages": [
+      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Duplicate entry '99' for key 'PRIMARY']]",
+      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO 'Employees' ('EmployeeID','LastName','FirstName','Title','TitleOfCourtesy','BirthDate','HireDate','Address','City','Region','PostalCode','Country','HomePhone','Extension','Photo','Notes','ReportsTo','PhotoPath') VALUES (99,%5C%22LastName%5C%22,%5C%22FirstName%5C%22,%5C%22Title%5C%22,%5C%22TitleOfCourtesy%5C%22,%5C%222024-04-06 00:00:00.000%5C%22,%5C%222024-04-07 00:00:00.000%5C%22,%5C%22Address%5C%22,%5C%22City%5C%22,%5C%22Region%5C%22,%5C%2212345%5C%22,%5C%22EU%5C%22,%5C%22123 456 7890%5C%22,%5C%229876%5C%22,x'0001020304',%5C%22Line1%5C%5CnLine2%5C%22,1,%5C%22http://accweb/emmployees/lastnamefirstname.bmp%5C%22);]"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/json"
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "text/csv"
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "multipart/form-data",
+      "multipartBoundary": "---------OINO999999999"
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+"---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="_OINOID_"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="EmployeeID"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="LastName"
+
+LastName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="FirstName"
+
+FirstName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Title"
+
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="TitleOfCourtesy"
+
+TitleOfCourtesy2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="BirthDate"
+
+2023-04-06T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HireDate"
+
+2023-04-07T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Address"
+
+Address2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="City"
+
+City2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Region"
+
+Region2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PostalCode"
+
+54321
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Country"
+
+EU2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HomePhone"
+
+234 567 8901
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Extension"
+
+8765
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Photo"; filename=Photo"
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: BASE64
+
+BQYHCAk=
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Notes"
+
+Line3
+Line4
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="ReportsTo"
+
+c7Ew4RtiDbPYXk
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PhotoPath"
+
+http://accweb/emmployees/lastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/x-www-form-urlencoded"
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update no data: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 405,
+   "statusMessage": "OINO ERROR (ValidateRowValues): Field 'LastName' is not allowed to be NULL!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Data too long for column 'LastName' at row 1]",
+   "messages": [
+      "OINO WARNING (ValidateRowValues): Field 'LastName' length (21) exceeds maximum (20) and might truncate or fail.",
+      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Data too long for column 'LastName' at row 1]]",
+      "OINO DEBUG (DoPut): OINO PUT SQL [UPDATE 'Employees' SET 'LastName'=%5C%22zzzzzzzzzzzzzzzzzzzzz%5C%22 WHERE ('EmployeeID'=99);]"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMariadb][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OINODbMariadb][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
 exports[`[OINODbMariadb][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -22192,19 +21788,11 @@ exports[`[OINODbMariadb][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbMariadb][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"11072_64","OrderID":11072,"ProductID":64,"UnitPrice":33.25,"Quantity":130,"Discount":0},
-{"_OINOID_":"10764_39","OrderID":10764,"ProductID":39,"UnitPrice":18,"Quantity":130,"Discount":0.1},
-{"_OINOID_":"10894_75","OrderID":10894,"ProductID":75,"UnitPrice":7.75,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10776_51","OrderID":10776,"ProductID":51,"UnitPrice":53,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10398_55","OrderID":10398,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
-{"_OINOID_":"10678_41","OrderID":10678,"ProductID":41,"UnitPrice":9.65,"Quantity":120,"Discount":0},
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
+{"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
 {"_OINOID_":"10515_27","OrderID":10515,"ProductID":27,"UnitPrice":43.9,"Quantity":120,"Discount":0},
-{"_OINOID_":"10451_55","OrderID":10451,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0},
-{"_OINOID_":"11017_59","OrderID":11017,"ProductID":59,"UnitPrice":55,"Quantity":110,"Discount":0},
-{"_OINOID_":"10713_45","OrderID":10713,"ProductID":45,"UnitPrice":9.5,"Quantity":110,"Discount":0}
+{"_OINOID_":"10776_51","OrderID":10776,"ProductID":51,"UnitPrice":53,"Quantity":120,"Discount":0.05},
+{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0}
 ]"
 `;
 
@@ -22445,7 +22033,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMsSql][Orders][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"nchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[OINODbMsSql][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"nchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
 exports[`[OINODbMsSql][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -24118,17 +23706,10 @@ exports[`[OINODbMsSql][Orders][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbMsSql][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"10365","OrderID":10365,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1996-11-27T00:00:00.000Z","RequiredDate":"1996-12-25T00:00:00.000Z","ShippedDate":"1996-12-02T00:00:00.000Z","ShipVia":2,"Freight":22,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10507","OrderID":10507,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-04-15T00:00:00.000Z","RequiredDate":"1997-05-13T00:00:00.000Z","ShippedDate":"1997-04-22T00:00:00.000Z","ShipVia":1,"Freight":47.45,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10535","OrderID":10535,"CustomerID":"ANTON","EmployeeID":4,"OrderDate":"1997-05-13T00:00:00.000Z","RequiredDate":"1997-06-10T00:00:00.000Z","ShippedDate":"1997-05-21T00:00:00.000Z","ShipVia":1,"Freight":15.64,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10677","OrderID":10677,"CustomerID":"ANTON","EmployeeID":1,"OrderDate":"1997-09-22T00:00:00.000Z","RequiredDate":"1997-10-20T00:00:00.000Z","ShippedDate":"1997-09-26T00:00:00.000Z","ShipVia":3,"Freight":4.03,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10682","OrderID":10682,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1997-09-25T00:00:00.000Z","RequiredDate":"1997-10-23T00:00:00.000Z","ShippedDate":"1997-10-01T00:00:00.000Z","ShipVia":2,"Freight":36.13,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
-{"_OINOID_":"10856","OrderID":10856,"CustomerID":"ANTON","EmployeeID":3,"OrderDate":"1998-01-28T00:00:00.000Z","RequiredDate":"1998-02-25T00:00:00.000Z","ShippedDate":"1998-02-10T00:00:00.000Z","ShipVia":2,"Freight":58.43,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
 {"_OINOID_":"10308","OrderID":10308,"CustomerID":"ANATR","EmployeeID":7,"OrderDate":"1996-09-18T00:00:00.000Z","RequiredDate":"1996-10-16T00:00:00.000Z","ShippedDate":"1996-09-24T00:00:00.000Z","ShipVia":3,"Freight":1.61,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
 {"_OINOID_":"10759","OrderID":10759,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-11-28T00:00:00.000Z","RequiredDate":"1997-12-26T00:00:00.000Z","ShippedDate":"1997-12-12T00:00:00.000Z","ShipVia":3,"Freight":11.99,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
-{"_OINOID_":"10625","OrderID":10625,"CustomerID":"ANATR","EmployeeID":3,"OrderDate":"1997-08-08T00:00:00.000Z","RequiredDate":"1997-09-05T00:00:00.000Z","ShippedDate":"1997-08-14T00:00:00.000Z","ShipVia":1,"Freight":43.9,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"},
 {"_OINOID_":"10926","OrderID":10926,"CustomerID":"ANATR","EmployeeID":4,"OrderDate":"1998-03-04T00:00:00.000Z","RequiredDate":"1998-04-01T00:00:00.000Z","ShippedDate":"1998-03-11T00:00:00.000Z","ShipVia":3,"Freight":39.92,"ShipName":"Ana Trujillo Emparedados y helados","ShipAddress":"Avda. de la Constitución 2222","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05021","ShipCountry":"Mexico"}
 ]"
 `;
@@ -24186,9 +23767,9 @@ exports[`[OINODbMsSql][Orders][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Orders'. Cannot insert duplicate key in object 'dbo.Orders'. The duplicate key value is (30000).]",
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Orders'. Cannot insert duplicate key in object 'dbo.Orders'. The duplicate key value is (30000).]",
    "messages": [
-      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Orders'. Cannot insert duplicate key in object 'dbo.Orders'. The duplicate key value is (30000).]]",
+      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Orders'. Cannot insert duplicate key in object 'dbo.Orders'. The duplicate key value is (30000).]]",
       "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO [Orders] ([OrderID],[CustomerID],[EmployeeID],[OrderDate],[RequiredDate],[ShippedDate],[ShipVia],[Freight],[ShipName],[ShipAddress],[ShipCity],[ShipRegion],[ShipPostalCode],[ShipCountry]) VALUES (30000,'CACTU',1,'2024-04-05T00:00:00.000','2024-04-06T00:00:00.000','2024-04-07T00:00:00.000',2,184.75,'a''b%5C%22c%d_e%5Ctf%5Crg%5Cnh%5C%5Ci','Garden House Crowther Way','Cowes','British Isles','PO31 7PJ','UK');]"
    ],
    "params": {
@@ -24398,10 +23979,10 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update with oversized data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [RequestError: String or binary data would be truncated in table 'Northwind.dbo.Orders', column 'CustomerID'. Truncated value: 'zzzzz'.]",
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [String or binary data would be truncated in table 'Northwind.dbo.Orders', column 'CustomerID'. Truncated value: 'zzzzz'.]",
    "messages": [
       "OINO WARNING (ValidateRowValues): Field 'CustomerID' length (6) exceeds maximum (5) and might truncate or fail.",
-      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [RequestError: String or binary data would be truncated in table 'Northwind.dbo.Orders', column 'CustomerID'. Truncated value: 'zzzzz'.]]",
+      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [String or binary data would be truncated in table 'Northwind.dbo.Orders', column 'CustomerID'. Truncated value: 'zzzzz'.]]",
       "OINO DEBUG (DoPut): OINO PUT SQL [UPDATE [Orders] SET [CustomerID]='zzzzzz' WHERE ([OrderID]=30000);]"
    ],
    "params": {
@@ -24428,7 +24009,7 @@ exports[`[OINODbMsSql][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMsSql][Products][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[OINODbMsSql][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
 exports[`[OINODbMsSql][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -24601,9 +24182,7 @@ exports[`[OINODbMsSql][Products][HTTP GET] select * with filter: GET JSON FILTER
 {"_OINOID_":"17","ProductID":17,"ProductName":"Alice Mutton","SupplierID":7,"CategoryID":6,"QuantityPerUnit":"20 - 1 kg tins","UnitPrice":39.09,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"29","ProductID":29,"ProductName":"Thüringer Rostbratwurst","SupplierID":12,"CategoryID":6,"QuantityPerUnit":"50 bags x 30 sausgs.","UnitPrice":123.79,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
 {"_OINOID_":"21","ProductID":21,"ProductName":"Sir Rodney's Scones","SupplierID":8,"CategoryID":3,"QuantityPerUnit":"24 pkgs. x 4 pieces","UnitPrice":10.09,"UnitsInStock":3,"UnitsOnOrder":40,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false},
-{"_OINOID_":"66","ProductID":66,"ProductName":"Louisiana Hot Spiced Okra","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"24 - 8 oz jars","UnitPrice":17.09,"UnitsInStock":4,"UnitsOnOrder":100,"ReorderLevel":20,"Discontinued":false},
-{"_OINOID_":"45","ProductID":45,"ProductName":"Rogede sild","SupplierID":21,"CategoryID":8,"QuantityPerUnit":"1k pkg.","UnitPrice":9.59,"UnitsInStock":5,"UnitsOnOrder":70,"ReorderLevel":15,"Discontinued":false}
+{"_OINOID_":"74","ProductID":74,"ProductName":"Longlife Tofu","SupplierID":4,"CategoryID":7,"QuantityPerUnit":"5 kg pkg.","UnitPrice":10.09,"UnitsInStock":4,"UnitsOnOrder":20,"ReorderLevel":5,"Discontinued":false}
 ]"
 `;
 
@@ -24658,9 +24237,9 @@ exports[`[OINODbMsSql][Products][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Products'. Cannot insert duplicate key in object 'dbo.Products'. The duplicate key value is (99).]",
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Products'. Cannot insert duplicate key in object 'dbo.Products'. The duplicate key value is (99).]",
    "messages": [
-      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Products'. Cannot insert duplicate key in object 'dbo.Products'. The duplicate key value is (99).]]",
+      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Products'. Cannot insert duplicate key in object 'dbo.Products'. The duplicate key value is (99).]]",
       "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO [Products] ([ProductID],[ProductName],[SupplierID],[CategoryID],[QuantityPerUnit],[UnitPrice],[UnitsInStock],[UnitsOnOrder],[ReorderLevel],[Discontinued]) VALUES (99,'Umeshu',1,1,'500 ml',12.99,2,0,20,'false');]"
    ],
    "params": {
@@ -24888,7 +24467,368 @@ exports[`[OINODbMsSql][Products][HTTP DELETE] remove: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][SCHEMA] public properties 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[OINODbMsSql][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"nvarchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"nvarchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"nvarchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"nvarchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"image","maxLength":2147483647,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"ntext","maxLength":1073741823,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"nvarchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+
+exports[`[OINODbMsSql][Employees][HTTP GET] select *: GET JSON 1`] = `
+"[
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+]"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP GET] select *: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
+"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
+"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
+"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
+"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
+"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
+"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
+"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+"[
+{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+]"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP POST] insert with id: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP POST] insert: POST 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP POST] insert: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP POST] insert: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP POST] insert no data: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP POST method requires at least one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP POST] insert duplicate: POST 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Employees'. Cannot insert duplicate key in object 'dbo.Employees'. The duplicate key value is (99).]",
+   "messages": [
+      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Employees'. Cannot insert duplicate key in object 'dbo.Employees'. The duplicate key value is (99).]]",
+      "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO [Employees] ([EmployeeID],[LastName],[FirstName],[Title],[TitleOfCourtesy],[BirthDate],[HireDate],[Address],[City],[Region],[PostalCode],[Country],[HomePhone],[Extension],[Photo],[Notes],[ReportsTo],[PhotoPath]) VALUES (99,'LastName','FirstName','Title','TitleOfCourtesy','2024-04-06T00:00:00.000','2024-04-07T00:00:00.000','Address','City','Region','12345','EU','123 456 7890','9876','%5Cu0000%5Cu0001%5Cu0002%5Cu0003%5Cu0004','Line1%5CnLine2',1,'http://accweb/emmployees/lastnamefirstname.bmp');]"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/json"
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+"[
+{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+]"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "text/csv"
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
+"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "multipart/form-data",
+      "multipartBoundary": "---------OINO999999999"
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+"---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="_OINOID_"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="EmployeeID"
+
+5EI1V6czK6RUPP
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="LastName"
+
+LastName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="FirstName"
+
+FirstName2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Title"
+
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="TitleOfCourtesy"
+
+TitleOfCourtesy2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="BirthDate"
+
+2023-04-06T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HireDate"
+
+2023-04-07T00:00:00.000Z
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Address"
+
+Address2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="City"
+
+City2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Region"
+
+Region2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PostalCode"
+
+54321
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Country"
+
+EU2
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="HomePhone"
+
+234 567 8901
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Extension"
+
+8765
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Photo"; filename=Photo"
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: BASE64
+
+BQYHCAk=
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="Notes"
+
+Line3
+Line4
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="ReportsTo"
+
+c7Ew4RtiDbPYXk
+---------OINOMultipartBoundary35424568
+Content-Disposition: form-data; name="PhotoPath"
+
+http://accweb/emmployees/lastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {},
+      "requestType": "application/x-www-form-urlencoded"
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update no data: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 405,
+   "statusMessage": "OINO ERROR (ValidateRowValues): Field 'LastName' is not allowed to be NULL!",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [String or binary data would be truncated in table 'Northwind.dbo.Employees', column 'LastName'. Truncated value: 'zzzzzzzzzzzzzzzzzzzz'.]",
+   "messages": [
+      "OINO WARNING (ValidateRowValues): Field 'LastName' length (21) exceeds maximum (20) and might truncate or fail.",
+      "OINO DEBUG (DoPut): OINO PUT MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [String or binary data would be truncated in table 'Northwind.dbo.Employees', column 'LastName'. Truncated value: 'zzzzzzzzzzzzzzzzzzzz'.]]",
+      "OINO DEBUG (DoPut): OINO PUT SQL [UPDATE [Employees] SET [LastName]='zzzzzzzzzzzzzzzzzzzzz' WHERE ([EmployeeID]=99);]"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OINODbMsSql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OINODbMsSql][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
 exports[`[OINODbMsSql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
@@ -29211,19 +29151,11 @@ exports[`[OINODbMsSql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 
 exports[`[OINODbMsSql][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"10764_39","OrderID":10764,"ProductID":39,"UnitPrice":18,"Quantity":130,"Discount":0.1},
-{"_OINOID_":"11072_64","OrderID":11072,"ProductID":64,"UnitPrice":33.25,"Quantity":130,"Discount":0},
-{"_OINOID_":"10776_51","OrderID":10776,"ProductID":51,"UnitPrice":53,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10894_75","OrderID":10894,"ProductID":75,"UnitPrice":7.75,"Quantity":120,"Discount":0.05},
-{"_OINOID_":"10398_55","OrderID":10398,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10451_55","OrderID":10451,"ProductID":55,"UnitPrice":19.2,"Quantity":120,"Discount":0.1},
-{"_OINOID_":"10515_27","OrderID":10515,"ProductID":27,"UnitPrice":43.9,"Quantity":120,"Discount":0},
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
-{"_OINOID_":"10678_41","OrderID":10678,"ProductID":41,"UnitPrice":9.65,"Quantity":120,"Discount":0},
 {"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
-{"_OINOID_":"10713_45","OrderID":10713,"ProductID":45,"UnitPrice":9.5,"Quantity":110,"Discount":0},
-{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0},
-{"_OINOID_":"11017_59","OrderID":11017,"ProductID":59,"UnitPrice":55,"Quantity":110,"Discount":0}
+{"_OINOID_":"10515_27","OrderID":10515,"ProductID":27,"UnitPrice":43.9,"Quantity":120,"Discount":0},
+{"_OINOID_":"10776_51","OrderID":10776,"ProductID":51,"UnitPrice":53,"Quantity":120,"Discount":0.05},
+{"_OINOID_":"10895_24","OrderID":10895,"ProductID":24,"UnitPrice":4.5,"Quantity":110,"Discount":0}
 ]"
 `;
 
@@ -29278,9 +29210,9 @@ exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
-   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Order_Details'. Cannot insert duplicate key in object 'dbo.OrderDetails'. The duplicate key value is (10249, 77).]",
+   "statusMessage": "OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Order_Details'. Cannot insert duplicate key in object 'dbo.OrderDetails'. The duplicate key value is (10249, 77).]",
    "messages": [
-      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [RequestError: Violation of PRIMARY KEY constraint 'PK_Order_Details'. Cannot insert duplicate key in object 'dbo.OrderDetails'. The duplicate key value is (10249, 77).]]",
+      "OINO DEBUG (DoPost): OINO POST MESSAGES [OINO ERROR (sqlExec): exception in _db.exec [Violation of PRIMARY KEY constraint 'PK_Order_Details'. Cannot insert duplicate key in object 'dbo.OrderDetails'. The duplicate key value is (10249, 77).]]",
       "OINO DEBUG (DoPost): OINO POST SQL [INSERT INTO [OrderDetails] ([OrderID],[ProductID],[UnitPrice],[Quantity],[Discount]) VALUES (10249,77,12.34,56,0);]"
    ],
    "params": {

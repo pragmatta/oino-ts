@@ -222,7 +222,7 @@ export class OINODbMsSql extends OINODb {
                 return "'" + cellValue?.toString() + "'"
             }
 
-        } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
+        } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
             return "'" + cellValue.toISOString().substring(0, 23) + "'"
 
         } else {
@@ -247,13 +247,49 @@ export class OINODbMsSql extends OINODb {
         } else if (sqlValue === undefined) {
             return undefined
 
-        } else if (((sqlType == "date")) && (typeof(sqlValue) == "string")) {
+        } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2")) && (typeof(sqlValue) == "string")) {
             return new Date(sqlValue)
 
         } else {
             return sqlValue
         }
 
+    }
+
+    /**
+     * Print SQL select statement with DB specific formatting.
+     * 
+     * @param tableName - The name of the table to select from.
+     * @param columnNames - The columns to be selected.
+     * @param whereCondition - The WHERE clause to filter the results.
+     * @param orderCondition - The ORDER BY clause to sort the results.
+     * @param limitCondition - The LIMIT clause to limit the number of results.
+     * 
+     */
+    printSqlSelect(tableName:string, columnNames:string, whereCondition:string, orderCondition:string, limitCondition:string): string {
+        const limit_parts = limitCondition.split(" OFFSET ")
+        let result:string = "SELECT " 
+        if ((limitCondition != "") && (limit_parts.length == 1)) {
+            result += "TOP " + limit_parts[0] + " "
+        }
+        result += columnNames + " FROM " + tableName
+        // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
+        if (whereCondition != "")  {
+            result += " WHERE " + whereCondition
+        }
+        if (orderCondition != "") {
+            result += " ORDER BY " + orderCondition 
+        }
+        if ((limitCondition != "") && (limit_parts.length == 2)) {
+            if (orderCondition == "") {
+                OINOLog.error("OINODbMsSql.printSqlSelect: LIMIT without ORDER BY is not supported in MS SQL Server")
+            } else {
+                result += " OFFSET " + limit_parts[1] + " ROWS FETCH NEXT " + limit_parts[0] + " ROWS ONLY"
+            }
+        }
+        result += ";"
+        // OINOLog.debug("OINODb.printSqlSelect", {result:result})
+        return result;
     }
 
     /**
@@ -314,18 +350,27 @@ export class OINODbMsSql extends OINODb {
 
     private _getSchemaSql(dbName:string, tableName:string):string {
         const sql =
-//      0              1              2            3                           4                    5                          6                       7                                                                                                                 8
-`SELECT C.COLUMN_NAME, C.IS_NULLABLE, C.DATA_TYPE, C.CHARACTER_MAXIMUM_LENGTH, C.NUMERIC_PRECISION, C.NUMERIC_PRECISION_RADIX, CONST.CONSTRAINT_TYPES, COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsIdentity') AS IS_AUTO_INCREMENT, COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsComputed') AS IS_COMPUTED
+`SELECT 
+    C.COLUMN_NAME, 
+    C.IS_NULLABLE, 
+    C.DATA_TYPE, 
+    C.CHARACTER_MAXIMUM_LENGTH, 
+    C.NUMERIC_PRECISION, 
+    C.NUMERIC_PRECISION_RADIX, 
+    CONST.CONSTRAINT_TYPES, 
+    COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsIdentity') AS IS_AUTO_INCREMENT, 
+    COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsComputed') AS IS_COMPUTED
 FROM 
     INFORMATION_SCHEMA.COLUMNS as C LEFT JOIN 
     (
-    SELECT TC.TABLE_NAME, KU.COLUMN_NAME, STRING_AGG(TC.CONSTRAINT_TYPE, ', ') as CONSTRAINT_TYPES
+    SELECT TC.TABLE_NAME, KU.COLUMN_NAME, STRING_AGG(TC.CONSTRAINT_TYPE, ',') as CONSTRAINT_TYPES
     FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC 
     INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KU ON TC.CONSTRAINT_NAME = KU.CONSTRAINT_NAME
     GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
     ) as CONST
     ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
-WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}';`
+WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}'
+ORDER BY C.ORDINAL_POSITION;`
         return sql
     }
     /**
@@ -350,6 +395,7 @@ WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}';`
             const constraint_types:string = row[6] as string || ""
             const field_params:OINODbDataFieldParams = {
                 isPrimaryKey: constraint_types.indexOf("PRIMARY KEY") >= 0,
+                isForeignKey: constraint_types.indexOf("FOREIGN KEY") >= 0,
                 isAutoInc: row[7] == 1,
                 isNotNull: row[1] == "NO"
             }            
@@ -389,6 +435,7 @@ WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}';`
         OINOLog.debug("OINODbMsSql.initializeDatasetModel:\n" + api.datamodel.printDebug("\n"))
         return Promise.resolve()
     }
+
 }
 
 

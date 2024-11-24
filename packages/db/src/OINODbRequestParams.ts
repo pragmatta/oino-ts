@@ -268,9 +268,10 @@ export class OINODbSqlOrder {
  *
  */
 export class OINODbSqlLimit {
-    private static _orderColumnRegex = /^(\d+)?$/i
+    private static _limitRegex = /^(\d+)(\spage\s)?(\d+)?$/i
     
     private _limit: number
+    private _page: number
 
     /**
      * Constructor for `OINODbSqlLimit`.
@@ -278,8 +279,9 @@ export class OINODbSqlLimit {
      * @param limit maximum number of items to return
      *
      */
-    constructor(limit: number) {
+    constructor(limit: number, page: number = -1) {
         this._limit = limit
+        this._page = page
     }
     /**
      * Constructor for `OINODbSqlLimit` as parser of http parameter.
@@ -288,9 +290,12 @@ export class OINODbSqlLimit {
      *
      */
     static parse(limitString: string):OINODbSqlLimit {
-        try {
-            return new OINODbSqlLimit(Number.parseInt(limitString))
-        } catch {
+        let match = OINODbSqlLimit._limitRegex.exec(limitString)
+        if ((match != null) && (match.length == 4)) {
+            return new OINODbSqlLimit(Number.parseInt(match[1]), Number.parseInt(match[3]))
+        } else if (match != null) {
+            return new OINODbSqlLimit(Number.parseInt(match[1]))
+        } else {
             return new OINODbSqlLimit(-1)
         }
     }
@@ -314,6 +319,11 @@ export class OINODbSqlLimit {
             return ""
         }
         let result:string = this._limit.toString()
+        if (this._page > 0) {
+            result += " OFFSET " + (this._limit * (this._page-1) + 1).toString()
+        }
         return result
     }
 }
+
+

@@ -38,11 +38,13 @@ export class OINODbModelSet {
 
     private _encodeAndHashFieldValue(field:OINODbDataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string):string {
         let result:string
-        if (field.fieldParams.isPrimaryKey) {
+        if (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) {
             if (value && (field instanceof OINONumberDataField) && (this.datamodel.api.hashid)) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed)
             }
-            primaryKeyValues.push(value || "")
+            if (field.fieldParams.isPrimaryKey) {
+                primaryKeyValues.push(value || "")
+            }
         }  
         result = OINOStr.encode(value, contentType)
         return result
@@ -66,7 +68,7 @@ export class OINODbModelSet {
 
             } else {
 
-                let is_hashed:boolean = f.fieldParams.isPrimaryKey && (f instanceof OINONumberDataField) && (this.datamodel.api.hashid != null)
+                let is_hashed:boolean = (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) && (f instanceof OINONumberDataField) && (this.datamodel.api.hashid != null)
                 let is_value = (f instanceof OINOBooleanDataField) || ((f instanceof OINONumberDataField) && !is_hashed)
                 value = this._encodeAndHashFieldValue(f, value, OINOContentType.json, primary_key_values, f.name + " " + row_id_seed)
                 if (is_value) {

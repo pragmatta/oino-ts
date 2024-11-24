@@ -70,6 +70,8 @@ export type OINODbParams = {
 export type OINODbDataFieldParams = {
     /** Is the field a primary key */
     isPrimaryKey: Boolean
+    /** Is the field a primary key */
+    isForeignKey: Boolean
     /** Is the field an auto inc type */
     isAutoInc: Boolean
     /** Is the field allowed to have null values */
