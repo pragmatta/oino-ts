@@ -93,6 +93,33 @@ export abstract class OINODb {
      *
      */
     abstract initializeApiDatamodel(api:OINODbApi): Promise<void>
+
+    /**
+     * Print SQL select statement with DB specific formatting.
+     * 
+     * @param tableName - The name of the table to select from.
+     * @param columnNames - The columns to be selected.
+     * @param whereCondition - The WHERE clause to filter the results.
+     * @param orderCondition - The ORDER BY clause to sort the results.
+     * @param limitCondition - The LIMIT clause to limit the number of results.
+     * 
+     */
+    printSqlSelect(tableName:string, columnNames:string, whereCondition:string, orderCondition:string, limitCondition:string): string {
+        let result:string = "SELECT " + columnNames + " FROM " + tableName;
+        // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
+        if (whereCondition != "")  {
+            result += " WHERE " + whereCondition
+        }
+        if (orderCondition != "") {
+            result += " ORDER BY " + orderCondition 
+        }
+        if (limitCondition != "") {
+            result += " LIMIT " + limitCondition 
+        }
+        result += ";"
+        // OINOLog.debug("OINODb.printSqlSelect", {result:result})
+        return result;
+    }
 }
 
 
