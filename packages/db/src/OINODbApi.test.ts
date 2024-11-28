@@ -13,6 +13,9 @@ import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { OINODbMariadb } from "@oino-ts/db-mariadb"
 import { OINODbMsSql } from "@oino-ts/db-mssql"
 
+const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set")
+const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set")
+const OINOCLOUD_POC_DB_TOKEN = process.env.OINOCLOUD_POC_DB_TOKEN || console.error("OINOCLOUD_POC_DB_TOKEN not set")
 
 type OINOTestApiParams = {
     apiParams: OINODbApiParams
@@ -23,9 +26,9 @@ type OINOTestApiParams = {
 
 const dbs:OINODbParams[] = [
     { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite", database: "Northwind" }, 
-    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: process.env.OINODB_POSTGRESQL_TOKEN },
-    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: process.env.OINODB_MARIADB_TOKEN }, 
-    { type: "OINODbMsSql", url: "oinocloud-poc-db-srv.database.windows.net", database: "Northwind", port:1433, user: "oinocloud-poc-db-srv-admin", password: process.env.OINOCLOUD_POC_DB_SRV } 
+    { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: OINODB_POSTGRESQL_TOKEN },
+    { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: OINODB_MARIADB_TOKEN }, 
+    { type: "OINODbMsSql", url: "oinocloud-poc-db-srv.database.windows.net", database: "Northwind", port:1433, user: "oinocloud-poc-db-srv-admin", password: OINOCLOUD_POC_DB_TOKEN } 
 ]
 
 const api_tests:OINOTestApiParams[] = [
