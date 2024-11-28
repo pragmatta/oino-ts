@@ -245,7 +245,7 @@ export class OINODbDataModel {
             where_sql = filter_sql
         }
         const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql)
-        OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
         return result;
     }
 
