@@ -222,6 +222,7 @@ export class OINODbFactory {
             end = this._findCsvLineEnd(data, start)
             const row_data:(string|null|undefined)[] = this._parseCsvLine(data.substring(start, end))
             const row:OINODataRow = new Array(field_to_header_mapping.length)
+            let has_data:boolean = false
             for (let i=0; i<datamodel.fields.length; i++) {
                 const field:OINODbDataField = datamodel.fields[i]
                 let j:number = field_to_header_mapping[i]
@@ -239,9 +240,14 @@ export class OINODbFactory {
                 } else {
                     row[i] = undefined
                 }
+                has_data = has_data || (row[i] !== undefined)
             }
             // console.log("createRowFromCsv: next row=" + row)
-            result.push(row)
+            if (has_data) {
+                result.push(row)
+            } else {
+                OINOLog.warning("createRowFromCsv: empty row skipped")
+            }
             start = end
             end = start
         }
@@ -249,10 +255,11 @@ export class OINODbFactory {
         return result
     }
 
-    private static _createRowFromJsonObj(obj:any, datamodel:OINODbDataModel):OINODataRow {
+    private static _createRowFromJsonObj(obj:any, datamodel:OINODbDataModel):OINODataRow|undefined {
         // console.log("createRowFromJsonObj: obj=" + JSON.stringify(obj))
         const fields:OINODbDataField[] = datamodel.fields
         let result:OINODataRow = new Array(fields.length)
+        let has_data:boolean = false
         //  console.log("createRowFromJsonObj: " + result)
         for (let i=0; i < fields.length; i++) {
             const field = fields[i]
@@ -274,30 +281,37 @@ export class OINODbFactory {
             } else { 
                 result[i] = value // value types are passed as-is
             }
+            has_data = has_data || (result[i] !== undefined)
             // console.log("createRowFromJsonObj: result["+i+"]=" + result[i])
         }
         // console.log("createRowFromJsonObj: " + result)
-        return result
+        if (has_data) {
+            return result
+        } else {
+            OINOLog.warning("createRowFromJsonObj: empty row skipped")
+            return undefined
+        }
     }
 
     private static _createRowFromJson(datamodel:OINODbDataModel, data:string):OINODataRow[] {
-        try {
-            let result:OINODataRow[] = []
-            // console.log("OINORowFactoryJson: data=" + data)
-            const obj:object = JSON.parse(data)
-            if (Array.isArray(obj)) {
-                obj.forEach(row => {
-                    result.push(this._createRowFromJsonObj(row, datamodel))                
-                });
+        let result:OINODataRow[] = []
+        // console.log("OINORowFactoryJson: data=" + data)
+        const obj:object = JSON.parse(data)
+        if (Array.isArray(obj)) {
+            obj.forEach(row => {
+                const data_row = this._createRowFromJsonObj(row, datamodel)
+                if (data_row !== undefined) {
+                    result.push(data_row)
+                }                
+            })
 
-            } else {
-                result.push(this._createRowFromJsonObj(obj, datamodel))
-            }
-            return result
-
-        } catch (e:any) {
-            return []
-        }
+        } else {
+            const data_row = this._createRowFromJsonObj(obj, datamodel)
+            if (data_row !== undefined) {
+                result.push(data_row)
+            }                
+    }
+        return result
     }
 
     private static _findMultipartBoundary(formData:string, multipartBoundary:string, start:number):number {
@@ -323,108 +337,127 @@ export class OINODbFactory {
 
     private static createRowFromFormdata(datamodel:OINODbDataModel, data:string, multipartBoundary:string):OINODataRow[] {
         let result:OINODataRow[] = []
-        const n = data.length
-        let start:number = this._findMultipartBoundary(data, multipartBoundary, 0)
-        let end:number = this._findMultipartBoundary(data, multipartBoundary, start)
-        // OINOLog.debug("createRowFromFormdata: enter", {start:start, end:end, multipartBoundary:multipartBoundary})
-        const row:OINODataRow = new Array(datamodel.fields.length)
-        while (end < n) {
-            // OINOLog.debug("createRowFromFormdata: next block", {start:start, end:end, block:data.substring(start, end)})
-            let block_ok:boolean = true
-            let l:string = this._parseMultipartLine(data, start)
-            // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
-            start += l.length+2
-            const header_matches = OINODbFactory._multipartHeaderRegex.exec(l)
-            if (!header_matches) {
-                OINOLog.warning("OINODbFactory.createRowFromFormdata: unsupported block skipped!", {header_line:l})
-                block_ok = false
-
-            } else {
-                const field_name = header_matches[2]
-                const is_file = header_matches[3] != null
-                let is_base64:boolean = false
-                const field_index:number = datamodel.findFieldIndexByName(field_name)
-                // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
-                if (field_index < 0) {
-                    OINOLog.warning("OINODbFactory.createRowFromFormdata: form field not found and skipped!", {field_name:field_name})
+        try {
+            const n = data.length
+            let start:number = this._findMultipartBoundary(data, multipartBoundary, 0)
+            let end:number = this._findMultipartBoundary(data, multipartBoundary, start)
+            // OINOLog.debug("createRowFromFormdata: enter", {start:start, end:end, multipartBoundary:multipartBoundary})
+            const row:OINODataRow = new Array(datamodel.fields.length)
+            let has_data:boolean = false
+            while (end < n) {
+                // OINOLog.debug("createRowFromFormdata: next block", {start:start, end:end, block:data.substring(start, end)})
+                let block_ok:boolean = true
+                let l:string = this._parseMultipartLine(data, start)
+                // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+                start += l.length+2
+                const header_matches = OINODbFactory._multipartHeaderRegex.exec(l)
+                if (!header_matches) {
+                    OINOLog.warning("OINODbFactory.createRowFromFormdata: unsupported block skipped!", {header_line:l})
                     block_ok = false
-    
+
                 } else {
-                    const field:OINODbDataField = datamodel.fields[field_index]
-                    l = this._parseMultipartLine(data, start)
-                    // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
-                    while (block_ok && (l != '')) {
-                        if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed')>=0)) {
-                            OINOLog.warning("OINODbFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", {header_line:l})
-                            block_ok = false
-                        } else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64')>=0)) {
-                            is_base64 = true
-                        }
-                        start += l.length+2
+                    const field_name = header_matches[2]
+                    const is_file = header_matches[3] != null
+                    let is_base64:boolean = false
+                    const field_index:number = datamodel.findFieldIndexByName(field_name)
+                    // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
+                    if (field_index < 0) {
+                        OINOLog.warning("OINODbFactory.createRowFromFormdata: form field not found and skipped!", {field_name:field_name})
+                        block_ok = false
+        
+                    } else {
+                        const field:OINODbDataField = datamodel.fields[field_index]
                         l = this._parseMultipartLine(data, start)
                         // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
-                    }
-                    start += 2
-                    if (!block_ok) {
-                        OINOLog.warning("OINODbFactory.createRowFromFormdata: invalid block skipped", {field_name:field_name})
-                    } else if (start + multipartBoundary.length + 2 >= end) {
-                        // OINOLog.debug("OINODbFactory.createRowFromFormdata: null value", {field_name:field_name})
-                        row[field_index] = null
-                        
-                    } else if (is_file) {
-                        const value = this._parseMultipartLine(data, start).trim()
-                        if (is_base64) {
-                            row[field_index] = field.deserializeCell(OINOStr.decode(value, OINOContentType.formdata))
+                        while (block_ok && (l != '')) {
+                            if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed')>=0)) {
+                                OINOLog.warning("OINODbFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", {header_line:l})
+                                block_ok = false
+                            } else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64')>=0)) {
+                                is_base64 = true
+                            }
+                            start += l.length+2
+                            l = this._parseMultipartLine(data, start)
+                            // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
+                        }
+                        start += 2
+                        if (!block_ok) {
+                            OINOLog.warning("OINODbFactory.createRowFromFormdata: invalid block skipped", {field_name:field_name})
+                        } else if (start + multipartBoundary.length + 2 >= end) {
+                            // OINOLog.debug("OINODbFactory.createRowFromFormdata: null value", {field_name:field_name})
+                            row[field_index] = null
+                            
+                        } else if (is_file) {
+                            const value = this._parseMultipartLine(data, start).trim()
+                            if (is_base64) {
+                                row[field_index] = field.deserializeCell(OINOStr.decode(value, OINOContentType.formdata))
+                            } else {
+                                row[field_index] = Buffer.from(value, "binary")
+                            }
                         } else {
-                            row[field_index] = Buffer.from(value, "binary")
+                            let value:string = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
+                            // OINOLog.debug("OINODbFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
+                            if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                                value = datamodel.api.hashid.decode(value)
+                            }
+                            row[field_index] = field.deserializeCell(value)
                         }
-                    } else {
-                        let value:string = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
-                        // OINOLog.debug("OINODbFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
-                        if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
-                            value = datamodel.api.hashid.decode(value)
-                        }
-                        row[field_index] = field.deserializeCell(value)
+                        has_data = has_data || (row[field_index] !== undefined)
                     }
                 }
+                start = end 
+                end = this._findMultipartBoundary(data, multipartBoundary, start)
             }
-            start = end 
-            end = this._findMultipartBoundary(data, multipartBoundary, start)
+            // OINOLog.debug("createRowFromFormdata: next row", {row:row})
+            if (has_data) {
+                result.push(row)
+            } else {
+                OINOLog.warning("createRowFromFormdata: empty row skipped")
+            }
+        } catch (e) {
+            OINOLog.error("createRowFromFormdata: error parsing formdata", {exception:e.message})
         }
-        // OINOLog.debug("createRowFromFormdata: next row", {row:row})
-        result.push(row)
-
         return result
     }
     private static createRowFromUrlencoded(datamodel:OINODbDataModel, data:string):OINODataRow[] {
         // OINOLog.debug("createRowFromUrlencoded: enter", {data:data})
         let result:OINODataRow[] = []
         const row:OINODataRow = new Array(datamodel.fields.length)
+        let has_data:boolean = false
         const data_parts:string[] = data.trim().split('&')
-        for (let i=0; i<data_parts.length; i++) {
-            const param_parts = data_parts[i].split('=')
-            // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
-            if (param_parts.length == 2) {
-                const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
-                const field_index:number = datamodel.findFieldIndexByName(key)
-                if (field_index < 0) {
-                    OINOLog.info("createRowFromUrlencoded: param field not found", {field:key})
+        try {
+            for (let i=0; i<data_parts.length; i++) {
+                const param_parts = data_parts[i].split('=')
+                // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
+                if (param_parts.length == 2) {
+                    const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
+                    const field_index:number = datamodel.findFieldIndexByName(key)
+                    if (field_index < 0) {
+                        OINOLog.info("createRowFromUrlencoded: param field not found", {field:key})
 
-                } else {
-                    const field:OINODbDataField = datamodel.fields[field_index]
-                    let value:string=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
-                    if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
-                        value = datamodel.api.hashid.decode(value)
+                    } else {
+                        const field:OINODbDataField = datamodel.fields[field_index]
+                        let value:string=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
+                        if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                            value = datamodel.api.hashid.decode(value)
+                        }
+                        row[field_index] = field.deserializeCell(value)
+                        has_data = has_data || (row[field_index] !== undefined)
                     }
-                    row[field_index] = field.deserializeCell(value)
                 }
+
+                // const value = requestParams[]
+
             }
-
-            // const value = requestParams[]
-
+            if (has_data) {
+                result.push(row)
+            } else {
+                OINOLog.warning("createRowFromUrlencoded: empty row skipped")
+            }
+        } catch (e) {
+            OINOLog.error("createRowFromUrlencoded: error parsing urlencoded data", {exception:e.message})
         }
         // console.log("createRowFromUrlencoded: next row=" + row)
-        result.push(row)
         return result
     }
 

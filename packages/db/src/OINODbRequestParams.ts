@@ -83,7 +83,7 @@ export class OINODbSqlFilter {
                         return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1) as OINODbSqlBooleanOperation, OINODbSqlFilter.parse(boolean_parts[2]))
         
                     } else {
-                        throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'")
+                        throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'") // invalid filter could be a security risk, stop processing
                     }                
                 }            
             }
@@ -153,18 +153,23 @@ export class OINODbSqlFilter {
         if (this._leftSide instanceof OINODbSqlFilter) {
             result += this._leftSide.toSql(dataModel)
         } else {
-            result += dataModel.api.db.printSqlColumnname(this._leftSide)
             field = dataModel.findFieldByName(this._leftSide)
+            if (!field) {
+                OINOLog.error("OINODbSqlFilter.toSql: Invalid field!", {field:this._leftSide})
+                throw new Error(OINO_ERROR_PREFIX + ": OINODbSqlFilter.toSql - Invalid field '" + this._leftSide + "'") // invalid field name could be a security risk, stop processing
+            }
+            result += dataModel.api.db.printSqlColumnname(field?.name || this._leftSide)
         }
         result += this._operatorToSql()
         if (this._rightSide instanceof OINODbSqlFilter) {
             result += this._rightSide.toSql(dataModel)
         } else {
-            if (field) {
-                result += field.printCellAsSqlValue(this._rightSide)
-            } else {
-                result += this._rightSide
+            const value = field!.deserializeCell(this._rightSide)
+            if (!value) {
+                OINOLog.error("OINODbSqlFilter.toSql: Invalid value!", {value:value})
+                throw new Error(OINO_ERROR_PREFIX + ": OINODbSqlFilter.toSql - Invalid value '" + value + "'") // invalid value could be a security risk, stop processing
             }
+            result += field!.printCellAsSqlValue(value)
         }
         // OINOLog.debug("OINOFilter.toSql", {result:result})
         return "(" + result + ")"
@@ -246,16 +251,18 @@ export class OINODbSqlOrder {
         let result:string = ""
         for (let i=0; i<this._columns.length; i++) {
             const field:OINODbDataField|null = dataModel.findFieldByName(this._columns[i])
-            if (field) {
-                if (result) {
-                    result += ","
-                }
-                result += dataModel.api.db.printSqlColumnname(field.name) + " "
-                if (this._descending[i]) {
-                    result += "DESC"
-                } else {
-                    result += "ASC"
-                }
+            if (!field) {
+                OINOLog.error("OINODbSqlOrder.toSql: Invalid field!", {field:this._columns[i]})
+                throw new Error(OINO_ERROR_PREFIX + ": OINODbSqlOrder.toSql - Invalid field '" + this._columns[i] + "'") // invalid field name could be a security risk, stop processing
+            }
+            if (result) {
+                result += ","
+            }
+            result += dataModel.api.db.printSqlColumnname(field.name) + " "
+            if (this._descending[i]) {
+                result += "DESC"
+            } else {
+                result += "ASC"
             }
         }
         // OINOLog.debug("OINODbSqlOrder.toSql", {result:result})
