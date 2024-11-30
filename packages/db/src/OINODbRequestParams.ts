@@ -284,6 +284,7 @@ export class OINODbSqlLimit {
      * Constructor for `OINODbSqlLimit`.
      * 
      * @param limit maximum number of items to return
+     * @param page page number to return starting from 1
      *
      */
     constructor(limit: number, page: number = -1) {

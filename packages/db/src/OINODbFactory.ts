@@ -417,7 +417,7 @@ export class OINODbFactory {
             } else {
                 OINOLog.warning("createRowFromFormdata: empty row skipped")
             }
-        } catch (e) {
+        } catch (e:any) {
             OINOLog.error("createRowFromFormdata: error parsing formdata", {exception:e.message})
         }
         return result
@@ -457,7 +457,7 @@ export class OINODbFactory {
             } else {
                 OINOLog.warning("createRowFromUrlencoded: empty row skipped")
             }
-        } catch (e) {
+        } catch (e:any) {
             OINOLog.error("createRowFromUrlencoded: error parsing urlencoded data", {exception:e.message})
         }
         // console.log("createRowFromUrlencoded: next row=" + row)
