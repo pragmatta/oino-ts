@@ -1,7 +1,0 @@
-<div id="OINOApiRow-Categories-###_OINOID_###" class="row"
-    hx-get="http://localhost:8080/categories/###_OINOID_###" 
-    hx-trigger="load"
-    hx-target="this" 
-    hx-swap="outerHTML"
->
-</div>

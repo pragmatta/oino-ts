@@ -1,0 +1,22 @@
+<tr id="OINOApiRow-employees-###_OINOID_###"
+    hx-get="http://localhost:8080/employees/###_OINOID_###" 
+    hx-trigger="OINODbApiTrigger-Employees-###_OINOID_### from:body"
+    hx-target="this" 
+    hx-swap="outerHTML"
+>
+    <td>###EmployeeID###</td>
+    <td>###LastName###</td>
+    <td>###FirstName###</td>
+    <td>###Title###</td>
+    <td><img id="Photo" name="Photo" style="max-width: 8em;" src="data:image/jpeg;base64,###Photo###" alt="Employee Photo"></td>
+    <td>
+        <a hx-get="http://localhost:8080/employees/###_OINOID_###/edit" hx-target="#OINOApiRow-employees-###_OINOID_###" hx-swap="outerHTML">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+        <a hx-delete="http://localhost:8080/employees/###_OINOID_###" hx-confirm="Delete row '###_OINOID_###', are you sure?">
+           <i class="bi bi-trash"></i>
+        </a>
+    </td>
+</tr>
+
+

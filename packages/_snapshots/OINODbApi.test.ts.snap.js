@@ -1,8 +1,8 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[OINODbBunSqlite][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[API][OINODbBunSqlite][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"DATETIME","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
-exports[`[OINODbBunSqlite][Orders][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248","OrderID":10248,"CustomerID":"VINET","EmployeeID":5,"OrderDate":"1996-07-04T00:00:00.000Z","RequiredDate":"1996-08-01T00:00:00.000Z","ShippedDate":"1996-07-16T00:00:00.000Z","ShipVia":3,"Freight":32.38,"ShipName":"Vins et alcools Chevalier","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Reims","ShipRegion":null,"ShipPostalCode":"51100","ShipCountry":"France"},
 {"_OINOID_":"10249","OrderID":10249,"CustomerID":"TOMSP","EmployeeID":6,"OrderDate":"1996-07-05T00:00:00.000Z","RequiredDate":"1996-08-16T00:00:00.000Z","ShippedDate":"1996-07-10T00:00:00.000Z","ShipVia":1,"Freight":11.61,"ShipName":"Toms Spezialitäten","ShipAddress":"Luisenstr. 48","ShipCity":"Münster","ShipRegion":null,"ShipPostalCode":"44087","ShipCountry":"Germany"},
@@ -837,7 +837,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "10248","10248","VINET","5","1996-07-04T00:00:00.000Z","1996-08-01T00:00:00.000Z","1996-07-16T00:00:00.000Z","3","32.38","Vins et alcools Chevalier","59 rue de l'Abbaye","Reims",null,"51100","France"
 "10249","10249","TOMSP","6","1996-07-05T00:00:00.000Z","1996-08-16T00:00:00.000Z","1996-07-10T00:00:00.000Z","1","11.61","Toms Spezialitäten","Luisenstr. 48","Münster",null,"44087","Germany"
@@ -1671,7 +1671,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP GET] select *: GET CSV 1`] = `
 "11077","11077","RATTC","1","1998-05-06T00:00:00.000Z","1998-06-03T00:00:00.000Z",null,"2","8.53","Rattlesnake Canyon Grocery","2817 Milton Dr.","Albuquerque","NM","87110","USA""
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
@@ -1681,7 +1681,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP GET] select * with filter: GET JSON FILT
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -1693,7 +1693,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1705,20 +1705,20 @@ exports[`[OINODbBunSqlite][Orders][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2024-04-05T00:00:00.000Z","RequiredDate":"2024-04-06T00:00:00.000Z","ShippedDate":"2024-04-07T00:00:00.000Z","ShipVia":2,"Freight":184.75,"ShipName":"a'b%5C%22c%d_e%5Ctf%5Crg%5Cnh%5C%5Ci","ShipAddress":"Garden House Crowther Way","ShipCity":"Cowes","ShipRegion":"British Isles","ShipPostalCode":"PO31 7PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -1730,7 +1730,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -1745,7 +1745,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1757,7 +1757,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1770,13 +1770,13 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2023-04-05T00:00:00.000Z","RequiredDate":"2023-04-06T00:00:00.000Z","ShippedDate":"2023-04-07T00:00:00.000Z","ShipVia":2,"Freight":847.51,"ShipName":"k'l%5C%22m%n_o%5Ctp%5Crq%5Cnr%5C%5Cs","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Cowes2","ShipRegion":"Western Europe","ShipPostalCode":"PO31 8PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1788,7 +1788,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1801,14 +1801,14 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1820,7 +1820,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1834,7 +1834,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] =
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -1900,7 +1900,7 @@ UK
 "
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1912,7 +1912,7 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE res
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1925,12 +1925,12 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`]
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=30000&OrderID=30000&CustomerID=CACTU&EmployeeID=1&OrderDate=2023-04-05T00%3A00%3A00.000Z&RequiredDate=2023-04-06T00%3A00%3A00.000Z&ShippedDate=2023-04-07T00%3A00%3A00.000Z&ShipVia=2&Freight=847.51&ShipName=k'l%22m%25n_o%09p%0Dq%0Ar%5Cs&ShipAddress=59%20rue%20de%20l'Abbaye&ShipCity=Cowes2&ShipRegion=Western%20Europe&ShipPostalCode=PO31%208PJ&ShipCountry=UK
 "
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -1942,7 +1942,21 @@ exports[`[OINODbBunSqlite][Orders][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Orders][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -1954,15 +1968,15 @@ exports[`[OINODbBunSqlite][Orders][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Orders][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"BOOLEAN","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[API][OINODbBunSqlite][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"BOOLEAN","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
-exports[`[OINODbBunSqlite][Products][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"1","ProductID":1,"ProductName":"Chai","SupplierID":8,"CategoryID":1,"QuantityPerUnit":"10 boxes x 30 bags","UnitPrice":18.09,"UnitsInStock":39,"UnitsOnOrder":0,"ReorderLevel":10,"Discontinued":true},
 {"_OINOID_":"2","ProductID":2,"ProductName":"Chang","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"24 - 12 oz bottles","UnitPrice":19.09,"UnitsInStock":17,"UnitsOnOrder":40,"ReorderLevel":25,"Discontinued":true},
@@ -2044,7 +2058,7 @@ exports[`[OINODbBunSqlite][Products][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "1","1","Chai","8","1","10 boxes x 30 bags","18.09","39","0","10","true"
 "2","2","Chang","1","1","24 - 12 oz bottles","19.09","17","40","25","true"
@@ -2125,7 +2139,7 @@ exports[`[OINODbBunSqlite][Products][HTTP GET] select *: GET CSV 1`] = `
 "77","77","Original Frankfurter grüne Soße","12","2","12 boxes","13.09","32","0","15","false""
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"31","ProductID":31,"ProductName":"Gorgonzola Telino","SupplierID":14,"CategoryID":4,"QuantityPerUnit":"12 - 100 g pkgs","UnitPrice":12.59,"UnitsInStock":0,"UnitsOnOrder":70,"ReorderLevel":20,"Discontinued":false},
 {"_OINOID_":"5","ProductID":5,"ProductName":"Chef Anton's Gumbo Mix","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"36 boxes","UnitPrice":21.35,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
@@ -2137,7 +2151,7 @@ exports[`[OINODbBunSqlite][Products][HTTP GET] select * with filter: GET JSON FI
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -2149,7 +2163,7 @@ exports[`[OINODbBunSqlite][Products][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2161,18 +2175,18 @@ exports[`[OINODbBunSqlite][Products][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":12.99,"UnitsInStock":2,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","12.99","2","0","20","false""
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -2184,7 +2198,7 @@ exports[`[OINODbBunSqlite][Products][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -2199,7 +2213,7 @@ exports[`[OINODbBunSqlite][Products][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2211,7 +2225,7 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update JSON: PUT JSON reset 1`] =
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2224,13 +2238,13 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":24.99,"UnitsInStock":3,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2242,7 +2256,7 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2255,12 +2269,12 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","24.99","3","0","20","false""
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2272,7 +2286,7 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: PUT FORMDATA res
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2286,7 +2300,7 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`]
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -2334,7 +2348,7 @@ false
 "
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2346,7 +2360,7 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: PUT URLENCODE r
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2359,12 +2373,12 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=99&ProductID=99&ProductName=Umeshu&SupplierID=1&CategoryID=1&QuantityPerUnit=500%20ml&UnitPrice=24.99&UnitsInStock=3&UnitsOnOrder=0&ReorderLevel=20&Discontinued=false
 "
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -2376,7 +2390,7 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP PUT] update with invalid null value: PUT 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update with invalid null value: PUT invalid null 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -2388,7 +2402,21 @@ exports[`[OINODbBunSqlite][Products][HTTP PUT] update with invalid null value: P
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Products][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2400,15 +2428,15 @@ exports[`[OINODbBunSqlite][Products][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Products][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Products][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"BLOB","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[API][OINODbBunSqlite][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"DATE","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"BLOB","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"TEXT","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
-exports[`[OINODbBunSqlite][Employees][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
@@ -2422,7 +2450,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
 "x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
@@ -2437,7 +2465,7 @@ Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3
 "c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
@@ -2446,7 +2474,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP GET] select * with filter: GET JSON F
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -2458,7 +2486,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2470,19 +2498,19 @@ exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
 Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -2494,7 +2522,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -2509,7 +2537,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2521,7 +2549,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] 
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2534,13 +2562,13 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2552,7 +2580,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = 
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2565,13 +2593,13 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
 Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2583,7 +2611,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA re
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2597,7 +2625,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -2679,7 +2707,7 @@ http://accweb/emmployees/lastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2691,7 +2719,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2704,12 +2732,12 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -2721,7 +2749,7 @@ exports[`[OINODbBunSqlite][Employees][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -2733,15 +2761,27 @@ exports[`[OINODbBunSqlite][Employees][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Employees][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[API][OINODbBunSqlite][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"NUMERIC","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"INTEGER","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"REAL","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248_11","OrderID":10248,"ProductID":11,"UnitPrice":14,"Quantity":12,"Discount":0},
 {"_OINOID_":"10248_42","OrderID":10248,"ProductID":42,"UnitPrice":9.8,"Quantity":10,"Discount":0},
@@ -4901,7 +4941,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10248_11","10248","11","14","12","0"
 "10248_42","10248","42","9.8","10","0"
@@ -7060,7 +7100,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 "11077_77","11077","77","13","2","0""
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
 {"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
@@ -7070,7 +7110,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP GET] select * with filter: GET JSO
 ]"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -7082,7 +7122,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7094,18 +7134,18 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":12.34,"Quantity":56,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","12.34","56","0""
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -7117,7 +7157,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -7132,7 +7172,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP POST] insert duplicate: POST 1`] =
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7144,7 +7184,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7157,13 +7197,13 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":23.45,"Quantity":67,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7175,7 +7215,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`]
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7188,12 +7228,12 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","23.45","67","0""
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7205,7 +7245,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7219,7 +7259,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -7247,7 +7287,7 @@ Content-Disposition: form-data; name="Discount"
 "
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7259,7 +7299,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCO
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7272,12 +7312,12 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCO
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=10249_77&OrderID=10249&ProductID=77&UnitPrice=23.45&Quantity=67&Discount=0
 "
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -7289,7 +7329,7 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -7301,15 +7341,15 @@ exports[`[OINODbBunSqlite][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbBunSqlite][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbBunSqlite][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbPostgresql][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"character","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
+exports[`[API][OINODbPostgresql][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"character","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
 
-exports[`[OINODbPostgresql][Orders][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248","OrderID":10248,"CustomerID":"VINET","EmployeeID":5,"OrderDate":"1996-07-04T00:00:00.000Z","RequiredDate":"1996-08-01T00:00:00.000Z","ShippedDate":"1996-07-16T00:00:00.000Z","ShipVia":3,"Freight":32.38,"ShipName":"Vins et alcools Chevalier","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Reims","ShipRegion":null,"ShipPostalCode":"51100","ShipCountry":"France"},
 {"_OINOID_":"10249","OrderID":10249,"CustomerID":"TOMSP","EmployeeID":6,"OrderDate":"1996-07-05T00:00:00.000Z","RequiredDate":"1996-08-16T00:00:00.000Z","ShippedDate":"1996-07-10T00:00:00.000Z","ShipVia":1,"Freight":11.61,"ShipName":"Toms Spezialitäten","ShipAddress":"Luisenstr. 48","ShipCity":"Münster","ShipRegion":null,"ShipPostalCode":"44087","ShipCountry":"Germany"},
@@ -8144,7 +8184,7 @@ exports[`[OINODbPostgresql][Orders][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "10248","10248","VINET","5","1996-07-04T00:00:00.000Z","1996-08-01T00:00:00.000Z","1996-07-16T00:00:00.000Z","3","32.38","Vins et alcools Chevalier","59 rue de l'Abbaye","Reims",null,"51100","France"
 "10249","10249","TOMSP","6","1996-07-05T00:00:00.000Z","1996-08-16T00:00:00.000Z","1996-07-10T00:00:00.000Z","1","11.61","Toms Spezialitäten","Luisenstr. 48","Münster",null,"44087","Germany"
@@ -8978,7 +9018,7 @@ exports[`[OINODbPostgresql][Orders][HTTP GET] select *: GET CSV 1`] = `
 "11077","11077","RATTC","1","1998-05-06T00:00:00.000Z","1998-06-03T00:00:00.000Z",null,"2","8.53","Rattlesnake Canyon Grocery","2817 Milton Dr.","Albuquerque","NM","87110","USA""
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
@@ -8988,7 +9028,7 @@ exports[`[OINODbPostgresql][Orders][HTTP GET] select * with filter: GET JSON FIL
 ]"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9000,7 +9040,7 @@ exports[`[OINODbPostgresql][Orders][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9012,20 +9052,20 @@ exports[`[OINODbPostgresql][Orders][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2024-04-05T00:00:00.000Z","RequiredDate":"2024-04-06T00:00:00.000Z","ShippedDate":"2024-04-07T00:00:00.000Z","ShipVia":2,"Freight":184.75,"ShipName":"a'b%5C%22c%d_e%5Ctf%5Crg%5Cnh%5C%5Ci","ShipAddress":"Garden House Crowther Way","ShipCity":"Cowes","ShipRegion":"British Isles","ShipPostalCode":"PO31 7PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9037,7 +9077,7 @@ exports[`[OINODbPostgresql][Orders][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -9052,7 +9092,7 @@ exports[`[OINODbPostgresql][Orders][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9064,7 +9104,7 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = 
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9077,13 +9117,13 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2023-04-05T00:00:00.000Z","RequiredDate":"2023-04-06T00:00:00.000Z","ShippedDate":"2023-04-07T00:00:00.000Z","ShipVia":2,"Freight":847.51,"ShipName":"k'l%5C%22m%n_o%5Ctp%5Crq%5Cnr%5C%5Cs","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Cowes2","ShipRegion":"Western Europe","ShipPostalCode":"PO31 8PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9095,7 +9135,7 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9108,14 +9148,14 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9127,7 +9167,7 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA rese
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9141,7 +9181,7 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] 
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -9207,7 +9247,7 @@ UK
 "
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9219,7 +9259,7 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE re
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9232,12 +9272,12 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=30000&OrderID=30000&CustomerID=CACTU&EmployeeID=1&OrderDate=2023-04-05T00%3A00%3A00.000Z&RequiredDate=2023-04-06T00%3A00%3A00.000Z&ShippedDate=2023-04-07T00%3A00%3A00.000Z&ShipVia=2&Freight=847.51&ShipName=k'l%22m%25n_o%09p%0Dq%0Ar%5Cs&ShipAddress=59%20rue%20de%20l'Abbaye&ShipCity=Cowes2&ShipRegion=Western%20Europe&ShipPostalCode=PO31%208PJ&ShipCountry=UK
 "
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9249,7 +9289,7 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -9265,7 +9305,21 @@ exports[`[OINODbPostgresql][Orders][HTTP PUT] update with oversized data: PUT 1`
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Orders][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9277,15 +9331,15 @@ exports[`[OINODbPostgresql][Orders][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Orders][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbPostgresql][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"boolean","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
+exports[`[API][OINODbPostgresql][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"character varying","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"boolean","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
 
-exports[`[OINODbPostgresql][Products][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"1","ProductID":1,"ProductName":"Chai","SupplierID":8,"CategoryID":1,"QuantityPerUnit":"10 boxes x 30 bags","UnitPrice":18.09,"UnitsInStock":39,"UnitsOnOrder":0,"ReorderLevel":10,"Discontinued":true},
 {"_OINOID_":"2","ProductID":2,"ProductName":"Chang","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"24 - 12 oz bottles","UnitPrice":19.09,"UnitsInStock":17,"UnitsOnOrder":40,"ReorderLevel":25,"Discontinued":true},
@@ -9367,7 +9421,7 @@ exports[`[OINODbPostgresql][Products][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "1","1","Chai","8","1","10 boxes x 30 bags","18.09","39","0","10","true"
 "2","2","Chang","1","1","24 - 12 oz bottles","19.09","17","40","25","true"
@@ -9448,7 +9502,7 @@ exports[`[OINODbPostgresql][Products][HTTP GET] select *: GET CSV 1`] = `
 "77","77","Original Frankfurter grüne Soße","12","2","12 boxes","13.09","32","0","15","false""
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"31","ProductID":31,"ProductName":"Gorgonzola Telino","SupplierID":14,"CategoryID":4,"QuantityPerUnit":"12 - 100 g pkgs","UnitPrice":12.59,"UnitsInStock":0,"UnitsOnOrder":70,"ReorderLevel":20,"Discontinued":false},
 {"_OINOID_":"5","ProductID":5,"ProductName":"Chef Anton's Gumbo Mix","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"36 boxes","UnitPrice":21.35,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
@@ -9460,7 +9514,7 @@ exports[`[OINODbPostgresql][Products][HTTP GET] select * with filter: GET JSON F
 ]"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9472,7 +9526,7 @@ exports[`[OINODbPostgresql][Products][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9484,18 +9538,18 @@ exports[`[OINODbPostgresql][Products][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":12.99,"UnitsInStock":2,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","12.99","2","0","20","false""
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9507,7 +9561,7 @@ exports[`[OINODbPostgresql][Products][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -9522,7 +9576,7 @@ exports[`[OINODbPostgresql][Products][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9534,7 +9588,7 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update JSON: PUT JSON reset 1`] 
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9547,13 +9601,13 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":24.99,"UnitsInStock":3,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9565,7 +9619,7 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = 
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9578,12 +9632,12 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","24.99","3","0","20","false""
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9595,7 +9649,7 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA re
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9609,7 +9663,7 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -9657,7 +9711,7 @@ false
 "
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9669,7 +9723,7 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9682,12 +9736,12 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=99&ProductID=99&ProductName=Umeshu&SupplierID=1&CategoryID=1&QuantityPerUnit=500%20ml&UnitPrice=24.99&UnitsInStock=3&UnitsOnOrder=0&ReorderLevel=20&Discontinued=false
 "
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9699,7 +9753,7 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update with invalid null value: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update with invalid null value: PUT invalid null 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -9711,7 +9765,7 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update with invalid null value: 
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -9723,7 +9777,21 @@ exports[`[OINODbPostgresql][Products][HTTP PUT] update with oversized data: PUT 
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Products][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9735,15 +9803,15 @@ exports[`[OINODbPostgresql][Products][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Products][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Products][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbPostgresql][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"integer","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"character varying","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"character varying","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"character varying","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"character varying","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"bytea","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"text","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"character varying","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
+exports[`[API][OINODbPostgresql][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"integer","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isNotNull":true,"isAutoInc":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"character varying","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"character varying","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"character varying","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"date","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"character varying","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"character varying","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"character varying","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"character varying","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"character varying","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"bytea","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"text","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isNotNull":false,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"character varying","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":false,"isAutoInc":false}}]"`;
 
-exports[`[OINODbPostgresql][Employees][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
@@ -9757,7 +9825,7 @@ exports[`[OINODbPostgresql][Employees][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
 "x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
@@ -9772,7 +9840,7 @@ Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3
 "c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
@@ -9781,7 +9849,7 @@ exports[`[OINODbPostgresql][Employees][HTTP GET] select * with filter: GET JSON 
 ]"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9793,7 +9861,7 @@ exports[`[OINODbPostgresql][Employees][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9805,19 +9873,19 @@ exports[`[OINODbPostgresql][Employees][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
 Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -9829,7 +9897,7 @@ exports[`[OINODbPostgresql][Employees][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -9844,7 +9912,7 @@ exports[`[OINODbPostgresql][Employees][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9856,7 +9924,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`]
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9869,13 +9937,13 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9887,7 +9955,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] =
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9900,13 +9968,13 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
 Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9918,7 +9986,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA r
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -9932,7 +10000,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -10014,7 +10082,7 @@ http://accweb/emmployees/lastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -10026,7 +10094,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -10039,12 +10107,12 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -10056,7 +10124,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update with invalid null value: PUT invalid null 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -10068,7 +10136,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update with invalid null value:
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -10084,7 +10152,7 @@ exports[`[OINODbPostgresql][Employees][HTTP PUT] update with oversized data: PUT
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -10096,15 +10164,27 @@ exports[`[OINODbPostgresql][Employees][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
+exports[`[API][OINODbPostgresql][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"real","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isNotNull":true,"isAutoInc":false}}]"`;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248_11","OrderID":10248,"ProductID":11,"UnitPrice":14,"Quantity":12,"Discount":0},
 {"_OINOID_":"10248_42","OrderID":10248,"ProductID":42,"UnitPrice":9.8,"Quantity":10,"Discount":0},
@@ -12264,7 +12344,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10248_11","10248","11","14","12","0"
 "10248_42","10248","42","9.8","10","0"
@@ -14423,7 +14503,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 "11077_77","11077","77","13","2","0""
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
 {"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
@@ -14433,7 +14513,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP GET] select * with filter: GET JS
 ]"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -14445,7 +14525,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert with id: POST 1`] = 
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14457,18 +14537,18 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":12.34,"Quantity":56,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","12.34","56","0""
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -14480,7 +14560,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert no data: POST 1`] = 
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -14495,7 +14575,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP POST] insert duplicate: POST 1`] 
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14507,7 +14587,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14520,13 +14600,13 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = 
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":23.45,"Quantity":67,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14538,7 +14618,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14551,12 +14631,12 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","23.45","67","0""
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14568,7 +14648,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDAT
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14582,7 +14662,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDAT
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -14610,7 +14690,7 @@ Content-Disposition: form-data; name="Discount"
 "
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14622,7 +14702,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENC
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14635,12 +14715,12 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENC
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=10249_77&OrderID=10249&ProductID=77&UnitPrice=23.45&Quantity=67&Discount=0
 "
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -14652,7 +14732,7 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -14664,15 +14744,15 @@ exports[`[OINODbPostgresql][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbPostgresql][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbPostgresql][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMariadb][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"varchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[API][OINODbMariadb][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"varchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
-exports[`[OINODbMariadb][Orders][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248","OrderID":10248,"CustomerID":"VINET","EmployeeID":5,"OrderDate":"1996-07-04T00:00:00.000Z","RequiredDate":"1996-08-01T00:00:00.000Z","ShippedDate":"1996-07-16T00:00:00.000Z","ShipVia":3,"Freight":32.38,"ShipName":"Vins et alcools Chevalier","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Reims","ShipRegion":null,"ShipPostalCode":"51100","ShipCountry":"France"},
 {"_OINOID_":"10249","OrderID":10249,"CustomerID":"TOMSP","EmployeeID":6,"OrderDate":"1996-07-05T00:00:00.000Z","RequiredDate":"1996-08-16T00:00:00.000Z","ShippedDate":"1996-07-10T00:00:00.000Z","ShipVia":1,"Freight":11.61,"ShipName":"Toms Spezialitäten","ShipAddress":"Luisenstr. 48","ShipCity":"Münster","ShipRegion":null,"ShipPostalCode":"44087","ShipCountry":"Germany"},
@@ -15507,7 +15587,7 @@ exports[`[OINODbMariadb][Orders][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "10248","10248","VINET","5","1996-07-04T00:00:00.000Z","1996-08-01T00:00:00.000Z","1996-07-16T00:00:00.000Z","3","32.38","Vins et alcools Chevalier","59 rue de l'Abbaye","Reims",null,"51100","France"
 "10249","10249","TOMSP","6","1996-07-05T00:00:00.000Z","1996-08-16T00:00:00.000Z","1996-07-10T00:00:00.000Z","1","11.61","Toms Spezialitäten","Luisenstr. 48","Münster",null,"44087","Germany"
@@ -16341,7 +16421,7 @@ exports[`[OINODbMariadb][Orders][HTTP GET] select *: GET CSV 1`] = `
 "11077","11077","RATTC","1","1998-05-06T00:00:00.000Z","1998-06-03T00:00:00.000Z",null,"2","8.53","Rattlesnake Canyon Grocery","2817 Milton Dr.","Albuquerque","NM","87110","USA""
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
@@ -16351,7 +16431,7 @@ exports[`[OINODbMariadb][Orders][HTTP GET] select * with filter: GET JSON FILTER
 ]"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -16363,7 +16443,7 @@ exports[`[OINODbMariadb][Orders][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16375,20 +16455,20 @@ exports[`[OINODbMariadb][Orders][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2024-04-05T00:00:00.000Z","RequiredDate":"2024-04-06T00:00:00.000Z","ShippedDate":"2024-04-07T00:00:00.000Z","ShipVia":2,"Freight":184.75,"ShipName":"a'b%5C%22c%d_e%5Ctf%5Crg%5Cnh%5C%5Ci","ShipAddress":"Garden House Crowther Way","ShipCity":"Cowes","ShipRegion":"British Isles","ShipPostalCode":"PO31 7PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -16400,7 +16480,7 @@ exports[`[OINODbMariadb][Orders][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -16415,7 +16495,7 @@ exports[`[OINODbMariadb][Orders][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16427,7 +16507,7 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16440,13 +16520,13 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2023-04-05T00:00:00.000Z","RequiredDate":"2023-04-06T00:00:00.000Z","ShippedDate":"2023-04-07T00:00:00.000Z","ShipVia":2,"Freight":847.51,"ShipName":"k'l%5C%22m%n_o%5Ctp%5Crq%5Cnr%5C%5Cs","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Cowes2","ShipRegion":"Western Europe","ShipPostalCode":"PO31 8PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16458,7 +16538,7 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16471,14 +16551,14 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16490,7 +16570,7 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16504,7 +16584,7 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -16570,7 +16650,7 @@ UK
 "
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16582,7 +16662,7 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16595,12 +16675,12 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] =
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=30000&OrderID=30000&CustomerID=CACTU&EmployeeID=1&OrderDate=2023-04-05T00%3A00%3A00.000Z&RequiredDate=2023-04-06T00%3A00%3A00.000Z&ShippedDate=2023-04-07T00%3A00%3A00.000Z&ShipVia=2&Freight=847.51&ShipName=k'l%22m%25n_o%09p%0Dq%0Ar%5Cs&ShipAddress=59%20rue%20de%20l'Abbaye&ShipCity=Cowes2&ShipRegion=Western%20Europe&ShipPostalCode=PO31%208PJ&ShipCountry=UK
 "
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -16612,7 +16692,7 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -16628,7 +16708,21 @@ exports[`[OINODbMariadb][Orders][HTTP PUT] update with oversized data: PUT 1`] =
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Orders][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16640,15 +16734,15 @@ exports[`[OINODbMariadb][Orders][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Orders][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMariadb][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[API][OINODbMariadb][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"varchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
-exports[`[OINODbMariadb][Products][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"1","ProductID":1,"ProductName":"Chai","SupplierID":8,"CategoryID":1,"QuantityPerUnit":"10 boxes x 30 bags","UnitPrice":18.09,"UnitsInStock":39,"UnitsOnOrder":0,"ReorderLevel":10,"Discontinued":true},
 {"_OINOID_":"2","ProductID":2,"ProductName":"Chang","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"24 - 12 oz bottles","UnitPrice":19.09,"UnitsInStock":17,"UnitsOnOrder":40,"ReorderLevel":25,"Discontinued":true},
@@ -16730,7 +16824,7 @@ exports[`[OINODbMariadb][Products][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "1","1","Chai","8","1","10 boxes x 30 bags","18.09","39","0","10","true"
 "2","2","Chang","1","1","24 - 12 oz bottles","19.09","17","40","25","true"
@@ -16811,7 +16905,7 @@ exports[`[OINODbMariadb][Products][HTTP GET] select *: GET CSV 1`] = `
 "77","77","Original Frankfurter grüne Soße","12","2","12 boxes","13.09","32","0","15","false""
 `;
 
-exports[`[OINODbMariadb][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"31","ProductID":31,"ProductName":"Gorgonzola Telino","SupplierID":14,"CategoryID":4,"QuantityPerUnit":"12 - 100 g pkgs","UnitPrice":12.59,"UnitsInStock":0,"UnitsOnOrder":70,"ReorderLevel":20,"Discontinued":false},
 {"_OINOID_":"5","ProductID":5,"ProductName":"Chef Anton's Gumbo Mix","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"36 boxes","UnitPrice":21.35,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
@@ -16823,7 +16917,7 @@ exports[`[OINODbMariadb][Products][HTTP GET] select * with filter: GET JSON FILT
 ]"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -16835,7 +16929,7 @@ exports[`[OINODbMariadb][Products][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16847,18 +16941,18 @@ exports[`[OINODbMariadb][Products][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":12.99,"UnitsInStock":2,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","12.99","2","0","20","false""
 `;
 
-exports[`[OINODbMariadb][Products][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -16870,7 +16964,7 @@ exports[`[OINODbMariadb][Products][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -16885,7 +16979,7 @@ exports[`[OINODbMariadb][Products][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16897,7 +16991,7 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16910,13 +17004,13 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":24.99,"UnitsInStock":3,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16928,7 +17022,7 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16941,12 +17035,12 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","24.99","3","0","20","false""
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16958,7 +17052,7 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -16972,7 +17066,7 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] =
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -17020,7 +17114,7 @@ false
 "
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17032,7 +17126,7 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update URLENCODE: PUT URLENCODE res
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17045,12 +17139,12 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`]
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=99&ProductID=99&ProductName=Umeshu&SupplierID=1&CategoryID=1&QuantityPerUnit=500%20ml&UnitPrice=24.99&UnitsInStock=3&UnitsOnOrder=0&ReorderLevel=20&Discontinued=false
 "
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -17062,7 +17156,7 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update with invalid null value: PUT 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update with invalid null value: PUT invalid null 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -17074,7 +17168,7 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update with invalid null value: PUT
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -17086,7 +17180,21 @@ exports[`[OINODbMariadb][Products][HTTP PUT] update with oversized data: PUT 1`]
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Products][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17098,15 +17206,15 @@ exports[`[OINODbMariadb][Products][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Products][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Products][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMariadb][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"varchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"varchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"varchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"varchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"longblob","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"mediumtext","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"varchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[API][OINODbMariadb][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":true,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"varchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"varchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"varchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"varchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"varchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"varchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"varchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"varchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"longblob","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"mediumtext","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"varchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
-exports[`[OINODbMariadb][Employees][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
@@ -17120,7 +17228,7 @@ exports[`[OINODbMariadb][Employees][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
 "x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
@@ -17135,7 +17243,7 @@ Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3
 "c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
@@ -17144,7 +17252,7 @@ exports[`[OINODbMariadb][Employees][HTTP GET] select * with filter: GET JSON FIL
 ]"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -17156,7 +17264,7 @@ exports[`[OINODbMariadb][Employees][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17168,19 +17276,19 @@ exports[`[OINODbMariadb][Employees][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
 Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -17192,7 +17300,7 @@ exports[`[OINODbMariadb][Employees][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -17207,7 +17315,7 @@ exports[`[OINODbMariadb][Employees][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17219,7 +17327,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = 
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17232,13 +17340,13 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17250,7 +17358,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17263,13 +17371,13 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
 Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17281,7 +17389,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA rese
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17295,7 +17403,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] 
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -17377,7 +17485,7 @@ http://accweb/emmployees/lastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17389,7 +17497,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE re
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17402,12 +17510,12 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -17419,7 +17527,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update with invalid null value: PUT invalid null 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -17431,7 +17539,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update with invalid null value: PU
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -17447,7 +17555,7 @@ exports[`[OINODbMariadb][Employees][HTTP PUT] update with oversized data: PUT 1`
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -17459,15 +17567,27 @@ exports[`[OINODbMariadb][Employees][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Employees][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[API][OINODbMariadb][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"double","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248_11","OrderID":10248,"ProductID":11,"UnitPrice":14,"Quantity":12,"Discount":0},
 {"_OINOID_":"10248_42","OrderID":10248,"ProductID":42,"UnitPrice":9.8,"Quantity":10,"Discount":0},
@@ -19627,7 +19747,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10248_11","10248","11","14","12","0"
 "10248_42","10248","42","9.8","10","0"
@@ -21786,7 +21906,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 "11077_77","11077","77","13","2","0""
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
 {"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
@@ -21796,7 +21916,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP GET] select * with filter: GET JSON 
 ]"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -21808,7 +21928,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21820,18 +21940,18 @@ exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":12.34,"Quantity":56,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","12.34","56","0""
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -21843,7 +21963,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -21858,7 +21978,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21870,7 +21990,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`]
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21883,13 +22003,13 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":23.45,"Quantity":67,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21901,7 +22021,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] =
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21914,12 +22034,12 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","23.45","67","0""
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21931,7 +22051,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA r
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21945,7 +22065,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -21973,7 +22093,7 @@ Content-Disposition: form-data; name="Discount"
 "
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21985,7 +22105,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -21998,12 +22118,12 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=10249_77&OrderID=10249&ProductID=77&UnitPrice=23.45&Quantity=67&Discount=0
 "
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -22015,7 +22135,7 @@ exports[`[OINODbMariadb][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -22027,15 +22147,15 @@ exports[`[OINODbMariadb][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMariadb][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMariadb][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMsSql][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"nchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[API][OINODbMsSql][Orders][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"CustomerID","type":"string","sqlType":"nchar","maxLength":5,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"OrderDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"RequiredDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShippedDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipVia","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Freight","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipAddress","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCity","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipRegion","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipPostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ShipCountry","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
-exports[`[OINODbMsSql][Orders][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248","OrderID":10248,"CustomerID":"VINET","EmployeeID":5,"OrderDate":"1996-07-04T00:00:00.000Z","RequiredDate":"1996-08-01T00:00:00.000Z","ShippedDate":"1996-07-16T00:00:00.000Z","ShipVia":3,"Freight":32.38,"ShipName":"Vins et alcools Chevalier","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Reims","ShipRegion":null,"ShipPostalCode":"51100","ShipCountry":"France"},
 {"_OINOID_":"10249","OrderID":10249,"CustomerID":"TOMSP","EmployeeID":6,"OrderDate":"1996-07-05T00:00:00.000Z","RequiredDate":"1996-08-16T00:00:00.000Z","ShippedDate":"1996-07-10T00:00:00.000Z","ShipVia":1,"Freight":11.61,"ShipName":"Toms Spezialitäten","ShipAddress":"Luisenstr. 48","ShipCity":"Münster","ShipRegion":null,"ShipPostalCode":"44087","ShipCountry":"Germany"},
@@ -22870,7 +22990,7 @@ exports[`[OINODbMsSql][Orders][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "10248","10248","VINET","5","1996-07-04T00:00:00.000Z","1996-08-01T00:00:00.000Z","1996-07-16T00:00:00.000Z","3","32.38","Vins et alcools Chevalier","59 rue de l'Abbaye","Reims",null,"51100","France"
 "10249","10249","TOMSP","6","1996-07-05T00:00:00.000Z","1996-08-16T00:00:00.000Z","1996-07-10T00:00:00.000Z","1","11.61","Toms Spezialitäten","Luisenstr. 48","Münster",null,"44087","Germany"
@@ -23704,7 +23824,7 @@ exports[`[OINODbMsSql][Orders][HTTP GET] select *: GET CSV 1`] = `
 "11077","11077","RATTC","1","1998-05-06T00:00:00.000Z","1998-06-03T00:00:00.000Z",null,"2","8.53","Rattlesnake Canyon Grocery","2817 Milton Dr.","Albuquerque","NM","87110","USA""
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10573","OrderID":10573,"CustomerID":"ANTON","EmployeeID":7,"OrderDate":"1997-06-19T00:00:00.000Z","RequiredDate":"1997-07-17T00:00:00.000Z","ShippedDate":"1997-06-20T00:00:00.000Z","ShipVia":3,"Freight":84.84,"ShipName":"Antonio Moreno Taquería","ShipAddress":"Mataderos  2312","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05023","ShipCountry":"Mexico"},
 {"_OINOID_":"10259","OrderID":10259,"CustomerID":"CENTC","EmployeeID":4,"OrderDate":"1996-07-18T00:00:00.000Z","RequiredDate":"1996-08-15T00:00:00.000Z","ShippedDate":"1996-07-25T00:00:00.000Z","ShipVia":3,"Freight":3.25,"ShipName":"Centro comercial Moctezuma","ShipAddress":"Sierras de Granada 9993","ShipCity":"México D.F.","ShipRegion":null,"ShipPostalCode":"05022","ShipCountry":"Mexico"},
@@ -23714,7 +23834,7 @@ exports[`[OINODbMsSql][Orders][HTTP GET] select * with filter: GET JSON FILTER 1
 ]"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -23726,7 +23846,7 @@ exports[`[OINODbMsSql][Orders][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23738,20 +23858,20 @@ exports[`[OINODbMsSql][Orders][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2024-04-05T00:00:00.000Z","RequiredDate":"2024-04-06T00:00:00.000Z","ShippedDate":"2024-04-07T00:00:00.000Z","ShipVia":2,"Freight":184.75,"ShipName":"a'b%5C%22c%d_e%5Ctf%5Crg%5Cnh%5C%5Ci","ShipAddress":"Garden House Crowther Way","ShipCity":"Cowes","ShipRegion":"British Isles","ShipPostalCode":"PO31 7PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -23763,7 +23883,7 @@ exports[`[OINODbMsSql][Orders][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -23778,7 +23898,7 @@ exports[`[OINODbMsSql][Orders][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23790,7 +23910,7 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23803,13 +23923,13 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"30000","OrderID":30000,"CustomerID":"CACTU","EmployeeID":1,"OrderDate":"2023-04-05T00:00:00.000Z","RequiredDate":"2023-04-06T00:00:00.000Z","ShippedDate":"2023-04-07T00:00:00.000Z","ShipVia":2,"Freight":847.51,"ShipName":"k'l%5C%22m%n_o%5Ctp%5Crq%5Cnr%5C%5Cs","ShipAddress":"59 rue de l'Abbaye","ShipCity":"Cowes2","ShipRegion":"Western Europe","ShipPostalCode":"PO31 8PJ","ShipCountry":"UK"}
 ]"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23821,7 +23941,7 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23834,14 +23954,14 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
 "30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23853,7 +23973,7 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`]
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23867,7 +23987,7 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -23933,7 +24053,7 @@ UK
 "
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23945,7 +24065,7 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -23958,12 +24078,12 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=30000&OrderID=30000&CustomerID=CACTU&EmployeeID=1&OrderDate=2023-04-05T00%3A00%3A00.000Z&RequiredDate=2023-04-06T00%3A00%3A00.000Z&ShippedDate=2023-04-07T00%3A00%3A00.000Z&ShipVia=2&Freight=847.51&ShipName=k'l%22m%25n_o%09p%0Dq%0Ar%5Cs&ShipAddress=59%20rue%20de%20l'Abbaye&ShipCity=Cowes2&ShipRegion=Western%20Europe&ShipPostalCode=PO31%208PJ&ShipCountry=UK
 "
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -23975,7 +24095,7 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -23991,7 +24111,21 @@ exports[`[OINODbMsSql][Orders][HTTP PUT] update with oversized data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Orders][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24003,15 +24137,15 @@ exports[`[OINODbMsSql][Orders][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Orders][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Orders][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMsSql][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[API][OINODbMsSql][Products][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductName","type":"string","sqlType":"nvarchar","maxLength":40,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"SupplierID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"CategoryID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"QuantityPerUnit","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsInStock","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"UnitsOnOrder","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReorderLevel","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Discontinued","type":"boolean","sqlType":"bit","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
-exports[`[OINODbMsSql][Products][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"1","ProductID":1,"ProductName":"Chai","SupplierID":8,"CategoryID":1,"QuantityPerUnit":"10 boxes x 30 bags","UnitPrice":18.09,"UnitsInStock":39,"UnitsOnOrder":0,"ReorderLevel":10,"Discontinued":true},
 {"_OINOID_":"2","ProductID":2,"ProductName":"Chang","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"24 - 12 oz bottles","UnitPrice":19.09,"UnitsInStock":17,"UnitsOnOrder":40,"ReorderLevel":25,"Discontinued":true},
@@ -24093,7 +24227,7 @@ exports[`[OINODbMsSql][Products][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "1","1","Chai","8","1","10 boxes x 30 bags","18.09","39","0","10","true"
 "2","2","Chang","1","1","24 - 12 oz bottles","19.09","17","40","25","true"
@@ -24174,7 +24308,7 @@ exports[`[OINODbMsSql][Products][HTTP GET] select *: GET CSV 1`] = `
 "77","77","Original Frankfurter grüne Soße","12","2","12 boxes","13.09","32","0","15","false""
 `;
 
-exports[`[OINODbMsSql][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"31","ProductID":31,"ProductName":"Gorgonzola Telino","SupplierID":14,"CategoryID":4,"QuantityPerUnit":"12 - 100 g pkgs","UnitPrice":12.59,"UnitsInStock":0,"UnitsOnOrder":70,"ReorderLevel":20,"Discontinued":false},
 {"_OINOID_":"5","ProductID":5,"ProductName":"Chef Anton's Gumbo Mix","SupplierID":2,"CategoryID":2,"QuantityPerUnit":"36 boxes","UnitPrice":21.35,"UnitsInStock":0,"UnitsOnOrder":0,"ReorderLevel":0,"Discontinued":true},
@@ -24186,7 +24320,7 @@ exports[`[OINODbMsSql][Products][HTTP GET] select * with filter: GET JSON FILTER
 ]"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -24198,7 +24332,7 @@ exports[`[OINODbMsSql][Products][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24210,18 +24344,18 @@ exports[`[OINODbMsSql][Products][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":12.99,"UnitsInStock":2,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","12.99","2","0","20","false""
 `;
 
-exports[`[OINODbMsSql][Products][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -24233,7 +24367,7 @@ exports[`[OINODbMsSql][Products][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -24248,7 +24382,7 @@ exports[`[OINODbMsSql][Products][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24260,7 +24394,7 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24273,13 +24407,13 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"99","ProductID":99,"ProductName":"Umeshu","SupplierID":1,"CategoryID":1,"QuantityPerUnit":"500 ml","UnitPrice":24.99,"UnitsInStock":3,"UnitsOnOrder":0,"ReorderLevel":20,"Discontinued":false}
 ]"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24291,7 +24425,7 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24304,12 +24438,12 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","ProductID","ProductName","SupplierID","CategoryID","QuantityPerUnit","UnitPrice","UnitsInStock","UnitsOnOrder","ReorderLevel","Discontinued"
 "99","99","Umeshu","1","1","500 ml","24.99","3","0","20","false""
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24321,7 +24455,7 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24335,7 +24469,7 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -24383,7 +24517,7 @@ false
 "
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24395,7 +24529,7 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE reset
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24408,12 +24542,12 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] =
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=99&ProductID=99&ProductName=Umeshu&SupplierID=1&CategoryID=1&QuantityPerUnit=500%20ml&UnitPrice=24.99&UnitsInStock=3&UnitsOnOrder=0&ReorderLevel=20&Discontinued=false
 "
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -24425,7 +24559,7 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update with invalid null value: PUT 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update with invalid null value: PUT invalid null 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -24437,7 +24571,7 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update with invalid null value: PUT 1
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -24449,7 +24583,21 @@ exports[`[OINODbMsSql][Products][HTTP PUT] update with oversized data: PUT 1`] =
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 400,
+   "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
+   "messages": [
+      "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Products][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24461,15 +24609,15 @@ exports[`[OINODbMsSql][Products][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Products][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Products][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMsSql][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"nvarchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"nvarchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"nvarchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"nvarchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"image","maxLength":2147483647,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"ntext","maxLength":1073741823,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"nvarchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
+exports[`[API][OINODbMsSql][Employees][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"EmployeeID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"LastName","type":"string","sqlType":"nvarchar","maxLength":20,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"FirstName","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Title","type":"string","sqlType":"nvarchar","maxLength":30,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"TitleOfCourtesy","type":"string","sqlType":"nvarchar","maxLength":25,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"BirthDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HireDate","type":"datetime","sqlType":"datetime","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Address","type":"string","sqlType":"nvarchar","maxLength":60,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"City","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Region","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PostalCode","type":"string","sqlType":"nvarchar","maxLength":10,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Country","type":"string","sqlType":"nvarchar","maxLength":15,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"HomePhone","type":"string","sqlType":"nvarchar","maxLength":24,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Extension","type":"string","sqlType":"nvarchar","maxLength":4,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Photo","type":"blob","sqlType":"image","maxLength":2147483647,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"Notes","type":"string","sqlType":"ntext","maxLength":1073741823,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"ReportsTo","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":true,"isAutoInc":false,"isNotNull":false}},{"db":{"name":"Northwind"},"name":"PhotoPath","type":"string","sqlType":"nvarchar","maxLength":255,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":false}}]"`;
 
-exports[`[OINODbMsSql][Employees][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
@@ -24483,7 +24631,7 @@ exports[`[OINODbMsSql][Employees][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
 "x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
@@ -24498,7 +24646,7 @@ Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3
 "c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
 {"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
@@ -24507,7 +24655,7 @@ exports[`[OINODbMsSql][Employees][HTTP GET] select * with filter: GET JSON FILTE
 ]"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -24519,7 +24667,7 @@ exports[`[OINODbMsSql][Employees][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24531,19 +24679,19 @@ exports[`[OINODbMsSql][Employees][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
 Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -24555,7 +24703,7 @@ exports[`[OINODbMsSql][Employees][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -24570,7 +24718,7 @@ exports[`[OINODbMsSql][Employees][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24582,7 +24730,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24595,13 +24743,13 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24613,7 +24761,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24626,13 +24774,13 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
 "5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
 Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24644,7 +24792,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24658,7 +24806,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = 
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -24740,7 +24888,7 @@ http://accweb/emmployees/lastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24752,7 +24900,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE rese
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24765,12 +24913,12 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] 
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -24782,7 +24930,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update with invalid null value: PUT 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update with invalid null value: PUT invalid null 1`] = `
 "{
    "success": false,
    "statusCode": 405,
@@ -24794,7 +24942,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update with invalid null value: PUT 
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP PUT] update with oversized data: PUT 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update with oversized data: PUT oversized value 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -24810,7 +24958,7 @@ exports[`[OINODbMsSql][Employees][HTTP PUT] update with oversized data: PUT 1`] 
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update NAN-value: PUT NAN-value 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -24822,15 +24970,27 @@ exports[`[OINODbMsSql][Employees][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][Employees][HTTP DELETE] remove: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Employees][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
+exports[`[API][OINODbMsSql][OrderDetails][SCHEMA] public properties: SCHEMA 1`] = `"[{"db":{"name":"Northwind"},"name":"OrderID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"ProductID","type":"number","sqlType":"int","maxLength":0,"fieldParams":{"isPrimaryKey":true,"isForeignKey":true,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"UnitPrice","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Quantity","type":"number","sqlType":"smallint","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}},{"db":{"name":"Northwind"},"name":"Discount","type":"number","sqlType":"float","maxLength":0,"fieldParams":{"isPrimaryKey":false,"isForeignKey":false,"isAutoInc":false,"isNotNull":true}}]"`;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 "[
 {"_OINOID_":"10248_11","OrderID":10248,"ProductID":11,"UnitPrice":14,"Quantity":12,"Discount":0},
 {"_OINOID_":"10248_42","OrderID":10248,"ProductID":42,"UnitPrice":9.8,"Quantity":10,"Discount":0},
@@ -26990,7 +27150,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP GET] select *: GET JSON 1`] = `
 ]"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10248_11","10248","11","14","12","0"
 "10248_42","10248","42","9.8","10","0"
@@ -29149,7 +29309,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP GET] select *: GET CSV 1`] = `
 "11077_77","11077","77","13","2","0""
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
 {"_OINOID_":"10595_61","OrderID":10595,"ProductID":61,"UnitPrice":28.5,"Quantity":120,"Discount":0.25},
 {"_OINOID_":"10711_53","OrderID":10711,"ProductID":53,"UnitPrice":32.8,"Quantity":120,"Discount":0},
@@ -29159,7 +29319,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP GET] select * with filter: GET JSON FI
 ]"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert with id: POST 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP POST] insert with id: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -29171,7 +29331,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert with id: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert: POST 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP POST] insert: POST 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29183,18 +29343,18 @@ exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP POST] insert: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":12.34,"Quantity":56,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","12.34","56","0""
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert no data: POST 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP POST] insert no data: POST 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -29206,7 +29366,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert no data: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
 "{
    "success": false,
    "statusCode": 500,
@@ -29221,7 +29381,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP POST] insert duplicate: POST 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29233,7 +29393,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update JSON: PUT JSON reset 1`] =
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29246,13 +29406,13 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update JSON: PUT JSON 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
 {"_OINOID_":"10249_77","OrderID":10249,"ProductID":77,"UnitPrice":23.45,"Quantity":67,"Discount":0}
 ]"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29264,7 +29424,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update CSV: PUT CSV reset 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29277,12 +29437,12 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update CSV: PUT CSV 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","ProductID","UnitPrice","Quantity","Discount"
 "10249_77","10249","77","23.45","67","0""
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29294,7 +29454,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA res
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29308,7 +29468,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: PUT FORMDATA 1`]
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update FORMDATA: GET FORMDATA 1`] = `
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
@@ -29336,7 +29496,7 @@ Content-Disposition: form-data; name="Discount"
 "
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE reset 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29348,7 +29508,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE r
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29361,12 +29521,12 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: PUT URLENCODE 1
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
 "_OINOID_=10249_77&OrderID=10249&ProductID=77&UnitPrice=23.45&Quantity=67&Discount=0
 "
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 "{
    "success": false,
    "statusCode": 400,
@@ -29378,7 +29538,7 @@ exports[`[OINODbMsSql][OrderDetails][HTTP PUT] update no data: PUT 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 "{
    "success": true,
    "statusCode": 200,
@@ -29390,8 +29550,1132 @@ exports[`[OINODbMsSql][OrderDetails][HTTP DELETE] remove: DELETE 1`] = `
 }"
 `;
 
-exports[`[OINODbMsSql][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
+exports[`[API][OINODbMsSql][OrderDetails][HTTP DELETE] remove: GET JSON 1`] = `
 "[
 
 ]"
+`;
+
+exports[`[OWASP 1][OINODbBunSqlite][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlFilter.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "1",
+            "_rightSide": "1",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbBunSqlite][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbBunSqlite][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbBunSqlite][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbBunSqlite][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbBunSqlite][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbBunSqlite][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 2][OINODbBunSqlite][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlOrder.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "order": {
+            "_columns": [
+               "1"
+            ],
+            "_descending": [
+               false
+            ]
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbBunSqlite][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbBunSqlite][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbBunSqlite][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbBunSqlite][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbBunSqlite][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbBunSqlite][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 3][OINODbBunSqlite][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value 'FOO'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "ProductID",
+            "_rightSide": "FOO",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbBunSqlite][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbBunSqlite][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%22 FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbBunSqlite][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbBunSqlite][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%5C FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbBunSqlite][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbBunSqlite][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 1][OINODbPostgresql][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlFilter.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "1",
+            "_rightSide": "1",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbPostgresql][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbPostgresql][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbPostgresql][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbPostgresql][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbPostgresql][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbPostgresql][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 2][OINODbPostgresql][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlOrder.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "order": {
+            "_columns": [
+               "1"
+            ],
+            "_descending": [
+               false
+            ]
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbPostgresql][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbPostgresql][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbPostgresql][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbPostgresql][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbPostgresql][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbPostgresql][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 3][OINODbPostgresql][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value 'FOO'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "ProductID",
+            "_rightSide": "FOO",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbPostgresql][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbPostgresql][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%22 FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbPostgresql][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbPostgresql][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%5C FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbPostgresql][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbPostgresql][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 1][OINODbMariadb][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlFilter.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "1",
+            "_rightSide": "1",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMariadb][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMariadb][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbMariadb][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMariadb][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbMariadb][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMariadb][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 2][OINODbMariadb][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlOrder.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "order": {
+            "_columns": [
+               "1"
+            ],
+            "_descending": [
+               false
+            ]
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMariadb][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMariadb][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbMariadb][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMariadb][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbMariadb][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMariadb][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 3][OINODbMariadb][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value 'FOO'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "ProductID",
+            "_rightSide": "FOO",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMariadb][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMariadb][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%22 FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbMariadb][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMariadb][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%5C FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbMariadb][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMariadb][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 1][OINODbMsSql][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlFilter.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "1",
+            "_rightSide": "1",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMsSql][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMsSql][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbMsSql][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMsSql][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 1][OINODbMsSql][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 1][OINODbMsSql][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 2][OINODbMsSql][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINODbSqlOrder.toSql - Invalid field '1'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "order": {
+            "_columns": [
+               "1"
+            ],
+            "_descending": [
+               false
+            ]
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMsSql][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMsSql][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"' FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbMsSql][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMsSql][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"; FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 2][OINODbMsSql][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 2][OINODbMsSql][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[OWASP 3][OINODbMsSql][Products][OWASP GET] GET with filter: OWASP GET RESULT 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoGet): Unhandled exception in doGet: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value 'FOO'",
+   "messages": [
+      "OINO DEBUG (DoGet): OINO GET SQL []"
+   ],
+   "params": {
+      "sqlParams": {
+         "filter": {
+            "_leftSide": "ProductID",
+            "_rightSide": "FOO",
+            "_operator": "eq"
+         }
+      }
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMsSql][Products][OWASP POST] POST: OWASP POST RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMsSql][Products][OWASP POST] POST: POST JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%22 FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbMsSql][Products][OWASP PUT] PUT: OWASP PUT RESULT 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMsSql][Products][OWASP PUT] PUT: PUT JSON 1`] = `
+"[
+{"_OINOID_":"99","ProductID":99,"ProductName":"%5C%5C FOO","SupplierID":1,"CategoryID":1,"QuantityPerUnit":null,"UnitPrice":null,"UnitsInStock":null,"UnitsOnOrder":null,"ReorderLevel":null,"Discontinued":false}
+]"
+`;
+
+exports[`[OWASP 3][OINODbMsSql][Products][OWASP DELETE] DELETE: DELETE 1`] = `
+"{
+   "success": true,
+   "statusCode": 200,
+   "statusMessage": "OK",
+   "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[OWASP 3][OINODbMsSql][Products][OWASP DELETE] DELETE: DELETE JSON 1`] = `
+"[
+
+]"
+`;
+
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
 `;

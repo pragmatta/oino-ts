@@ -14,33 +14,35 @@
         <div class="row">
             <main role="main" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap align-items-center pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Categories</h1>
+                    <h1 class="h2">Employees</h1>
                 </div>
                 <div id="content" class="container-fluid">
-                    <table id="categories" class="table table-striped table-sm">
-                        <thead id="categories-header">
+                    <table id="employees" class="table table-striped table-sm">
+                        <thead id="employees-header">
                             <tr>
-                                <th>Category Id</th>
-                                <th>Category Name</th>
-                                <th>Description</th>
+                                <th>Employee ID</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Title</th>
+                                <th>Photo</th>
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody id="categories-rows"  
-                            hx-get="http://localhost:8080/categories" 
-                            hx-trigger="load, OINODbApiTrigger-Categories from:body"
-                            hx-target="#categories-rows" 
+                        <tbody id="employees-rows"  
+                            hx-get="http://localhost:8080/employees" 
+                            hx-trigger="load, OINODbApiTrigger-Employees from:body"
+                            hx-target="#employees-rows" 
                             hx-swap="innerHTML"
                             >
                         </tbody>
                     </table>
-                    <div id="categories-insert" class="link-primary"
-                        hx-get="http://localhost:8080///insert_category" 
+                    <div id="employees-insert" class="link-primary"
+                        hx-get="http://localhost:8080///insert_employee" 
                         hx-trigger="click"
                         hx-target="this" 
                         hx-swap="outerHTML"
                     >
-                        <button type="button" class="btn btn-success">Create Category</button>
+                        <button type="button" class="btn btn-success">Create Employee</button>
                     </div>
                 </div>
                 <div id="alerts" class="mt-4"

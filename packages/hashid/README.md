@@ -59,20 +59,8 @@
  
  ## RESTfull
  OINO maps HTTP methods GET/POST/PUT/DELETE to SQL operations SELECT/INSERT/UPDATE/DELETE. The GET/POST requests can be made without URL ID to get all rows or insert new ones and others target a single row using URL ID. 
- 
- ### HTTP GET
- ```
- Request and response:
- > curl.exe -X GET http://localhost:3001/orderdetails/11077:77
- [
-   {"_OINOID_":"11077:77","OrderID":11077,"ProductID":77,"UnitPrice":13,"Quantity":2,"Discount":0}
- ]
 
- SQL:
- SELECT "OrderID","ProductID","UnitPrice","Quantity","Discount" FROM [OrderDetails] WHERE ("OrderID"=11077 AND "ProductID"=77);
- ```
-
- ### HTTP POST 
+ For example HTTP POST 
  ```
  Request and response:
  > curl.exe -X POST http://localhost:3001/orderdetails -H "Content-Type: application/json" --data '[{\"OrderID\":11077,\"ProductID\":99,\"UnitPrice\":19,\"Quantity\":1,\"Discount\":0}]'
@@ -82,31 +70,12 @@
  INSERT INTO [OrderDetails] ("OrderID","ProductID","UnitPrice","Quantity","Discount") VALUES (11077,99,19,1,0);
  ```
 
- ### HTTP PUT
- ```
- Request and response:
- > curl.exe -X PUT http://localhost:3001/orderdetails/11077:99 -H "Content-Type: application/json" --data '[{\"UnitPrice\":20}]'
- {"success":true,"statusCode":200,"statusMessage":"OK","messages":[]}
 
- SQL:
- UPDATE [OrderDetails] SET "UnitPrice"=20 WHERE ("OrderID"=11077 AND "ProductID"=99);
- ```
- 
- ### HTTP DELETE
- ```
- Request and response:
- > curl.exe -X DELETE http://localhost:3001/orderdetails/11077:99
- {"success":true,"statusCode":200,"statusMessage":"OK","messages":[]}
-
- SQL:
- DELETE FROM [OrderDetails] WHERE ("OrderID"=11077 AND "ProductID"=99);
- ```
-  
  ## Universal Serialization
  OINO handles serialization of data to JSON/CSV/etc. and back based on the data model. It knows what columns exist, what is their data type and how to convert each to JSON/CSV and back. This allows also partial data to be sent, i.e. you can send only columns that need updating or even send extra columns and have them ignored.
 
  ### Features
- - Files can be sent to BLOB fields using BASE64 encoding.
+ - Files can be sent to BLOB fields using BASE64 or MIME multipart encoding.
  - Datetimes are (optionally) normalized to ISO 8601 format.
  - Extended JSON-encoding
    - Unquoted literal `undefined` can be used to represent non-existent values (leaving property out works too but preserving structure might be easier e.g. when translating data).
@@ -135,7 +104,7 @@
  To support tables with multipart primary keys OINO generates a composite key `_OINOID_` that is included in the result and can be used as the REST ID. For example in the example above table `OrderDetails` has two primary keys `OrderID` and `ProductID` making the `_OINOID_` of form `11077:99`. 
 
  ## Power Of SQL
- Since OINO is just generating SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html) and order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
+ Since OINO is just generating SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html), order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html) and limits/paging with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlLimit.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
 
  ## Swagger Support
  Swagger is great as long as the definitions are updated and with OINO you can automatically get a Swagger definition including a data model schema.
@@ -179,8 +148,8 @@
  ### Batch updates
  Supporting batch updates similar to batch inserts is slightly bending the RESTfull principles but would still be a useful optional feature.
 
- ### Aggregation and limits
- Similar to filtering and ordering, aggregation and limits can be implemented as HTTP request parameters telling what column is aggregated or used for ordering or how many results to return.
+ ### Aggregation
+ Similar to filtering, ordering and limits, aggregation could be implemented as HTTP request parameters telling what column is aggregated or used for ordering or how many results to return.
 
  ### Streaming
  One core idea is to be efficient in not making unnecessary copies of the data and minimizing garbage collection debt. This can be taken further by implementing streaming, allowing large dataset to be written to HTTP response as SQL result rows are received.
@@ -222,4 +191,3 @@
  
  ## SQL Scripts
  The SQL scripts for creating the sample Northwind database are based on [Google Code archive](https://code.google.com/archive/p/northwindextended/downloads) and have been further customized to ensure they would have identical data (in the scope of the automated testing).
-

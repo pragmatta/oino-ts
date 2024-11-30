@@ -63,7 +63,7 @@ try {
 	const db:OINODb = await OINODbFactory.createDb(db_params)
 
 	const apis:Record<string, OINODbApi> = {
-		"categories": await OINODbFactory.createApi(db, { tableName: "Categories" })
+		"employees": await OINODbFactory.createApi(db, { tableName: "Employees", hashidKey: "" }),
 	};
 	const api_array:OINODbApi[] = Object.entries(apis).map(([path, api]) => (api));
 	
@@ -103,7 +103,7 @@ try {
 
 				const params:OINODbApiRequestParams = OINODbFactory.createParamsFromRequest(request)
 				const api:OINODbApi|null = apis[api_name]
-				const body = await request.text()
+				const body:Buffer = Buffer.from(await request.arrayBuffer())
 				OINOLog.debug("index.ts / api", {params:params, body:body }) 
 				let api_result:OINODbApiResult
 				if (api_name == "") {
@@ -117,11 +117,13 @@ try {
 				} else if (api) {
 					api_result = await api.doRequest(request.method, id, body, params)
 					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
-					OINOLog.debug("index.ts / template", {template:template}) 
+					// OINOLog.debug("index.ts / template", {template:template}) 
 					if (api_result.data?.dataset) {
+						OINOLog.debug("index.ts / template render", {is_empty:api_result.data.dataset.isEmpty()}) 
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
 						response = await http_result.getResponse(response_headers)
 					} else {
+						OINOLog.debug("index.ts / template with id") 
 						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getResponse(response_headers)
 					}
 					if (request.method == "POST") {

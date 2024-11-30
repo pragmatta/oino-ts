@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbDataFieldParams, OINODataCell, OINODb } from "./index.js";
+import { OINODbDataFieldParams, OINODataCell, OINODb, OINOLog, OINO_ERROR_PREFIX } from "./index.js";
 
 /**
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
@@ -256,7 +256,12 @@ export class OINONumberDataField extends OINODbDataField {
         } else if ((value === "") || (value === null)) {
             return null
         } else {
-            return Number.parseFloat(value) 
+            const result:number = parseFloat(value)
+            if (isNaN(result)) {
+                OINOLog.error("OINODbSqlFilter.toSql: Invalid value!", {value:value})
+                throw new Error(OINO_ERROR_PREFIX + ": OINONumberDataField.deserializeCell - Invalid value '" + value + "'") // incorrectly formatted data could be a security risk, abort processing
+            }
+            return result
         }
     }
 }

@@ -155,6 +155,14 @@ export class OINOConsoleLog extends OINOLog {
         if (data) {
             log += " " + JSON.stringify(data)
         }
-        console.log(log)
+        if (level == "ERROR") {
+            console.error(log)
+        } else if (level == "WARN") {
+            console.warn(log)
+        } else if (level == "INFO") {
+            console.info(log)
+        } else {
+            console.log(log)
+        }
     }
 }

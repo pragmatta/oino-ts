@@ -5,7 +5,7 @@ export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PR
 
 import { OINODb } from "./OINODb.js"
 import { OINODbDataField } from "./OINODbDataField.js"
-import { OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbRequestParams.js"
+import { OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbSqlParams.js"
 
 export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi } from "./OINODbApi.js"
 export { OINODbDataModel } from "./OINODbDataModel.js"
@@ -13,7 +13,7 @@ export { OINODbModelSet } from "./OINODbModelSet.js"
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js"
 export { OINODb } from "./OINODb.js"
 export { OINODbDataSet, OINODbMemoryDataSet } from "./OINODbDataSet.js"
-export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation } from "./OINODbRequestParams.js"
+export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation } from "./OINODbSqlParams.js"
 export { OINODbConfig } from "./OINODbConfig.js"
 export { OINODbFactory } from "./OINODbFactory.js"
 export { OINODbSwagger } from "./OINODbSwagger.js"

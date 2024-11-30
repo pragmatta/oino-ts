@@ -1,0 +1,45 @@
+<tr id="OINOApiRow-employees-###_OINOID_###">
+<td colspan="100%" class="">
+    <form class="container p-0"
+        hx-put="http://localhost:8080/employees/###_OINOID_###" 
+        hx-target="#OINOApiRow-employees-###_OINOID_###" 
+        hx-swap="outerHTML"
+        hx-encoding="multipart/form-data"
+    >
+    <div class="row row-cols-auto border rounded border-primary m-0 p-3">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="EmployeeID">Employee Id:</label><br></i>
+            <input type="text" id="EmployeeID" name="EmployeeID" value="###EmployeeID###" disabled>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="LastName">Last  Name:</label><br></i>
+            <input type="text" id="LastName" name="LastName" value="###LastName###">
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="FirstName">First Name:</label><br></i>
+            <input type="text" id="FirstName" name="FirstName" value="###FirstName###">
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="Title">Title:</label><br></i>
+            <input type="text" id="Title" name="Title" value="###Title###">
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="Photo">Photo:</label><br></i>
+            <img id="Photo" name="Photo" src="data:image/jpeg;base64,###Photo###">
+            <input type="file" id="Photo" name="Photo">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <input class="btn btn-outline-primary" type="submit" value="Update API">
+            <button class="btn btn-outline-secondary" 
+                hx-get="http://localhost:8080/employees/###_OINOID_###" 
+                hx-target="#OINOApiRow-employees-###_OINOID_###" 
+                hx-swap="outerHTML"
+            >
+            Cancel
+            </button>
+        </div>
+    </div>
+    </form>
+</tr>

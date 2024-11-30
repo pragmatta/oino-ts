@@ -4,9 +4,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbApiRequestParams, OINOLog, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField, OINOContentType, OINOStr } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbApiRequestParams, OINOLog, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField } from "./index.js"
 import { OINOResult } from "@oino-ts/types";
 import { OINOHashid } from "@oino-ts/hashid"
+import { OINOParser } from "@oino-ts/types";
 
 const API_EMPTY_PARAMS:OINODbApiRequestParams = { sqlParams: {} }
 
@@ -41,7 +42,7 @@ export class OINODbApiResult extends OINOResult {
      * @param headers Headers to include in the response
      * 
      */
-    async createResponseFromResult(headers:Record<string, string> = {}):Promise<Response> {
+    async getResponse(headers:Record<string, string> = {}):Promise<Response> {
         let response:Response|null = null
         if (this.success && this.data) {
             const body = await this.data.writeString(this.params.responseType)
@@ -195,9 +196,10 @@ export class OINODbApi {
     }
 
     private async _doGet(result:OINODbApiResult, id:string, params:OINODbApiRequestParams):Promise<void> {
-        const sql:string = this.datamodel.printSqlSelect(id, params.sqlParams || {})
-        // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
+        let sql:string = ""
         try {
+            sql = this.datamodel.printSqlSelect(id, params.sqlParams || {})
+            // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
             const sql_res:OINODbDataSet = await this.db.sqlSelect(sql)
             // OINOLog.debug("OINODbApi.doGet sql_res", {sql_res:sql_res})
             if (sql_res.hasErrors()) {
@@ -293,20 +295,21 @@ export class OINODbApi {
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
+    async doRequest(method:string, id: string, body:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("OINODbApi", "doRequest")
         // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
         let result:OINODbApiResult = new OINODbApiResult(params)
         let rows:OINODataRow[] = []
         if ((method == "POST") || (method == "PUT")) {
-            if (Array.isArray(body)) {
-                rows = body
-
-            } else if (typeof(body) == "object") {
-                rows = [OINODbFactory.createRowFromObject(this.datamodel, body)]
-
-            } else if (typeof(body) == "string") {
-                rows = OINODbFactory.createRows(this.datamodel, body, params)
+            try {
+                if (Array.isArray(body)) {
+                    rows = body as OINODataRow[]
+                } else {
+                    rows = OINOParser.createRows(this.datamodel, body, params)
+                }
+            
+            } catch (e:any) {
+                result.setError(400, "Invalid data: " + e.message, "DoRequest")
             }
             // OINOLog.debug("OINODbApi.doRequest - OINODataRow rows", {rows:rows})        
         }
