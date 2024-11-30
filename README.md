@@ -75,7 +75,7 @@
  OINO handles serialization of data to JSON/CSV/etc. and back based on the data model. It knows what columns exist, what is their data type and how to convert each to JSON/CSV and back. This allows also partial data to be sent, i.e. you can send only columns that need updating or even send extra columns and have them ignored.
 
  ### Features
- - Files can be sent to BLOB fields using BASE64 or MIME multipart encoding.
+ - Files can be sent to BLOB fields using BASE64 or MIME multipart encoding. Also supports standard HTML form file submission to blob fields and returning them data url images.
  - Datetimes are (optionally) normalized to ISO 8601 format.
  - Extended JSON-encoding
    - Unquoted literal `undefined` can be used to represent non-existent values (leaving property out works too but preserving structure might be easier e.g. when translating data).
@@ -104,7 +104,7 @@
  To support tables with multipart primary keys OINO generates a composite key `_OINOID_` that is included in the result and can be used as the REST ID. For example in the example above table `OrderDetails` has two primary keys `OrderID` and `ProductID` making the `_OINOID_` of form `11077:99`. 
 
  ## Power Of SQL
- Since OINO is just generating SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html), order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html) and limits/paging with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlLimit.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
+ Since OINO is just generating SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html), order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html) and limits/paging with [`OINOSqlLimit`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlLimit.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
 
  ## Swagger Support
  Swagger is great as long as the definitions are updated and with OINO you can automatically get a Swagger definition including a data model schema.
@@ -133,9 +133,6 @@
 
  ### Realistic app
  There needs to be a realistic app built on top of OINO to get a better grasp of the edge cases.
-
- ### Security review
- Handling of SQL-injection attacks needs a thorough review, what are the relevant attack vectors are for OINO and what protections are still needed.
  
  ## Roadmap
  Things that need to happen in some order before beta-status are at least following:
