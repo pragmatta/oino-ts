@@ -1,0 +1,8 @@
+<div id="employees-insert" class="link-primary"
+    hx-get="http://localhost:8080///insert_employee" 
+    hx-trigger="click"
+    hx-target="this" 
+    hx-swap="outerHTML"
+>
+    <button type="button" class="btn btn-success">Create Employee</button>
+</div>

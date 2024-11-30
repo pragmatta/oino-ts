@@ -1,0 +1,39 @@
+<form id="OINOApiRow-employees-insert" class="bg-primary-subtle"
+    hx-post="http://localhost:8080/employees" 
+    hx-target="this" 
+    hx-swap="outerHTML"
+    hx-encoding="multipart/form-data"
+>
+    <div class="row row-cols-auto border rounded border-success m-0 p-3">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="LastName">Last  Name:</label><br></i>
+            <input type="text" id="LastName" name="LastName" value="">
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="FirstName">First Name:</label><br></i>
+            <input type="text" id="FirstName" name="FirstName" value="">
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="Title">Title:</label><br></i>
+            <input type="text" id="Title" name="Title" value="">
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <i><label for="Photo">Photo:</label><br></i>
+            <input type="file" id="Photo" name="Photo">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <br/>
+            <input class="btn btn-outline-success" type="submit" value="Create Employee">
+            <button class="btn btn-outline-secondary" 
+                hx-get="http://localhost:8080///insert_employee_cancel" 
+                hx-target="#OINOApiRow-employees-insert" 
+                hx-swap="outerHTML"
+            >
+            Cancel
+            </button>
+        </div>
+    </div>
+</form>
+

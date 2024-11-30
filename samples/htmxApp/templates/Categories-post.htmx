@@ -1,9 +1,0 @@
-<div id="categories-insert" class="link-primary"
-    hx-get="http://localhost:8080///insert_category" 
-    hx-trigger="click"
-    hx-target="this" 
-    hx-swap="outerHTML"
->
-    <button type="button" class="btn btn-success">Create Category</button>
-</div>
-
