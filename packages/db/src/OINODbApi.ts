@@ -294,7 +294,7 @@ export class OINODbApi {
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, body:string|OINODataRow[]|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
+    async doRequest(method:string, id: string, body:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("OINODbApi", "doRequest")
         // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
         let result:OINODbApiResult = new OINODbApiResult(params)
@@ -303,13 +303,10 @@ export class OINODbApi {
             try {
                 if (Array.isArray(body)) {
                     rows = body as OINODataRow[]
-
-                } else if (typeof(body) == "object") {
-                    rows = [OINODbFactory.createRowFromObject(this.datamodel, body)]
-
-                } else if (typeof(body) == "string") {
+                } else {
                     rows = OINODbFactory.createRows(this.datamodel, body, params)
                 }
+            
             } catch (e:any) {
                 result.setError(400, "Invalid data: " + e.message, "DoRequest")
             }

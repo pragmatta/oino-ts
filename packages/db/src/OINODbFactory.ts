@@ -314,7 +314,7 @@ export class OINODbFactory {
         return result
     }
 
-    private static _findMultipartBoundary(formData:string, multipartBoundary:string, start:number):number {
+    private static _findMultipartBoundary(formData:Buffer, multipartBoundary:string, start:number):number {
         let n:number = formData.indexOf(multipartBoundary, start)
         if (n >= 0) {
             n += multipartBoundary.length + 2
@@ -324,10 +324,10 @@ export class OINODbFactory {
         return n
     }
 
-    private static _parseMultipartLine(csvData:string, start:number):string {
-        let line_end:number = csvData.indexOf('\r\n', start)
+    private static _parseMultipartLine(data:Buffer, start:number):string {
+        let line_end:number = data.indexOf('\r\n', start)
         if (line_end >= start) {
-            return csvData.substring(start, line_end)
+            return data.subarray(start, line_end).toString()
         } else {
             return ''
         }
@@ -335,7 +335,7 @@ export class OINODbFactory {
 
     private static _multipartHeaderRegex:RegExp = /Content-Disposition\: (form-data|file); name=\"([^\"]+)\"(; filename=.*)?/i
 
-    private static createRowFromFormdata(datamodel:OINODbDataModel, data:string, multipartBoundary:string):OINODataRow[] {
+    private static createRowFromFormdata(datamodel:OINODbDataModel, data:Buffer, multipartBoundary:string):OINODataRow[] {
         let result:OINODataRow[] = []
         try {
             const n = data.length
@@ -360,7 +360,7 @@ export class OINODbFactory {
                     const is_file = header_matches[3] != null
                     let is_base64:boolean = false
                     const field_index:number = datamodel.findFieldIndexByName(field_name)
-                    // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file})
+                    // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file, is_base64:is_base64})
                     if (field_index < 0) {
                         OINOLog.warning("OINODbFactory.createRowFromFormdata: form field not found and skipped!", {field_name:field_name})
                         block_ok = false
@@ -388,12 +388,15 @@ export class OINODbFactory {
                             row[field_index] = null
                             
                         } else if (is_file) {
-                            const value = this._parseMultipartLine(data, start).trim()
                             if (is_base64) {
+                                const value = this._parseMultipartLine(data, start).trim()
                                 row[field_index] = field.deserializeCell(OINOStr.decode(value, OINOContentType.formdata))
                             } else {
-                                row[field_index] = Buffer.from(value, "binary")
+                                const e = this._findMultipartBoundary(data, multipartBoundary, start)
+                                const value = data.subarray(start, e-2)
+                                row[field_index] =  value
                             }
+                            // console.log("OINODbFactory.createRowFromFormdata: file field", {field_name:field_name, value:row[field_index]})
                         } else {
                             let value:string = OINOStr.decode(this._parseMultipartLine(data, start).trim(), OINOContentType.formdata)
                             // OINOLog.debug("OINODbFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
@@ -469,7 +472,7 @@ export class OINODbFactory {
      * @param requestParams parameters
      * 
      */
-    static createRows(datamodel:OINODbDataModel, data:string, requestParams:OINODbApiRequestParams ):OINODataRow[] {
+    static createRowsFromText(datamodel:OINODbDataModel, data:string, requestParams:OINODbApiRequestParams ):OINODataRow[] {
         if ((requestParams.requestType == OINOContentType.json) || (requestParams.requestType == undefined)) {
             return this._createRowFromJson(datamodel, data)
             
@@ -477,7 +480,7 @@ export class OINODbFactory {
             return this.createRowFromCsv(datamodel, data)
 
         } else if (requestParams.requestType == OINOContentType.formdata) {
-            return this.createRowFromFormdata(datamodel, data, requestParams.multipartBoundary || "")
+            return this.createRowFromFormdata(datamodel, Buffer.from(data, "utf8"), requestParams.multipartBoundary || "")
 
         } else if (requestParams.requestType == OINOContentType.urlencode) {
             return this.createRowFromUrlencoded(datamodel, data)
@@ -491,6 +494,35 @@ export class OINODbFactory {
         }
     }
    /**
+     * Create data rows from request body based on the datamodel. 
+     * 
+     * @param datamodel datamodel of the api
+     * @param data data as an Buffer
+     * @param requestParams parameters
+     * 
+     */
+    static createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer, requestParams:OINODbApiRequestParams ):OINODataRow[] {
+        if ((requestParams.requestType == OINOContentType.json) || (requestParams.requestType == undefined)) {
+            return this._createRowFromJson(datamodel, data.toString()) // JSON is always a string
+            
+        } else if (requestParams.requestType == OINOContentType.csv) {
+            return this.createRowFromCsv(datamodel, data.toString()) // binary data has to be base64 encoded so it's a string
+
+        } else if (requestParams.requestType == OINOContentType.formdata) {
+            return this.createRowFromFormdata(datamodel, data, requestParams.multipartBoundary || "")
+
+        } else if (requestParams.requestType == OINOContentType.urlencode) {
+            return this.createRowFromUrlencoded(datamodel, data.toString()) // data is urlencoded so it's a string
+
+        } else if (requestParams.requestType == OINOContentType.html) {
+            OINOLog.error("HTML can't be used as an input content type!", {contentType:OINOContentType.html})
+            return []
+        } else {
+            OINOLog.error("Unrecognized input content type!", {contentType:requestParams.requestType})
+            return []
+        }
+    }
+    /**
      * Create one data row from javascript object based on the datamodel. 
      * NOTE! Data assumed to be unserialized i.e. of the native type (string, number, boolean, Buffer)
      * 
@@ -503,6 +535,28 @@ export class OINODbFactory {
         let result:OINODataRow = new Array(fields.length)
         for (let i=0; i < fields.length; i++) {
             result[i] = data[fields[i].name]
+        }
+        return result
+    }
+
+    /**
+     * Create data rows from request body based on the datamodel. 
+     * 
+     * @param datamodel datamodel of the api
+     * @param data data as a string
+     * @param requestParams parameters
+     * 
+     */
+    static createRows(datamodel:OINODbDataModel, data:string|Buffer|object, requestParams:OINODbApiRequestParams ):OINODataRow[] {
+        let result:OINODataRow[] = []
+        if (typeof data == "string") {
+            result = this.createRowsFromText(datamodel, data, requestParams)
+
+        } else if (data instanceof Buffer) {
+            result = this.createRowsFromBlob(datamodel, data, requestParams)
+
+        } else if (typeof data == "object") {
+            result = [this.createRowFromObject(datamodel, data)]
         }
         return result
     }

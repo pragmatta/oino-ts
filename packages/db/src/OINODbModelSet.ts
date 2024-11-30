@@ -61,7 +61,7 @@ export class OINODbModelSet {
             const f = fields[i]
             let value:string|null|undefined = f.serializeCell(row[i])
             if (value === undefined) {
-                OINOLog.info("OINODbModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
+                // OINOLog.info("OINODbModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
 
             } else if (value === null) {
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":null"
