@@ -20,6 +20,7 @@
   "devDependencies": {
   },
   "files": [
-    "index.d.ts"
+    "index.d.ts",
+    "**/src/*.d.ts"
   ]
 }
