@@ -6,7 +6,7 @@
     "app": "bun run ./readmeApp.ts"
   },
   "dependencies": {
-    "@types/node":"^22.7.9",
+    "@types/node": "^22.10.1",
     "@oino-ts/db": "latest",
     "@oino-ts/db-bunsqlite": "latest",
     "@oino-ts/common": "0.1.0"

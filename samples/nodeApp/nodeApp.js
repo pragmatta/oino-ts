@@ -1,16 +1,16 @@
-import { OINOFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OINOContentType, OINOSwagger, OINOBenchmark } from "@oino-ts/core";
-import { OINODbPostgresql } from "@oino-ts/postgresql";
+import { OINODbFactory, OINOLog, OINOLogLevel, OINOConsoleLog, OINOContentType, OINOBenchmark, OINODbSwagger } from "@oino-ts/db";
+import { OINODbPostgresql } from "@oino-ts/db-postgresql";
 import { createServer } from "node:http";
 
-OINOFactory.registerDb("OINODbPostgresql", OINODbPostgresql);
+OINODbFactory.registerDb("OINODbPostgresql", OINODbPostgresql);
 OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug));
 
-const db = await OINOFactory.createDb({ type: "OINODbPostgresql", url: "localhost", database: "Northwind", port: 5432, user: "node", password:  process.env.OINO_POSTGRESQL_TOKEN });
+const db = await OINODbFactory.createDb({ type: "OINODbPostgresql", url: "localhost", database: "Northwind", port: 5432, user: "node", password:  process.env.OINO_POSTGRESQL_TOKEN });
 const apis = {
-    "employees": await OINOFactory.createApi(db, { tableName: "Employees", excludeFields: ["BirthDate"] }),
-    "orders": await OINOFactory.createApi(db, { tableName: "Orders" }),
-    "orderdetails": await OINOFactory.createApi(db, { tableName: "OrderDetails" }),
-    "products": await OINOFactory.createApi(db, { tableName: "Products" })
+    "employees": await OINODbFactory.createApi(db, { tableName: "Employees", excludeFields: ["BirthDate"] }),
+    "orders": await OINODbFactory.createApi(db, { tableName: "Orders" }),
+    "orderdetails": await OINODbFactory.createApi(db, { tableName: "OrderDetails" }),
+    "products": await OINODbFactory.createApi(db, { tableName: "Products" })
 };
 
 OINOBenchmark.reset()
@@ -29,7 +29,7 @@ const server = createServer(async (request, response) => {
     let id = path_matches[2] || "";
     let api = apis[path];
     if (pathname == "/swagger.json") {
-        response.end(JSON.stringify(OINOSwagger.getApiDefinition(api_array)));
+        response.end(JSON.stringify(OINODbSwagger.getApiDefinition(api_array)));
     }
     else if (!api) {
         response.statusCode = 404;
