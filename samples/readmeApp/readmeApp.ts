@@ -1,5 +1,5 @@
 import { OINODb, OINODbApi, OINODbFactory, OINOConsoleLog, OINODbApiResult, OINORequestParams } from "@oino-ts/db";
-import { OINOLog, OINOLogLevel } from "@oino-ts/types"
+import { OINOLog, OINOLogLevel } from "@oino-ts/common"
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 

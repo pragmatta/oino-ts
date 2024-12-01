@@ -6,21 +6,21 @@
 
 import { expect, test } from "bun:test";
 
-import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINORequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINODbSqlComparison, OINONumberDataField, OINODatetimeDataField } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINODbSqlComparison, OINONumberDataField, OINODatetimeDataField, OINODbApiRequestParams } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { OINODbMariadb } from "@oino-ts/db-mariadb"
 import { OINODbMsSql } from "@oino-ts/db-mssql"
 
-const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set")
-const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set")
-const OINOCLOUD_POC_DB_TOKEN = process.env.OINOCLOUD_POC_DB_TOKEN || console.error("OINOCLOUD_POC_DB_TOKEN not set")
+const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set") || ""
+const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set") || ""
+const OINOCLOUD_POC_DB_TOKEN = process.env.OINOCLOUD_POC_DB_TOKEN || console.error("OINOCLOUD_POC_DB_TOKEN not set") || ""
 
 type OINOTestParams = {
     name: string
     apiParams: OINODbApiParams
-    requestParams: OINORequestParams
+    requestParams: OINODbApiRequestParams
     postRow: OINODataRow
     putRow: OINODataRow
 }
@@ -141,10 +141,10 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
     // OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
 
-    const empty_params:OINORequestParams = { sqlParams: {}}
-    const request_params:OINORequestParams = Object.assign({}, testParams.requestParams)
+    const empty_params:OINODbApiRequestParams = { sqlParams: {}}
+    const request_params:OINODbApiRequestParams = Object.assign({}, testParams.requestParams)
     request_params.sqlParams = {}
-    const request_params_with_filters:OINORequestParams = Object.assign({}, request_params)
+    const request_params_with_filters:OINODbApiRequestParams = Object.assign({}, request_params)
     request_params_with_filters.sqlParams = testParams.requestParams.sqlParams
     // OINOLog.debug("OINOTestApi", {request_params:request_params, request_params_with_filters:request_params_with_filters})
     
@@ -270,7 +270,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
         const numeric_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINONumberDataField) && (field.fieldParams.isPrimaryKey == false) })
         if (numeric_fields.length > 0) {
             const nan_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + numeric_fields[0].name + "\":\"" + "; FOO" + "\"}]"
-            OINOLog.debug("HTTP PUT NAN-value", {nan_value:nan_value})
+            // OINOLog.debug("HTTP PUT NAN-value", {nan_value:nan_value})
             test(target_name + target_db + target_table + target_group + " update NAN-value", async () => {
                 expect(encodeResult((await api.doRequest("PUT", new_row_id, nan_value, empty_params)))).toMatchSnapshot("PUT NAN-value")
             })
@@ -278,7 +278,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
         const date_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINODatetimeDataField) && (field.fieldParams.isPrimaryKey == false) })
         if (date_fields.length > 0) {
             const non_date = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + date_fields[0].name + "\":\"" + "; FOO" + "\"}]"
-            OINOLog.debug("HTTP PUT invalid date value", {non_date:non_date})
+            // OINOLog.debug("HTTP PUT invalid date value", {non_date:non_date})
             test(target_name + target_db + target_table + target_group + " update invalid date value", async () => {
                 expect(encodeResult((await api.doRequest("PUT", new_row_id, non_date, empty_params)))).toMatchSnapshot("PUT invalid date value")
             })
@@ -306,10 +306,10 @@ export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestP
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
     // OINOLog.debug("OINOTestOwasp", {new_row_id:new_row_id})
 
-    const empty_params:OINORequestParams = { sqlParams: {}}
-    const request_params:OINORequestParams = Object.assign({}, testParams.requestParams)
+    const empty_params:OINODbApiRequestParams = { sqlParams: {}}
+    const request_params:OINODbApiRequestParams = Object.assign({}, testParams.requestParams)
     request_params.sqlParams = {}
-    const request_params_with_filters:OINORequestParams = Object.assign({}, request_params)
+    const request_params_with_filters:OINODbApiRequestParams = Object.assign({}, request_params)
     request_params_with_filters.sqlParams = testParams.requestParams.sqlParams
     // OINOLog.debug("OINOTestOwasp", {request_params:request_params, request_params_with_filters:request_params_with_filters})
     

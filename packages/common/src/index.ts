@@ -3,7 +3,6 @@ export { OINOLog, OINOLogLevel, OINOConsoleLog } from "./OINOLog.js"
 export { OINOResult, OINOHttpResult } from "./OINOResult.js"
 export { OINOStr } from "./OINOStr.js"
 export { OINOHtmlTemplate } from "./OINOHtmlTemplate.js"
-export { OINOParser } from "./OINOParser"
 
 /** OINO error message prefix */
 export const OINO_ERROR_PREFIX = "OINO ERROR"
