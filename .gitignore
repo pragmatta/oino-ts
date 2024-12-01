@@ -48,3 +48,16 @@ update_src.cmd
 /packages/db-mssql/node_modules
 /packages/db-mssql/dist
 packages/db-mssql/package-lock.json
+/packages/common/dist
+packages/common/package-lock.json
+packages/common/README.md
+packages/db-mssql/README.md
+packages/db-mssql/README.md
+packages/hashid/README.md
+/packages/types/db-bunsqlite
+/packages/types/db-mariadb
+/packages/types/db-mssql
+/packages/types/db-postgresql
+/packages/types/db
+/packages/types/hashid
+/packages/node_modules
