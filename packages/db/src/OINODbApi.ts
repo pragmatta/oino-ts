@@ -4,10 +4,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbFactory, OINODbApiRequestParams, OINOLog, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField } from "./index.js"
-import { OINOResult } from "@oino-ts/types";
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbApiRequestParams, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField, OINODbParser } from "./index.js"
+import { OINOResult } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid"
-import { OINOParser } from "@oino-ts/types";
 
 const API_EMPTY_PARAMS:OINODbApiRequestParams = { sqlParams: {} }
 
@@ -305,7 +304,7 @@ export class OINODbApi {
                 if (Array.isArray(body)) {
                     rows = body as OINODataRow[]
                 } else {
-                    rows = OINOParser.createRows(this.datamodel, body, params)
+                    rows = OINODbParser.createRows(this.datamodel, body, params)
                 }
             
             } catch (e:any) {

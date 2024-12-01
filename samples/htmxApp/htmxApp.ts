@@ -1,7 +1,7 @@
 import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINODbSwagger, OINODbApiResult, OINOLog, OINOLogLevel, OINODbHtmlTemplate, OINODbApiRequestParams } from "@oino-ts/db";
 
 import { OINODbConfig } from "@oino-ts/db"
-import { OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/types"
+import { OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common"
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { BunFile } from "bun";
 import { existsSync, readFileSync } from "fs";

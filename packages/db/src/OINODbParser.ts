@@ -4,18 +4,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOContentType, OINODbDataModel, OINODbDataField, OINODataRow, OINODbApiRequestParams, OINOStr, OINONumberDataField, OINOLog } from "../../db/src/index.js"
+import { OINOContentType, OINODbDataModel, OINODbDataField, OINODataRow, OINODbApiRequestParams, OINOStr, OINONumberDataField, OINOLog } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
  *
  */
-export class OINOParser {
+export class OINODbParser {
     /**
      * Create data rows from request body based on the datamodel. 
      * 
      * @param datamodel datamodel of the api
-     * @param data data as a string
+     * @param data data as a string or Buffer or object
      * @param requestParams parameters
      * 
      */
@@ -341,7 +341,7 @@ export class OINOParser {
                 let l:string = this._parseMultipartLine(data, start)
                 // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
                 start += l.length+2
-                const header_matches = OINOParser._multipartHeaderRegex.exec(l)
+                const header_matches = OINODbParser._multipartHeaderRegex.exec(l)
                 if (!header_matches) {
                     OINOLog.warning("OINODbFactory.createRowFromFormdata: unsupported block skipped!", {header_line:l})
                     block_ok = false
