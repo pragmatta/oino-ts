@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/types",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OINO TS package for types.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -20,6 +20,7 @@
   "devDependencies": {
   },
   "files": [
-    "index.d.ts"
+    "index.d.ts",
+    "**/src/*.d.ts"
   ]
 }

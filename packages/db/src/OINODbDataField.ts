@@ -298,7 +298,7 @@ export class OINOBlobDataField extends OINODbDataField {
             return cellVal
 
         } else if (cellVal instanceof Uint8Array) {
-            return Buffer.from(cellVal).toString('base64')
+            return Buffer.from(cellVal as Uint8Array).toString('base64')
 
         } else {
             return cellVal.toString()

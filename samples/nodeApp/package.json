@@ -1,14 +1,16 @@
 {
-  "name": "OinoNodeApp",
-  "version": "0.1.0",
+  "name": "oinonodeapp",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "app": "node ./nodeApp.js",
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-	  "@oino-ts/core":"latest",
-	  "@oino-ts/postgresql":"latest"
+	  "@oino-ts/common":"latest",
+	  "@oino-ts/hashid":"latest",
+	  "@oino-ts/db":"latest",
+	  "@oino-ts/db-postgresql":"latest"
   },
   "devDependencies": {
   },
