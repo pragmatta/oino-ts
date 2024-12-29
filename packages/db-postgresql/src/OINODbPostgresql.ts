@@ -101,7 +101,7 @@ export class OINODbPostgresql extends OINODb {
         if (this._params.type !== "OINODbPostgresql") {
             throw new Error(OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type)
         } 
-        this._pool = new Pool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password })
+        this._pool = new Pool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password, ssl: true })
         this._pool.on("error", (err: any) => {
             OINOLog.error("OINODbPostgresql error", {err:err})
         })
