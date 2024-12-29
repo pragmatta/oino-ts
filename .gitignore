@@ -61,3 +61,15 @@ packages/hashid/README.md
 /packages/types/db
 /packages/types/hashid
 /packages/node_modules
+/packages/common/node_modules
+packages/db-bunsqlite/package-lock.json
+packages/db-mariadb/package-lock.json
+packages/db-postgresql/package-lock.json
+packages/db-bunsqlite/package-lock.json
+packages/db-mariadb/package-lock.json
+packages/db-postgresql/package-lock.json
+packages/db-bunsqlite/package-lock.json
+packages/db-mariadb/package-lock.json
+packages/db-postgresql/package-lock.json
+packages/hashid/package-lock.json
+packages/types/package-lock.json
