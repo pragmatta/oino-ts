@@ -15,7 +15,9 @@ import { OINODbMsSql } from "@oino-ts/db-mssql"
 
 const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set") || ""
 const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set") || ""
-const OINOCLOUD_POC_DB_TOKEN = process.env.OINOCLOUD_POC_DB_TOKEN || console.error("OINOCLOUD_POC_DB_TOKEN not set") || ""
+const OINOCLOUD_MSSQL_TEST_SRV = process.env.OINOCLOUD_MSSQL_TEST_SRV || console.error("OINOCLOUD_MSSQL_TEST_SRV not set") || ""
+const OINOCLOUD_MSSQL_TEST_USER = process.env.OINOCLOUD_MSSQL_TEST_USER || console.error("OINOCLOUD_MSSQL_TEST_USER not set") || ""
+const OINOCLOUD_MSSQL_TEST_PWD = process.env.OINOCLOUD_DB_NORTHWIND_PWD || console.error("OINOCLOUD_DB_ACCOUNT_PWD not set") || ""
 
 type OINOTestParams = {
     name: string
@@ -26,10 +28,10 @@ type OINOTestParams = {
 }
 
 const dbs:OINODbParams[] = [
-    { type: "OINODbBunSqlite", url:"file://../localDb/northwind.sqlite", database: "Northwind" }, 
+    { type: "OINODbBunSqlite", url:"file://./localDb/northwind.sqlite", database: "Northwind" }, 
     { type: "OINODbPostgresql", url: "localhost", database: "Northwind", port:5432, user: "node", password: OINODB_POSTGRESQL_TOKEN },
     { type: "OINODbMariadb", url: "127.0.0.1", database: "Northwind", port:6543, user: "node", password: OINODB_MARIADB_TOKEN }, 
-    { type: "OINODbMsSql", url: "oinocloud-poc-db-srv.database.windows.net", database: "Northwind", port:1433, user: "oinocloud-poc-db-srv-admin", password: OINOCLOUD_POC_DB_TOKEN } 
+    { type: "OINODbMsSql", url: OINOCLOUD_MSSQL_TEST_SRV, database: "Northwind", port:1433, user: OINOCLOUD_MSSQL_TEST_USER, password: OINOCLOUD_MSSQL_TEST_PWD } 
 ]
 
 const api_tests:OINOTestParams[] = [
