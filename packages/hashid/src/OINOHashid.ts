@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { createCipheriv, createDecipheriv, createHmac, randomFillSync } from 'node:crypto';
+import { BinaryLike, createCipheriv, createDecipheriv, createHmac, randomFillSync } from 'node:crypto';
 import basex from 'base-x'
 
 const HASHID_MIN_LENGTH:number = 12
@@ -63,27 +63,27 @@ export class OINOHashid {
         // if seed was given use it for pseudorandom chars, otherwise generate them
         let random_chars:string = ""
         if (this._staticIds) {
-            const hmac_seed = createHmac('sha1', this._key)
+            const hmac_seed = createHmac('sha1', this._key as BinaryLike)
             hmac_seed.update(this._domainId + " " + cellSeed)
-            random_chars = hashidEncoder.encode(hmac_seed.digest()) // hmac_seed.digest('base64url')
+            random_chars = hashidEncoder.encode(hmac_seed.digest() as Uint8Array) // hmac_seed.digest('base64url')
             
         } else {
-            randomFillSync(this._iv, 0, 16)
-            random_chars = hashidEncoder.encode(this._iv) // this._iv.toString('base64url')
+            randomFillSync(this._iv as Uint8Array, 0, 16)
+            random_chars = hashidEncoder.encode(this._iv as Uint8Array) // this._iv.toString('base64url')
         }
-        const hmac = createHmac('sha1', this._key)
+        const hmac = createHmac('sha1', this._key as Uint8Array)
         let iv_seed:string = random_chars.substring(0, this._minLength)
         hmac.update(this._domainId + " " + iv_seed)
         const iv_data:Buffer = hmac.digest()
-        iv_data.copy(this._iv, 0, 0, 16) 
+        iv_data.copy(this._iv as Uint8Array, 0, 0, 16) 
 
         let plaintext = id.toString()
         if (plaintext.length < this._minLength) {
             plaintext += " " + random_chars.substring(random_chars.length - (this._minLength - plaintext.length - 1))
         }
 
-        const cipher = createCipheriv('aes-128-gcm', this._key, this._iv)
-        const cryptotext = hashidEncoder.encode(cipher.update(plaintext, 'utf8')) + hashidEncoder.encode(cipher.final())
+        const cipher = createCipheriv('aes-128-gcm', this._key as Uint8Array, this._iv as Uint8Array)
+        const cryptotext = hashidEncoder.encode(cipher.update(plaintext, 'utf8') as Uint8Array) + hashidEncoder.encode(cipher.final() as Uint8Array)
         return iv_seed + cryptotext
     }
 
@@ -95,16 +95,16 @@ export class OINOHashid {
      */
     decode(hashid:string):string {
         // reproduce nonce from seed
-        const hmac = createHmac('sha1', this._key)
+        const hmac = createHmac('sha1', this._key as Uint8Array)
         const iv_seed = hashid.substring(0, this._minLength)
         hmac.update(this._domainId + " " + iv_seed)
         const hash:Buffer = hmac.digest()
-        hash.copy(this._iv, 0, 0, 16)
+        hash.copy(this._iv as Uint8Array, 0, 0, 16)
 
         const cryptotext:string = hashid.substring(this._minLength)
         const cryptobytes:Buffer = Buffer.from(hashidEncoder.decode(cryptotext))
-        const decipher = createDecipheriv('aes-128-gcm', this._key, this._iv)
-        const plaintext = decipher.update(cryptobytes, undefined, 'utf8') //, cryptotext, 'base64url', 'utf8') 
+        const decipher = createDecipheriv('aes-128-gcm', this._key as Uint8Array, this._iv as Uint8Array)
+        const plaintext = decipher.update(cryptobytes as Uint8Array, undefined, 'utf8') //, cryptotext, 'base64url', 'utf8') 
         
         return plaintext.split(" ")[0]
     }
