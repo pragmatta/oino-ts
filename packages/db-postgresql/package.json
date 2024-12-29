@@ -20,7 +20,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/db": "^0.1.1",
+    "@oino-ts/db": "0.1.1",
     "pg": "^8.11.3"
   },
   "devDependencies": {

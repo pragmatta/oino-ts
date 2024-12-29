@@ -22,11 +22,11 @@
   "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@oino-ts/db": "^0.1.1",
-    "mariadb": "3.2.3"
+    "mariadb": "^3.2.3"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
-    "@types/bun": "latest"
+    "@types/bun": "^1.1.14"
   },
   "files": [
     "src/*.ts",
