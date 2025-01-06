@@ -7,10 +7,10 @@
 import { BinaryLike, createCipheriv, createDecipheriv, createHmac, randomFillSync } from 'node:crypto';
 import basex from 'base-x'
 
-const HASHID_MIN_LENGTH:number = 12
-const HASHID_MAX_LENGTH:number = 40
-const HASHID_ALPHABET:string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const hashidEncoder = basex(HASHID_ALPHABET)
+export const OINOHASHID_MIN_LENGTH:number = 12
+export const OINOHASHID_MAX_LENGTH:number = 42
+const OINOHASHID_ALPHABET:string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const hashidEncoder = basex(OINOHASHID_ALPHABET)
 
 /**
  * Hashid implementation for OINO API:s for the purpose of making it infeasible to scan 
@@ -37,10 +37,10 @@ export class OINOHashid {
      * @param staticIds whether hash values should remain static per row or random values 
      * 
      */
-    constructor (key: string, domainId:string, minLength:number = HASHID_MIN_LENGTH, staticIds:boolean = false) {
+    constructor (key: string, domainId:string, minLength:number = OINOHASHID_MIN_LENGTH, staticIds:boolean = false) {
         this._domainId = domainId
-        if ((minLength < HASHID_MIN_LENGTH) || (minLength > HASHID_MAX_LENGTH)) {
-            throw Error("OINOHashid minLength needs to be between " + HASHID_MIN_LENGTH + " and " + HASHID_MAX_LENGTH + "!")
+        if ((minLength < OINOHASHID_MIN_LENGTH) || (minLength > OINOHASHID_MAX_LENGTH)) {
+            throw Error("OINOHashid minLength (" + minLength + ")needs to be between " + OINOHASHID_MIN_LENGTH + " and " + OINOHASHID_MAX_LENGTH + "!")
         }
         this._minLength = Math.ceil(minLength/2)
         if (key.length != 32) {
@@ -63,15 +63,15 @@ export class OINOHashid {
         // if seed was given use it for pseudorandom chars, otherwise generate them
         let random_chars:string = ""
         if (this._staticIds) {
-            const hmac_seed = createHmac('sha1', this._key as BinaryLike)
+            const hmac_seed = createHmac('sha256', this._key as BinaryLike)
             hmac_seed.update(this._domainId + " " + cellSeed)
-            random_chars = hashidEncoder.encode(hmac_seed.digest() as Uint8Array) // hmac_seed.digest('base64url')
+            random_chars = hashidEncoder.encode(hmac_seed.digest() as Uint8Array) 
             
         } else {
             randomFillSync(this._iv as Uint8Array, 0, 16)
-            random_chars = hashidEncoder.encode(this._iv as Uint8Array) // this._iv.toString('base64url')
+            random_chars = hashidEncoder.encode(this._iv as Uint8Array) 
         }
-        const hmac = createHmac('sha1', this._key as Uint8Array)
+        const hmac = createHmac('sha256', this._key as Uint8Array)
         let iv_seed:string = random_chars.substring(0, this._minLength)
         hmac.update(this._domainId + " " + iv_seed)
         const iv_data:Buffer = hmac.digest()
@@ -95,7 +95,7 @@ export class OINOHashid {
      */
     decode(hashid:string):string {
         // reproduce nonce from seed
-        const hmac = createHmac('sha1', this._key as Uint8Array)
+        const hmac = createHmac('sha256', this._key as Uint8Array)
         const iv_seed = hashid.substring(0, this._minLength)
         hmac.update(this._domainId + " " + iv_seed)
         const hash:Buffer = hmac.digest()
