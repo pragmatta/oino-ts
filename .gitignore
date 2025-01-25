@@ -13,9 +13,6 @@ packages/db-postgresql/OINODbPostgresql.js
 packages/db-postgresql/OINODbPostgresql.d.ts
 packages/db-bunsqlite/OINODbBunSqlite.js
 packages/db-bunsqlite/OINODbBunSqlite.d.ts
-/packages/db-bunsqlite/dist
-/packages/db/dist
-/packages/db-postgresql/dist
 /packages/mysql/node_modules
 /packages/mysql/dist
 /packages/_dist
@@ -24,7 +21,6 @@ packages/cleanup_packages.cmd
 /packages/db-bunsqlite/node_modules
 /packages/db-postgresql/node_modules
 /packages/db-mariadb/node_modules
-/packages/db-mariadb/dist
 packages/update_snapshots.cmd
 samples/update_samples.cmd
 packages/publish_packages_test.cmd
@@ -40,15 +36,10 @@ packages/db-postgresql/README.md
 samples/nodeApp/package-lock.json
 samples/readmeApp/package-lock.json
 /packages/hashid/node_modules
-/packages/hashid/dist
-/packages/hashid/dist
-/packages/types/dist
 samples/htmxApp/package-lock.json
 update_src.cmd
 /packages/db-mssql/node_modules
-/packages/db-mssql/dist
 packages/db-mssql/package-lock.json
-/packages/common/dist
 packages/common/package-lock.json
 packages/common/README.md
 packages/db-mssql/README.md
