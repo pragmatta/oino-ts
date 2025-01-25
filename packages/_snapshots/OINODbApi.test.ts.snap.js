@@ -1713,7 +1713,7 @@ exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert: GET JSON 1`] = `
 
 exports[`[API][OINODbBunSqlite][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
+"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e\tf
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
@@ -1803,7 +1803,7 @@ exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 
 exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
+"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o\tp
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
@@ -1874,7 +1874,7 @@ Content-Disposition: form-data; name="Freight"
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ShipName"
 
-k'l"m%n_o	p
+k'l"m%n_o\tp
 q
 r%5Cs
 ---------OINOMultipartBoundary35424568
@@ -1949,6 +1949,20 @@ exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update NAN-value: PUT NAN-valu
    "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
    "messages": [
       "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
    ],
    "params": {
       "sqlParams": {}
@@ -2438,39 +2452,39 @@ exports[`[API][OINODbBunSqlite][Employees][SCHEMA] public properties: SCHEMA 1`]
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4OF0jpe0ZCgfM2","EmployeeID":"4OF0jpe0ZCgfM2","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"7p7bTX69BesxDP","EmployeeID":"7p7bTX69BesxDP","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"N9Zdta75vB3CYn","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"LRwusHnmYiVxDH","EmployeeID":"LRwusHnmYiVxDH","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"448WAzHM29ev4e","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"uMl2ljQ5bMHO7d","EmployeeID":"uMl2ljQ5bMHO7d","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"VqFCkfy9QYG8rJ","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3IBZxo14ply13pB","EmployeeID":"3IBZxo14ply13pB","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"fxuS8p5AAyCoWd","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+"OrRzmt19tdvPcEY","OrRzmt19tdvPcEY","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","8L4pfD1hewjoEB6","http://accweb/emmployees/davolio.bmp"
+"4OF0jpe0ZCgfM2","4OF0jpe0ZCgfM2","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"DIOu7ngtPHVJOV","DIOu7ngtPHVJOV","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","VBcc0VU1ZKEYt8","http://accweb/emmployees/leverling.bmp"
+"7p7bTX69BesxDP","7p7bTX69BesxDP","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","N9Zdta75vB3CYn","http://accweb/emmployees/peacock.bmp"
+"LRwusHnmYiVxDH","LRwusHnmYiVxDH","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","448WAzHM29ev4e","http://accweb/emmployees/buchanan.bmp"
+"uMl2ljQ5bMHO7d","uMl2ljQ5bMHO7d","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","VqFCkfy9QYG8rJ","http://accweb/emmployees/davolio.bmp"
+"3IBZxo14ply13pB","3IBZxo14ply13pB","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","fxuS8p5AAyCoWd","http://accweb/emmployees/davolio.bmp"
+"5di01B9V1Nm2Ju","5di01B9V1Nm2Ju","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","YDHMD51eFRUzkm1","http://accweb/emmployees/davolio.bmp"
+"gnxpo7EpaGGGFh","gnxpo7EpaGGGFh","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","Y60bK2ZqP7SWSt","http://accweb/emmployees/davolio.bmp""
 `;
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
 ]"
 `;
 
@@ -2500,14 +2514,14 @@ exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert: POST 1`] = `
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP POST] insert no data: POST 1`] = `
@@ -2564,7 +2578,7 @@ exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update JSON: PUT JSON 1`] =
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
@@ -2595,8 +2609,8 @@ exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
@@ -2629,11 +2643,11 @@ exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update FORMDATA: GET FORMDA
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="EmployeeID"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="LastName"
 
@@ -2699,7 +2713,7 @@ Line4
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ReportsTo"
 
-c7Ew4RtiDbPYXk
+44ZI3UbkJ1pW3C
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="PhotoPath"
 
@@ -2733,7 +2747,7 @@ exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: PUT URLEN
 `;
 
 exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"_OINOID_=HM9t4jENQmWKTf&EmployeeID=HM9t4jENQmWKTf&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=44ZI3UbkJ1pW3C&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
@@ -2755,6 +2769,20 @@ exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update NAN-value: PUT NAN-v
    "statusCode": 200,
    "statusMessage": "OK",
    "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
    "params": {
       "sqlParams": {}
    }
@@ -9060,7 +9088,7 @@ exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert: GET JSON 1`] = `
 
 exports[`[API][OINODbPostgresql][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
+"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e\tf
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
@@ -9150,7 +9178,7 @@ exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 
 exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
+"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o\tp
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
@@ -9221,7 +9249,7 @@ Content-Disposition: form-data; name="Freight"
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ShipName"
 
-k'l"m%n_o	p
+k'l"m%n_o\tp
 q
 r%5Cs
 ---------OINOMultipartBoundary35424568
@@ -9312,6 +9340,20 @@ exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update NAN-value: PUT NAN-val
    "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
    "messages": [
       "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
    ],
    "params": {
       "sqlParams": {}
@@ -9813,39 +9855,39 @@ exports[`[API][OINODbPostgresql][Employees][SCHEMA] public properties: SCHEMA 1`
 
 exports[`[API][OINODbPostgresql][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4OF0jpe0ZCgfM2","EmployeeID":"4OF0jpe0ZCgfM2","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"7p7bTX69BesxDP","EmployeeID":"7p7bTX69BesxDP","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"N9Zdta75vB3CYn","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"LRwusHnmYiVxDH","EmployeeID":"LRwusHnmYiVxDH","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"448WAzHM29ev4e","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"uMl2ljQ5bMHO7d","EmployeeID":"uMl2ljQ5bMHO7d","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"VqFCkfy9QYG8rJ","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3IBZxo14ply13pB","EmployeeID":"3IBZxo14ply13pB","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"fxuS8p5AAyCoWd","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbPostgresql][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+"OrRzmt19tdvPcEY","OrRzmt19tdvPcEY","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","8L4pfD1hewjoEB6","http://accweb/emmployees/davolio.bmp"
+"4OF0jpe0ZCgfM2","4OF0jpe0ZCgfM2","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"DIOu7ngtPHVJOV","DIOu7ngtPHVJOV","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","VBcc0VU1ZKEYt8","http://accweb/emmployees/leverling.bmp"
+"7p7bTX69BesxDP","7p7bTX69BesxDP","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","N9Zdta75vB3CYn","http://accweb/emmployees/peacock.bmp"
+"LRwusHnmYiVxDH","LRwusHnmYiVxDH","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","448WAzHM29ev4e","http://accweb/emmployees/buchanan.bmp"
+"uMl2ljQ5bMHO7d","uMl2ljQ5bMHO7d","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","VqFCkfy9QYG8rJ","http://accweb/emmployees/davolio.bmp"
+"3IBZxo14ply13pB","3IBZxo14ply13pB","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","fxuS8p5AAyCoWd","http://accweb/emmployees/davolio.bmp"
+"5di01B9V1Nm2Ju","5di01B9V1Nm2Ju","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","YDHMD51eFRUzkm1","http://accweb/emmployees/davolio.bmp"
+"gnxpo7EpaGGGFh","gnxpo7EpaGGGFh","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","Y60bK2ZqP7SWSt","http://accweb/emmployees/davolio.bmp""
 `;
 
 exports[`[API][OINODbPostgresql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
 ]"
 `;
 
@@ -9875,14 +9917,14 @@ exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert: POST 1`] = `
 
 exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbPostgresql][Employees][HTTP POST] insert no data: POST 1`] = `
@@ -9939,7 +9981,7 @@ exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update JSON: PUT JSON 1`] 
 
 exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
@@ -9970,8 +10012,8 @@ exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = 
 
 exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
@@ -10004,11 +10046,11 @@ exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update FORMDATA: GET FORMD
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="EmployeeID"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="LastName"
 
@@ -10074,7 +10116,7 @@ Line4
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ReportsTo"
 
-c7Ew4RtiDbPYXk
+44ZI3UbkJ1pW3C
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="PhotoPath"
 
@@ -10108,7 +10150,7 @@ exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: PUT URLE
 `;
 
 exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"_OINOID_=HM9t4jENQmWKTf&EmployeeID=HM9t4jENQmWKTf&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=44ZI3UbkJ1pW3C&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
@@ -10158,6 +10200,20 @@ exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update NAN-value: PUT NAN-
    "statusCode": 200,
    "statusMessage": "OK",
    "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
    "params": {
       "sqlParams": {}
    }
@@ -16463,7 +16519,7 @@ exports[`[API][OINODbMariadb][Orders][HTTP POST] insert: GET JSON 1`] = `
 
 exports[`[API][OINODbMariadb][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
+"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e\tf
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
@@ -16553,7 +16609,7 @@ exports[`[API][OINODbMariadb][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 
 exports[`[API][OINODbMariadb][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
+"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o\tp
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
@@ -16624,7 +16680,7 @@ Content-Disposition: form-data; name="Freight"
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ShipName"
 
-k'l"m%n_o	p
+k'l"m%n_o\tp
 q
 r%5Cs
 ---------OINOMultipartBoundary35424568
@@ -16715,6 +16771,20 @@ exports[`[API][OINODbMariadb][Orders][HTTP PUT] update NAN-value: PUT NAN-value 
    "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
    "messages": [
       "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
    ],
    "params": {
       "sqlParams": {}
@@ -17216,39 +17286,39 @@ exports[`[API][OINODbMariadb][Employees][SCHEMA] public properties: SCHEMA 1`] =
 
 exports[`[API][OINODbMariadb][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4OF0jpe0ZCgfM2","EmployeeID":"4OF0jpe0ZCgfM2","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"7p7bTX69BesxDP","EmployeeID":"7p7bTX69BesxDP","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"N9Zdta75vB3CYn","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"LRwusHnmYiVxDH","EmployeeID":"LRwusHnmYiVxDH","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"448WAzHM29ev4e","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"uMl2ljQ5bMHO7d","EmployeeID":"uMl2ljQ5bMHO7d","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"VqFCkfy9QYG8rJ","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3IBZxo14ply13pB","EmployeeID":"3IBZxo14ply13pB","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"fxuS8p5AAyCoWd","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbMariadb][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+"OrRzmt19tdvPcEY","OrRzmt19tdvPcEY","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","8L4pfD1hewjoEB6","http://accweb/emmployees/davolio.bmp"
+"4OF0jpe0ZCgfM2","4OF0jpe0ZCgfM2","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"DIOu7ngtPHVJOV","DIOu7ngtPHVJOV","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","VBcc0VU1ZKEYt8","http://accweb/emmployees/leverling.bmp"
+"7p7bTX69BesxDP","7p7bTX69BesxDP","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","N9Zdta75vB3CYn","http://accweb/emmployees/peacock.bmp"
+"LRwusHnmYiVxDH","LRwusHnmYiVxDH","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","448WAzHM29ev4e","http://accweb/emmployees/buchanan.bmp"
+"uMl2ljQ5bMHO7d","uMl2ljQ5bMHO7d","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","VqFCkfy9QYG8rJ","http://accweb/emmployees/davolio.bmp"
+"3IBZxo14ply13pB","3IBZxo14ply13pB","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","fxuS8p5AAyCoWd","http://accweb/emmployees/davolio.bmp"
+"5di01B9V1Nm2Ju","5di01B9V1Nm2Ju","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","YDHMD51eFRUzkm1","http://accweb/emmployees/davolio.bmp"
+"gnxpo7EpaGGGFh","gnxpo7EpaGGGFh","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","Y60bK2ZqP7SWSt","http://accweb/emmployees/davolio.bmp""
 `;
 
 exports[`[API][OINODbMariadb][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
 ]"
 `;
 
@@ -17278,14 +17348,14 @@ exports[`[API][OINODbMariadb][Employees][HTTP POST] insert: POST 1`] = `
 
 exports[`[API][OINODbMariadb][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbMariadb][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbMariadb][Employees][HTTP POST] insert no data: POST 1`] = `
@@ -17342,7 +17412,7 @@ exports[`[API][OINODbMariadb][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 
 exports[`[API][OINODbMariadb][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
@@ -17373,8 +17443,8 @@ exports[`[API][OINODbMariadb][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 
 exports[`[API][OINODbMariadb][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbMariadb][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
@@ -17407,11 +17477,11 @@ exports[`[API][OINODbMariadb][Employees][HTTP PUT] update FORMDATA: GET FORMDATA
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="EmployeeID"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="LastName"
 
@@ -17477,7 +17547,7 @@ Line4
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ReportsTo"
 
-c7Ew4RtiDbPYXk
+44ZI3UbkJ1pW3C
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="PhotoPath"
 
@@ -17511,7 +17581,7 @@ exports[`[API][OINODbMariadb][Employees][HTTP PUT] update URLENCODE: PUT URLENCO
 `;
 
 exports[`[API][OINODbMariadb][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"_OINOID_=HM9t4jENQmWKTf&EmployeeID=HM9t4jENQmWKTf&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=44ZI3UbkJ1pW3C&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
@@ -17561,6 +17631,20 @@ exports[`[API][OINODbMariadb][Employees][HTTP PUT] update NAN-value: PUT NAN-val
    "statusCode": 200,
    "statusMessage": "OK",
    "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMariadb][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
    "params": {
       "sqlParams": {}
    }
@@ -23866,7 +23950,7 @@ exports[`[API][OINODbMsSql][Orders][HTTP POST] insert: GET JSON 1`] = `
 
 exports[`[API][OINODbMsSql][Orders][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e	f
+"30000","30000","CACTU","1","2024-04-05T00:00:00.000Z","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","2","184.75","a'b""c%d_e\tf
 g
 h%5Ci","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK""
 `;
@@ -23956,7 +24040,7 @@ exports[`[API][OINODbMsSql][Orders][HTTP PUT] update CSV: PUT CSV 1`] = `
 
 exports[`[API][OINODbMsSql][Orders][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","OrderID","CustomerID","EmployeeID","OrderDate","RequiredDate","ShippedDate","ShipVia","Freight","ShipName","ShipAddress","ShipCity","ShipRegion","ShipPostalCode","ShipCountry"
-"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o	p
+"30000","30000","CACTU","1","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2","847.51","k'l""m%n_o\tp
 q
 r%5Cs","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK""
 `;
@@ -24027,7 +24111,7 @@ Content-Disposition: form-data; name="Freight"
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ShipName"
 
-k'l"m%n_o	p
+k'l"m%n_o\tp
 q
 r%5Cs
 ---------OINOMultipartBoundary35424568
@@ -24118,6 +24202,20 @@ exports[`[API][OINODbMsSql][Orders][HTTP PUT] update NAN-value: PUT NAN-value 1`
    "statusMessage": "OINO ERROR (DoRequest): HTTP PUT method requires exactly one row in the body data!",
    "messages": [
       "OINO ERROR (DoRequest): Invalid data: OINO ERROR: OINONumberDataField.deserializeCell - Invalid value '; FOO'"
+   ],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
    ],
    "params": {
       "sqlParams": {}
@@ -24619,39 +24717,39 @@ exports[`[API][OINODbMsSql][Employees][SCHEMA] public properties: SCHEMA 1`] = `
 
 exports[`[API][OINODbMsSql][Employees][HTTP GET] select *: GET JSON 1`] = `
 "[
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"x9VauyfnDbkRPe","EmployeeID":"x9VauyfnDbkRPe","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
-{"_OINOID_":"298ZENpYOW4okg","EmployeeID":"298ZENpYOW4okg","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"z6i8KmyM3jcZfi","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
-{"_OINOID_":"n5x4HMNpscb5eV","EmployeeID":"n5x4HMNpscb5eV","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"y6Fjl7Im8wBLs4","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
-{"_OINOID_":"dapuKRXF1rKRrX","EmployeeID":"dapuKRXF1rKRrX","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"fObaoxR41LQiVg","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"6xwYRU12FrS21no","EmployeeID":"6xwYRU12FrS21no","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"96BiTL9LclLS0K","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"4OF0jpe0ZCgfM2","EmployeeID":"4OF0jpe0ZCgfM2","LastName":"Fuller","FirstName":"Andrew","Title":"Vice President, Sales","TitleOfCourtesy":"Dr.","BirthDate":"1952-02-19T00:00:00.000Z","HireDate":"1992-08-14T00:00:00.000Z","Address":"908 W. Capital Way","City":"Tacoma","Region":"WA","PostalCode":"98401","Country":"USA","HomePhone":"(206) 555-9482","Extension":"3457","Photo":"T0lOT0Jsb2Iy","Notes":"Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.","ReportsTo":null,"PhotoPath":"http://accweb/emmployees/fuller.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"},
+{"_OINOID_":"7p7bTX69BesxDP","EmployeeID":"7p7bTX69BesxDP","LastName":"Peacock","FirstName":"Margaret","Title":"Sales Representative","TitleOfCourtesy":"Mrs.","BirthDate":"1937-09-19T00:00:00.000Z","HireDate":"1993-05-03T00:00:00.000Z","Address":"4110 Old Redmond Rd.","City":"Redmond","Region":"WA","PostalCode":"98052","Country":"USA","HomePhone":"(206) 555-8122","Extension":"5176","Photo":"T0lOT0Jsb2I0","Notes":"Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","ReportsTo":"N9Zdta75vB3CYn","PhotoPath":"http://accweb/emmployees/peacock.bmp"},
+{"_OINOID_":"LRwusHnmYiVxDH","EmployeeID":"LRwusHnmYiVxDH","LastName":"Buchanan","FirstName":"Steven","Title":"Sales Manager","TitleOfCourtesy":"Mr.","BirthDate":"1955-03-04T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"14 Garrett Hill","City":"London","Region":null,"PostalCode":"SW1 8JR","Country":"UK","HomePhone":"(71) 555-4848","Extension":"3453","Photo":"T0lOT0Jsb2I1","Notes":"Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses %5C%22Successful Telemarketing%5C%22 and %5C%22International Sales Management.%5C%22  He is fluent in French.","ReportsTo":"448WAzHM29ev4e","PhotoPath":"http://accweb/emmployees/buchanan.bmp"},
+{"_OINOID_":"uMl2ljQ5bMHO7d","EmployeeID":"uMl2ljQ5bMHO7d","LastName":"Suyama","FirstName":"Michael","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1963-07-02T00:00:00.000Z","HireDate":"1993-10-17T00:00:00.000Z","Address":"Coventry House%5Cr%5CnMiner Rd.","City":"London","Region":null,"PostalCode":"EC2 7JR","Country":"UK","HomePhone":"(71) 555-7773","Extension":"428","Photo":"T0lOT0Jsb2I2","Notes":"Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses %5C%22Multi-Cultural Selling%5C%22 and %5C%22Time Management for the Sales Professional.%5C%22  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","ReportsTo":"VqFCkfy9QYG8rJ","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"3IBZxo14ply13pB","EmployeeID":"3IBZxo14ply13pB","LastName":"King","FirstName":"Robert","Title":"Sales Representative","TitleOfCourtesy":"Mr.","BirthDate":"1960-05-29T00:00:00.000Z","HireDate":"1994-01-02T00:00:00.000Z","Address":"Edgeham Hollow%5Cr%5CnWinchester Way","City":"London","Region":null,"PostalCode":"RG1 9SP","Country":"UK","HomePhone":"(71) 555-5598","Extension":"465","Photo":"T0lOT0Jsb2I3","Notes":"Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled %5C%22Selling in Europe,%5C%22 he was transferred to the London office in March 1993.","ReportsTo":"fxuS8p5AAyCoWd","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbMsSql][Employees][HTTP GET] select *: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"3gWSUrhVC0BaSG","3gWSUrhVC0BaSG","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","iMTFiq11ndKsONq","http://accweb/emmployees/davolio.bmp"
-"x9VauyfnDbkRPe","x9VauyfnDbkRPe","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
-"eX5vTx16aP8ep06","eX5vTx16aP8ep06","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","gXV8K5MTr3KkZa","http://accweb/emmployees/leverling.bmp"
-"298ZENpYOW4okg","298ZENpYOW4okg","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","z6i8KmyM3jcZfi","http://accweb/emmployees/peacock.bmp"
-"n5x4HMNpscb5eV","n5x4HMNpscb5eV","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","y6Fjl7Im8wBLs4","http://accweb/emmployees/buchanan.bmp"
-"dapuKRXF1rKRrX","dapuKRXF1rKRrX","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
-Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","fObaoxR41LQiVg","http://accweb/emmployees/davolio.bmp"
-"6xwYRU12FrS21no","6xwYRU12FrS21no","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
-Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","96BiTL9LclLS0K","http://accweb/emmployees/davolio.bmp"
-"4tn0yBI1jlYq6h","4tn0yBI1jlYq6h","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","d2p8FI157sOfhhA","http://accweb/emmployees/davolio.bmp"
-"c0IGZf1Mhy1enD","c0IGZf1Mhy1enD","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","csUkuy8QClibis","http://accweb/emmployees/davolio.bmp""
+"OrRzmt19tdvPcEY","OrRzmt19tdvPcEY","Davolio","Nancy","Sales Representative","Ms.","1948-12-08T00:00:00.000Z","1992-05-01T00:00:00.000Z","507 - 20th Ave. E. Apt. 2A","Seattle","WA","98122","USA","(206) 555-9857","5467","T0lOT0Jsb2Ix","Education includes a BA in psychology from Colorado State University in 1970.  She also completed ""The Art of the Cold Call.""  Nancy is a member of Toastmasters International.","8L4pfD1hewjoEB6","http://accweb/emmployees/davolio.bmp"
+"4OF0jpe0ZCgfM2","4OF0jpe0ZCgfM2","Fuller","Andrew","Vice President, Sales","Dr.","1952-02-19T00:00:00.000Z","1992-08-14T00:00:00.000Z","908 W. Capital Way","Tacoma","WA","98401","USA","(206) 555-9482","3457","T0lOT0Jsb2Iy","Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981.  He is fluent in French and Italian and reads German.  He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993.  Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",null,"http://accweb/emmployees/fuller.bmp"
+"DIOu7ngtPHVJOV","DIOu7ngtPHVJOV","Leverling","Janet","Sales Representative","Ms.","1963-08-30T00:00:00.000Z","1992-04-01T00:00:00.000Z","722 Moss Bay Blvd.","Kirkland","WA","98033","USA","(206) 555-3412","3355","T0lOT0Jsb2Iz","Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","VBcc0VU1ZKEYt8","http://accweb/emmployees/leverling.bmp"
+"7p7bTX69BesxDP","7p7bTX69BesxDP","Peacock","Margaret","Sales Representative","Mrs.","1937-09-19T00:00:00.000Z","1993-05-03T00:00:00.000Z","4110 Old Redmond Rd.","Redmond","WA","98052","USA","(206) 555-8122","5176","T0lOT0Jsb2I0","Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966).  She was assigned to the London office temporarily from July through November 1992.","N9Zdta75vB3CYn","http://accweb/emmployees/peacock.bmp"
+"LRwusHnmYiVxDH","LRwusHnmYiVxDH","Buchanan","Steven","Sales Manager","Mr.","1955-03-04T00:00:00.000Z","1993-10-17T00:00:00.000Z","14 Garrett Hill","London",null,"SW1 8JR","UK","(71) 555-4848","3453","T0lOT0Jsb2I1","Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976.  Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London.  He was promoted to sales manager in March 1993.  Mr. Buchanan has completed the courses ""Successful Telemarketing"" and ""International Sales Management.""  He is fluent in French.","448WAzHM29ev4e","http://accweb/emmployees/buchanan.bmp"
+"uMl2ljQ5bMHO7d","uMl2ljQ5bMHO7d","Suyama","Michael","Sales Representative","Mr.","1963-07-02T00:00:00.000Z","1993-10-17T00:00:00.000Z","Coventry House
+Miner Rd.","London",null,"EC2 7JR","UK","(71) 555-7773","428","T0lOT0Jsb2I2","Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA, marketing, 1986).  He has also taken the courses ""Multi-Cultural Selling"" and ""Time Management for the Sales Professional.""  He is fluent in Japanese and can read and write French, Portuguese, and Spanish.","VqFCkfy9QYG8rJ","http://accweb/emmployees/davolio.bmp"
+"3IBZxo14ply13pB","3IBZxo14ply13pB","King","Robert","Sales Representative","Mr.","1960-05-29T00:00:00.000Z","1994-01-02T00:00:00.000Z","Edgeham Hollow
+Winchester Way","London",null,"RG1 9SP","UK","(71) 555-5598","465","T0lOT0Jsb2I3","Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the University of Michigan in 1992, the year he joined the company.  After completing a course entitled ""Selling in Europe,"" he was transferred to the London office in March 1993.","fxuS8p5AAyCoWd","http://accweb/emmployees/davolio.bmp"
+"5di01B9V1Nm2Ju","5di01B9V1Nm2Ju","Callahan","Laura","Inside Sales Coordinator","Ms.","1958-01-09T00:00:00.000Z","1994-03-05T00:00:00.000Z","4726 - 11th Ave. N.E.","Seattle","WA","98105","USA","(206) 555-1189","2344","T0lOT0Jsb2I4","Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","YDHMD51eFRUzkm1","http://accweb/emmployees/davolio.bmp"
+"gnxpo7EpaGGGFh","gnxpo7EpaGGGFh","Dodsworth","Anne","Sales Representative","Ms.","1966-01-27T00:00:00.000Z","1994-11-15T00:00:00.000Z","7 Houndstooth Rd.","London",null,"WG2 7LT","UK","(71) 555-4444","452","T0lOT0Jsb2I5","Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","Y60bK2ZqP7SWSt","http://accweb/emmployees/davolio.bmp""
 `;
 
 exports[`[API][OINODbMsSql][Employees][HTTP GET] select * with filter: GET JSON FILTER 1`] = `
 "[
-{"_OINOID_":"4tn0yBI1jlYq6h","EmployeeID":"4tn0yBI1jlYq6h","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"d2p8FI157sOfhhA","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"3gWSUrhVC0BaSG","EmployeeID":"3gWSUrhVC0BaSG","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"iMTFiq11ndKsONq","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"c0IGZf1Mhy1enD","EmployeeID":"c0IGZf1Mhy1enD","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"csUkuy8QClibis","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
-{"_OINOID_":"eX5vTx16aP8ep06","EmployeeID":"eX5vTx16aP8ep06","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"gXV8K5MTr3KkZa","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
+{"_OINOID_":"5di01B9V1Nm2Ju","EmployeeID":"5di01B9V1Nm2Ju","LastName":"Callahan","FirstName":"Laura","Title":"Inside Sales Coordinator","TitleOfCourtesy":"Ms.","BirthDate":"1958-01-09T00:00:00.000Z","HireDate":"1994-03-05T00:00:00.000Z","Address":"4726 - 11th Ave. N.E.","City":"Seattle","Region":"WA","PostalCode":"98105","Country":"USA","HomePhone":"(206) 555-1189","Extension":"2344","Photo":"T0lOT0Jsb2I4","Notes":"Laura received a BA in psychology from the University of Washington.  She has also completed a course in business French.  She reads and writes French.","ReportsTo":"YDHMD51eFRUzkm1","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"OrRzmt19tdvPcEY","EmployeeID":"OrRzmt19tdvPcEY","LastName":"Davolio","FirstName":"Nancy","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1948-12-08T00:00:00.000Z","HireDate":"1992-05-01T00:00:00.000Z","Address":"507 - 20th Ave. E. Apt. 2A","City":"Seattle","Region":"WA","PostalCode":"98122","Country":"USA","HomePhone":"(206) 555-9857","Extension":"5467","Photo":"T0lOT0Jsb2Ix","Notes":"Education includes a BA in psychology from Colorado State University in 1970.  She also completed %5C%22The Art of the Cold Call.%5C%22  Nancy is a member of Toastmasters International.","ReportsTo":"8L4pfD1hewjoEB6","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"gnxpo7EpaGGGFh","EmployeeID":"gnxpo7EpaGGGFh","LastName":"Dodsworth","FirstName":"Anne","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1966-01-27T00:00:00.000Z","HireDate":"1994-11-15T00:00:00.000Z","Address":"7 Houndstooth Rd.","City":"London","Region":null,"PostalCode":"WG2 7LT","Country":"UK","HomePhone":"(71) 555-4444","Extension":"452","Photo":"T0lOT0Jsb2I5","Notes":"Anne has a BA degree in English from St. Lawrence College.  She is fluent in French and German.","ReportsTo":"Y60bK2ZqP7SWSt","PhotoPath":"http://accweb/emmployees/davolio.bmp"},
+{"_OINOID_":"DIOu7ngtPHVJOV","EmployeeID":"DIOu7ngtPHVJOV","LastName":"Leverling","FirstName":"Janet","Title":"Sales Representative","TitleOfCourtesy":"Ms.","BirthDate":"1963-08-30T00:00:00.000Z","HireDate":"1992-04-01T00:00:00.000Z","Address":"722 Moss Bay Blvd.","City":"Kirkland","Region":"WA","PostalCode":"98033","Country":"USA","HomePhone":"(206) 555-3412","Extension":"3355","Photo":"T0lOT0Jsb2Iz","Notes":"Janet has a BS degree in chemistry from Boston College (1984).  She has also completed a certificate program in food retailing management.  Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.","ReportsTo":"VBcc0VU1ZKEYt8","PhotoPath":"http://accweb/emmployees/leverling.bmp"}
 ]"
 `;
 
@@ -24681,14 +24779,14 @@ exports[`[API][OINODbMsSql][Employees][HTTP POST] insert: POST 1`] = `
 
 exports[`[API][OINODbMsSql][Employees][HTTP POST] insert: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName","FirstName":"FirstName","Title":"Title","TitleOfCourtesy":"TitleOfCourtesy","BirthDate":"2024-04-06T00:00:00.000Z","HireDate":"2024-04-07T00:00:00.000Z","Address":"Address","City":"City","Region":"Region","PostalCode":"12345","Country":"EU","HomePhone":"123 456 7890","Extension":"9876","Photo":"AAECAwQ=","Notes":"Line1%5CnLine2","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
 exports[`[API][OINODbMsSql][Employees][HTTP POST] insert: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
-Line2","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName","FirstName","Title","TitleOfCourtesy","2024-04-06T00:00:00.000Z","2024-04-07T00:00:00.000Z","Address","City","Region","12345","EU","123 456 7890","9876","AAECAwQ=","Line1
+Line2","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbMsSql][Employees][HTTP POST] insert no data: POST 1`] = `
@@ -24745,7 +24843,7 @@ exports[`[API][OINODbMsSql][Employees][HTTP PUT] update JSON: PUT JSON 1`] = `
 
 exports[`[API][OINODbMsSql][Employees][HTTP PUT] update JSON: GET JSON 1`] = `
 "[
-{"_OINOID_":"5EI1V6czK6RUPP","EmployeeID":"5EI1V6czK6RUPP","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"c7Ew4RtiDbPYXk","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
+{"_OINOID_":"HM9t4jENQmWKTf","EmployeeID":"HM9t4jENQmWKTf","LastName":"LastName2","FirstName":"FirstName2","Title":null,"TitleOfCourtesy":"TitleOfCourtesy2","BirthDate":"2023-04-06T00:00:00.000Z","HireDate":"2023-04-07T00:00:00.000Z","Address":"Address2","City":"City2","Region":"Region2","PostalCode":"54321","Country":"EU2","HomePhone":"234 567 8901","Extension":"8765","Photo":"BQYHCAk=","Notes":"Line3%5CnLine4","ReportsTo":"44ZI3UbkJ1pW3C","PhotoPath":"http://accweb/emmployees/lastnamefirstname.bmp"}
 ]"
 `;
 
@@ -24776,8 +24874,8 @@ exports[`[API][OINODbMsSql][Employees][HTTP PUT] update CSV: PUT CSV 1`] = `
 
 exports[`[API][OINODbMsSql][Employees][HTTP PUT] update CSV: GET CSV 1`] = `
 ""_OINOID_","EmployeeID","LastName","FirstName","Title","TitleOfCourtesy","BirthDate","HireDate","Address","City","Region","PostalCode","Country","HomePhone","Extension","Photo","Notes","ReportsTo","PhotoPath"
-"5EI1V6czK6RUPP","5EI1V6czK6RUPP","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
-Line4","c7Ew4RtiDbPYXk","http://accweb/emmployees/lastnamefirstname.bmp""
+"HM9t4jENQmWKTf","HM9t4jENQmWKTf","LastName2","FirstName2",null,"TitleOfCourtesy2","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","Address2","City2","Region2","54321","EU2","234 567 8901","8765","BQYHCAk=","Line3
+Line4","44ZI3UbkJ1pW3C","http://accweb/emmployees/lastnamefirstname.bmp""
 `;
 
 exports[`[API][OINODbMsSql][Employees][HTTP PUT] update FORMDATA: PUT FORMDATA reset 1`] = `
@@ -24810,11 +24908,11 @@ exports[`[API][OINODbMsSql][Employees][HTTP PUT] update FORMDATA: GET FORMDATA 1
 "---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="_OINOID_"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="EmployeeID"
 
-5EI1V6czK6RUPP
+HM9t4jENQmWKTf
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="LastName"
 
@@ -24880,7 +24978,7 @@ Line4
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="ReportsTo"
 
-c7Ew4RtiDbPYXk
+44ZI3UbkJ1pW3C
 ---------OINOMultipartBoundary35424568
 Content-Disposition: form-data; name="PhotoPath"
 
@@ -24914,7 +25012,7 @@ exports[`[API][OINODbMsSql][Employees][HTTP PUT] update URLENCODE: PUT URLENCODE
 `;
 
 exports[`[API][OINODbMsSql][Employees][HTTP PUT] update URLENCODE: GET URLENCODE 1`] = `
-"_OINOID_=5EI1V6czK6RUPP&EmployeeID=5EI1V6czK6RUPP&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=c7Ew4RtiDbPYXk&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
+"_OINOID_=HM9t4jENQmWKTf&EmployeeID=HM9t4jENQmWKTf&LastName=LastName2&FirstName=FirstName2&Title=null&TitleOfCourtesy=TitleOfCourtesy2&BirthDate=2023-04-06T00%3A00%3A00.000Z&HireDate=2023-04-07T00%3A00%3A00.000Z&Address=Address2&City=City2&Region=Region2&PostalCode=54321&Country=EU2&HomePhone=234%20567%208901&Extension=8765&Photo=BQYHCAk%3D&Notes=Line3%0ALine4&ReportsTo=44ZI3UbkJ1pW3C&PhotoPath=http%3A%2F%2Faccweb%2Femmployees%2Flastnamefirstname.bmp
 "
 `;
 
@@ -24964,6 +25062,20 @@ exports[`[API][OINODbMsSql][Employees][HTTP PUT] update NAN-value: PUT NAN-value
    "statusCode": 200,
    "statusMessage": "OK",
    "messages": [],
+   "params": {
+      "sqlParams": {}
+   }
+}"
+`;
+
+exports[`[API][OINODbMsSql][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
+"{
+   "success": false,
+   "statusCode": 500,
+   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
+   "messages": [
+      "OINO DEBUG (DoPut): OINO POST SQL []"
+   ],
    "params": {
       "sqlParams": {}
    }
@@ -30454,228 +30566,4 @@ exports[`[OWASP 3][OINODbMsSql][Products][OWASP DELETE] DELETE: DELETE JSON 1`] 
 "[
 
 ]"
-`;
-
-exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMariadb][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMariadb][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMsSql][Orders][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMsSql][Employees][HTTP PUT] update NAN-value: PUT non_date-value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbBunSqlite][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbBunSqlite][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbPostgresql][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbPostgresql][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMariadb][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMariadb][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMsSql][Orders][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
-`;
-
-exports[`[API][OINODbMsSql][Employees][HTTP PUT] update invalid date value: PUT invalid date value 1`] = `
-"{
-   "success": false,
-   "statusCode": 500,
-   "statusMessage": "OINO ERROR (DoPut): Unhandled exception: Invalid Date",
-   "messages": [
-      "OINO DEBUG (DoPut): OINO POST SQL []"
-   ],
-   "params": {
-      "sqlParams": {}
-   }
-}"
 `;

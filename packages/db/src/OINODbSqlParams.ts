@@ -181,7 +181,7 @@ export class OINODbSqlFilter {
  *
  */
 export class OINODbSqlOrder {
-    private static _orderColumnRegex = /^\s*(\w+)\s?(ASC|DESC)?\s*?$/i
+    private static _orderColumnRegex = /^\s*(\w+)\s?(ASC|DESC|\+|\-)?\s*?$/i
     
     private _columns: string[]
     private _descending: boolean[]
@@ -223,7 +223,8 @@ export class OINODbSqlOrder {
             let match = OINODbSqlOrder._orderColumnRegex.exec(column_strings[i])
             if (match != null) {
                 columns.push(match[1])
-                directions.push((match[2] || "DESC").toUpperCase() == "DESC")
+                const dir:string = (match[2] || "ASC").toUpperCase() 
+                directions.push((dir == "DESC") || (dir == "-"))
             }
         }
         return new OINODbSqlOrder(columns, directions)
