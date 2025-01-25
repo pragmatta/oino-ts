@@ -26,12 +26,26 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org/
       - run: npm publish ./packages/common --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm publish ./packages/db --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm publish ./packages/db-bunsqlite --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm publish ./packages/db-postgresql --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm publish ./packages/db-mariadb --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm publish ./packages/db-mssql --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm publish ./packages/hashid --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: npm publish ./packages/types --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
