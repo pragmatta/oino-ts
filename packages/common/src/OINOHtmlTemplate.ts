@@ -156,7 +156,7 @@ export class OINOHtmlTemplate {
      * @param includeDebugMessages include debug messages in result
      * 
      */
-    renderFromResult(result:OINOResult, removeUnusedTags:boolean=true, messageSeparator:string, includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
+    renderFromResult(result:OINOResult, removeUnusedTags:boolean=true, messageSeparator:string = "", includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
         OINOBenchmark.start("OINOHtmlTemplate", "renderFromResult")
         this.setVariableFromValue("statusCode", result.statusCode.toString())
         this.setVariableFromValue("statusMessage", result.statusMessage.toString())
@@ -176,7 +176,7 @@ export class OINOHtmlTemplate {
             } 
             
         }
-        if (messages.length > 0) {
+        if (messageSeparator && (messages.length > 0)) {
             this.setVariableFromValue("messages", messages.join(messageSeparator), false) // messages have been escaped already
         }        
         const http_result:OINOHttpResult = this.render(removeUnusedTags)
