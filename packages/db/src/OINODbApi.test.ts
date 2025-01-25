@@ -39,7 +39,7 @@ const api_tests:OINOTestParams[] = [
         name: "API",
         apiParams: { tableName: "Orders" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: OINODbSqlOrder.parse("ShipPostalCode desc,Freight asc"), limit: OINODbSqlLimit.parse("5 page 2") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: OINODbSqlOrder.parse("ShipPostalCode-,Freight+"), limit: OINODbSqlLimit.parse("5 page 2") }
         },
         postRow: [30000,"CACTU",1,new Date("2024-04-05"),new Date("2024-04-06"),new Date("2024-04-07"),2,"184.75","a'b\"c%d_e\tf\rg\nh\\i","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK"],
         putRow: [30000,"CACTU",1,new Date("2023-04-05"),new Date("2023-04-06"),new Date("2023-04-07"),2,"847.51","k'l\"m%n_o\tp\rq\nr\\s","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK"]
@@ -48,7 +48,7 @@ const api_tests:OINOTestParams[] = [
         name: "API",
         apiParams: { tableName: "Products", failOnOversizedValues: true },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock asc,UnitPrice asc"), limit: OINODbSqlLimit.parse("7") }
+            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock,UnitPrice"), limit: OINODbSqlLimit.parse("7") }
         },
         postRow: [99, "Umeshu", 1, 1, "500 ml", 12.99, 2, 0, 20, 0],
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
