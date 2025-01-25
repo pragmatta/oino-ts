@@ -7,10 +7,9 @@
     "build:js": "npx tsc -p ./tsconfig.cjs.json && npx tsc -p ./tsconfig.esm.json",
     "build:types": "npx tsc -p ./tsconfig.types.json",
     "build:docs": "bunx typedoc --options ./typedoc.json",
-    "build:all": "bun run build:js && bun run build:types && bun run build:docs && bun run snapshots:update",
+    "build:all": "bun run packages:cleanup && bun run build:js && bun run build:types && bun run build:docs && bun run snapshots:update && bun run packages:update",
     "snapshots:update": "../packages/update_snapshots.cmd",
     "packages:cleanup": "./cleanup_packages.cmd",
-    "packages:update": "./update_packages.cmd",
-    "packages:all": "bun run packages:cleanup && bun run build:all && bun run snapshots:update && bun run packages:update"
+    "packages:update": "./update_packages.cmd"
   }
 }
