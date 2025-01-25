@@ -6,43 +6,74 @@
 
 import { expect, test } from "bun:test";
 
-import { OINOHashid } from "./OINOHashid";
-import { OINOLog, OINOConsoleLog, OINOLogLevel } from "@oino-ts/log"
+import { OINOHASHID_MAX_LENGTH, OINOHashid } from "./OINOHashid";
+import { OINOLog, OINOConsoleLog, OINOLogLevel } from "@oino-ts/common"
 
 Math.random()
 
 OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
 
-test("OINOHashId persistent", async () => {
-    for (let j=12; j<=40; j++) {
-        const hashid:OINOHashid = new OINOHashid('c7a87c6a5df870842eb6ef6d7937f0b4', 'OINOHashIdTestApp-persistent', j) 
+function benchmarkOINOHashId(hashid: OINOHashid, id: string, iterations: number = 1000): number {
+    const start = performance.now();
+
+    for (let i = 0; i < iterations; i++) {
+        const h = hashid.encode(id, '');
+        hashid.decode(h)
+    }
+
+    const end = performance.now();
+    const duration = end - start;
+    return Math.round(iterations / duration)
+}   
+
+await test("OINOHashId persistent", async () => {
+
+    let hps_min = Number.MAX_VALUE
+    let hps_max = 0
+    
+    for (let j=12; j<=OINOHASHID_MAX_LENGTH; j++) {
+        const hashid:OINOHashid = new OINOHashid('c7a87c6a5df870842eb6ef6d7937f0b4', 'OINOHashIdTestApp-persistent', j, true) 
         let i:number = 1
         let id:string = ''
         while (i <= j) {
             id += i % 10
             const hashed_id = hashid.encode(id, '')
             const id2 = hashid.decode(hashed_id)
-            // console.log("j: " + j + ", i: " + i + ", id: " + id + ", hashed_id: " + hashed_id + ", id2: " + id2)
+            // console.log("j: " + j + ", i: " + i + ", id: " + id + ", hashed_id: " + hashed_id)
             expect(id).toMatch(id2)
             i++
         }
+        const hps = benchmarkOINOHashId(hashid, id, 4000)
+        hps_min = Math.min(hps, hps_min)
+        hps_max = Math.max(hps, hps_max)
+        expect(hps_min).toBeGreaterThanOrEqual(15)
+        expect(hps_max).toBeLessThanOrEqual(25)
     }
-    
+    console.log("OINOHashId persistent performance: " + hps_min + "k - " + hps_max + "k hashes per second")
 })
     
-test("OINOHashId random", async () => {
-    for (let j=12; j<=40; j++) {
-        const hashid:OINOHashid = new OINOHashid('c7a87c6a5df870842eb6ef6d7937f0b4', 'OINOHashIdTestApp-random', j, true) 
+await test("OINOHashId random", async () => {
+
+    let hps_min = Number.MAX_VALUE
+    let hps_max = 0
+    
+    for (let j=12; j<=OINOHASHID_MAX_LENGTH; j++) {
+        const hashid:OINOHashid = new OINOHashid('c7a87c6a5df870842eb6ef6d7937f0b4', 'OINOHashIdTestApp-random', j, false) 
         let i:number = 1
         let id:string = ''
         while (i <= j) {
             id += i % 10
             const hashed_id = hashid.encode(id, '')
             const id2 = hashid.decode(hashed_id)
-            // console.log("j: " + j + ", i: " + i + ", id: " + id + ", hashed_id: " + hashed_id + ", id2: " + id2)
+            // console.log("j: " + j + ", i: " + i + ", id: " + id + ", hashed_id: " + hashed_id)
             expect(id).toMatch(id2)
             i++
         }
+        const hps = benchmarkOINOHashId(hashid, id, 4000)
+        hps_min = Math.min(hps, hps_min)
+        hps_max = Math.max(hps, hps_max)
     }
-    
+    console.log("OINOHashId random performance: " + hps_min + "k - " + hps_max + "k hashes per second")
 })
+
+
