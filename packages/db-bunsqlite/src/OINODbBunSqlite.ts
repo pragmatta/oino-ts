@@ -255,7 +255,7 @@ export class OINODbBunSqlite extends OINODb {
                     const sql_type:string = field_match[2]
                     const field_length:number = parseInt(field_match[4]) || 0
                     // OINOLog.debug("OINODbBunSqlite.initializeApiDatamodel: field regex matches", { api.params: api.params, field_name:field_name })
-                    if (((api.params.excludeFieldPrefix) && field_name.startsWith(api.params.excludeFieldPrefix)) || ((api.params.excludeFields) && (api.params.excludeFields.indexOf(field_name) < 0))) {
+                    if (api.isFieldIncluded(field_name) == false) {
                         OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
 
                     } else {

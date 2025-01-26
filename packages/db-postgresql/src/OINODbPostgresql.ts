@@ -339,7 +339,10 @@ WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
                 isNotNull: row[3] == "NO",
                 isAutoInc: default_val.startsWith("nextval(")
             }            
-            if ((!api.params.excludeFieldPrefix || !field_name.startsWith(api.params.excludeFieldPrefix)) && (!api.params.excludeFields || (api.params.excludeFields.indexOf(field_name) < 0))) {
+            if (api.isFieldIncluded(field_name) == false) {
+                OINOLog.info("OINODbPostgresql.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
+
+            } else {
                 // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
                 if ((sql_type == "integer") || (sql_type == "smallint") || (sql_type == "real")) {
                     api.datamodel.addField(new OINONumberDataField(this, field_name, sql_type, field_params ))
@@ -366,7 +369,7 @@ WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
                 } else {
                     OINOLog.info("OINODbPostgresql.initializeApiDatamodel: unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
-                }   
+                }
             }
             await res.next()
         }

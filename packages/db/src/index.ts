@@ -5,7 +5,7 @@ export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PR
 
 import { OINODb } from "./OINODb.js"
 import { OINODbDataField } from "./OINODbDataField.js"
-import { OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbSqlParams.js"
+import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbSqlParams.js"
 
 export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi } from "./OINODbApi.js"
 export { OINODbDataModel } from "./OINODbDataModel.js"
@@ -20,6 +20,8 @@ export { OINODbParser } from "./OINODbParser.js"
 
 /** API parameters */
 export type OINODbApiParams = {
+    /** Name of the api */
+    apiName: string 
     /** Name of the database table */
     tableName: string 
     /** Reject values that exceed field max length (behaviour on such is platform dependent) */
@@ -30,9 +32,11 @@ export type OINODbApiParams = {
     failOnInsertWithoutKey?: boolean
     /** Treat date type fields as just strings and use the native formatting instead of the ISO 8601 format */
     useDatesAsString?: Boolean
+    /** Include given fields from the API and exclude rest (if defined) */
+    includeFields?:string[],
     /** Exclude all fields with this prefix from the API */
     excludeFieldPrefix?:string
-    /** Exclude given fields from the API */
+    /** Exclude given fields from the API and include rest (if defined) */
     excludeFields?:string[],
     /** Enable hashids for numeric primarykeys by adding a 32 char key */
     hashidKey?:string,
@@ -92,6 +96,8 @@ export type OINODbSqlParams = {
     order?:OINODbSqlOrder
     /** SQL result limit condition */
     limit?:OINODbSqlLimit
+    /** SQL aggregation functions */
+    aggregate?:OINODbSqlAggregate
 }
 
 /** Request options */

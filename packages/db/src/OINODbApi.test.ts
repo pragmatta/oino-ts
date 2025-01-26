@@ -12,6 +12,7 @@ import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { OINODbMariadb } from "@oino-ts/db-mariadb"
 import { OINODbMsSql } from "@oino-ts/db-mssql"
+import { OINODbSqlAggregate } from "./OINODbSqlParams.js";
 
 const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set") || ""
 const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set") || ""
@@ -36,8 +37,8 @@ const dbs:OINODbParams[] = [
 
 const api_tests:OINOTestParams[] = [
     {
-        name: "API",
-        apiParams: { tableName: "Orders" },
+        name: "API 1",
+        apiParams: { apiName: "Orders", tableName: "Orders" },
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: OINODbSqlOrder.parse("ShipPostalCode-,Freight+"), limit: OINODbSqlLimit.parse("5 page 2") }
         },
@@ -45,8 +46,8 @@ const api_tests:OINOTestParams[] = [
         putRow: [30000,"CACTU",1,new Date("2023-04-05"),new Date("2023-04-06"),new Date("2023-04-07"),2,"847.51","k'l\"m%n_o\tp\rq\nr\\s","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK"]
     },
     {
-        name: "API",
-        apiParams: { tableName: "Products", failOnOversizedValues: true },
+        name: "API 2",
+        apiParams: { apiName: "Products", tableName: "Products", failOnOversizedValues: true },
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock,UnitPrice"), limit: OINODbSqlLimit.parse("7") }
         },
@@ -54,8 +55,8 @@ const api_tests:OINOTestParams[] = [
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
     },
     {
-        name: "API",
-        apiParams: { tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidStaticIds:true },
+        name: "API 3",
+        apiParams: { apiName: "Employees", tableName: "Employees", hashidKey: "12345678901234567890123456789012", hashidStaticIds:true },
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(TitleOfCourtesy)-eq(Ms.)"), order: OINODbSqlOrder.parse("LastName asc"), limit: OINODbSqlLimit.parse("5") }
         },
@@ -63,20 +64,21 @@ const api_tests:OINOTestParams[] = [
         putRow: [99, "LastName2", "FirstName2", null, "TitleOfCourtesy2", new Date("2023-04-06"), new Date("2023-04-07"), "Address2", "City2", "Region2", 54321, "EU2", "234 567 8901", "8765", Buffer.from("0506070809", "hex"), "Line3\nLine4", 1, "http://accweb/emmployees/lastnamefirstname.bmp"],
     },
     {
-        name: "API",
-        apiParams: { tableName: "OrderDetails" },
+        name: "API 4",
+        apiParams: { apiName: "OrderDetails", tableName: "OrderDetails" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(Quantity)-gt(100)"), order: OINODbSqlOrder.parse("Quantity desc,UnitPrice asc"), limit: OINODbSqlLimit.parse("5 page 2") }
+            sqlParams: { aggregate: OINODbSqlAggregate.parse("count(ProductID),avg(UnitPrice),sum(Quantity),max(Discount)") }
         },
         postRow: [10249,77,12.34,56,0],
         putRow: [10249,77,23.45,67,0]
     }
+    
 ]
 
 const owasp_tests:OINOTestParams[] = [
     {
         name: "OWASP 1",
-        apiParams: { tableName: "Products", failOnOversizedValues: true },
+        apiParams: { apiName: "Products", tableName: "Products", failOnOversizedValues: true },
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(1)-eq(1)") }
         },
@@ -85,7 +87,7 @@ const owasp_tests:OINOTestParams[] = [
     },
     {
         name: "OWASP 2",
-        apiParams: { tableName: "Products", failOnOversizedValues: true },
+        apiParams: { apiName: "Products", tableName: "Products", failOnOversizedValues: true },
         requestParams: {
             sqlParams: { order: OINODbSqlOrder.parse("1 asc") }
         },
@@ -94,7 +96,7 @@ const owasp_tests:OINOTestParams[] = [
     },
     {
         name: "OWASP 3",
-        apiParams: { tableName: "Products", failOnOversizedValues: true },
+        apiParams: { apiName: "Products", tableName: "Products", failOnOversizedValues: true },
         requestParams: {
             sqlParams: { filter: OINODbSqlFilter.parse("(ProductID)-eq(FOO)") }
         },

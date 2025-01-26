@@ -264,9 +264,10 @@ export class OINODbMsSql extends OINODb {
      * @param whereCondition - The WHERE clause to filter the results.
      * @param orderCondition - The ORDER BY clause to sort the results.
      * @param limitCondition - The LIMIT clause to limit the number of results.
+     * @param groupByCondition - The GROUP BY clause to group the results.
      * 
      */
-    printSqlSelect(tableName:string, columnNames:string, whereCondition:string, orderCondition:string, limitCondition:string): string {
+    printSqlSelect(tableName:string, columnNames:string, whereCondition:string, orderCondition:string, limitCondition:string, groupByCondition: string): string {
         const limit_parts = limitCondition.split(" OFFSET ")
         let result:string = "SELECT " 
         if ((limitCondition != "") && (limit_parts.length == 1)) {
@@ -286,6 +287,9 @@ export class OINODbMsSql extends OINODb {
             } else {
                 result += " OFFSET " + limit_parts[1] + " ROWS FETCH NEXT " + limit_parts[0] + " ROWS ONLY"
             }
+        }
+        if (groupByCondition != "") {
+            result += " GROUP BY " + groupByCondition 
         }
         result += ";"
         // OINOLog.debug("OINODb.printSqlSelect", {result:result})
@@ -399,8 +403,9 @@ ORDER BY C.ORDINAL_POSITION;`
                 isAutoInc: row[7] == 1,
                 isNotNull: row[1] == "NO"
             }            
-            if (((api.params.excludeFieldPrefix) && field_name.startsWith(api.params.excludeFieldPrefix)) || ((api.params.excludeFields) && (api.params.excludeFields.indexOf(field_name) < 0))) {
+            if (api.isFieldIncluded(field_name) == false) {
                 OINOLog.info("OINODbMsSql.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
+                
             } else {
                 // OINOLog.debug("OINODbMsSql.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, char_field_length:char_field_length, numeric_field_length1:numeric_field_length1, numeric_field_length2:numeric_field_length2, field_params:field_params })
                 if ((sql_type == "tinyint") || (sql_type == "smallint") || (sql_type == "int") || (sql_type == "bigint") || (sql_type == "float") || (sql_type == "real")) {
