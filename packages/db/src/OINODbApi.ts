@@ -5,7 +5,7 @@
  */
 
 import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbApiRequestParams, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField, OINODbParser } from "./index.js"
-import { OINOResult } from "@oino-ts/common";
+import { OINOLog, OINOResult } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid"
 
 const API_EMPTY_PARAMS:OINODbApiRequestParams = { sqlParams: {} }
@@ -364,4 +364,22 @@ export class OINODbApi {
         OINOBenchmark.end("OINODbApi", "doRequest", method)
         return Promise.resolve(result)
     }
+
+    /**
+     * Method to check if a field is included in the API params.
+     *
+     * @param fieldName name of the field
+     * 
+     */
+
+    public isFieldIncluded(fieldName:string):boolean {
+        // OINOLog.debug("OINODbApi.isFieldIncluded", {fieldName:fieldName, included:this.params.includeFields})
+        const params = this.params
+        return (
+            ((params.excludeFieldPrefix == undefined) || (params.excludeFieldPrefix == "") || fieldName.startsWith(params.excludeFieldPrefix)) && 
+            ((params.excludeFields == undefined) || (params.excludeFields.length == 0) || (params.excludeFields.indexOf(fieldName) < 0)) &&
+            ((params.includeFields == undefined) || (params.includeFields.length == 0) || (params.includeFields.indexOf(fieldName) >= 0))
+        ) 
+    }
+
 }

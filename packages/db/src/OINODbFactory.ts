@@ -5,6 +5,7 @@
  */
 
 import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODb, OINODbConstructor, OINODbApiRequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlParams } from "./index.js"
+import { OINODbSqlAggregate } from "./OINODbSqlParams.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -74,6 +75,10 @@ export class OINODbFactory {
         const limit = url.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
         if (limit) {
             sql_params.limit = OINODbSqlLimit.parse(limit)
+        }
+        const aggregate = url.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM)
+        if (aggregate) {
+            sql_params.aggregate = OINODbSqlAggregate.parse(aggregate)
         }
 
         let result:OINODbApiRequestParams = { sqlParams: sql_params }

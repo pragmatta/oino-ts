@@ -43,13 +43,10 @@ export class OINODbDataModel {
 
     private _printSqlColumnNames(): string {
         let result: string = "";
-        for (let f of this.fields) {
-            if (result != "") {
-                result += ",";
-            }
-            result += f.printSqlColumnName();
+        for (let i=0; i < this.fields.length; i++) {
+            result += this.fields[i].printSqlColumnName()+","
         }
-        return result;
+        return result.substring(0, result.length-1)
     }
 
     private _printSqlInsertColumnsAndValues(row: OINODataRow): string {
@@ -231,10 +228,17 @@ export class OINODbDataModel {
      *
      */
     printSqlSelect(id: string, params:OINODbSqlParams): string {
-        const column_names = this._printSqlColumnNames()
+        let column_names = ""
+        if (params.aggregate) {
+            column_names = params.aggregate.printSqlColumnNames(this)
+        } else { 
+            column_names = this._printSqlColumnNames()
+        } 
         const order_sql = params.order?.toSql(this) || ""
         const limit_sql = params.limit?.toSql(this) || ""
         const filter_sql = params.filter?.toSql(this) || ""
+        const aggregate_sql = params.aggregate?.toSql(this) || ""
+        
         let where_sql = ""
         // OINOLog.debug("OINODbDataModel.printSqlSelect", {id:id, select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
         if ((id != null) && (id != "") && (filter_sql != ""))  {
@@ -244,7 +248,7 @@ export class OINODbDataModel {
         } else if (filter_sql != "") {
             where_sql = filter_sql
         }
-        const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql)
+        const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, aggregate_sql)
         // OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
         return result;
     }
