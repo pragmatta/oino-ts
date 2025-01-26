@@ -374,6 +374,9 @@ ORDER BY C.ORDINAL_POSITION;`
             }            
             if (api.isFieldIncluded(field_name)==false) {
                 OINOLog.info("OINODbMariadb.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
+                if (field_params.isPrimaryKey) {
+                    throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name)
+                }
                 
             } else {
                 // OINOLog.debug("OINODbMariadb.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, field_length1:field_length1, field_length2:field_length2, field_params:field_params })

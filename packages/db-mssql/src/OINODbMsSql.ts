@@ -405,7 +405,10 @@ ORDER BY C.ORDINAL_POSITION;`
             }            
             if (api.isFieldIncluded(field_name) == false) {
                 OINOLog.info("OINODbMsSql.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
-                
+                if (field_params.isPrimaryKey) {
+                    throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name)
+                }
+
             } else {
                 // OINOLog.debug("OINODbMsSql.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, char_field_length:char_field_length, numeric_field_length1:numeric_field_length1, numeric_field_length2:numeric_field_length2, field_params:field_params })
                 if ((sql_type == "tinyint") || (sql_type == "smallint") || (sql_type == "int") || (sql_type == "bigint") || (sql_type == "float") || (sql_type == "real")) {

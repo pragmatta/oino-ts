@@ -341,6 +341,9 @@ WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
             }            
             if (api.isFieldIncluded(field_name) == false) {
                 OINOLog.info("OINODbPostgresql.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
+                if (field_params.isPrimaryKey) {
+                    throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name)
+                }
 
             } else {
                 // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
