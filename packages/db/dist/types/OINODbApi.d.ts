@@ -79,4 +79,11 @@ export declare class OINODbApi {
      *
      */
     doRequest(method: string, id: string, body: string | OINODataRow[] | Buffer | any, params?: OINODbApiRequestParams): Promise<OINODbApiResult>;
+    /**
+     * Method to check if a field is included in the API params.
+     *
+     * @param fieldName name of the field
+     *
+     */
+    isFieldIncluded(fieldName: string): boolean;
 }

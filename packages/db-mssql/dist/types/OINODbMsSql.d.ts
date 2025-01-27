@@ -52,9 +52,10 @@ export declare class OINODbMsSql extends OINODb {
      * @param whereCondition - The WHERE clause to filter the results.
      * @param orderCondition - The ORDER BY clause to sort the results.
      * @param limitCondition - The LIMIT clause to limit the number of results.
+     * @param groupByCondition - The GROUP BY clause to group the results.
      *
      */
-    printSqlSelect(tableName: string, columnNames: string, whereCondition: string, orderCondition: string, limitCondition: string): string;
+    printSqlSelect(tableName: string, columnNames: string, whereCondition: string, orderCondition: string, limitCondition: string, groupByCondition: string): string;
     /**
      * Connect to database.
      *

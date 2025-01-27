@@ -4,6 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import { OINODbApi, OINOContentType, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit } from "./index.js";
+import { OINODbSqlAggregate } from "./OINODbSqlParams.js";
 /**
  * Static factory class for easily creating things based on data
  *
@@ -68,6 +69,10 @@ export class OINODbFactory {
         const limit = url.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM);
         if (limit) {
             sql_params.limit = OINODbSqlLimit.parse(limit);
+        }
+        const aggregate = url.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM);
+        if (aggregate) {
+            sql_params.aggregate = OINODbSqlAggregate.parse(aggregate);
         }
         let result = { sqlParams: sql_params };
         const content_type = request.headers.get("content-type");

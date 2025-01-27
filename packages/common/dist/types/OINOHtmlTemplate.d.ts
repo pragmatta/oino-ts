@@ -84,5 +84,5 @@ export declare class OINOHtmlTemplate {
      * @param includeDebugMessages include debug messages in result
      *
      */
-    renderFromResult(result: OINOResult, removeUnusedTags: boolean | undefined, messageSeparator: string, includeErrorMessages?: boolean, includeWarningMessages?: boolean, includeInfoMessages?: boolean, includeDebugMessages?: boolean): OINOHttpResult;
+    renderFromResult(result: OINOResult, removeUnusedTags?: boolean, messageSeparator?: string, includeErrorMessages?: boolean, includeWarningMessages?: boolean, includeInfoMessages?: boolean, includeDebugMessages?: boolean): OINOHttpResult;
 }

@@ -242,7 +242,7 @@ export class OINONumberDataField extends OINODbDataField {
         else {
             const result = parseFloat(value);
             if (isNaN(result)) {
-                OINOLog.error("OINODbSqlFilter.toSql: Invalid value!", { value: value });
+                OINOLog.error("OINONumberDataField.toSql: Invalid value!", { value: value });
                 throw new Error(OINO_ERROR_PREFIX + ": OINONumberDataField.deserializeCell - Invalid value '" + value + "'"); // incorrectly formatted data could be a security risk, abort processing
             }
             return result;

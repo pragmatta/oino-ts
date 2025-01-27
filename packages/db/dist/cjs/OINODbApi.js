@@ -358,5 +358,18 @@ class OINODbApi {
         index_js_1.OINOBenchmark.end("OINODbApi", "doRequest", method);
         return Promise.resolve(result);
     }
+    /**
+     * Method to check if a field is included in the API params.
+     *
+     * @param fieldName name of the field
+     *
+     */
+    isFieldIncluded(fieldName) {
+        // OINOLog.debug("OINODbApi.isFieldIncluded", {fieldName:fieldName, included:this.params.includeFields})
+        const params = this.params;
+        return (((params.excludeFieldPrefix == undefined) || (params.excludeFieldPrefix == "") || fieldName.startsWith(params.excludeFieldPrefix)) &&
+            ((params.excludeFields == undefined) || (params.excludeFields.length == 0) || (params.excludeFields.indexOf(fieldName) < 0)) &&
+            ((params.includeFields == undefined) || (params.includeFields.length == 0) || (params.includeFields.indexOf(fieldName) >= 0)));
+    }
 }
 exports.OINODbApi = OINODbApi;

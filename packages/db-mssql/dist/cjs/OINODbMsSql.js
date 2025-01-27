@@ -249,9 +249,10 @@ class OINODbMsSql extends db_1.OINODb {
      * @param whereCondition - The WHERE clause to filter the results.
      * @param orderCondition - The ORDER BY clause to sort the results.
      * @param limitCondition - The LIMIT clause to limit the number of results.
+     * @param groupByCondition - The GROUP BY clause to group the results.
      *
      */
-    printSqlSelect(tableName, columnNames, whereCondition, orderCondition, limitCondition) {
+    printSqlSelect(tableName, columnNames, whereCondition, orderCondition, limitCondition, groupByCondition) {
         const limit_parts = limitCondition.split(" OFFSET ");
         let result = "SELECT ";
         if ((limitCondition != "") && (limit_parts.length == 1)) {
@@ -272,6 +273,9 @@ class OINODbMsSql extends db_1.OINODb {
             else {
                 result += " OFFSET " + limit_parts[1] + " ROWS FETCH NEXT " + limit_parts[0] + " ROWS ONLY";
             }
+        }
+        if (groupByCondition != "") {
+            result += " GROUP BY " + groupByCondition;
         }
         result += ";";
         // OINOLog.debug("OINODb.printSqlSelect", {result:result})
@@ -380,8 +384,11 @@ ORDER BY C.ORDINAL_POSITION;`;
                 isAutoInc: row[7] == 1,
                 isNotNull: row[1] == "NO"
             };
-            if (((api.params.excludeFieldPrefix) && field_name.startsWith(api.params.excludeFieldPrefix)) || ((api.params.excludeFields) && (api.params.excludeFields.indexOf(field_name) < 0))) {
+            if (api.isFieldIncluded(field_name) == false) {
                 db_1.OINOLog.info("OINODbMsSql.initializeApiDatamodel: field excluded in API parameters.", { field: field_name });
+                if (field_params.isPrimaryKey) {
+                    throw new Error(db_1.OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name);
+                }
             }
             else {
                 // OINOLog.debug("OINODbMsSql.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, char_field_length:char_field_length, numeric_field_length1:numeric_field_length1, numeric_field_length2:numeric_field_length2, field_params:field_params })

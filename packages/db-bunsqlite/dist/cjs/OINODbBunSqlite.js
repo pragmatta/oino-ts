@@ -193,7 +193,7 @@ class OINODbBunSqlite extends db_1.OINODb {
     async initializeApiDatamodel(api) {
         const res = await this.sqlSelect("select sql from sqlite_schema WHERE name='" + api.params.tableName + "'");
         const sql_desc = (res?.getRow()[0]);
-        const foreign_keys = [];
+        const excluded_fields = [];
         // OINOLog.debug("OINODbBunSqlite.initDatamodel.sql_desc=" + sql_desc)
         let table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc);
         // OINOLog.debug("OINODbBunSqlite.initDatamodel", {table_matches:table_matches})
@@ -212,11 +212,14 @@ class OINODbBunSqlite extends db_1.OINODb {
                 if ((!field_match) || (field_match.length < 3)) {
                     let primarykey_match = OINODbBunSqlite._tablePrimarykeyRegex.exec(field_str);
                     let foreignkey_match = OINODbBunSqlite._tableForeignkeyRegex.exec(field_str);
-                    db_1.OINOLog.debug("initDatamodel non-field definition", { primarykey_match: primarykey_match, foreignkey_match: foreignkey_match });
+                    // OINOLog.debug("initDatamodel non-field definition", {primarykey_match:primarykey_match, foreignkey_match:foreignkey_match})
                     if (primarykey_match && primarykey_match.length >= 2) {
                         const primary_keys = primarykey_match[1].replaceAll("\"", "").split(','); // not sure if will have space or not so split by comma and trim later
                         for (let i = 0; i < primary_keys.length; i++) {
                             const pk = primary_keys[i].trim(); //..the trim
+                            if (excluded_fields.indexOf(pk) >= 0) {
+                                throw new Error(db_1.OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + pk);
+                            }
                             for (let j = 0; j < api.datamodel.fields.length; j++) {
                                 if (api.datamodel.fields[j].name == pk) {
                                     api.datamodel.fields[j].fieldParams.isPrimaryKey = true;
@@ -243,7 +246,8 @@ class OINODbBunSqlite extends db_1.OINODb {
                     const sql_type = field_match[2];
                     const field_length = parseInt(field_match[4]) || 0;
                     // OINOLog.debug("OINODbBunSqlite.initializeApiDatamodel: field regex matches", { api.params: api.params, field_name:field_name })
-                    if (((api.params.excludeFieldPrefix) && field_name.startsWith(api.params.excludeFieldPrefix)) || ((api.params.excludeFields) && (api.params.excludeFields.indexOf(field_name) < 0))) {
+                    if (api.isFieldIncluded(field_name) == false) {
+                        excluded_fields.push(field_name);
                         db_1.OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: field excluded in API parameters.", { field: field_name });
                     }
                     else {

@@ -5,8 +5,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OINODbSqlLimit = exports.OINODbSqlOrder = exports.OINODbSqlFilter = exports.OINODbSqlComparison = exports.OINODbSqlBooleanOperation = void 0;
+exports.OINODbSqlAggregate = exports.OINODbSqlAggregateFunctions = exports.OINODbSqlLimit = exports.OINODbSqlOrder = exports.OINODbSqlFilter = exports.OINODbSqlComparison = exports.OINODbSqlBooleanOperation = void 0;
 const index_js_1 = require("./index.js");
+const OINO_FIELD_NAME_CHARS = "\\w\\s\\-\\_\\#\\¤";
 /**
  * Supported logical conjunctions in filter predicates.
  * @enum
@@ -65,13 +66,13 @@ class OINODbSqlFilter {
         this._rightSide = rightSide;
     }
     /**
-     * Constructor for `OINOFilter` as parser of http parameter.
+     * Constructor for `OINODbSqlFilter` as parser of http parameter.
      *
      * @param filterString string representation of filter from HTTP-request
      *
      */
     static parse(filterString) {
-        // OINOLog_debug("OINOFilter.constructor", {filterString:filterString})
+        // OINOLog_debug("OINODbSqlFilter.constructor", {filterString:filterString})
         if (!filterString) {
             return new OINODbSqlFilter("", null, "");
         }
@@ -87,7 +88,7 @@ class OINODbSqlFilter {
                 }
                 else {
                     let boolean_parts = index_js_1.OINOStr.splitByBrackets(filterString, true, false, '(', ')');
-                    // OINOLog_debug("OINOFilter.constructor", {boolean_parts:boolean_parts})
+                    // OINOLog_debug("OINODbSqlFilter.constructor", {boolean_parts:boolean_parts})
                     if (boolean_parts.length == 3 && (boolean_parts[1].match(OINODbSqlFilter._booleanOperationRegex))) {
                         return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1), OINODbSqlFilter.parse(boolean_parts[2]));
                     }
@@ -99,7 +100,7 @@ class OINODbSqlFilter {
         }
     }
     /**
-     * Construct a new `OINOFilter` as combination of (boolean and/or) of two filters.
+     * Construct a new `OINODbSqlFilter` as combination of (boolean and/or) of two filters.
      *
      * @param leftSide left side to combine
      * @param operation boolean operation to use in combination
@@ -148,7 +149,7 @@ class OINODbSqlFilter {
      *
      */
     toSql(dataModel) {
-        // OINOLog.debug("OINOFilter.toSql", {_leftSide:this._leftSide, _operator:this._operator, _rightSide:this._rightSide})
+        // OINOLog.debug("OINODbSqlFilter.toSql", {_leftSide:this._leftSide, _operator:this._operator, _rightSide:this._rightSide})
         if (this.isEmpty()) {
             return "";
         }
@@ -177,7 +178,7 @@ class OINODbSqlFilter {
             }
             result += field.printCellAsSqlValue(value);
         }
-        // OINOLog.debug("OINOFilter.toSql", {result:result})
+        // OINOLog.debug("OINODbSqlFilter.toSql", {result:result})
         return "(" + result + ")";
     }
 }
@@ -187,7 +188,7 @@ exports.OINODbSqlFilter = OINODbSqlFilter;
  *
  */
 class OINODbSqlOrder {
-    static _orderColumnRegex = /^\s*(\w+)\s?(ASC|DESC)?\s*?$/i;
+    static _orderColumnRegex = /^\s*(\w+)\s?(ASC|DESC|\+|\-)?\s*?$/i;
     _columns;
     _descending;
     /**
@@ -226,7 +227,8 @@ class OINODbSqlOrder {
             let match = OINODbSqlOrder._orderColumnRegex.exec(column_strings[i]);
             if (match != null) {
                 columns.push(match[1]);
-                directions.push((match[2] || "DESC").toUpperCase() == "DESC");
+                const dir = (match[2] || "ASC").toUpperCase();
+                directions.push((dir == "DESC") || (dir == "-"));
             }
         }
         return new OINODbSqlOrder(columns, directions);
@@ -334,3 +336,102 @@ class OINODbSqlLimit {
     }
 }
 exports.OINODbSqlLimit = OINODbSqlLimit;
+/**
+ * Supported aggregation functions in OINODbSqlAggregate.
+ * @enum
+ */
+var OINODbSqlAggregateFunctions;
+(function (OINODbSqlAggregateFunctions) {
+    OINODbSqlAggregateFunctions["count"] = "count";
+    OINODbSqlAggregateFunctions["sum"] = "sum";
+    OINODbSqlAggregateFunctions["avg"] = "avg";
+    OINODbSqlAggregateFunctions["min"] = "min";
+    OINODbSqlAggregateFunctions["max"] = "max";
+})(OINODbSqlAggregateFunctions || (exports.OINODbSqlAggregateFunctions = OINODbSqlAggregateFunctions = {}));
+/**
+ * Class for limiting the number of results.
+ *
+ */
+class OINODbSqlAggregate {
+    static _aggregateRegex = new RegExp("^(count|sum|avg|min|max)\\(([" + OINO_FIELD_NAME_CHARS + "]+)\\)$", "mi");
+    _functions;
+    _fields;
+    /**
+     * Constructor for `OINODbSqlAggregate`.
+     *
+     * @param function aggregate function to use
+     * @param fields fields to aggregate
+     *
+     */
+    constructor(func, fields) {
+        this._functions = func;
+        this._fields = fields;
+    }
+    /**
+     * Constructor for `OINODbSqlAggregate` as parser of http parameter.
+     *
+     * @param aggregatorString string representation of limit from HTTP-request
+     *
+     */
+    static parse(aggregatorString) {
+        let funtions = [];
+        let fields = [];
+        const aggregator_parts = aggregatorString.split(',');
+        for (let i = 0; i < aggregator_parts.length; i++) {
+            let match = OINODbSqlAggregate._aggregateRegex.exec(aggregator_parts[i]);
+            // OINOLog.debug("OINODbSqlAggregate.parse - next aggregator", {aggregator: aggregator_parts[i], match:match})
+            if ((match != null) && (match.length == 3)) {
+                funtions.push(match[1]);
+                fields.push(match[2]);
+            }
+        }
+        return new OINODbSqlAggregate(funtions, fields);
+    }
+    /**
+     * Does filter contain any valid conditions.
+     *
+     */
+    isEmpty() {
+        return (this._functions.length <= 0);
+    }
+    /**
+     * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
+     *
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    toSql(dataModel) {
+        if (this.isEmpty()) {
+            return "";
+        }
+        let result = "";
+        for (let i = 0; i < dataModel.fields.length; i++) {
+            if (this._fields.includes(dataModel.fields[i].name) == false) {
+                result += dataModel.fields[i].printSqlColumnName() + ",";
+            }
+        }
+        index_js_1.OINOLog.debug("OINODbSqlAggregate.toSql", { result: result });
+        return result.substring(0, result.length - 1);
+    }
+    /**
+     * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
+     *
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    printSqlColumnNames(dataModel) {
+        let result = "";
+        for (let i = 0; i < dataModel.fields.length; i++) {
+            const aggregate_index = this._fields.indexOf(dataModel.fields[i].name);
+            if (aggregate_index >= 0) {
+                result += this._functions[aggregate_index] + "(" + dataModel.fields[i].printSqlColumnName() + "),";
+            }
+            else {
+                result += dataModel.fields[i].printSqlColumnName() + ",";
+            }
+        }
+        index_js_1.OINOLog.debug("OINODbSqlAggregate.printSqlColumnNames", { result: result });
+        return result.substring(0, result.length - 1);
+    }
+}
+exports.OINODbSqlAggregate = OINODbSqlAggregate;

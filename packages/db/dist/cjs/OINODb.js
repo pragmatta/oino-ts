@@ -32,9 +32,10 @@ class OINODb {
      * @param whereCondition - The WHERE clause to filter the results.
      * @param orderCondition - The ORDER BY clause to sort the results.
      * @param limitCondition - The LIMIT clause to limit the number of results.
+     * @param groupByCondition - The GROUP BY clause to group the results.
      *
      */
-    printSqlSelect(tableName, columnNames, whereCondition, orderCondition, limitCondition) {
+    printSqlSelect(tableName, columnNames, whereCondition, orderCondition, limitCondition, groupByCondition) {
         let result = "SELECT " + columnNames + " FROM " + tableName;
         // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
         if (whereCondition != "") {
@@ -45,6 +46,9 @@ class OINODb {
         }
         if (limitCondition != "") {
             result += " LIMIT " + limitCondition;
+        }
+        if (groupByCondition != "") {
+            result += " GROUP BY " + groupByCondition;
         }
         result += ";";
         // OINOLog.debug("OINODb.printSqlSelect", {result:result})
