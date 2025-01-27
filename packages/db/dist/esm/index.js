@@ -6,7 +6,7 @@ export { OINODbDataModel } from "./OINODbDataModel.js";
 export { OINODbModelSet } from "./OINODbModelSet.js";
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js";
 export { OINODbDataSet, OINODbMemoryDataSet, OINODb } from "./OINODb.js";
-export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation } from "./OINODbSqlParams.js";
+export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation, OINODbSqlAggregate, OINODbSqlAggregateFunctions } from "./OINODbSqlParams.js";
 export { OINODbConfig } from "./OINODbConfig.js";
 export { OINODbFactory } from "./OINODbFactory.js";
 export { OINODbSwagger } from "./OINODbSwagger.js";
