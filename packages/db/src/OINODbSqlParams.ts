@@ -378,7 +378,7 @@ export class OINODbSqlAggregate {
             let match = OINODbSqlAggregate._aggregateRegex.exec(aggregator_parts[i])
             // OINOLog.debug("OINODbSqlAggregate.parse - next aggregator", {aggregator: aggregator_parts[i], match:match})
             if ((match != null) && (match.length == 3)) {
-                funtions.push(OINODbSqlAggregateFunctions[match[1]])
+                funtions.push(match[1] as OINODbSqlAggregateFunctions)
                 fields.push(match[2])
             } 
         }
