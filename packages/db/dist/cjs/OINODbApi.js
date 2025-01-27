@@ -367,7 +367,7 @@ class OINODbApi {
     isFieldIncluded(fieldName) {
         // OINOLog.debug("OINODbApi.isFieldIncluded", {fieldName:fieldName, included:this.params.includeFields})
         const params = this.params;
-        return (((params.excludeFieldPrefix == undefined) || (params.excludeFieldPrefix == "") || fieldName.startsWith(params.excludeFieldPrefix)) &&
+        return (((params.excludeFieldPrefix == undefined) || (params.excludeFieldPrefix == "") || (fieldName.startsWith(params.excludeFieldPrefix) == false)) &&
             ((params.excludeFields == undefined) || (params.excludeFields.length == 0) || (params.excludeFields.indexOf(fieldName) < 0)) &&
             ((params.includeFields == undefined) || (params.includeFields.length == 0) || (params.includeFields.indexOf(fieldName) >= 0)));
     }
