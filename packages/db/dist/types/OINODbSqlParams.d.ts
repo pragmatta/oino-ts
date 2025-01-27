@@ -44,14 +44,14 @@ export declare class OINODbSqlFilter {
      */
     constructor(leftSide: OINODbSqlFilter | string, operation: OINODbSqlComparison | OINODbSqlBooleanOperation | null, rightSide: OINODbSqlFilter | string);
     /**
-     * Constructor for `OINOFilter` as parser of http parameter.
+     * Constructor for `OINODbSqlFilter` as parser of http parameter.
      *
      * @param filterString string representation of filter from HTTP-request
      *
      */
     static parse(filterString: string): OINODbSqlFilter;
     /**
-     * Construct a new `OINOFilter` as combination of (boolean and/or) of two filters.
+     * Construct a new `OINODbSqlFilter` as combination of (boolean and/or) of two filters.
      *
      * @param leftSide left side to combine
      * @param operation boolean operation to use in combination
@@ -144,4 +144,58 @@ export declare class OINODbSqlLimit {
      *
      */
     toSql(dataModel: OINODbDataModel): string;
+}
+/**
+ * Supported aggregation functions in OINODbSqlAggregate.
+ * @enum
+ */
+export declare enum OINODbSqlAggregateFunctions {
+    count = "count",
+    sum = "sum",
+    avg = "avg",
+    min = "min",
+    max = "max"
+}
+/**
+ * Class for limiting the number of results.
+ *
+ */
+export declare class OINODbSqlAggregate {
+    private static _aggregateRegex;
+    private _functions;
+    private _fields;
+    /**
+     * Constructor for `OINODbSqlAggregate`.
+     *
+     * @param function aggregate function to use
+     * @param fields fields to aggregate
+     *
+     */
+    constructor(func: OINODbSqlAggregateFunctions[], fields: string[]);
+    /**
+     * Constructor for `OINODbSqlAggregate` as parser of http parameter.
+     *
+     * @param aggregatorString string representation of limit from HTTP-request
+     *
+     */
+    static parse(aggregatorString: string): OINODbSqlAggregate;
+    /**
+     * Does filter contain any valid conditions.
+     *
+     */
+    isEmpty(): boolean;
+    /**
+     * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
+     *
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    toSql(dataModel: OINODbDataModel): string;
+    /**
+     * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
+     *
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    printSqlColumnNames(dataModel: OINODbDataModel): string;
 }

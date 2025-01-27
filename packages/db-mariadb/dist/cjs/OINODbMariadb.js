@@ -353,8 +353,11 @@ ORDER BY C.ORDINAL_POSITION;`;
                 isAutoInc: extra.indexOf('auto_increment') >= 0,
                 isNotNull: row[2] == "NO"
             };
-            if (((api.params.excludeFieldPrefix) && field_name.startsWith(api.params.excludeFieldPrefix)) || ((api.params.excludeFields) && (api.params.excludeFields.indexOf(field_name) < 0))) {
+            if (api.isFieldIncluded(field_name) == false) {
                 db_1.OINOLog.info("OINODbMariadb.initializeApiDatamodel: field excluded in API parameters.", { field: field_name });
+                if (field_params.isPrimaryKey) {
+                    throw new Error(db_1.OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name);
+                }
             }
             else {
                 // OINOLog.debug("OINODbMariadb.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, field_length1:field_length1, field_length2:field_length2, field_params:field_params })
