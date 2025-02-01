@@ -356,12 +356,12 @@ export class OINODbSqlAggregate {
     /**
      * Constructor for `OINODbSqlAggregate`.
      * 
-     * @param function aggregate function to use
+     * @param functions aggregate function to use
      * @param fields fields to aggregate
      *
      */
-    constructor(func: OINODbSqlAggregateFunctions[], fields: string[]) {
-        this._functions = func
+    constructor(functions: OINODbSqlAggregateFunctions[], fields: string[]) {
+        this._functions = functions
         this._fields = fields
     }
     /**

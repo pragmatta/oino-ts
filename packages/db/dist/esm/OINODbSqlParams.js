@@ -353,12 +353,12 @@ export class OINODbSqlAggregate {
     /**
      * Constructor for `OINODbSqlAggregate`.
      *
-     * @param function aggregate function to use
+     * @param functions aggregate function to use
      * @param fields fields to aggregate
      *
      */
-    constructor(func, fields) {
-        this._functions = func;
+    constructor(functions, fields) {
+        this._functions = functions;
         this._fields = fields;
     }
     /**
@@ -417,11 +417,12 @@ export class OINODbSqlAggregate {
         let result = "";
         for (let i = 0; i < dataModel.fields.length; i++) {
             const aggregate_index = this._fields.indexOf(dataModel.fields[i].name);
+            const col_name = dataModel.fields[i].printSqlColumnName();
             if (aggregate_index >= 0) {
-                result += this._functions[aggregate_index] + "(" + dataModel.fields[i].printSqlColumnName() + "),";
+                result += this._functions[aggregate_index] + "(" + col_name + ") as " + col_name + ",";
             }
             else {
-                result += dataModel.fields[i].printSqlColumnName() + ",";
+                result += col_name + ",";
             }
         }
         OINOLog.debug("OINODbSqlAggregate.printSqlColumnNames", { result: result });

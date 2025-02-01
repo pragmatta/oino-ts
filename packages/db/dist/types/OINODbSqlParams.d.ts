@@ -167,11 +167,11 @@ export declare class OINODbSqlAggregate {
     /**
      * Constructor for `OINODbSqlAggregate`.
      *
-     * @param function aggregate function to use
+     * @param functions aggregate function to use
      * @param fields fields to aggregate
      *
      */
-    constructor(func: OINODbSqlAggregateFunctions[], fields: string[]);
+    constructor(functions: OINODbSqlAggregateFunctions[], fields: string[]);
     /**
      * Constructor for `OINODbSqlAggregate` as parser of http parameter.
      *

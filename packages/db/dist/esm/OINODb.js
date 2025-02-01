@@ -38,14 +38,14 @@ export class OINODb {
         if (whereCondition != "") {
             result += " WHERE " + whereCondition;
         }
+        if (groupByCondition != "") {
+            result += " GROUP BY " + groupByCondition;
+        }
         if (orderCondition != "") {
             result += " ORDER BY " + orderCondition;
         }
         if (limitCondition != "") {
             result += " LIMIT " + limitCondition;
-        }
-        if (groupByCondition != "") {
-            result += " GROUP BY " + groupByCondition;
         }
         result += ";";
         // OINOLog.debug("OINODb.printSqlSelect", {result:result})
