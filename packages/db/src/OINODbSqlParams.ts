@@ -423,10 +423,11 @@ export class OINODbSqlAggregate {
         let result:string = ""
         for (let i=0; i<dataModel.fields.length; i++) {
             const aggregate_index = this._fields.indexOf(dataModel.fields[i].name)
+            const col_name = dataModel.fields[i].printSqlColumnName()
             if (aggregate_index >= 0) {
-                result += this._functions[aggregate_index] + "(" + dataModel.fields[i].printSqlColumnName() + "),"
+                result += this._functions[aggregate_index] + "(" + col_name + ") as " + col_name + ","
             } else {
-                result += dataModel.fields[i].printSqlColumnName() + ","
+                result += col_name + ","
             }
         }
         OINOLog.debug("OINODbSqlAggregate.printSqlColumnNames", {result:result})
