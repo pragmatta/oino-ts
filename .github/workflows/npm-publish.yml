@@ -6,6 +6,7 @@ name: Node.js Package
 on:
   release:
     types: [created]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -27,7 +28,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
+      - run: ls -r
       - run: npm publish ./packages/common --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
