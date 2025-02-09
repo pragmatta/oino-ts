@@ -39,7 +39,7 @@ class OINODbModelSet {
     _encodeAndHashFieldValue(field, value, contentType, primaryKeyValues, rowIdSeed) {
         let result;
         if (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) {
-            if (value && (field instanceof index_js_1.OINONumberDataField) && (this.datamodel.api.hashid)) {
+            if (value && (field instanceof index_js_1.OINONumberDataField) && (this.datamodel.api.hashid) && ((this.sqlParams?.aggregate === undefined) || (this.sqlParams.aggregate.isAggregated(field) == false))) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed);
             }
             if (field.fieldParams.isPrimaryKey) {
