@@ -365,6 +365,29 @@ export class OINODatetimeDataField extends OINODbDataField {
     }
 
     /**
+     * Serialize cell value in the given content format.
+     * 
+     * @param cellVal cell value
+     *
+     */
+    serializeCellWithLocale(cellVal: OINODataCell, locale:Intl.DateTimeFormat): string|null|undefined {
+        // OINOLog.debug("OINODatetimeDataField.serializeCell", {cellVal:cellVal, type:typeof(cellVal)})
+        if (typeof(cellVal) == "string") {
+            cellVal = this.db.parseSqlValueAsCell(cellVal, this.sqlType)
+            // OINOLog.debug("OINODatetimeDataField.serializeCell parsed", {cellVal:cellVal, type:typeof(cellVal)})
+        }
+        if ((cellVal === null) || (cellVal === undefined))  {
+            return cellVal
+            
+        } else if (cellVal instanceof Date) {
+            return locale.format(cellVal)
+
+        } else {
+            return cellVal.toString()
+        }
+    }
+
+    /**
      * Parce cell value from string using field type specific formatting rules.
      * 
      * @param value string value

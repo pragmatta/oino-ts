@@ -126,8 +126,8 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             for (let i=0; i<datamodel.fields.length; i++) {
                 const f:OINODbDataField = datamodel.fields[i]
                 let value:string|null|undefined
-                if ((this._locale != null) && (f instanceof OINODatetimeDataField) && (row[i] instanceof Date)) {
-                    value = this._locale.format(row[i] as Date)
+                if ((this._locale != null) && (f instanceof OINODatetimeDataField)) {
+                    value = f.serializeCellWithLocale(row[i], this._locale)
                 } else {
                     value = f.serializeCell(row[i])
                 }
