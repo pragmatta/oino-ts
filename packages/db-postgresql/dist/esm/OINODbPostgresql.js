@@ -183,8 +183,17 @@ export class OINODbPostgresql extends OINODb {
             return "\'" + cellValue.toISOString() + "\'";
         }
         else {
-            return "\'" + cellValue?.toString().replaceAll("'", "''") + "\'";
+            return this.printSqlString(cellValue.toString());
         }
+    }
+    /**
+     * Print a single string value as valid sql literal
+     *
+     * @param sqlString string value
+     *
+     */
+    printSqlString(sqlString) {
+        return "\'" + sqlString.replaceAll("'", "''") + "\'";
     }
     /**
      * Parse a single SQL result value for serialization using the context of the native data
@@ -198,7 +207,7 @@ export class OINODbPostgresql extends OINODb {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null;
         }
-        else if ((sqlValue === undefined)) {
+        else if (sqlValue === undefined) {
             return undefined;
         }
         else if (((sqlType == "date")) && (typeof (sqlValue) == "string")) {

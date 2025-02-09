@@ -417,6 +417,7 @@ export class OINODbSqlAggregate {
      * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
      * 
      * @param dataModel data model (and database) to use for formatting of values
+     * @param select what fields to select 
      *
      */
     printSqlColumnNames(dataModel:OINODbDataModel, select?:OINODbSqlSelect):string {
@@ -440,6 +441,11 @@ export class OINODbSqlAggregate {
         return result.substring(0, result.length-1)
     }
 
+    /**
+     * Does filter contain any valid conditions.
+     * 
+     * @param field field to check if it is aggregated
+     */
     isAggregated(field:OINODbDataField):boolean {
         return (this._fields.includes(field.name))
     }
@@ -488,6 +494,8 @@ export class OINODbSqlSelect {
 
     /**
      * Does select include given column.
+     * 
+     * @param field field to check if it is selected
      *
      */
     isSelected(field:OINODbDataField):boolean {

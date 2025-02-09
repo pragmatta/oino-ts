@@ -39,6 +39,13 @@ export declare class OINODbMariadb extends OINODb {
      */
     printCellAsSqlValue(cellValue: OINODataCell, sqlType: string): string;
     /**
+     * Print a single string value as valid sql literal
+     *
+     * @param sqlString string value
+     *
+     */
+    printSqlString(sqlString: string): string;
+    /**
      * Parse a single SQL result value for serialization using the context of the native data
      * type.
      *

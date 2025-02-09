@@ -37,10 +37,16 @@ class OINODbDataModel {
     async initialize() {
         await this.api.db.initializeApiDatamodel(this.api);
     }
-    _printSqlColumnNames() {
+    _printSqlColumnNames(select) {
         let result = "";
         for (let i = 0; i < this.fields.length; i++) {
-            result += this.fields[i].printSqlColumnName() + ",";
+            const f = this.fields[i];
+            if (select?.isSelected(f) === false) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
+                result += f.db.printSqlString(index_js_1.OINODB_UNDEFINED) + " as " + f.printSqlColumnName() + ",";
+            }
+            else {
+                result += f.printSqlColumnName() + ",";
+            }
         }
         return result.substring(0, result.length - 1);
     }
@@ -219,17 +225,18 @@ class OINODbDataModel {
     printSqlSelect(id, params) {
         let column_names = "";
         if (params.aggregate) {
-            column_names = params.aggregate.printSqlColumnNames(this);
+            column_names = params.aggregate.printSqlColumnNames(this, params.select);
         }
         else {
-            column_names = this._printSqlColumnNames();
+            column_names = this._printSqlColumnNames(params.select);
         }
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {column_names:column_names})
         const order_sql = params.order?.toSql(this) || "";
         const limit_sql = params.limit?.toSql(this) || "";
         const filter_sql = params.filter?.toSql(this) || "";
         const aggregate_sql = params.aggregate?.toSql(this) || "";
         let where_sql = "";
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {id:id, select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {order_sql:order_sql, limit_sql:limit_sql, filter_sql:filter_sql, aggregate_sql:aggregate_sql})
         if ((id != null) && (id != "") && (filter_sql != "")) {
             where_sql = this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
         }

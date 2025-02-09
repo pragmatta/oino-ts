@@ -91,6 +91,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             this._locale = new Intl.DateTimeFormat(undefined, locale_opts)
             this.localeStr = "default"
         } else {
+            this.localeStr = supported_locales[0]
             this._locale = new Intl.DateTimeFormat(supported_locales[0], locale_opts)
         }
     }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OINODB_EMPTY_ROWS = exports.OINODB_EMPTY_ROW = exports.OINODbParser = exports.OINODbSwagger = exports.OINODbFactory = exports.OINODbConfig = exports.OINODbSqlAggregateFunctions = exports.OINODbSqlAggregate = exports.OINODbSqlBooleanOperation = exports.OINODbSqlLimit = exports.OINODbSqlComparison = exports.OINODbSqlOrder = exports.OINODbSqlFilter = exports.OINODb = exports.OINODbMemoryDataSet = exports.OINODbDataSet = exports.OINODatetimeDataField = exports.OINOBlobDataField = exports.OINOStringDataField = exports.OINONumberDataField = exports.OINOBooleanDataField = exports.OINODbDataField = exports.OINODbModelSet = exports.OINODbDataModel = exports.OINODbApi = exports.OINODbHtmlTemplate = exports.OINODbApiResult = exports.OINOHtmlTemplate = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOBenchmark = exports.OINOStr = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOContentType = void 0;
+exports.OINODB_UNDEFINED = exports.OINODB_EMPTY_ROWS = exports.OINODB_EMPTY_ROW = exports.OINODbParser = exports.OINODbSwagger = exports.OINODbFactory = exports.OINODbConfig = exports.OINODbSqlSelect = exports.OINODbSqlAggregateFunctions = exports.OINODbSqlAggregate = exports.OINODbSqlBooleanOperation = exports.OINODbSqlLimit = exports.OINODbSqlComparison = exports.OINODbSqlOrder = exports.OINODbSqlFilter = exports.OINODb = exports.OINODbMemoryDataSet = exports.OINODbDataSet = exports.OINODatetimeDataField = exports.OINOBlobDataField = exports.OINOStringDataField = exports.OINONumberDataField = exports.OINOBooleanDataField = exports.OINODbDataField = exports.OINODbModelSet = exports.OINODbDataModel = exports.OINODbApi = exports.OINODbHtmlTemplate = exports.OINODbApiResult = exports.OINOHtmlTemplate = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOBenchmark = exports.OINOStr = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOContentType = void 0;
 const common_1 = require("@oino-ts/common");
 Object.defineProperty(exports, "OINOContentType", { enumerable: true, get: function () { return common_1.OINOContentType; } });
 var common_2 = require("@oino-ts/common");
@@ -43,6 +43,7 @@ Object.defineProperty(exports, "OINODbSqlLimit", { enumerable: true, get: functi
 Object.defineProperty(exports, "OINODbSqlBooleanOperation", { enumerable: true, get: function () { return OINODbSqlParams_js_1.OINODbSqlBooleanOperation; } });
 Object.defineProperty(exports, "OINODbSqlAggregate", { enumerable: true, get: function () { return OINODbSqlParams_js_1.OINODbSqlAggregate; } });
 Object.defineProperty(exports, "OINODbSqlAggregateFunctions", { enumerable: true, get: function () { return OINODbSqlParams_js_1.OINODbSqlAggregateFunctions; } });
+Object.defineProperty(exports, "OINODbSqlSelect", { enumerable: true, get: function () { return OINODbSqlParams_js_1.OINODbSqlSelect; } });
 var OINODbConfig_js_1 = require("./OINODbConfig.js");
 Object.defineProperty(exports, "OINODbConfig", { enumerable: true, get: function () { return OINODbConfig_js_1.OINODbConfig; } });
 var OINODbFactory_js_1 = require("./OINODbFactory.js");
@@ -55,3 +56,5 @@ Object.defineProperty(exports, "OINODbParser", { enumerable: true, get: function
 exports.OINODB_EMPTY_ROW = [];
 /** Empty row array instance */
 exports.OINODB_EMPTY_ROWS = [exports.OINODB_EMPTY_ROW];
+/** Constant for undefined values */
+exports.OINODB_UNDEFINED = ""; // original idea was to have a defined literal that get's swapped back to undefined, but current implementation just leaves it out at serialization (so value does not matter)

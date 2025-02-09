@@ -7,7 +7,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbFactory = void 0;
 const index_js_1 = require("./index.js");
-const OINODbSqlParams_js_1 = require("./OINODbSqlParams.js");
 /**
  * Static factory class for easily creating things based on data
  *
@@ -75,7 +74,11 @@ class OINODbFactory {
         }
         const aggregate = url.searchParams.get(index_js_1.OINODbConfig.OINODB_SQL_AGGREGATE_PARAM);
         if (aggregate) {
-            sql_params.aggregate = OINODbSqlParams_js_1.OINODbSqlAggregate.parse(aggregate);
+            sql_params.aggregate = index_js_1.OINODbSqlAggregate.parse(aggregate);
+        }
+        const select = url.searchParams.get(index_js_1.OINODbConfig.OINODB_SQL_SELECT_PARAM);
+        if (select) {
+            sql_params.select = index_js_1.OINODbSqlSelect.parse(select);
         }
         let result = { sqlParams: sql_params };
         const content_type = request.headers.get("content-type");

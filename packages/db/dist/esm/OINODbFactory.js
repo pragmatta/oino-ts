@@ -3,8 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODbApi, OINOContentType, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit } from "./index.js";
-import { OINODbSqlAggregate } from "./OINODbSqlParams.js";
+import { OINODbApi, OINOContentType, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlAggregate, OINODbSqlSelect } from "./index.js";
 /**
  * Static factory class for easily creating things based on data
  *
@@ -73,6 +72,10 @@ export class OINODbFactory {
         const aggregate = url.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM);
         if (aggregate) {
             sql_params.aggregate = OINODbSqlAggregate.parse(aggregate);
+        }
+        const select = url.searchParams.get(OINODbConfig.OINODB_SQL_SELECT_PARAM);
+        if (select) {
+            sql_params.select = OINODbSqlSelect.parse(select);
         }
         let result = { sqlParams: sql_params };
         const content_type = request.headers.get("content-type");

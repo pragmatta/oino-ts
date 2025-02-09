@@ -1,4 +1,4 @@
-import { OINODbDataSet, OINODbDataModel, OINOContentType, OINODataCell } from "./index.js";
+import { OINODbDataSet, OINODbDataModel, OINOContentType, OINODataCell, OINODbSqlParams } from "./index.js";
 /**
  * Class for dataset based on a data model that can be serialized to
  * a supported format:
@@ -11,6 +11,8 @@ export declare class OINODbModelSet {
     readonly datamodel: OINODbDataModel;
     /** Reference to data set */
     readonly dataset: OINODbDataSet;
+    /** SQL parameters */
+    readonly sqlParams?: OINODbSqlParams;
     /** Collection of errors */
     errors: string[];
     /**
@@ -18,8 +20,9 @@ export declare class OINODbModelSet {
      *
      * @param datamodel data model
      * @param dataset data set
+     * @param sqlParams SQL parameters
      */
-    constructor(datamodel: OINODbDataModel, dataset: OINODbDataSet);
+    constructor(datamodel: OINODbDataModel, dataset: OINODbDataSet, sqlParams?: OINODbSqlParams);
     private _encodeAndHashFieldValue;
     private _writeRowJson;
     private _writeStringJson;

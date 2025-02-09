@@ -3,13 +3,13 @@ export { OINOContentType };
 export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult, OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common";
 import { OINODb } from "./OINODb.js";
 import { OINODbDataField } from "./OINODbDataField.js";
-import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbSqlParams.js";
+import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder, OINODbSqlSelect } from "./OINODbSqlParams.js";
 export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi } from "./OINODbApi.js";
 export { OINODbDataModel } from "./OINODbDataModel.js";
 export { OINODbModelSet } from "./OINODbModelSet.js";
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js";
 export { OINODbDataSet, OINODbMemoryDataSet, OINODb } from "./OINODb.js";
-export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation, OINODbSqlAggregate, OINODbSqlAggregateFunctions } from "./OINODbSqlParams.js";
+export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation, OINODbSqlAggregate, OINODbSqlAggregateFunctions, OINODbSqlSelect } from "./OINODbSqlParams.js";
 export { OINODbConfig } from "./OINODbConfig.js";
 export { OINODbFactory } from "./OINODbFactory.js";
 export { OINODbSwagger } from "./OINODbSwagger.js";
@@ -89,6 +89,8 @@ export type OINODbSqlParams = {
     limit?: OINODbSqlLimit;
     /** SQL aggregation functions */
     aggregate?: OINODbSqlAggregate;
+    /** SQL select condition */
+    select?: OINODbSqlSelect;
 };
 /** Request options */
 export type OINODbApiRequestParams = {
@@ -113,5 +115,7 @@ export type OINODataRow = Array<OINODataCell>;
 export declare const OINODB_EMPTY_ROW: OINODataRow;
 /** Empty row array instance */
 export declare const OINODB_EMPTY_ROWS: OINODataRow[];
+/** Constant for undefined values */
+export declare const OINODB_UNDEFINED = "";
 /** Key-value collection */
 export type OINOValues = Record<string, string>;
