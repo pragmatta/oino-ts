@@ -243,7 +243,7 @@ export class OINODbApi {
                 result.setError(500, sql_res.getFirstError(), "DoGet")
                 result.addDebug("OINO GET SQL [" + sql + "]", "DoPut")
             } else {
-                result.data = new OINODbModelSet(this.datamodel, sql_res)
+                result.data = new OINODbModelSet(this.datamodel, sql_res, params.sqlParams)
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet")

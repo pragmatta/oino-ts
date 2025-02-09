@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbDataSet, OINODbDataModel, OINODbDataField, OINODataRow, OINOContentType, OINOBlobDataField, OINOStr, OINODbConfig, OINONumberDataField, OINOBooleanDataField, OINODataCell, OINOLog } from "./index.js";
+import { OINODbDataSet, OINODbDataModel, OINODbDataField, OINODataRow, OINOContentType, OINOBlobDataField, OINOStr, OINODbConfig, OINONumberDataField, OINOBooleanDataField, OINODataCell, OINOLog, OINODbSqlSelect, OINODbSqlParams } from "./index.js";
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -21,6 +21,9 @@ export class OINODbModelSet {
     /** Reference to data set */
     readonly dataset: OINODbDataSet
 
+    /** SQL parameters */
+    readonly sqlParams?: OINODbSqlParams
+
     /** Collection of errors */
     errors: string[]
 
@@ -29,10 +32,12 @@ export class OINODbModelSet {
      *
      * @param datamodel data model
      * @param dataset data set
+     * @param sqlParams SQL parameters 
      */
-    constructor(datamodel: OINODbDataModel, dataset: OINODbDataSet) {
+    constructor(datamodel: OINODbDataModel, dataset: OINODbDataSet, sqlParams?: OINODbSqlParams) {
         this.datamodel = datamodel
         this.dataset = dataset
+        this.sqlParams = sqlParams
         this.errors = this.dataset.messages
     }
 
@@ -59,6 +64,9 @@ export class OINODbModelSet {
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue
+            }
             let value:string|null|undefined = f.serializeCell(row[i])
             if (value === undefined) {
                 // OINOLog.info("OINODbModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
@@ -118,6 +126,9 @@ export class OINODbModelSet {
         let csv_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue
+            }
             let value:string|null|undefined = f.serializeCell(row[i])
             if (value == null) {
                 csv_row += "," + OINOStr.encode(value, OINOContentType.csv) // either null or undefined
@@ -169,6 +180,9 @@ export class OINODbModelSet {
         let result:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue
+            }
             let value:string|null|undefined = f.serializeCell(row[i])
             let formdata_block:string = ""
             let is_file = (f instanceof OINOBlobDataField)
@@ -213,6 +227,9 @@ export class OINODbModelSet {
         let urlencode_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue
+            }
             let value:string|null|undefined = f.serializeCell(row[i])
             if ((value === undefined)) { // || (value === null)) {
                 // console.log("OINODbModelSet._writeRowUrlencode undefined field value:" + fields[i].name)

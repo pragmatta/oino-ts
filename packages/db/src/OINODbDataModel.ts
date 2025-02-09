@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbDataField, OINODbApi, OINODataRow, OINO_ERROR_PREFIX, OINODbDataFieldFilter, OINODbConfig, OINODbSqlParams, OINONumberDataField, OINOLog } from "./index.js";
+import { OINODbDataField, OINODbApi, OINODataRow, OINO_ERROR_PREFIX, OINODbDataFieldFilter, OINODbConfig, OINODbSqlParams, OINONumberDataField, OINOLog, OINODbSqlSelect, OINODB_UNDEFINED } from "./index.js";
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -41,10 +41,15 @@ export class OINODbDataModel {
         await this.api.db.initializeApiDatamodel(this.api)
     }
 
-    private _printSqlColumnNames(): string {
+    private _printSqlColumnNames(select?:OINODbSqlSelect): string {
         let result: string = "";
         for (let i=0; i < this.fields.length; i++) {
-            result += this.fields[i].printSqlColumnName()+","
+            const f:OINODbDataField = this.fields[i]
+            if (select?.isSelected(f) === false) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
+                result += f.db.printSqlString(OINODB_UNDEFINED) + " as " + f.printSqlColumnName()+","
+            } else {
+                result += f.printSqlColumnName()+","
+            }
         }
         return result.substring(0, result.length-1)
     }
@@ -230,17 +235,18 @@ export class OINODbDataModel {
     printSqlSelect(id: string, params:OINODbSqlParams): string {
         let column_names = ""
         if (params.aggregate) {
-            column_names = params.aggregate.printSqlColumnNames(this)
+            column_names = params.aggregate.printSqlColumnNames(this, params.select)
         } else { 
-            column_names = this._printSqlColumnNames()
+            column_names = this._printSqlColumnNames(params.select)
         } 
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {column_names:column_names})
         const order_sql = params.order?.toSql(this) || ""
         const limit_sql = params.limit?.toSql(this) || ""
         const filter_sql = params.filter?.toSql(this) || ""
         const aggregate_sql = params.aggregate?.toSql(this) || ""
         
         let where_sql = ""
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {id:id, select_sql:result, filter_sql:filter_sql, order_sql:order_sql})
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {order_sql:order_sql, limit_sql:limit_sql, filter_sql:filter_sql, aggregate_sql:aggregate_sql})
         if ((id != null) && (id != "") && (filter_sql != ""))  {
             where_sql = this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql
         } else if ((id != null) && (id != "")) {

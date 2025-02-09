@@ -110,8 +110,18 @@ export class OINODbBunSqlite extends OINODb {
             return "\'" + cellValue.toISOString() + "\'"
 
         } else {
-            return "\"" + cellValue.toString().replaceAll("\"", "\"\"") + "\""
+            return this.printSqlString(cellValue.toString())
         }
+    }
+
+    /**
+     * Print a single string value as valid sql literal
+     * 
+     * @param sqlString string value
+     *
+     */
+    printSqlString(sqlString:string): string {
+        return "\"" + sqlString.replaceAll("\"", "\"\"") + "\""
     }
 
     /**
