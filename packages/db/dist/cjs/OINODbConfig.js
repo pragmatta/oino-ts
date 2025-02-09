@@ -16,6 +16,8 @@ class OINODbConfig {
     static OINODB_SQL_LIMIT_PARAM = "oinosqllimit";
     /** Name of the OINODbSqlAggregate-parameter in request */
     static OINODB_SQL_AGGREGATE_PARAM = "oinosqlaggregate";
+    /** Name of the OINODbSqlSelect-parameter in request */
+    static OINODB_SQL_SELECT_PARAM = "oinosqlselect";
     /**
      * Set the name of the OINO ID field
      * @param idField name of the OINO ID field

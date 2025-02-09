@@ -6,7 +6,7 @@
 
 import { expect, test } from "bun:test";
 
-import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINODbSqlComparison, OINONumberDataField, OINODatetimeDataField, OINODbApiRequestParams } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINODbSqlComparison, OINONumberDataField, OINODatetimeDataField, OINODbApiRequestParams, OINODbHtmlTemplate } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
@@ -130,6 +130,14 @@ function encodeResult(o:any|undefined):string {
     })
 }
 
+function createApiTemplate(api:OINODbApi):OINODbHtmlTemplate {
+	let template_str = ""
+	for (let i=0; i<api.datamodel.fields.length; i++) {
+		template_str += "<input type='text' name='" + api.datamodel.fields[i].name + "' value='###" + api.datamodel.fields[i].name + "###'></input>"
+	}
+	return new OINODbHtmlTemplate(template_str, "fi", "medium")
+}
+
 export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestParams) {
     // OINOLog.info("OINOTestApi", {dbParams:dbParams, apiDataset:apiDataset})
     const db:OINODb = await OINODbFactory.createDb( dbParams )
@@ -175,6 +183,13 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     
     test(target_name + target_db + target_table + target_group + " select *", async () => {
         expect(encodeData(await (await api.doRequest("GET", "", "", empty_params)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+    })
+
+    test(target_name + target_db + target_table + target_group + " select * with template", async () => {
+        const template = createApiTemplate(api)
+        const api_result:OINODbApiResult = await api.doRequest("GET", "", "", empty_params)
+        const html = (await template.renderFromDbData(api_result.data!)).body
+        expect(encodeData(html)).toMatchSnapshot("GET HTML")
     })
 
     test(target_name + target_db + target_table + target_group + " select * with filter", async () => {
@@ -376,6 +391,7 @@ const snapshots = require("./__snapshots__/OINODbApi.test.ts.snap.js")
 
 const api_crosschecks:string[] = [
     "[HTTP GET] select *: GET JSON 1",
+    "[HTTP GET] select * with template: GET HTML 1",
     "[HTTP POST] insert: GET JSON 1",
     "[HTTP POST] insert: GET CSV 1",
     "[HTTP PUT] update JSON: GET JSON 1",

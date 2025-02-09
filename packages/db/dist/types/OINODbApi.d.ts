@@ -32,6 +32,19 @@ export declare class OINODbApiResult extends OINOResult {
  *
  */
 export declare class OINODbHtmlTemplate extends OINOHtmlTemplate {
+    /** Datetime format string */
+    localeStr: string;
+    /** Locale formatter */
+    protected _locale: Intl.DateTimeFormat | null;
+    /**
+     * Constructor of OINODbHtmlTemplate.
+     *
+     * @param template HTML template string
+     * @param localeStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
+     * @param localeStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
+     *
+     */
+    constructor(template: string, localeStr?: string, localeStyle?: string | any);
     /**
      * Creates HTML Response from API modelset.
      *

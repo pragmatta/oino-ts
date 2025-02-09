@@ -19,6 +19,9 @@ export class OINODbConfig {
     /** Name of the OINODbSqlAggregate-parameter in request */
     static OINODB_SQL_AGGREGATE_PARAM:string = "oinosqlaggregate"
 
+    /** Name of the OINODbSqlSelect-parameter in request */
+    static OINODB_SQL_SELECT_PARAM:string = "oinosqlselect"
+
     /** 
      * Set the name of the OINO ID field 
      * @param idField name of the OINO ID field 

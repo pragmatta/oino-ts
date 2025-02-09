@@ -193,6 +193,14 @@ export declare class OINODatetimeDataField extends OINODbDataField {
      */
     serializeCell(cellVal: OINODataCell): string | null | undefined;
     /**
+     * Serialize cell value in the given content format.
+     *
+     * @param cellVal cell value
+     * @param locale locale-object to format datetimes with
+     *
+     */
+    serializeCellWithLocale(cellVal: OINODataCell, locale: Intl.DateTimeFormat): string | null | undefined;
+    /**
      * Parce cell value from string using field type specific formatting rules.
      *
      * @param value string value

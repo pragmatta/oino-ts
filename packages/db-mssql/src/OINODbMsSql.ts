@@ -226,9 +226,18 @@ export class OINODbMsSql extends OINODb {
             return "'" + cellValue.toISOString().substring(0, 23) + "'"
 
         } else {
-            // return "'" + cellValue?.toString().replaceAll("\\", "\\\\").replaceAll("\'", "''").replaceAll("\r", "\\r").replaceAll("\n", "\\n").replaceAll("\t", "\\t") + "'"
-            return "'" + cellValue?.toString().replaceAll("\'", "''") + "'"
+            return this.printSqlString(cellValue.toString())
         }
+    }
+
+    /**
+     * Print a single string value as valid sql literal
+     * 
+     * @param sqlString string value
+     *
+     */
+    printSqlString(sqlString:string): string {
+        return "'" + sqlString.replaceAll("'", "''") + "'"
     }
 
     /**

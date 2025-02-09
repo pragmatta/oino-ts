@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINOStr, OINO_ERROR_PREFIX, OINOLog } from "./index.js";
+import { OINOStr, OINO_ERROR_PREFIX, OINOLog, OINODB_UNDEFINED } from "./index.js";
 const OINO_FIELD_NAME_CHARS = "\\w\\s\\-\\_\\#\\¤";
 /**
  * Supported logical conjunctions in filter predicates.
@@ -404,28 +404,91 @@ export class OINODbSqlAggregate {
                 result += dataModel.fields[i].printSqlColumnName() + ",";
             }
         }
-        OINOLog.debug("OINODbSqlAggregate.toSql", { result: result });
+        // OINOLog.debug("OINODbSqlAggregate.toSql", {result:result})
         return result.substring(0, result.length - 1);
     }
     /**
      * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
      *
      * @param dataModel data model (and database) to use for formatting of values
+     * @param select what fields to select
      *
      */
-    printSqlColumnNames(dataModel) {
+    printSqlColumnNames(dataModel, select) {
         let result = "";
         for (let i = 0; i < dataModel.fields.length; i++) {
-            const aggregate_index = this._fields.indexOf(dataModel.fields[i].name);
-            const col_name = dataModel.fields[i].printSqlColumnName();
-            if (aggregate_index >= 0) {
-                result += this._functions[aggregate_index] + "(" + col_name + ") as " + col_name + ",";
+            const f = dataModel.fields[i];
+            if (select?.isSelected(f) == false) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
+                result += f.db.printSqlString(OINODB_UNDEFINED) + " as " + f.printSqlColumnName() + ",";
             }
             else {
-                result += col_name + ",";
+                const aggregate_index = this._fields.indexOf(f.name);
+                const col_name = f.printSqlColumnName();
+                if (aggregate_index >= 0) {
+                    result += this._functions[aggregate_index] + "(" + col_name + ") as " + col_name + ",";
+                }
+                else {
+                    result += col_name + ",";
+                }
             }
         }
-        OINOLog.debug("OINODbSqlAggregate.printSqlColumnNames", { result: result });
+        // OINOLog.debug("OINODbSqlAggregate.printSqlColumnNames", {result:result})
         return result.substring(0, result.length - 1);
+    }
+    /**
+     * Does filter contain any valid conditions.
+     *
+     * @param field field to check if it is aggregated
+     */
+    isAggregated(field) {
+        return (this._fields.includes(field.name));
+    }
+}
+/**
+ * Class for ordering select results on a number of columns.
+ *
+ */
+export class OINODbSqlSelect {
+    _columns;
+    /**
+     * Constructor for `OINODbSqlSelect`.
+     *
+     * @param columns array of columns to select
+     *
+     */
+    constructor(columns) {
+        // OINOLog.debug("OINODbSqlSelect.constructor", {columns:columns})
+        this._columns = columns;
+    }
+    /**
+     * Constructor for `OINODbSqlSelect` as parser of http parameter.
+     *
+     * @param columns comma separatef string selected columns from HTTP-request
+     *
+     */
+    static parse(columns) {
+        if (columns == "") {
+            return new OINODbSqlSelect([]);
+        }
+        else {
+            return new OINODbSqlSelect(columns.split(','));
+        }
+    }
+    /**
+     * Does select contain any valid columns.
+     *
+     */
+    isEmpty() {
+        return (this._columns.length == 0);
+    }
+    /**
+     * Does select include given column.
+     *
+     * @param field field to check if it is selected
+     *
+     */
+    isSelected(field) {
+        // OINOLog.debug("OINODbSqlSelect.isSelected", {column:column, columns:this._columns})
+        return ((this._columns.length == 0) || (field.fieldParams.isPrimaryKey == true) || (this._columns.includes(field.name)));
     }
 }

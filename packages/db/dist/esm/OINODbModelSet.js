@@ -16,6 +16,8 @@ export class OINODbModelSet {
     datamodel;
     /** Reference to data set */
     dataset;
+    /** SQL parameters */
+    sqlParams;
     /** Collection of errors */
     errors;
     /**
@@ -23,10 +25,12 @@ export class OINODbModelSet {
      *
      * @param datamodel data model
      * @param dataset data set
+     * @param sqlParams SQL parameters
      */
-    constructor(datamodel, dataset) {
+    constructor(datamodel, dataset, sqlParams) {
         this.datamodel = datamodel;
         this.dataset = dataset;
+        this.sqlParams = sqlParams;
         this.errors = this.dataset.messages;
     }
     _encodeAndHashFieldValue(field, value, contentType, primaryKeyValues, rowIdSeed) {
@@ -51,6 +55,9 @@ export class OINODbModelSet {
         let json_row = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue;
+            }
             let value = f.serializeCell(row[i]);
             if (value === undefined) {
                 // OINOLog.info("OINODbModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
@@ -106,6 +113,9 @@ export class OINODbModelSet {
         let csv_row = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue;
+            }
             let value = f.serializeCell(row[i]);
             if (value == null) {
                 csv_row += "," + OINOStr.encode(value, OINOContentType.csv); // either null or undefined
@@ -154,6 +164,9 @@ export class OINODbModelSet {
         let result = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue;
+            }
             let value = f.serializeCell(row[i]);
             let formdata_block = "";
             let is_file = (f instanceof OINOBlobDataField);
@@ -193,6 +206,9 @@ export class OINODbModelSet {
         let urlencode_row = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue;
+            }
             let value = f.serializeCell(row[i]);
             if ((value === undefined)) { // || (value === null)) {
                 // console.log("OINODbModelSet._writeRowUrlencode undefined field value:" + fields[i].name)

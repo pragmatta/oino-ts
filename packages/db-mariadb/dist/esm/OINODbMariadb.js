@@ -219,8 +219,17 @@ export class OINODbMariadb extends OINODb {
             }
         }
         else {
-            return "\"" + cellValue?.toString().replaceAll("\\", "\\\\").replaceAll("\"", "\\\"").replaceAll("\r", "\\r").replaceAll("\n", "\\n").replaceAll("\t", "\\t") + "\"";
+            return this.printSqlString(cellValue?.toString());
         }
+    }
+    /**
+     * Print a single string value as valid sql literal
+     *
+     * @param sqlString string value
+     *
+     */
+    printSqlString(sqlString) {
+        return "\"" + sqlString.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"").replaceAll("\r", "\\r").replaceAll("\n", "\\n").replaceAll("\t", "\\t") + "\"";
     }
     /**
      * Parse a single SQL result value for serialization using the context of the native data

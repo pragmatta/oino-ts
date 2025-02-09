@@ -5,14 +5,14 @@ export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PR
 
 import { OINODb } from "./OINODb.js"
 import { OINODbDataField } from "./OINODbDataField.js"
-import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder } from "./OINODbSqlParams.js"
+import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder, OINODbSqlSelect } from "./OINODbSqlParams.js"
 
 export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi } from "./OINODbApi.js"
 export { OINODbDataModel } from "./OINODbDataModel.js"
 export { OINODbModelSet } from "./OINODbModelSet.js"
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js"
 export { OINODbDataSet, OINODbMemoryDataSet, OINODb } from "./OINODb.js"
-export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation, OINODbSqlAggregate, OINODbSqlAggregateFunctions } from "./OINODbSqlParams.js"
+export { OINODbSqlFilter, OINODbSqlOrder, OINODbSqlComparison, OINODbSqlLimit, OINODbSqlBooleanOperation, OINODbSqlAggregate, OINODbSqlAggregateFunctions, OINODbSqlSelect } from "./OINODbSqlParams.js"
 export { OINODbConfig } from "./OINODbConfig.js"
 export { OINODbFactory } from "./OINODbFactory.js"
 export { OINODbSwagger } from "./OINODbSwagger.js"
@@ -98,6 +98,8 @@ export type OINODbSqlParams = {
     limit?:OINODbSqlLimit
     /** SQL aggregation functions */
     aggregate?:OINODbSqlAggregate
+    /** SQL select condition */
+    select?:OINODbSqlSelect
 }
 
 /** Request options */
@@ -124,6 +126,8 @@ export type OINODataRow = Array<OINODataCell>
 export const OINODB_EMPTY_ROW:OINODataRow = []
 /** Empty row array instance */
 export const OINODB_EMPTY_ROWS:OINODataRow[] = [OINODB_EMPTY_ROW]
+/** Constant for undefined values */
+export const OINODB_UNDEFINED = "" // original idea was to have a defined literal that get's swapped back to undefined, but current implementation just leaves it out at serialization (so value does not matter)
 
 /** Key-value collection */
 export type OINOValues = Record<string, string>

@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODbDataModel, OINOStringDataField, OINO_ERROR_PREFIX, OINODbModelSet, OINOBenchmark, OINODbConfig, OINOHtmlTemplate, OINONumberDataField, OINODbParser } from "./index.js";
+import { OINODbDataModel, OINOStringDataField, OINO_ERROR_PREFIX, OINODbModelSet, OINOBenchmark, OINODbConfig, OINOHtmlTemplate, OINONumberDataField, OINODbParser, OINODatetimeDataField } from "./index.js";
 import { OINOResult } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid";
 const API_EMPTY_PARAMS = { sqlParams: {} };
@@ -55,6 +55,41 @@ export class OINODbApiResult extends OINOResult {
  *
  */
 export class OINODbHtmlTemplate extends OINOHtmlTemplate {
+    /** Datetime format string */
+    localeStr;
+    /** Locale formatter */
+    _locale;
+    /**
+     * Constructor of OINODbHtmlTemplate.
+     *
+     * @param template HTML template string
+     * @param localeStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
+     * @param localeStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
+     *
+     */
+    constructor(template, localeStr = "iso", localeStyle = "medium") {
+        super(template);
+        const supported_locales = Intl.DateTimeFormat.supportedLocalesOf([localeStr]);
+        let locale_opts;
+        if (typeof localeStyle == "string") {
+            locale_opts = { dateStyle: localeStyle, timeStyle: localeStyle };
+        }
+        else {
+            locale_opts = localeStyle;
+        }
+        if ((localeStr == "iso") || (localeStr == "") || (supported_locales.length == 0)) {
+            this._locale = null;
+            this.localeStr = "iso";
+        }
+        else if (localeStr == "default") {
+            this._locale = new Intl.DateTimeFormat(undefined, locale_opts);
+            this.localeStr = "default";
+        }
+        else {
+            this.localeStr = supported_locales[0];
+            this._locale = new Intl.DateTimeFormat(supported_locales[0], locale_opts);
+        }
+    }
     /**
      * Creates HTML Response from API modelset.
      *
@@ -84,7 +119,13 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             // let html_row:string = this.template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
             for (let i = 0; i < datamodel.fields.length; i++) {
                 const f = datamodel.fields[i];
-                let value = f.serializeCell(row[i]);
+                let value;
+                if ((this._locale != null) && (f instanceof OINODatetimeDataField)) {
+                    value = f.serializeCellWithLocale(row[i], this._locale);
+                }
+                else {
+                    value = f.serializeCell(row[i]);
+                }
                 if (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) {
                     if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                         value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed);
@@ -190,7 +231,7 @@ export class OINODbApi {
                 result.addDebug("OINO GET SQL [" + sql + "]", "DoPut");
             }
             else {
-                result.data = new OINODbModelSet(this.datamodel, sql_res);
+                result.data = new OINODbModelSet(this.datamodel, sql_res, params.sqlParams);
             }
         }
         catch (e) {

@@ -1,4 +1,4 @@
-import { OINODbDataModel } from "./index.js";
+import { OINODbDataField, OINODbDataModel } from "./index.js";
 /**
  * Supported logical conjunctions in filter predicates.
  * @enum
@@ -195,7 +195,47 @@ export declare class OINODbSqlAggregate {
      * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
      *
      * @param dataModel data model (and database) to use for formatting of values
+     * @param select what fields to select
      *
      */
-    printSqlColumnNames(dataModel: OINODbDataModel): string;
+    printSqlColumnNames(dataModel: OINODbDataModel, select?: OINODbSqlSelect): string;
+    /**
+     * Does filter contain any valid conditions.
+     *
+     * @param field field to check if it is aggregated
+     */
+    isAggregated(field: OINODbDataField): boolean;
+}
+/**
+ * Class for ordering select results on a number of columns.
+ *
+ */
+export declare class OINODbSqlSelect {
+    private _columns;
+    /**
+     * Constructor for `OINODbSqlSelect`.
+     *
+     * @param columns array of columns to select
+     *
+     */
+    constructor(columns: string[]);
+    /**
+     * Constructor for `OINODbSqlSelect` as parser of http parameter.
+     *
+     * @param columns comma separatef string selected columns from HTTP-request
+     *
+     */
+    static parse(columns: string): OINODbSqlSelect;
+    /**
+     * Does select contain any valid columns.
+     *
+     */
+    isEmpty(): boolean;
+    /**
+     * Does select include given column.
+     *
+     * @param field field to check if it is selected
+     *
+     */
+    isSelected(field: OINODbDataField): boolean;
 }

@@ -4,8 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODb, OINODbConstructor, OINODbApiRequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlParams } from "./index.js"
-import { OINODbSqlAggregate } from "./OINODbSqlParams.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODb, OINODbConstructor, OINODbApiRequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlParams, OINODbSqlAggregate, OINODbSqlSelect } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -79,6 +78,10 @@ export class OINODbFactory {
         const aggregate = url.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM)
         if (aggregate) {
             sql_params.aggregate = OINODbSqlAggregate.parse(aggregate)
+        }
+        const select = url.searchParams.get(OINODbConfig.OINODB_SQL_SELECT_PARAM)
+        if (select) {
+            sql_params.select = OINODbSqlSelect.parse(select)
         }
 
         let result:OINODbApiRequestParams = { sqlParams: sql_params }
