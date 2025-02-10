@@ -188,9 +188,10 @@ export declare class OINODbSqlAggregate {
      * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
      *
      * @param dataModel data model (and database) to use for formatting of values
+     * @param select what fields to select
      *
      */
-    toSql(dataModel: OINODbDataModel): string;
+    toSql(dataModel: OINODbDataModel, select?: OINODbSqlSelect): string;
     /**
      * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
      *

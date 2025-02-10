@@ -392,16 +392,18 @@ export class OINODbSqlAggregate {
      * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
      *
      * @param dataModel data model (and database) to use for formatting of values
+     * @param select what fields to select
      *
      */
-    toSql(dataModel) {
+    toSql(dataModel, select) {
         if (this.isEmpty()) {
             return "";
         }
         let result = "";
         for (let i = 0; i < dataModel.fields.length; i++) {
-            if (this._fields.includes(dataModel.fields[i].name) == false) {
-                result += dataModel.fields[i].printSqlColumnName() + ",";
+            const f = dataModel.fields[i];
+            if (select?.isSelected(f) && (this._fields.includes(f.name) == false)) {
+                result += f.printSqlColumnName() + ",";
             }
         }
         // OINOLog.debug("OINODbSqlAggregate.toSql", {result:result})
@@ -418,8 +420,8 @@ export class OINODbSqlAggregate {
         let result = "";
         for (let i = 0; i < dataModel.fields.length; i++) {
             const f = dataModel.fields[i];
-            if (select?.isSelected(f) == false) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
-                result += f.db.printSqlString(OINODB_UNDEFINED) + " as " + f.printSqlColumnName() + ",";
+            if (select?.isSelected(f) == false) { // if a field is not selected, we include an aggregated constant (min of const string) and correct fieldname instead so that dimensions of the data don't change, it does not need a group by but no unnecessary data is fetched
+                result += OINODbSqlAggregateFunctions.min + "(" + f.db.printSqlString(OINODB_UNDEFINED) + ") as " + f.printSqlColumnName() + ",";
             }
             else {
                 const aggregate_index = this._fields.indexOf(f.name);

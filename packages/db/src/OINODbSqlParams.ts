@@ -397,16 +397,17 @@ export class OINODbSqlAggregate {
      * Print non-aggregated fields as SQL GROUP BY-condition based on the datamodel of the API.
      * 
      * @param dataModel data model (and database) to use for formatting of values
+     * @param select what fields to select 
      *
      */
-    toSql(dataModel:OINODbDataModel, select:OINODbSqlSelect):string {
+    toSql(dataModel:OINODbDataModel, select?:OINODbSqlSelect):string {
         if (this.isEmpty()) {
             return ""
         }
         let result:string = ""
         for (let i=0; i<dataModel.fields.length; i++) {
             const f = dataModel.fields[i]
-            if (select.isSelected(f) && (this._fields.includes(f.name) == false)) {
+            if (select?.isSelected(f) && (this._fields.includes(f.name) == false)) {
                 result += f.printSqlColumnName() + ","
             }
         }
