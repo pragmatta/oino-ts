@@ -60,7 +60,7 @@ exports.OINODbApiResult = OINODbApiResult;
  */
 class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
     /** Locale validation regex */
-    static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/g;
+    static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/;
     /** Locale formatter */
     _locale;
     /**

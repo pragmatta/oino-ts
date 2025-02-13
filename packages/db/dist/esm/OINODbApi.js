@@ -56,7 +56,7 @@ export class OINODbApiResult extends OINOResult {
  */
 export class OINODbHtmlTemplate extends OINOHtmlTemplate {
     /** Locale validation regex */
-    static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/g;
+    static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/;
     /** Locale formatter */
     _locale;
     /**
