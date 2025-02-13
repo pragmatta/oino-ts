@@ -62,7 +62,7 @@ export class OINODbApiResult extends OINOResult {
  */
 export class OINODbHtmlTemplate extends OINOHtmlTemplate {
     /** Locale validation regex */
-    static LOCALE_REGEX:RegExp = /^(\w\w)(\-\w\w)?$/g
+    static LOCALE_REGEX:RegExp = /^(\w\w)(\-\w\w)?$/
     /** Locale formatter */
     protected _locale:Intl.DateTimeFormat|null
 
