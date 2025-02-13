@@ -61,8 +61,7 @@ export class OINODbApiResult extends OINOResult {
  *
  */
 export class OINODbHtmlTemplate extends OINOHtmlTemplate {
-    /** Datetime format string */
-    localeStr:string
+    static LOCALE_REGEX:RegExp = /^(\w\w)(\-\w\w)?$/g
     /** Locale formatter */
     protected _locale:Intl.DateTimeFormat|null
 
@@ -70,29 +69,27 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
      * Constructor of OINODbHtmlTemplate.
      *
      * @param template HTML template string
-     * @param localeStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
-     * @param localeStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
+     * @param dateLocaleStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
+     * @param dateLocaleStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
      * 
      */
-    constructor (template:string, localeStr:string = "iso", localeStyle:string|any = "medium") {
+    constructor (template:string, dateLocaleStr?:string, dateLocaleStyle?:string|any) {
         super(template)
-        const supported_locales = Intl.DateTimeFormat.supportedLocalesOf([localeStr])
+        console.log("OINODbHtmlTemplate.constructor", {dateLocaleStr:dateLocaleStr, dateLocaleStyle:dateLocaleStyle})
         let locale_opts:any
-        if (typeof localeStyle == "string") {
-            locale_opts = { dateStyle: localeStyle, timeStyle: localeStyle }
+        if ((dateLocaleStyle == null) || (dateLocaleStyle == "")) {
+            locale_opts = { dateStyle: "medium", timeStyle: "medium" }
+        } else if (typeof dateLocaleStyle == "string") {
+            locale_opts = { dateStyle: dateLocaleStyle, timeStyle: dateLocaleStyle }
         } else {
-            locale_opts = localeStyle
+            locale_opts = dateLocaleStyle
         }
+        this._locale = null
 
-        if ((localeStr == "iso") || (localeStr == "") || (supported_locales.length == 0)) {
-            this._locale = null
-            this.localeStr = "iso"
-        } else if (localeStr == "default") {
-            this._locale = new Intl.DateTimeFormat(undefined, locale_opts)
-            this.localeStr = "default"
-        } else {
-            this.localeStr = supported_locales[0]
-            this._locale = new Intl.DateTimeFormat(supported_locales[0], locale_opts)
+        if ((dateLocaleStr != null) && (dateLocaleStr != "") && OINODbHtmlTemplate.LOCALE_REGEX.test(dateLocaleStr)) {
+            try {
+                this._locale = new Intl.DateTimeFormat(dateLocaleStr, locale_opts)
+            } catch (e:any) {}
         }
     }
 
