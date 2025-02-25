@@ -24,12 +24,15 @@ export class OINODbSwagger {
     }
 
     private static _getSchemaApiMethodParamsBody(tableName:string): any {
-        return {
-            "schema": {
-                "$ref": "#/components/schemas/" + tableName
-            },
-            "in": "body",
-            "required": true
+        return  {
+            "required": true,
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/" + tableName
+                    }
+                }
+            }
         }
     }
 
@@ -134,29 +137,26 @@ export class OINODbSwagger {
         }
     }
 
-    private static _getSchemaApiMethodParams(tableName:string, hasQueryIdParam:boolean, hasResultData:boolean) {
-        if (hasResultData && hasQueryIdParam) {
+    private static _getSchemaApiMethodParams(hasQueryIdParam:boolean) {
+        if (hasQueryIdParam) {
             return [ this._getSchemaApiMethodParamsQueryId() ]
-
-        } else if (hasResultData) {
-            return []
-
-        } else if (hasQueryIdParam) {
-            return [ this._getSchemaApiMethodParamsQueryId(), this._getSchemaApiMethodParamsBody(tableName) ]
-
         } else {
-            return [ this._getSchemaApiMethodParamsBody(tableName) ]
+            return [  ]
         }
     }
 
     private static _getSchemaApiMethod(method:string, tableName:string, hasQueryIdParam:boolean, hasBody:boolean, hasResultData:boolean) {
-        return {
+        const result:any = {
             responses: {
                 200: { description: this._getSchemaApiMethodDescription(method, tableName, hasQueryIdParam), content: { "application/json": { schema: this._getSchemaType(tableName, hasQueryIdParam, hasResultData) } } }
             },
             "operationId": this._getSchemaApiMethodOperationId(method, tableName, hasQueryIdParam),
-            "parameters": this._getSchemaApiMethodParams(tableName, hasQueryIdParam, hasResultData)
+            "parameters": this._getSchemaApiMethodParams(hasQueryIdParam)
         }
+        if (hasBody) {
+            result["requestBody"] = this._getSchemaApiMethodParamsBody(tableName)
+        }
+        return result
     }
 
     private static _getSwaggerApiPath(tableName:string, hasQueryIdParam:boolean):any {
