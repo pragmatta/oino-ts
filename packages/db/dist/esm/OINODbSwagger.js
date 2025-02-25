@@ -20,11 +20,14 @@ export class OINODbSwagger {
     }
     static _getSchemaApiMethodParamsBody(tableName) {
         return {
-            "schema": {
-                "$ref": "#/components/schemas/" + tableName
-            },
-            "in": "body",
-            "required": true
+            "required": true,
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/" + tableName
+                    }
+                }
+            }
         };
     }
     static _getSchemaApiMethodDescription(method, tableName, hasQueryIdParam) {
@@ -127,28 +130,26 @@ export class OINODbSwagger {
             return { "$ref": "#/components/schemas/OINOResponse" };
         }
     }
-    static _getSchemaApiMethodParams(tableName, hasQueryIdParam, hasResultData) {
-        if (hasResultData && hasQueryIdParam) {
+    static _getSchemaApiMethodParams(hasQueryIdParam) {
+        if (hasQueryIdParam) {
             return [this._getSchemaApiMethodParamsQueryId()];
         }
-        else if (hasResultData) {
-            return [];
-        }
-        else if (hasQueryIdParam) {
-            return [this._getSchemaApiMethodParamsQueryId(), this._getSchemaApiMethodParamsBody(tableName)];
-        }
         else {
-            return [this._getSchemaApiMethodParamsBody(tableName)];
+            return [];
         }
     }
     static _getSchemaApiMethod(method, tableName, hasQueryIdParam, hasBody, hasResultData) {
-        return {
+        const result = {
             responses: {
                 200: { description: this._getSchemaApiMethodDescription(method, tableName, hasQueryIdParam), content: { "application/json": { schema: this._getSchemaType(tableName, hasQueryIdParam, hasResultData) } } }
             },
             "operationId": this._getSchemaApiMethodOperationId(method, tableName, hasQueryIdParam),
-            "parameters": this._getSchemaApiMethodParams(tableName, hasQueryIdParam, hasResultData)
+            "parameters": this._getSchemaApiMethodParams(hasQueryIdParam)
         };
+        if (hasBody) {
+            result["requestBody"] = this._getSchemaApiMethodParamsBody(tableName);
+        }
+        return result;
     }
     static _getSwaggerApiPath(tableName, hasQueryIdParam) {
         if (hasQueryIdParam) {

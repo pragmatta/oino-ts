@@ -406,7 +406,7 @@ export class OINODbSqlAggregate {
                 result += f.printSqlColumnName() + ",";
             }
         }
-        // OINOLog.debug("OINODbSqlAggregate.toSql", {result:result})
+        OINOLog.debug("OINODbSqlAggregate.toSql", { result: result });
         return result.substring(0, result.length - 1);
     }
     /**

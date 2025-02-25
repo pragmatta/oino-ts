@@ -246,7 +246,7 @@ export class OINODbDataModel {
         const groupby_sql = params.aggregate?.toSql(this, params.select) || ""
         
         let where_sql = ""
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {order_sql:order_sql, limit_sql:limit_sql, filter_sql:filter_sql, aggregate_sql:aggregate_sql})
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {order_sql:order_sql, limit_sql:limit_sql, filter_sql:filter_sql, groupby_sql:groupby_sql})
         if ((id != null) && (id != "") && (filter_sql != ""))  {
             where_sql = this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql
         } else if ((id != null) && (id != "")) {
@@ -255,7 +255,7 @@ export class OINODbDataModel {
             where_sql = filter_sql
         }
         const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql)
-        OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
+        // OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
         return result;
     }
 

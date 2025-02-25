@@ -412,7 +412,7 @@ class OINODbSqlAggregate {
                 result += f.printSqlColumnName() + ",";
             }
         }
-        // OINOLog.debug("OINODbSqlAggregate.toSql", {result:result})
+        index_js_1.OINOLog.debug("OINODbSqlAggregate.toSql", { result: result });
         return result.substring(0, result.length - 1);
     }
     /**
