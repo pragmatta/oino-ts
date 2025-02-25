@@ -76,7 +76,6 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
      */
     constructor (template:string, dateLocaleStr?:string, dateLocaleStyle?:string|any) {
         super(template)
-        console.log("OINODbHtmlTemplate.constructor", {dateLocaleStr:dateLocaleStr, dateLocaleStyle:dateLocaleStyle})
         let locale_opts:any
         if ((dateLocaleStyle == null) || (dateLocaleStyle == "")) {
             locale_opts = { dateStyle: "medium", timeStyle: "medium" }
