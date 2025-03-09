@@ -86,23 +86,23 @@ export class OINODbFactory {
 
         let result:OINODbApiRequestParams = { sqlParams: sql_params }
 
-        const content_type = request.headers.get("content-type")
-        if (content_type == OINOContentType.csv) {
+        const request_type = url.searchParams.get(OINODbConfig.OINODB_REQUEST_TYPE) || request.headers.get("content-type") // content-type header can be overridden by query parameter
+        if (request_type == OINOContentType.csv) {
             result.requestType = OINOContentType.csv
 
-        } else if (content_type == OINOContentType.urlencode) {
+        } else if (request_type == OINOContentType.urlencode) {
             result.requestType = OINOContentType.urlencode
 
-        } else if (content_type?.startsWith(OINOContentType.formdata)) {
+        } else if (request_type?.startsWith(OINOContentType.formdata)) {
             result.requestType = OINOContentType.formdata
-            result.multipartBoundary = content_type.split('boundary=')[1] || ""
+            result.multipartBoundary = request_type.split('boundary=')[1] || ""
 
         } else {
             result.requestType = OINOContentType.json
         }
-        const accept = request.headers.get("accept")
+        const response_type = url.searchParams.get(OINODbConfig.OINODB_RESPONSE_TYPE) || request.headers.get("accept") // accept header can be overridden by query parameter
         // OINOLog.debug("createParamsFromRequest: accept headers", {accept:accept})
-        const accept_types = accept?.split(', ') || []
+        const accept_types = response_type?.split(', ') || []
         for (let i=0; i<accept_types.length; i++) {
             if (Object.values(OINOContentType).includes(accept_types[i] as OINOContentType)) {
                 result.responseType = accept_types[i] as OINOContentType

@@ -81,23 +81,23 @@ class OINODbFactory {
             sql_params.select = index_js_1.OINODbSqlSelect.parse(select);
         }
         let result = { sqlParams: sql_params };
-        const content_type = request.headers.get("content-type");
-        if (content_type == index_js_1.OINOContentType.csv) {
+        const request_type = url.searchParams.get(index_js_1.OINODbConfig.OINODB_REQUEST_TYPE) || request.headers.get("content-type"); // content-type header can be overridden by query parameter
+        if (request_type == index_js_1.OINOContentType.csv) {
             result.requestType = index_js_1.OINOContentType.csv;
         }
-        else if (content_type == index_js_1.OINOContentType.urlencode) {
+        else if (request_type == index_js_1.OINOContentType.urlencode) {
             result.requestType = index_js_1.OINOContentType.urlencode;
         }
-        else if (content_type?.startsWith(index_js_1.OINOContentType.formdata)) {
+        else if (request_type?.startsWith(index_js_1.OINOContentType.formdata)) {
             result.requestType = index_js_1.OINOContentType.formdata;
-            result.multipartBoundary = content_type.split('boundary=')[1] || "";
+            result.multipartBoundary = request_type.split('boundary=')[1] || "";
         }
         else {
             result.requestType = index_js_1.OINOContentType.json;
         }
-        const accept = request.headers.get("accept");
+        const response_type = url.searchParams.get(index_js_1.OINODbConfig.OINODB_RESPONSE_TYPE) || request.headers.get("accept"); // accept header can be overridden by query parameter
         // OINOLog.debug("createParamsFromRequest: accept headers", {accept:accept})
-        const accept_types = accept?.split(', ') || [];
+        const accept_types = response_type?.split(', ') || [];
         for (let i = 0; i < accept_types.length; i++) {
             if (Object.values(index_js_1.OINOContentType).includes(accept_types[i])) {
                 result.responseType = accept_types[i];
