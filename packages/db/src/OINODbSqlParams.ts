@@ -196,7 +196,7 @@ export class OINODbSqlOrder {
      *
      */
     constructor(column_or_array:string[]|string, descending_or_array:boolean[]|boolean) {
-        OINOLog.debug("OINODbSqlOrder.constructor", {columns:column_or_array, directions:descending_or_array})
+        // OINOLog.debug("OINODbSqlOrder.constructor", {columns:column_or_array, directions:descending_or_array})
         if (Array.isArray(column_or_array)) {
             this._columns = column_or_array
         } else {

@@ -159,6 +159,17 @@ export class OINOResult {
     }
 
     /**
+     * Get a Response object from the result values.
+     * 
+     * @param headers HTTP headers (overrides existing values)
+     */
+    getResponse(headers?:Record<string, string>):Response {
+        const result:Response = new Response(this.statusMessage, {status:this.statusCode, headers: headers})
+        result.headers.set('Content-Length', this.statusMessage.length.toString())
+        return result
+    }
+
+    /**
      * Print result for logging.
      * 
      */
