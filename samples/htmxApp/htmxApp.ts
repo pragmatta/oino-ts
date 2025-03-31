@@ -51,7 +51,7 @@ function hostFile(path: string, contentType: string, data?:any): Response {
 		let file_content: string = readFileSync("." + path, { encoding: "utf8" });
 		const template:OINOHtmlTemplate = new OINOHtmlTemplate(file_content)
 		const http_result = template.renderFromObject(data)
-		return http_result.getResponse( { "Content-Type": contentType })
+		return http_result.getHttpResponse( { "Content-Type": contentType })
 	} else {
 		return new Response("", { status: 404, statusText: "File not found" });
 	}
@@ -110,7 +110,7 @@ try {
 					const template:OINODbHtmlTemplate = await getTemplate(id, "", operation, "")
 					if (template) {
 						const http_result:OINOHttpResult = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id)
-						response = http_result.getResponse(response_headers)
+						response = http_result.getHttpResponse(response_headers)
 					} else {
 						response = new Response("Template not found!", {status:404, statusText: "Template not found!", headers: response_headers })	
 					}
@@ -124,7 +124,7 @@ try {
 						response = await http_result.getHttpResponse(response_headers)
 					} else {
 						OINOLog.debug("index.ts / template with id") 
-						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getResponse(response_headers)
+						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getHttpResponse(response_headers)
 					}
 					if (request.method == "POST") {
 						response.headers.set('HX-Trigger', 'OINODbApiTrigger-' + api.params.tableName)
