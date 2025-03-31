@@ -41,7 +41,7 @@ export class OINODbApiResult extends OINOResult {
      * @param headers Headers to include in the response
      * 
      */
-    async getResponse(headers:Record<string, string> = {}):Promise<Response> {
+    async writeApiResponse(headers:Record<string, string> = {}):Promise<Response> {
         let response:Response|null = null
         if (this.success && this.data) {
             const body = await this.data.writeString(this.params.responseType)

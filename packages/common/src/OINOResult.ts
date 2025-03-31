@@ -165,6 +165,18 @@ export class OINOResult {
     printLog() {
         return "OINOResult: statusCode=" + this.statusCode + ", statusMessage=" + this.statusMessage + ", messages=[" + this.messages.join(", ") + "]"
     }
+
+    /**
+     * Get a Response object from the result values.
+     * 
+     * @param headers HTTP headers (overrides existing values)
+     */
+    getStatusResponse(headers?:Record<string, string>):Response {
+        const result:Response = new Response(this.statusMessage, {status:this.statusCode, headers: headers})
+        result.headers.set('Content-Length', this.statusMessage.length.toString())
+        return result
+    }
+
 }
 
 /**
@@ -213,7 +225,7 @@ export class OINOHttpResult extends OINOResult {
      * 
      * @param headers HTTP headers (overrides existing values)
      */
-    getResponse(headers?:Record<string, string>):Response {
+    getHttpResponse(headers?:Record<string, string>):Response {
         const result:Response = new Response(this.body, {status:this.statusCode, statusText: this.statusMessage, headers: headers})
         result.headers.set('Content-Length', this.body.length.toString())
         if (this.lastModified > 0) {
@@ -228,7 +240,5 @@ export class OINOHttpResult extends OINOResult {
         result.headers.set("ETag", this.getEtag())
         return result
     }
-
-
 
 }
