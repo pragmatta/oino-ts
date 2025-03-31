@@ -157,7 +157,7 @@ export class OINOResult {
      *
      * @param headers HTTP headers (overrides existing values)
      */
-    getResponse(headers) {
+    getStatusResponse(headers) {
         const result = new Response(this.statusMessage, { status: this.statusCode, headers: headers });
         result.headers.set('Content-Length', this.statusMessage.length.toString());
         return result;

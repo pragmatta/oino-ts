@@ -82,7 +82,7 @@ export declare class OINOResult {
      *
      * @param headers HTTP headers (overrides existing values)
      */
-    getResponse(headers?: Record<string, string>): Response;
+    getStatusResponse(headers?: Record<string, string>): Response;
 }
 /**
  * Specialized result for HTTP responses.
