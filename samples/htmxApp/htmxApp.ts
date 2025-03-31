@@ -121,7 +121,7 @@ try {
 					if (api_result.data?.dataset) {
 						OINOLog.debug("index.ts / template render", {is_empty:api_result.data.dataset.isEmpty()}) 
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
-						response = await http_result.getResponse(response_headers)
+						response = await http_result.getHttpResponse(response_headers)
 					} else {
 						OINOLog.debug("index.ts / template with id") 
 						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getResponse(response_headers)

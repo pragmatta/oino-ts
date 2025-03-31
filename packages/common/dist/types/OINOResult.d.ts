@@ -77,6 +77,12 @@ export declare class OINOResult {
      *
      */
     printLog(): string;
+    /**
+     * Get a Response object from the result values.
+     *
+     * @param headers HTTP headers (overrides existing values)
+     */
+    getResponse(headers?: Record<string, string>): Response;
 }
 /**
  * Specialized result for HTTP responses.
@@ -106,5 +112,5 @@ export declare class OINOHttpResult extends OINOResult {
      *
      * @param headers HTTP headers (overrides existing values)
      */
-    getResponse(headers?: Record<string, string>): Response;
+    getHttpResponse(headers?: Record<string, string>): Response;
 }

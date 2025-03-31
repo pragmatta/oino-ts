@@ -25,7 +25,7 @@ export declare class OINODbApiResult extends OINOResult {
      * @param headers Headers to include in the response
      *
      */
-    getResponse(headers?: Record<string, string>): Promise<Response>;
+    writeApiResponse(headers?: Record<string, string>): Promise<Response>;
 }
 /**
  * Specialized HTML template that can render ´OINODbApiResult´.

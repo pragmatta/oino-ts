@@ -38,7 +38,7 @@ class OINODbApiResult extends common_1.OINOResult {
      * @param headers Headers to include in the response
      *
      */
-    async getResponse(headers = {}) {
+    async writeApiResponse(headers = {}) {
         let response = null;
         if (this.success && this.data) {
             const body = await this.data.writeString(this.params.responseType);
