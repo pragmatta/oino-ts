@@ -128,7 +128,7 @@ export class OINODbBunSqlite extends OINODb {
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (typeof (sqlValue) == "string")) {
+        else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
         else {

@@ -242,7 +242,7 @@ class OINODbMsSql extends db_1.OINODb {
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2")) && (typeof (sqlValue) == "string")) {
+        else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
         else {
