@@ -210,7 +210,7 @@ export class OINODbPostgresql extends OINODb {
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((sqlType == "date")) && (typeof (sqlValue) == "string")) {
+        else if (((sqlType == "date")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
         else {
