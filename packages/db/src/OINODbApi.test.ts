@@ -12,7 +12,7 @@ import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { OINODbMariadb } from "@oino-ts/db-mariadb"
 import { OINODbMsSql } from "@oino-ts/db-mssql"
-import { OINODbSqlAggregate } from "./OINODbSqlParams.js";
+import { OINODbSqlAggregate, OINODbSqlSelect } from "./OINODbSqlParams.js";
 
 const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set") || ""
 const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set") || ""
@@ -67,7 +67,7 @@ const api_tests:OINOTestParams[] = [
         name: "API 4",
         apiParams: { apiName: "OrderDetails", tableName: "OrderDetails" },
         requestParams: {
-            sqlParams: { aggregate: OINODbSqlAggregate.parse("count(ProductID),avg(UnitPrice),sum(Quantity),max(Discount)") }
+            sqlParams: { aggregate: OINODbSqlAggregate.parse("count(OrderID),count(ProductID),avg(UnitPrice),sum(Quantity)"), select: OINODbSqlSelect.parse("OrderID,ProductID,UnitPrice,Quantity,Discount"), order: OINODbSqlOrder.parse("Discount asc") }
         },
         postRow: [10249,77,12.34,56,0],
         putRow: [10249,77,23.45,67,0]

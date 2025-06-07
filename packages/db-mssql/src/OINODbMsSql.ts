@@ -287,6 +287,9 @@ export class OINODbMsSql extends OINODb {
         if (whereCondition != "")  {
             result += " WHERE " + whereCondition
         }
+        if (groupByCondition != "") {
+            result += " GROUP BY " + groupByCondition 
+        }
         if (orderCondition != "") {
             result += " ORDER BY " + orderCondition 
         }
@@ -296,9 +299,6 @@ export class OINODbMsSql extends OINODb {
             } else {
                 result += " OFFSET " + limit_parts[1] + " ROWS FETCH NEXT " + limit_parts[0] + " ROWS ONLY"
             }
-        }
-        if (groupByCondition != "") {
-            result += " GROUP BY " + groupByCondition 
         }
         result += ";"
         // OINOLog.debug("OINODb.printSqlSelect", {result:result})
