@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbParams, OINODbApi, OINODataCell, OINO_ERROR_PREFIX, OINODataRow, OINODB_EMPTY_ROW } from "./index.js"
+import { OINODbParams, OINODbApi, OINODataCell, OINO_ERROR_PREFIX, OINODataRow, OINODB_EMPTY_ROW, OINOResult } from "./index.js"
 
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data 
@@ -32,6 +32,12 @@ export abstract class OINODb {
      *
      */
     abstract connect(): Promise<boolean>
+    
+    /**
+     * Validate connection to database is working. 
+     *
+     */
+    abstract validate(): Promise<OINOResult>
     
     /**
      * Print a table name using database specific SQL escaping.

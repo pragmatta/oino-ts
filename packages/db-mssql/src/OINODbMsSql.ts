@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS, OINOLog } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS, OINOLog, OINOResult } from "@oino-ts/db";
 
 import {ConnectionPool, config} from "mssql";
 
@@ -323,6 +323,37 @@ export class OINODbMsSql extends OINODb {
     }
 
     /**
+     * Validate connection to database is working. 
+     *
+     */
+    async validate(): Promise<OINOResult> {
+        OINOBenchmark.start("OINODb", "validate")
+        let result:OINOResult = new OINOResult()
+        try {
+            const sql = this._getValidateSql(this._params.database)
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql:sql})
+            const sql_res:OINODbDataSet = await this.sqlSelect(sql)
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql_res:sql_res})
+            if (sql_res.isEmpty()) {
+                result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate")
+
+            } else if (sql_res.getRow().length == 0) {
+                result.setError(400, "DB returned no values for database!", "OINODbBunSqlite.validate")
+
+            } else if (sql_res.getRow()[0] == "0") {
+                result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate")
+
+            } else {
+                // connection is working
+            }
+        } catch (e:any) {
+            result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate")
+        }
+        OINOBenchmark.end("OINODb", "validate")
+        return result
+    }
+
+    /**
      * Execute a select operation.
      * 
      * @param sql SQL statement.
@@ -332,7 +363,7 @@ export class OINODbMsSql extends OINODb {
         OINOBenchmark.start("OINODb", "sqlSelect")
         let result:OINODbDataSet
         try {
-            // OINOLog.debug("OINODbMsSql.sqlSelect", {sql_rows:sql_rows})
+            // OINOLog.debug("OINODbMsSql.sqlSelect", {sql:sql})
             result = await this._query(sql)
 
         } catch (e:any) {
@@ -386,6 +417,24 @@ WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}'
 ORDER BY C.ORDINAL_POSITION;`
         return sql
     }
+
+    private _getValidateSql(dbName:string):string {
+        const sql =
+`SELECT 
+    count(C.COLUMN_NAME) AS COLUMN_COUNT
+FROM 
+    INFORMATION_SCHEMA.COLUMNS as C LEFT JOIN 
+    (
+    SELECT TC.TABLE_NAME, KU.COLUMN_NAME, STRING_AGG(TC.CONSTRAINT_TYPE, ',') as CONSTRAINT_TYPES
+    FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC 
+    INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KU ON TC.CONSTRAINT_NAME = KU.CONSTRAINT_NAME
+    GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
+    ) as CONST
+    ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
+WHERE C.TABLE_CATALOG = '${dbName}';`
+        return sql
+    }
+
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
      * the model.
