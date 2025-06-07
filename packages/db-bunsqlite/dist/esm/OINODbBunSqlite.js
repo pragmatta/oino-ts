@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODb, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODbMemoryDataSet, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr, OINOLog } from "@oino-ts/db";
+import { OINODb, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODbMemoryDataSet, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr, OINOLog, OINOResult } from "@oino-ts/db";
 import { Database as BunSqliteDb } from "bun:sqlite";
 /**
  * Implmentation of OINODbDataSet for BunSqlite.
@@ -152,6 +152,37 @@ export class OINODbBunSqlite extends OINODb {
         }
     }
     /**
+     * Validate connection to database is working.
+     *
+     */
+    async validate() {
+        OINOBenchmark.start("OINODb", "validate");
+        let result = new OINOResult();
+        try {
+            const sql = this._getValidateSql(this._params.database);
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql:sql})
+            const sql_res = await this.sqlSelect(sql);
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql_res:sql_res})
+            if (sql_res.isEmpty()) {
+                result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow().length == 0) {
+                result.setError(400, "DB returned no values for database!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow()[0] == "0") {
+                result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate");
+            }
+            else {
+                // connection is working
+            }
+        }
+        catch (e) {
+            result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate");
+        }
+        OINOBenchmark.end("OINODb", "validate");
+        return result;
+    }
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
@@ -189,6 +220,14 @@ export class OINODbBunSqlite extends OINODb {
         OINOBenchmark.end("OINODb", "sqlExec");
         return Promise.resolve(result);
     }
+    _getSchemaSql(dbName, tableName) {
+        const sql = "SELECT sql from sqlite_schema WHERE name='" + tableName + "'";
+        return sql;
+    }
+    _getValidateSql(dbName) {
+        const sql = "SELECT count(*) as COLUMN_COUNT from sqlite_schema";
+        return sql;
+    }
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
      * the model.
@@ -197,7 +236,8 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async initializeApiDatamodel(api) {
-        const res = await this.sqlSelect("select sql from sqlite_schema WHERE name='" + api.params.tableName + "'");
+        const schema_sql = this._getSchemaSql(this._params.database, api.params.tableName);
+        const res = await this.sqlSelect(schema_sql);
         const sql_desc = (res?.getRow()[0]);
         const excluded_fields = [];
         // OINOLog.debug("OINODbBunSqlite.initDatamodel.sql_desc=" + sql_desc)

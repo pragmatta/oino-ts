@@ -1,4 +1,4 @@
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell, OINOResult } from "@oino-ts/db";
 /**
  * Implementation of BunSqlite-database.
  *
@@ -60,6 +60,11 @@ export declare class OINODbBunSqlite extends OINODb {
      */
     connect(): Promise<boolean>;
     /**
+     * Validate connection to database is working.
+     *
+     */
+    validate(): Promise<OINOResult>;
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
@@ -73,6 +78,8 @@ export declare class OINODbBunSqlite extends OINODb {
      *
      */
     sqlExec(sql: string): Promise<OINODbDataSet>;
+    private _getSchemaSql;
+    private _getValidateSql;
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
      * the model.

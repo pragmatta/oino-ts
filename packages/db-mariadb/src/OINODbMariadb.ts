@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS, OINOLog } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS, OINOLog, OINOResult } from "@oino-ts/db";
 
 import mariadb from "mariadb";
 
@@ -299,6 +299,37 @@ export class OINODbMariadb extends OINODb {
     }
 
     /**
+     * Validate connection to database is working. 
+     *
+     */
+    async validate(): Promise<OINOResult> {
+        OINOBenchmark.start("OINODb", "validate")
+        let result:OINOResult = new OINOResult()
+        try {
+            const sql = this._getValidateSql(this._params.database)
+            // OINOLog.debug("OINODbMariadb.validate", {sql:sql})
+            const sql_res:OINODbDataSet = await this.sqlSelect(sql)
+            OINOLog.debug("OINODbMariadb.validate", {sql_res:sql_res})
+            if (sql_res.isEmpty()) {
+                result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate")
+
+            } else if (sql_res.getRow().length == 0) {
+                result.setError(400, "DB returned no values for database!", "OINODbMariadb.validate")
+
+            } else if (sql_res.getRow()[0] == "0") {
+                result.setError(400, "DB returned no schema for database!", "OINODbMariadb.validate")
+
+            } else {
+                // connection is working
+            }
+        } catch (e:any) {
+            result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbMariadb.validate exception in _db.query: " + e.message, "OINODbMariadb.validate")
+        }
+        OINOBenchmark.end("OINODb", "validate")
+        return result
+    }
+
+    /**
      * Execute a select operation.
      * 
      * @param sql SQL statement.
@@ -356,6 +387,17 @@ WHERE C.TABLE_SCHEMA = '${dbName}' AND C.TABLE_NAME = '${tableName}'
 ORDER BY C.ORDINAL_POSITION;`
         return sql
     }
+
+    private _getValidateSql(dbName:string):string {
+        const sql = 
+`SELECT
+    Count(c.COLUMN_NAME) AS COLUMN_COUNT
+FROM information_schema.COLUMNS C
+	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
+WHERE C.TABLE_SCHEMA = '${dbName}';`
+        return sql
+    }
+
 
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 

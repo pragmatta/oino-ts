@@ -271,6 +271,9 @@ class OINODbMsSql extends db_1.OINODb {
         if (whereCondition != "") {
             result += " WHERE " + whereCondition;
         }
+        if (groupByCondition != "") {
+            result += " GROUP BY " + groupByCondition;
+        }
         if (orderCondition != "") {
             result += " ORDER BY " + orderCondition;
         }
@@ -281,9 +284,6 @@ class OINODbMsSql extends db_1.OINODb {
             else {
                 result += " OFFSET " + limit_parts[1] + " ROWS FETCH NEXT " + limit_parts[0] + " ROWS ONLY";
             }
-        }
-        if (groupByCondition != "") {
-            result += " GROUP BY " + groupByCondition;
         }
         result += ";";
         // OINOLog.debug("OINODb.printSqlSelect", {result:result})
@@ -307,6 +307,37 @@ class OINODbMsSql extends db_1.OINODb {
         }
     }
     /**
+     * Validate connection to database is working.
+     *
+     */
+    async validate() {
+        db_1.OINOBenchmark.start("OINODb", "validate");
+        let result = new db_1.OINOResult();
+        try {
+            const sql = this._getValidateSql(this._params.database);
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql:sql})
+            const sql_res = await this.sqlSelect(sql);
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql_res:sql_res})
+            if (sql_res.isEmpty()) {
+                result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow().length == 0) {
+                result.setError(400, "DB returned no values for database!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow()[0] == "0") {
+                result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate");
+            }
+            else {
+                // connection is working
+            }
+        }
+        catch (e) {
+            result.setError(500, db_1.OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate");
+        }
+        db_1.OINOBenchmark.end("OINODb", "validate");
+        return result;
+    }
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
@@ -316,7 +347,7 @@ class OINODbMsSql extends db_1.OINODb {
         db_1.OINOBenchmark.start("OINODb", "sqlSelect");
         let result;
         try {
-            // OINOLog.debug("OINODbMsSql.sqlSelect", {sql_rows:sql_rows})
+            // OINOLog.debug("OINODbMsSql.sqlSelect", {sql:sql})
             result = await this._query(sql);
         }
         catch (e) {
@@ -365,6 +396,21 @@ FROM
     ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
 WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}'
 ORDER BY C.ORDINAL_POSITION;`;
+        return sql;
+    }
+    _getValidateSql(dbName) {
+        const sql = `SELECT 
+    count(C.COLUMN_NAME) AS COLUMN_COUNT
+FROM 
+    INFORMATION_SCHEMA.COLUMNS as C LEFT JOIN 
+    (
+    SELECT TC.TABLE_NAME, KU.COLUMN_NAME, STRING_AGG(TC.CONSTRAINT_TYPE, ',') as CONSTRAINT_TYPES
+    FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC 
+    INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KU ON TC.CONSTRAINT_NAME = KU.CONSTRAINT_NAME
+    GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
+    ) as CONST
+    ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
+WHERE C.TABLE_CATALOG = '${dbName}';`;
         return sql;
     }
     /**

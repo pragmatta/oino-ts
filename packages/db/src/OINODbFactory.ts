@@ -40,6 +40,10 @@ export class OINODbFactory {
             throw new Error("Unsupported database type: " + params.type)
         }
         await result.connect()
+        const validate_res = await result.validate()
+        if (validate_res.success == false) {
+            throw new Error("Database connection validation failed: " + validate_res.statusMessage)
+        }
         return result
     }
 
