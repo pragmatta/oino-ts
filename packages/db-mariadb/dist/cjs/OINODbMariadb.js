@@ -283,6 +283,37 @@ class OINODbMariadb extends db_1.OINODb {
         }
     }
     /**
+     * Validate connection to database is working.
+     *
+     */
+    async validate() {
+        db_1.OINOBenchmark.start("OINODb", "validate");
+        let result = new db_1.OINOResult();
+        try {
+            const sql = this._getValidateSql(this._params.database);
+            // OINOLog.debug("OINODbMariadb.validate", {sql:sql})
+            const sql_res = await this.sqlSelect(sql);
+            db_1.OINOLog.debug("OINODbMariadb.validate", { sql_res: sql_res });
+            if (sql_res.isEmpty()) {
+                result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate");
+            }
+            else if (sql_res.getRow().length == 0) {
+                result.setError(400, "DB returned no values for database!", "OINODbMariadb.validate");
+            }
+            else if (sql_res.getRow()[0] == "0") {
+                result.setError(400, "DB returned no schema for database!", "OINODbMariadb.validate");
+            }
+            else {
+                // connection is working
+            }
+        }
+        catch (e) {
+            result.setError(500, db_1.OINO_ERROR_PREFIX + " (validate): OINODbMariadb.validate exception in _db.query: " + e.message, "OINODbMariadb.validate");
+        }
+        db_1.OINOBenchmark.end("OINODb", "validate");
+        return result;
+    }
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
@@ -335,6 +366,14 @@ FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
 WHERE C.TABLE_SCHEMA = '${dbName}' AND C.TABLE_NAME = '${tableName}'
 ORDER BY C.ORDINAL_POSITION;`;
+        return sql;
+    }
+    _getValidateSql(dbName) {
+        const sql = `SELECT
+    Count(c.COLUMN_NAME) AS COLUMN_COUNT
+FROM information_schema.COLUMNS C
+	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
+WHERE C.TABLE_SCHEMA = '${dbName}';`;
         return sql;
     }
     /**

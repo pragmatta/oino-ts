@@ -238,6 +238,37 @@ class OINODbPostgresql extends db_1.OINODb {
         }
     }
     /**
+     * Validate connection to database is working.
+     *
+     */
+    async validate() {
+        db_1.OINOBenchmark.start("OINODb", "validate");
+        let result = new db_1.OINOResult();
+        try {
+            const sql = this._getValidateSql(this._params.database);
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql:sql})
+            const sql_res = await this.sqlSelect(sql);
+            // OINOLog.debug("OINODbBunSqlite.validate", {sql_res:sql_res})
+            if (sql_res.isEmpty()) {
+                result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow().length == 0) {
+                result.setError(400, "DB returned no values for database!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow()[0] == "0") {
+                result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate");
+            }
+            else {
+                // connection is working
+            }
+        }
+        catch (e) {
+            result.setError(500, db_1.OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate");
+        }
+        db_1.OINOBenchmark.end("OINODb", "validate");
+        return result;
+    }
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
@@ -301,6 +332,25 @@ LEFT JOIN LATERAL
         and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
 	group by kcu.column_name) con on col.column_name = con.column_name
 WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`;
+        return sql;
+    }
+    _getValidateSql(dbName) {
+        const sql = `SELECT 
+    count(col.column_name) AS column_count
+FROM information_schema.columns col
+LEFT JOIN LATERAL
+    (select kcu.column_name, STRING_AGG(tco.constraint_type,',') as constraint_type
+    from 
+        information_schema.table_constraints tco,
+        information_schema.key_column_usage kcu 	 
+    where 
+        kcu.constraint_name = tco.constraint_name
+        and kcu.constraint_schema = tco.constraint_schema
+		and tco.table_catalog = col.table_catalog
+		and tco.table_name = col.table_name
+        and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
+	group by kcu.column_name) con on col.column_name = con.column_name
+WHERE col.table_catalog = '${dbName}'`;
         return sql;
     }
     /**
