@@ -160,7 +160,7 @@ export class OINODbBunSqlite extends OINODb {
             // OINOLog.debug("OINODbBunSqlite.connect", {params:this._params})
             this._db = BunSqliteDb.open(filepath, { create: true, readonly: false, readwrite: true })        
             this.isConnected = true
-        } catch (err) {
+        } catch (err:any) {
             result.setError(500, "Exception connecting to database: " + err.message, "OINODbBunSqlite.connect")
             OINOLog.error(result.statusMessage, {error:err})
         }   

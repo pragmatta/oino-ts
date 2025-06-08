@@ -29,7 +29,7 @@ class OINODbFactory {
      *
      * @param params database connection parameters
      */
-    static async createDb(params) {
+    static async createDb(params, connect = true, validate = true) {
         let result;
         let db_type = this._dbRegistry[params.type];
         if (db_type) {
@@ -38,10 +38,17 @@ class OINODbFactory {
         else {
             throw new Error("Unsupported database type: " + params.type);
         }
-        await result.connect();
-        const validate_res = await result.validate();
-        if (validate_res.success == false) {
-            throw new Error("Database connection validation failed: " + validate_res.statusMessage);
+        if (connect) {
+            const connect_res = await result.connect();
+            if (connect_res.success == false) {
+                throw new Error("Database connection failed: " + connect_res.statusMessage);
+            }
+        }
+        if (validate) {
+            const validate_res = await result.validate();
+            if (validate_res.success == false) {
+                throw new Error("Database validation failed: " + validate_res.statusMessage);
+            }
         }
         return result;
     }

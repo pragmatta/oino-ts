@@ -319,7 +319,7 @@ export class OINODbMsSql extends OINODb {
             // await this._pool.request().query("SELECT 1 as test")
             this.isConnected = true
             
-        } catch (err) {
+        } catch (err:any) {
             // ... error checks
             result.setError(500, "Exception connecting to database: " + err.message, "OINODbMsSql.connect")
             OINOLog.error(result.statusMessage, {error:err})

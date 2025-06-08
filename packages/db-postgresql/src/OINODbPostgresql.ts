@@ -249,8 +249,8 @@ export class OINODbPostgresql extends OINODb {
             // OINOLog.debug("OINODbPostgresql.connect")
             await this._pool.connect()
             this.isConnected = true
-            
-        } catch (err) {
+
+        } catch (err:any) {
             result.setError(500, "Exception connecting to database: " + err.message, "OINODbPostgresql.connect")
             OINOLog.error(result.statusMessage, {error:err})
         }        
