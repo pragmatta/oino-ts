@@ -153,16 +153,18 @@ export class OINODbBunSqlite extends OINODb {
      * Connect to database.
      *
      */
-    connect(): Promise<boolean> {
+    async connect(): Promise<OINOResult> {
+        let result:OINOResult = new OINOResult()
         const filepath:string = this._params.url.substring(7)
         try {
             // OINOLog.debug("OINODbBunSqlite.connect", {params:this._params})
             this._db = BunSqliteDb.open(filepath, { create: true, readonly: false, readwrite: true })        
-            // OINOLog.debug("OINODbBunSqlite.connect done")
-            return Promise.resolve(true)
+            this.isConnected = true
         } catch (err) {
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Sqlite database ("+ filepath +"): " + err)
+            result.setError(500, "Exception connecting to database: " + err.message, "OINODbBunSqlite.connect")
+            OINOLog.error(result.statusMessage, {error:err})
         }   
+        return result
     }
 
     /**
@@ -187,7 +189,7 @@ export class OINODbBunSqlite extends OINODb {
                 result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate")
 
             } else {
-                // connection is working
+                this.isValidated = true
             }
         } catch (e:any) {
             result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate")

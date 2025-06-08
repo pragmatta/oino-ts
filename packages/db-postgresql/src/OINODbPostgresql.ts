@@ -101,20 +101,22 @@ export class OINODbPostgresql extends OINODb {
         if (this._params.type !== "OINODbPostgresql") {
             throw new Error(OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type)
         } 
-        const ssl_enabled:boolean = !(params.url == "localhost" || params.url == "127.0.0.1")
-        this._pool = new Pool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password, ssl: ssl_enabled })
+        const ssl_enabled:boolean = !(this._params.url == "localhost" || this._params.url == "127.0.0.1")
+        this._pool = new Pool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, ssl: ssl_enabled })
+        delete this._params.password
+
         this._pool.on("error", (err: any) => {
-            OINOLog.error("OINODbPostgresql error", {err:err})
+            OINOLog.error("OINODbPostgresql error event", {err:err})
         })
-        this._pool.on("connect", (message: any) => {
-            // OINOLog.info("OINODbPostgresql connect")
-        })
-        this._pool.on("release", (message: any) => {
-            // OINOLog.info("OINODbPostgresql notice")
-        })
-        this._pool.on("acquire", () => {
-            // OINOLog.info("OINODbPostgresql end")
-        })
+        // this._pool.on("connect", (message: any) => {
+        //     OINOLog.info("OINODbPostgresql connect")
+        // })
+        // this._pool.on("release", (message: any) => {
+        //     OINOLog.info("OINODbPostgresql notice")
+        // })
+        // this._pool.on("acquire", () => {
+        //     OINOLog.info("OINODbPostgresql end")
+        // })
     }
 
     private _parseFieldLength(fieldLength:OINODataCell):number {
@@ -240,17 +242,19 @@ export class OINODbPostgresql extends OINODb {
      * Connect to database.
      *
      */
-    async connect(): Promise<boolean> {
+    async connect(): Promise<OINOResult> {
+        let result:OINOResult = new OINOResult()
         try {
             // make sure that any items are correctly URL encoded in the connection string
             // OINOLog.debug("OINODbPostgresql.connect")
-            // await this._pool.connect()
-            // await this._client.connect()
-            return Promise.resolve(true)
+            await this._pool.connect()
+            this.isConnected = true
+            
         } catch (err) {
-            // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to Postgresql server: " + err)
+            result.setError(500, "Exception connecting to database: " + err.message, "OINODbPostgresql.connect")
+            OINOLog.error(result.statusMessage, {error:err})
         }        
+        return result
     }
 
     /**
@@ -262,23 +266,24 @@ export class OINODbPostgresql extends OINODb {
         let result:OINOResult = new OINOResult()
         try {
             const sql = this._getValidateSql(this._params.database)
-            // OINOLog.debug("OINODbBunSqlite.validate", {sql:sql})
+            // OINOLog.debug("OINODbPostgresql.validate", {sql:sql})
             const sql_res:OINODbDataSet = await this.sqlSelect(sql)
-            // OINOLog.debug("OINODbBunSqlite.validate", {sql_res:sql_res})
+            // OINOLog.debug("OINODbPostgresql.validate", {sql_res:sql_res})
             if (sql_res.isEmpty()) {
-                result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate")
+                result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate")
 
             } else if (sql_res.getRow().length == 0) {
-                result.setError(400, "DB returned no values for database!", "OINODbBunSqlite.validate")
+                result.setError(400, "DB returned no values for database!", "OINODbPostgresql.validate")
 
             } else if (sql_res.getRow()[0] == "0") {
-                result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate")
+                result.setError(400, "DB returned no schema for database!", "OINODbPostgresql.validate")
 
             } else {
-                // connection is working
+                this.isValidated = true
             }
-        } catch (e:any) {
-            result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate")
+        } catch (err:any) {
+            result.setError(500, "Exception validating connection: " + err.message, "OINODbPostgresql.validate")
+            OINOLog.error(result.statusMessage, {error:err})
         }
         OINOBenchmark.end("OINODb", "validate")
         return result

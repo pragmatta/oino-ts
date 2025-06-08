@@ -18,20 +18,23 @@ export abstract class OINODb {
     /** Name of the database */
     readonly name:string
 
+    protected isConnected:boolean = false
+    protected isValidated:boolean = false
+
     /**
      * Constructor for `OINODb`.
      * @param params database parameters
      */
     constructor(params:OINODbParams) {
-        this._params = params
-        this.name = params.database
+        this._params = { ...params } // make a shallow copy of params so that changes to them do not affect the original object
+        this.name = this._params.database
     }
 
     /**
      * Connect to database.
      *
      */
-    abstract connect(): Promise<boolean>
+    abstract connect(): Promise<OINOResult>
     
     /**
      * Validate connection to database is working. 
