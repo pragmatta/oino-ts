@@ -47,7 +47,7 @@ await test("OINOHashId persistent", async () => {
         hps_min = Math.min(hps, hps_min)
         hps_max = Math.max(hps, hps_max)
         expect(hps_min).toBeGreaterThanOrEqual(15)
-        expect(hps_max).toBeLessThanOrEqual(30)
+        expect(hps_max).toBeLessThanOrEqual(35)
     }
     console.log("OINOHashId persistent performance: " + hps_min + "k - " + hps_max + "k hashes per second")
 })

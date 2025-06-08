@@ -140,9 +140,38 @@ function createApiTemplate(api:OINODbApi):OINODbHtmlTemplate {
 
 export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestParams) {
     // OINOLog.info("OINOTestApi", {dbParams:dbParams, apiDataset:apiDataset})
+
+    let target_name:string = ""
+    if (testParams.name) {
+        target_name = "[" + testParams.name + "]"
+    } 
+    const target_db:string = "[" + dbParams.type + "]"
+    let target_table:string = "[" + testParams.apiParams.tableName + "]"
+    let target_group:string = "[CONNECTION]"
+
+    if (dbParams.type != "OINODbBunSqlite") { // no passwords in BunSqlite, it will never fail
+        const wrong_pwd_params:OINODbParams = Object.assign({}, dbParams)
+        wrong_pwd_params.password = "WRONG_PASSWORD"
+        const wrong_pwd_db:OINODb = await OINODbFactory.createDb( wrong_pwd_params, false, false )
+        test(target_name + target_db + target_table + target_group + " connection error", async () => {
+            expect(wrong_pwd_db).toBeDefined()
+
+            const connect_res = await wrong_pwd_db.connect()
+            expect(connect_res.success).toBe(false)
+            expect(connect_res.statusMessage).toMatchSnapshot("CONNECTION ERROR")
+        })
+    }
+
+    // const db:OINODb = await OINODbFactory.createDb( dbParams )
     const db:OINODb = await OINODbFactory.createDb( dbParams )
+    test(target_name + target_db + target_table + target_group + " connection success", async () => {
+        expect(db).toBeDefined()
+        expect(db.isConnected).toBe(true)
+        expect(db.isValidated).toBe(true)
+    })
+
     const api:OINODbApi = await OINODbFactory.createApi(db, testParams.apiParams)
-    
+
     const post_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([testParams.postRow])
     const post_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, post_dataset)
     
@@ -160,18 +189,11 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     request_params_with_filters.sqlParams = testParams.requestParams.sqlParams
     // OINOLog.debug("OINOTestApi", {request_params:request_params, request_params_with_filters:request_params_with_filters})
     
-    let target_name:string = ""
-    if (testParams.name) {
-        target_name = "[" + testParams.name + "]"
-    } 
-    const target_db:string = "[" + dbParams.type + "]"
-    let target_table:string = "[" + testParams.apiParams.tableName + "]"
-    let target_group:string = "[SCHEMA]"
-
     // test("dummy", () => {
     //     expect({foo:"h\\i"}).toMatchSnapshot()
     // })
 
+    target_group = "[SCHEMA]"
     test(target_name + target_db + target_table + target_group + " public properties", async () => {
         expect(api.datamodel.printFieldPublicPropertiesJson()).toMatchSnapshot("SCHEMA")
     })

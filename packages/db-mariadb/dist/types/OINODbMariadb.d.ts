@@ -5,7 +5,8 @@ import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell, OINOResul
  */
 export declare class OINODbMariadb extends OINODb {
     private static _fieldLengthRegex;
-    private static _exceptionMessageRegex;
+    private static _connectionExceptionMessageRegex;
+    private static _sqlExceptionMessageRegex;
     private _pool;
     /**
      * Constructor of `OINODbMariadb`
@@ -58,7 +59,7 @@ export declare class OINODbMariadb extends OINODb {
      * Connect to database.
      *
      */
-    connect(): Promise<boolean>;
+    connect(): Promise<OINOResult>;
     /**
      * Validate connection to database is working.
      *

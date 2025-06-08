@@ -117,11 +117,11 @@ export class OINODbMsSql extends OINODb {
             throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMsSql-type: " + this._params.type)
         } 
         this._pool = new ConnectionPool({
-            user: params.user,
-            password: params.password,
-            server: params.url,
-            port: params.port,
-            database: params.database,
+            user: this._params.user,
+            password: this._params.password,
+            server: this._params.url,
+            port: this._params.port,
+            database: this._params.database,
             arrayRowMode:true,
             options: {
                 encrypt: true, // Use encryption for Azure SQL Database
@@ -130,20 +130,21 @@ export class OINODbMsSql extends OINODb {
                 trustServerCertificate: true // Change to false for production
             }
         })
-        //this._pool = new ConnectionPool({connectionString: "Server=localhost,1433;Database=database;User Id=username;Password=" + params.password + ";Encrypt=true"})
+        delete this._params.password // do not store password in db object
        
         this._pool.on("error", (conn:any) => {
-            // console.log("OINODbMsSql error", conn)
+            OINOLog.error("OINODbMsSql error event", conn)
         })
-        this._pool.on("debug", (event:any) => {
-            // console.log("OINODbMsSql debug",event)
-        })
+        // this._pool.on("debug", (event:any) => {
+        //     console.log("OINODbMsSql debug",event)
+        // })
     }
 
     private async _query(sql:string):Promise<OINOMsSqlData> {
         // OINOLog.debug("OINODbMsSql._query", {sql:sql})
         try {
-            const sql_res = await this._pool.request().query(sql);
+            const request = this._pool.request() // this does not need to be released but the pool will handle it
+            const sql_res = await request.query(sql)
             // console.log("OINODbMsSql._query result:" + JSON.stringify(sql_res.recordsets))
             const result:OINOMsSqlData = new OINOMsSqlData(sql_res.recordsets)
             return Promise.resolve(result)
@@ -309,17 +310,21 @@ export class OINODbMsSql extends OINODb {
      * Connect to database.
      *
      */
-    async connect(): Promise<boolean> {
+    async connect(): Promise<OINOResult> {
+        let result:OINOResult = new OINOResult()
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await this._pool.connect()
             // OINOLog.info("OINODbMsSql.connect: Connected to database server.")
-            await this._pool.request().query("SELECT 1 as test")
-            return Promise.resolve(true)
-        } catch (err) {
+            // await this._pool.request().query("SELECT 1 as test")
+            this.isConnected = true
+            
+        } catch (err:any) {
             // ... error checks
-            throw new Error(OINO_ERROR_PREFIX + ": Error connecting to OINODbMsSql server: " + err)
+            result.setError(500, "Exception connecting to database: " + err.message, "OINODbMsSql.connect")
+            OINOLog.error(result.statusMessage, {error:err})
         }        
+        return Promise.resolve(result)
     }
 
     /**
@@ -327,27 +332,32 @@ export class OINODbMsSql extends OINODb {
      *
      */
     async validate(): Promise<OINOResult> {
-        OINOBenchmark.start("OINODb", "validate")
         let result:OINOResult = new OINOResult()
+        if (!this.isConnected) {
+            result.setError(400, "Database is not connected!", "OINODbMsSql.validate")
+            return result
+        }
+        OINOBenchmark.start("OINODb", "validate")
         try {
             const sql = this._getValidateSql(this._params.database)
-            // OINOLog.debug("OINODbBunSqlite.validate", {sql:sql})
+            // OINOLog.debug("OINODbMsSql.validate", {sql:sql})
             const sql_res:OINODbDataSet = await this.sqlSelect(sql)
-            // OINOLog.debug("OINODbBunSqlite.validate", {sql_res:sql_res})
+            // OINOLog.debug("OINODbMsSql.validate", {sql_res:sql_res})
             if (sql_res.isEmpty()) {
-                result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate")
+                result.setError(400, "DB returned no rows for select!", "OINODbMsSql.validate")
 
             } else if (sql_res.getRow().length == 0) {
-                result.setError(400, "DB returned no values for database!", "OINODbBunSqlite.validate")
+                result.setError(400, "DB returned no values for database!", "OINODbMsSql.validate")
 
             } else if (sql_res.getRow()[0] == "0") {
-                result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate")
+                result.setError(400, "DB returned no schema for database!", "OINODbMsSql.validate")
 
             } else {
                 // connection is working
+                this.isValidated = true
             }
         } catch (e:any) {
-            result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate")
+            result.setError(500, "Exception in validating connection: " + e.message, "OINODbMsSql.validate")
         }
         OINOBenchmark.end("OINODb", "validate")
         return result

@@ -67,7 +67,7 @@ export declare class OINODbMsSql extends OINODb {
      * Connect to database.
      *
      */
-    connect(): Promise<boolean>;
+    connect(): Promise<OINOResult>;
     /**
      * Validate connection to database is working.
      *

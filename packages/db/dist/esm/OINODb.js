@@ -13,13 +13,15 @@ export class OINODb {
     _params;
     /** Name of the database */
     name;
+    isConnected = false;
+    isValidated = false;
     /**
      * Constructor for `OINODb`.
      * @param params database parameters
      */
     constructor(params) {
-        this._params = params;
-        this.name = params.database;
+        this._params = { ...params }; // make a shallow copy of params so that changes to them do not affect the original object
+        this.name = this._params.database;
     }
     /**
      * Print SQL select statement with DB specific formatting.

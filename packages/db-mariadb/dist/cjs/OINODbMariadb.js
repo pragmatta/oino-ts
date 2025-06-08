@@ -85,7 +85,8 @@ class OINOMariadbData extends db_1.OINODbDataSet {
  */
 class OINODbMariadb extends db_1.OINODb {
     static _fieldLengthRegex = /([^\(\)]+)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i;
-    static _exceptionMessageRegex = /\(([^\)]*)\) (.*)\nsql\:(.*)?/i;
+    static _connectionExceptionMessageRegex = /\(([^\)]*)\) (.*)/i;
+    static _sqlExceptionMessageRegex = /\(([^\)]*)\) (.*)\nsql\:(.*)?/i;
     _pool;
     /**
      * Constructor of `OINODbMariadb`
@@ -97,7 +98,8 @@ class OINODbMariadb extends db_1.OINODb {
         if (this._params.type !== "OINODbMariadb") {
             throw new Error(db_1.OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type);
         }
-        this._pool = mariadb_1.default.createPool({ host: params.url, database: params.database, port: params.port, user: params.user, password: params.password, acquireTimeout: 2000, debug: false, rowsAsArray: true });
+        this._pool = mariadb_1.default.createPool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, acquireTimeout: 2000, debug: false, rowsAsArray: true });
+        delete this._params.password; // do not store password in db object
         // this._pool.on("acquire", (conn: mariadb.Connection) => {
         //     OINOLog.info("OINODbMariadb acquire", {conn:conn})
         // })
@@ -148,7 +150,7 @@ class OINODbMariadb extends db_1.OINODb {
             return Promise.resolve(result);
         }
         catch (err) {
-            const msg_parts = err.message.match(OINODbMariadb._exceptionMessageRegex) || [];
+            const msg_parts = err.message.match(OINODbMariadb._sqlExceptionMessageRegex) || [];
             // OINOLog.debug("OINODbMariadb._exec exception", {connection: msg_parts[1], message:msg_parts[2], sql:msg_parts[3]}) // print connection info just to log so tests don't break on runtime output
             throw new Error(msg_parts[2]);
         }
@@ -270,17 +272,25 @@ class OINODbMariadb extends db_1.OINODb {
      *
      */
     async connect() {
+        const result = new db_1.OINOResult();
+        let connection = null;
         try {
             // make sure that any items are correctly URL encoded in the connection string
             // OINOLog.debug("OINODbMariadb.connect")
-            await this._pool.on;
-            // await this._client.connect()
-            return Promise.resolve(true);
+            connection = await this._pool.getConnection();
+            this.isConnected = true;
         }
         catch (err) {
-            // ... error checks
-            throw new Error(db_1.OINO_ERROR_PREFIX + ": Error connecting to OINODbMariadb server: " + err);
+            const msg_parts = err.message.match(OINODbMariadb._connectionExceptionMessageRegex) || [];
+            result.setError(500, "Error connecting to server: " + msg_parts[2], "OINODbMariadb.connect");
+            db_1.OINOLog.error(result.statusMessage, { error: err });
         }
+        finally {
+            if (connection) {
+                await connection.end();
+            }
+        }
+        return Promise.resolve(result);
     }
     /**
      * Validate connection to database is working.
@@ -293,7 +303,7 @@ class OINODbMariadb extends db_1.OINODb {
             const sql = this._getValidateSql(this._params.database);
             // OINOLog.debug("OINODbMariadb.validate", {sql:sql})
             const sql_res = await this.sqlSelect(sql);
-            db_1.OINOLog.debug("OINODbMariadb.validate", { sql_res: sql_res });
+            // OINOLog.debug("OINODbMariadb.validate", {sql_res:sql_res})
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate");
             }
@@ -304,11 +314,12 @@ class OINODbMariadb extends db_1.OINODb {
                 result.setError(400, "DB returned no schema for database!", "OINODbMariadb.validate");
             }
             else {
-                // connection is working
+                this.isValidated = true;
             }
         }
-        catch (e) {
-            result.setError(500, db_1.OINO_ERROR_PREFIX + " (validate): OINODbMariadb.validate exception in _db.query: " + e.message, "OINODbMariadb.validate");
+        catch (err) {
+            result.setError(500, "Exception validating connection: " + err.message, "OINODbMariadb.validate");
+            db_1.OINOLog.error(result.statusMessage, { error: err });
         }
         db_1.OINOBenchmark.end("OINODb", "validate");
         return result;
