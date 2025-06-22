@@ -140,6 +140,12 @@ export declare abstract class OINODbDataSet {
      */
     abstract getRow(): OINODataRow;
     /**
+     * Gets all rows of data.
+     *
+     * NOTE: This is left abstract instead of just using `getRow()` so that DB implementations can hopefully optimize not duplicating data     *
+     */
+    abstract getAllRows(): Promise<OINODataRow[]>;
+    /**
      * Checks if the messages contain errors.
      *
      */
@@ -187,6 +193,11 @@ export declare class OINODbMemoryDataSet extends OINODbDataSet {
      *
      */
     getRow(): OINODataRow;
+    /**
+     * Gets all rows of data.
+     *
+     */
+    getAllRows(): Promise<OINODataRow[]>;
     /**
      * Rewinds data set to the first row, returns !isEof().
      *

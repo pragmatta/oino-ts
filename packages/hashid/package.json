@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/hashid",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "OINO TS package for hashid's.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -18,11 +18,11 @@
   "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@types/node": "^20.12.7",
-    "@oino-ts/common": "0.6.1",
+    "@oino-ts/common": "0.7.0",
     "base-x": "^5.0.0"
   },
   "devDependencies": {
-    "@oino-ts/types": "0.6.1"
+    "@oino-ts/types": "0.7.0"
   },
   "files": [
     "src/*.ts",

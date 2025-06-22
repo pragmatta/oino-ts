@@ -201,7 +201,7 @@ class OINODbBunSqlite extends db_1.OINODb {
             // OINOLog.debug("OINODbBunSqlite.sqlSelect", {result:result})
         }
         catch (e) {
-            result = new OINOBunSqliteDataset([[]], ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlSelect");
         return Promise.resolve(result);
@@ -217,10 +217,10 @@ class OINODbBunSqlite extends db_1.OINODb {
         let result;
         try {
             this._db?.exec(sql);
-            result = new OINOBunSqliteDataset([[]], []);
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, []);
         }
         catch (e) {
-            result = new OINOBunSqliteDataset([[]], [db_1.OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlExec");
         return Promise.resolve(result);

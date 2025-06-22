@@ -91,6 +91,13 @@ class OINOMsSqlData extends db_1.OINODbDataSet {
             return db_1.OINODB_EMPTY_ROW;
         }
     }
+    /**
+     * Gets all rows of data.
+     *
+     */
+    async getAllRows() {
+        return this._rows; // at the moment theres no result streaming, so we can just return the rows
+    }
 }
 /**
  * Implementation of MariaDb/MySql-database.
@@ -153,7 +160,7 @@ class OINODbMsSql extends db_1.OINODb {
         try {
             const sql_res = await this._pool.request().query(sql);
             // console.log("OINODbMsSql._exec result", sql_res); 
-            return Promise.resolve(new OINOMsSqlData([[]]));
+            return Promise.resolve(new OINOMsSqlData(db_1.OINODB_EMPTY_ROWS));
         }
         catch (err) {
             db_1.OINOLog.error("OINODbMsSql._exec exception", { err: err });
@@ -360,7 +367,7 @@ class OINODbMsSql extends db_1.OINODb {
             result = await this._query(sql);
         }
         catch (e) {
-            result = new OINOMsSqlData([[]], [db_1.OINO_ERROR_PREFIX + " (sqlSelect): OINODbMsSql.sqlSelect exception in _db.query: " + e.message]);
+            result = new OINOMsSqlData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlSelect): OINODbMsSql.sqlSelect exception in _db.query: " + e.message]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlSelect");
         return result;
@@ -378,7 +385,7 @@ class OINODbMsSql extends db_1.OINODb {
             result = await this._exec(sql);
         }
         catch (e) {
-            result = new OINOMsSqlData([[]], [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
+            result = new OINOMsSqlData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlExec");
         return result;

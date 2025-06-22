@@ -173,6 +173,13 @@ export class OINODbMemoryDataSet extends OINODbDataSet {
         }
     }
     /**
+     * Gets all rows of data.
+     *
+     */
+    async getAllRows() {
+        return this._rows; // at the moment theres no result streaming, so we can just return the rows
+    }
+    /**
      * Rewinds data set to the first row, returns !isEof().
      *
      */

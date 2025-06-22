@@ -158,6 +158,8 @@ exports.OINODbHtmlTemplate = OINODbHtmlTemplate;
  *
  */
 class OINODbApi {
+    /** Enable debug output on errors */
+    _debugOnError = false;
     /** API database reference */
     db;
     /** API datamodel */
@@ -189,7 +191,20 @@ class OINODbApi {
             this.hashid = null;
         }
     }
-    _validateRowValues(httpResult, row, requirePrimaryKey) {
+    _printSql(result, rows, requirePrimaryKey, printer) {
+        let sql = "";
+        for (let i = 0; i < rows.length; i++) {
+            this._validateRow(result, rows[i], requirePrimaryKey);
+            if (result.success) {
+                sql += printer(rows[i]);
+            }
+            else if (this.params.failOnAnyInvalidRows === false) {
+                result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
+            }
+        }
+        return sql;
+    }
+    _validateRow(result, row, requirePrimaryKey) {
         let field;
         for (let i = 0; i < this.datamodel.fields.length; i++) {
             field = this.datamodel.fields[i];
@@ -197,13 +212,13 @@ class OINODbApi {
             const val = row[i];
             // OINOLog.debug("OINODbApi.validateHttpValues", {val:val})
             if ((val === null) && ((field.fieldParams.isNotNull) || (field.fieldParams.isPrimaryKey))) { // null is a valid SQL value except if it's not allowed
-                httpResult.setError(405, "Field '" + field.name + "' is not allowed to be NULL!", "ValidateRowValues");
+                result.setError(405, "Field '" + field.name + "' is not allowed to be NULL!", "ValidateRowValues");
             }
             else if ((val === undefined) && (requirePrimaryKey) && (field.fieldParams.isPrimaryKey) && (!field.fieldParams.isAutoInc)) {
-                httpResult.setError(405, "Primary key '" + field.name + "' is not autoinc and missing from the data!", "ValidateRowValues");
+                result.setError(405, "Primary key '" + field.name + "' is not autoinc and missing from the data!", "ValidateRowValues");
             }
             else if ((val !== undefined) && (this.params.failOnUpdateOnAutoinc) && (field.fieldParams.isAutoInc)) {
-                httpResult.setError(405, "Autoinc field '" + field.name + "' can't be updated!", "ValidateRowValues");
+                result.setError(405, "Autoinc field '" + field.name + "' can't be updated!", "ValidateRowValues");
             }
             else {
                 if ((field instanceof index_js_1.OINOStringDataField) && ((field.maxLength > 0))) {
@@ -211,16 +226,31 @@ class OINODbApi {
                     // OINOLog.debug("OINODbApi.validateHttpValues", {f:str_field, val:val})
                     if (str_val.length > field.maxLength) {
                         if (this.params.failOnOversizedValues) {
-                            httpResult.setError(405, "Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and can't be set!", "ValidateRowValues");
+                            result.setError(405, "Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and can't be set!", "ValidateRowValues");
                         }
                         else {
-                            httpResult.addWarning("Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and might truncate or fail.", "ValidateRowValues");
+                            result.addWarning("Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and might truncate or fail.", "ValidateRowValues");
                         }
                     }
                 }
             }
         }
         //logDebug("OINODbApi.validateHttpValues", {result:result})
+    }
+    _parseData(httpResult, body, params) {
+        let rows = [];
+        try {
+            if (Array.isArray(body)) {
+                rows = body;
+            }
+            else {
+                rows = index_js_1.OINODbParser.createRows(this.datamodel, body, params);
+            }
+        }
+        catch (e) {
+            httpResult.setError(400, "Invalid data: " + e.message, "DoRequest");
+        }
+        return rows;
     }
     async _doGet(result, id, params) {
         let sql = "";
@@ -245,27 +275,28 @@ class OINODbApi {
     async _doPost(result, rows) {
         let sql = "";
         try {
-            let i = 0;
-            while (i < rows.length) {
-                this._validateRowValues(result, rows[i], this.params.failOnInsertWithoutKey || false);
+            for (let i = 0; i < rows.length; i++) {
+                this._validateRow(result, rows[i], this.params.failOnInsertWithoutKey || false);
                 if (result.success) {
                     sql += this.datamodel.printSqlInsert(rows[i]);
                 }
-                result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
-                i++;
+                else if (this.params.failOnAnyInvalidRows == false) {
+                    result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
+                }
             }
-            if (sql == "") {
+            if ((sql == "") && result.success) {
                 result.setError(405, "No valid rows for POST!", "DoPost");
-                result.addDebug("OINO POST DATA [" + rows.join("|") + "]", "DoPost");
             }
-            else {
+            else if (result.success) {
                 // OINOLog.debug("OINODbApi.doPost sql", {sql:sql})
                 const sql_res = await this.db.sqlExec(sql);
                 // OINOLog.debug("OINODbApi.doPost sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoPost");
-                    result.addDebug("OINO POST MESSAGES [" + sql_res.messages.join('|') + "]", "DoPost");
-                    result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
+                    if (this._debugOnError) {
+                        result.addDebug("OINO POST MESSAGES [" + sql_res.messages.join('|') + "]", "DoPost");
+                        result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
+                    }
                 }
             }
         }
@@ -274,19 +305,33 @@ class OINODbApi {
             result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
         }
     }
-    async _doPut(result, id, row) {
+    async _doPut(result, id, rows) {
         let sql = "";
         try {
-            this._validateRowValues(result, row, false);
-            if (result.success) {
-                sql = this.datamodel.printSqlUpdate(id, row);
+            // this._validateRowValues(result, row, false)
+            for (let i = 0; i < rows.length; i++) {
+                const row_id = id || index_js_1.OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], this.hashid != null));
+                this._validateRow(result, rows[i], this.params.failOnInsertWithoutKey || false);
+                if (result.success) {
+                    sql += this.datamodel.printSqlUpdate(row_id, rows[i]);
+                }
+                else if (this.params.failOnAnyInvalidRows == false) {
+                    result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
+                }
+            }
+            if ((sql == "") && result.success) {
+                result.setError(405, "No valid rows for PUT!", "DoPut"); // only set error if there are multiple rows and no valid sql was created
+            }
+            else if (result.success) {
                 // OINOLog.debug("OINODbApi.doPut sql", {sql:sql})
                 const sql_res = await this.db.sqlExec(sql);
                 // OINOLog.debug("OINODbApi.doPut sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoPut");
-                    result.addDebug("OINO PUT MESSAGES [" + sql_res.messages.join('|') + "]", "DoPut");
-                    result.addDebug("OINO PUT SQL [" + sql + "]", "DoPut");
+                    if (this._debugOnError) {
+                        result.addDebug("OINO PUT MESSAGES [" + sql_res.messages.join('|') + "]", "DoPut");
+                        result.addDebug("OINO PUT SQL [" + sql + "]", "DoPut");
+                    }
                 }
             }
         }
@@ -295,17 +340,37 @@ class OINODbApi {
             result.addDebug("OINO POST SQL [" + sql + "]", "DoPut");
         }
     }
-    async _doDelete(result, id) {
+    async _doDelete(result, id, rows) {
         let sql = "";
         try {
-            sql = this.datamodel.printSqlDelete(id);
-            // OINOLog.debug("OINODbApi.doDelete sql", {sql:sql})
-            const sql_res = await this.db.sqlExec(sql);
-            // OINOLog.debug("OINODbApi.doDelete sql_res", {sql_res:sql_res})
-            if (sql_res.hasErrors()) {
-                result.setError(500, sql_res.getFirstError(), "DoDelete");
-                result.addDebug("OINO DELETE MESSAGES [" + sql_res.messages.join('|') + "]", "DoDelete");
-                result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete");
+            if (rows != null) {
+                for (let i = 0; i < rows.length; i++) {
+                    const row_id = index_js_1.OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], this.hashid != null));
+                    if (row_id) {
+                        sql += this.datamodel.printSqlDelete(row_id);
+                    }
+                    else if (this.params.failOnAnyInvalidRows == false) {
+                        result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
+                    }
+                }
+            }
+            else if (id) {
+                sql = this.datamodel.printSqlDelete(id);
+            }
+            if ((sql == "") && result.success) {
+                result.setError(405, "No valid rows for DELETE!", "DoDelete"); // only set error if there are multiple rows and no valid sql was created
+            }
+            else if (result.success) {
+                // OINOLog.debug("OINODbApi.doDelete sql", {sql:sql})
+                const sql_res = await this.db.sqlExec(sql);
+                // OINOLog.debug("OINODbApi.doDelete sql_res", {sql_res:sql_res})
+                if (sql_res.hasErrors()) {
+                    result.setError(500, sql_res.getFirstError(), "DoDelete");
+                    if (this._debugOnError) {
+                        result.addDebug("OINO DELETE MESSAGES [" + sql_res.messages.join('|') + "]", "DoDelete");
+                        result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete");
+                    }
+                }
             }
         }
         catch (e) {
@@ -314,33 +379,30 @@ class OINODbApi {
         }
     }
     /**
+     * Enable or disable debug output on errors.
+     *
+     * @param debugOnError true to enable debug output on errors, false to disable
+     */
+    setDebugOnError(debugOnError) {
+        this._debugOnError = debugOnError;
+    }
+    /**
      * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
      * @param method HTTP verb (uppercase)
      * @param id URL id of the REST request
-     * @param body HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
+     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method, id, body, params = API_EMPTY_PARAMS) {
+    async doRequest(method, id, data, params = API_EMPTY_PARAMS) {
         index_js_1.OINOBenchmark.start("OINODbApi", "doRequest");
         // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
         let result = new OINODbApiResult(params);
         let rows = [];
         if ((method == "POST") || (method == "PUT")) {
-            try {
-                if (Array.isArray(body)) {
-                    rows = body;
-                }
-                else {
-                    rows = index_js_1.OINODbParser.createRows(this.datamodel, body, params);
-                }
-            }
-            catch (e) {
-                result.setError(400, "Invalid data: " + e.message, "DoRequest");
-            }
-            // OINOLog.debug("OINODbApi.doRequest - OINODataRow rows", {rows:rows})        
+            rows = this._parseData(result, data, params);
         }
         if (method == "GET") {
             await this._doGet(result, id, params);
@@ -354,7 +416,7 @@ class OINODbApi {
             }
             else {
                 try {
-                    await this._doPut(result, id, rows[0]);
+                    await this._doPut(result, id, rows);
                 }
                 catch (e) {
                     result.setError(500, "Unhandled exception in HTTP PUT doRequest: " + e.message, "DoRequest");
@@ -384,7 +446,7 @@ class OINODbApi {
             }
             else {
                 try {
-                    await this._doDelete(result, id);
+                    await this._doDelete(result, id, null);
                 }
                 catch (e) {
                     result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message, "DoRequest");
@@ -392,9 +454,48 @@ class OINODbApi {
             }
         }
         else {
-            result.setError(405, "Unsupported HTTP method '" + method + "'", "DoRequest");
+            result.setError(405, "Unsupported HTTP method '" + method + "' for REST request", "DoRequest");
         }
         index_js_1.OINOBenchmark.end("OINODbApi", "doRequest", method);
+        return Promise.resolve(result);
+    }
+    /**
+     * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
+     * SQL select, insert, update and delete.
+     *
+     * @param method HTTP verb (uppercase)
+     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
+     * @param params HTTP URL parameters as key-value-pairs
+     *
+     */
+    async doBatchUpdate(method, data, params = API_EMPTY_PARAMS) {
+        index_js_1.OINOBenchmark.start("OINODbApi", "doBatchUpdate");
+        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
+        let result = new OINODbApiResult(params);
+        let rows = [];
+        if ((method == "PUT")) {
+            rows = this._parseData(result, data, params);
+        }
+        if (method == "PUT") {
+            try {
+                await this._doPut(result, null, rows);
+            }
+            catch (e) {
+                result.setError(500, "Unhandled exception in HTTP PUT doRequest: " + e.message, "DoBatchUpdate");
+            }
+        }
+        else if (method == "DELETE") {
+            try {
+                await this._doDelete(result, null, rows);
+            }
+            catch (e) {
+                result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message, "DoBatchUpdate");
+            }
+        }
+        else {
+            result.setError(405, "Unsupported HTTP method '" + method + "' for batch update", "DoBatchUpdate");
+        }
+        index_js_1.OINOBenchmark.end("OINODbApi", "doBatchUpdate", method);
         return Promise.resolve(result);
     }
     /**
