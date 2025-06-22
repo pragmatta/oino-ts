@@ -103,6 +103,7 @@ export class OINODbDataModel {
                 if ((f instanceof OINONumberDataField) && (this.api.hashid)) {
                     value = this.api.hashid.decode(value)
                 }
+                // OINOLog.debug("OINODbDataModel._printSqlPrimaryKeyCondition", {field:f.name, value:value, id_value:id_value})
                 result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(value); 
                 i = i + 1
             }
@@ -279,6 +280,7 @@ export class OINODbDataModel {
      */
     printSqlUpdate(id: string, row: OINODataRow): string {
         let result: string = "UPDATE " + this.api.db.printSqlTablename(this.api.params.tableName) + " SET " + this._printSqlUpdateValues(row) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
+        // OINOLog.debug("OINODbDataModel.printSqlUpdate", {result:result, id:id, row:row})
         return result;
     }
 

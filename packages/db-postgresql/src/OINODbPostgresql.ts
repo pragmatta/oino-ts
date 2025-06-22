@@ -4,11 +4,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINOLog, OINOResult } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINOLog, OINOResult, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 
 import { Pool, QueryResult } from "pg";
 
-const EMPTY_ROW:string[] = []
 
 /**
  * Implmentation of OINODbDataSet for Postgresql.
@@ -77,9 +76,17 @@ class OINOPostgresqlData extends OINODbDataSet {
         if ((this._currentRow >=0) && (this._currentRow < this._rows.length)) {
             return this._rows[this._currentRow]
         } else {
-            return EMPTY_ROW
+            return OINODB_EMPTY_ROW
         }
     }
+
+    /**
+     * Gets all rows of data.
+     *
+     */
+    async getAllRows(): Promise<OINODataRow[]> {
+        return this._rows // at the moment theres no result streaming, so we can just return the rows
+    }    
 }
 
 /**
@@ -135,10 +142,16 @@ export class OINODbPostgresql extends OINODb {
     }
 
     private async _exec(sql:string):Promise<OINODataRow[]> {
-        // OINOLog.debug("OINODbPostgresql._query", {sql:sql})
+        // OINOLog.debug("OINODbPostgresql._exec", {sql:sql})
         const query_result:QueryResult = await this._pool.query({rowMode: "array", text: sql})
-        // OINOLog.debug("OINODbPostgresql._query", {result:query_result})
-        return Promise.resolve(query_result.rows)
+        // OINOLog.debug("OINODbPostgresql._exec", {result:query_result})
+        if (Array.isArray(query_result) == true) {
+            return Promise.resolve(query_result.flatMap((q) => q.rows))
+        } else if (query_result.rows) {
+            return Promise.resolve(query_result.rows)
+        } else {
+            return Promise.resolve(OINODB_EMPTY_ROWS) // return empty row if no rows returned
+        }
     }
 
     /**
@@ -304,7 +317,7 @@ export class OINODbPostgresql extends OINODb {
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"])
+            result = new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"])
         }
         OINOBenchmark.end("OINODb", "sqlSelect")
         return result
@@ -325,7 +338,7 @@ export class OINODbPostgresql extends OINODb {
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
-            result = new OINOPostgresqlData([[]], [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
+            result = new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("OINODb", "sqlExec")
         return result

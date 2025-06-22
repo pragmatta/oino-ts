@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODbMemoryDataSet, OINODataCell, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr, OINOLog, OINOResult } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINO_ERROR_PREFIX, OINODbMemoryDataSet, OINODataCell, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr, OINOLog, OINOResult, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 
 import { Database as BunSqliteDb } from "bun:sqlite";
 
@@ -212,7 +212,7 @@ export class OINODbBunSqlite extends OINODb {
             // OINOLog.debug("OINODbBunSqlite.sqlSelect", {result:result})
 
         } catch (e:any) {
-            result = new OINOBunSqliteDataset([[]], ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message])
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.end("OINODb", "sqlSelect")
         return Promise.resolve(result)
@@ -229,10 +229,10 @@ export class OINODbBunSqlite extends OINODb {
         let result:OINODbDataSet
         try {
             this._db?.exec(sql)
-            result = new OINOBunSqliteDataset([[]], [])
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [])
 
         } catch (e:any) {
-            result = new OINOBunSqliteDataset([[]], [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"])
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"])
         }
         OINOBenchmark.end("OINODb", "sqlExec")
         return Promise.resolve(result)

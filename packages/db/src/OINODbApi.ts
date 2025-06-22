@@ -318,7 +318,7 @@ export class OINODbApi {
         try {
             // this._validateRowValues(result, row, false)
             for (let i=0; i<rows.length; i++) {
-                const row_id = id || OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], false))
+                const row_id = id || OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], this.hashid != null))
                 this._validateRow(result, rows[i], this.params.failOnInsertWithoutKey||false)
                 if (result.success) {
                     sql += this.datamodel.printSqlUpdate(row_id, rows[i]) 
@@ -353,7 +353,7 @@ export class OINODbApi {
         try {
             if (rows != null) {
                 for (let i=0; i<rows.length; i++) {
-                    const row_id = OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], false))
+                    const row_id = OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], this.hashid != null))
                     if (row_id) {
                         sql += this.datamodel.printSqlDelete(row_id) 
                     } else if (this.params.failOnAnyInvalidRows == false) {
