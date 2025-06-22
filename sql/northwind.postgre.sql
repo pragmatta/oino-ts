@@ -3851,6 +3851,13 @@ ALTER TABLE ONLY orderdetails
     ADD CONSTRAINT FK_OrderDetails_Products FOREIGN KEY ("ProductID") REFERENCES products("ProductID");
 ALTER TABLE ONLY orders
     ADD CONSTRAINT FK_Orders_Employees FOREIGN KEY ("EmployeeID") REFERENCES employees("EmployeeID");
+ALTER TABLE ONLY orders
+    ADD CONSTRAINT FK_Orders_Shippers FOREIGN KEY ("ShipVia") REFERENCES shippers("ShipperID");
+ALTER TABLE ONLY orders
+    ADD CONSTRAINT FK_Orders_Customers FOREIGN KEY ("CustomerID") REFERENCES customers("CustomerID");
+ALTER TABLE ONLY products
+    ADD CONSTRAINT FK_Products_Suppliers FOREIGN KEY ("SupplierID") REFERENCES suppliers("SupplierID");
+
 
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres

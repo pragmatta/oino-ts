@@ -314,19 +314,12 @@ CREATE TABLE "Products" (
 	(
 		"ProductID"
 	),
-	CONSTRAINT "FK_Products_Categories" FOREIGN KEY
-	(
-		"CategoryID"
-	) REFERENCES "dbo"."Categories" (
-		"CategoryID"
-	),
 	CONSTRAINT "FK_Products_Suppliers" FOREIGN KEY
 	(
 		"SupplierID"
 	) REFERENCES "dbo"."Suppliers" (
 		"SupplierID"
 	),
-	CONSTRAINT "CK_Products_UnitPrice" CHECK (UnitPrice >= 0),
 	CONSTRAINT "CK_ReorderLevel" CHECK (ReorderLevel >= 0),
 	CONSTRAINT "CK_UnitsInStock" CHECK (UnitsInStock >= 0),
 	CONSTRAINT "CK_UnitsOnOrder" CHECK (UnitsOnOrder >= 0)
@@ -367,8 +360,7 @@ CREATE TABLE "OrderDetails" (
 		"ProductID"
 	),
 	CONSTRAINT "CK_Discount" CHECK (Discount >= 0 and (Discount <= 1)),
-	CONSTRAINT "CK_Quantity" CHECK (Quantity > 0),
-	CONSTRAINT "CK_UnitPrice" CHECK (UnitPrice >= 0)
+	CONSTRAINT "CK_Quantity" CHECK (Quantity > 0)
 )
 GO
  CREATE  INDEX "OrderID" ON "dbo"."OrderDetails"("OrderID")
