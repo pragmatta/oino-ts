@@ -59,6 +59,8 @@ export declare class OINODbHtmlTemplate extends OINOHtmlTemplate {
  *
  */
 export declare class OINODbApi {
+    /** Enable debug output on errors */
+    private _debugOnError;
     /** API database reference */
     readonly db: OINODb;
     /** API datamodel */
@@ -76,22 +78,40 @@ export declare class OINODbApi {
      *
      */
     constructor(db: OINODb, params: OINODbApiParams);
-    private _validateRowValues;
+    private _printSql;
+    private _validateRow;
+    private _parseData;
     private _doGet;
     private _doPost;
     private _doPut;
     private _doDelete;
+    /**
+     * Enable or disable debug output on errors.
+     *
+     * @param debugOnError true to enable debug output on errors, false to disable
+     */
+    setDebugOnError(debugOnError: boolean): void;
     /**
      * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
      * @param method HTTP verb (uppercase)
      * @param id URL id of the REST request
-     * @param body HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
+     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    doRequest(method: string, id: string, body: string | OINODataRow[] | Buffer | any, params?: OINODbApiRequestParams): Promise<OINODbApiResult>;
+    doRequest(method: string, id: string, data: string | OINODataRow[] | Buffer | any, params?: OINODbApiRequestParams): Promise<OINODbApiResult>;
+    /**
+     * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
+     * SQL select, insert, update and delete.
+     *
+     * @param method HTTP verb (uppercase)
+     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
+     * @param params HTTP URL parameters as key-value-pairs
+     *
+     */
+    doBatchUpdate(method: string, data: string | OINODataRow[] | Buffer | any, params?: OINODbApiRequestParams): Promise<OINODbApiResult>;
     /**
      * Method to check if a field is included in the API params.
      *

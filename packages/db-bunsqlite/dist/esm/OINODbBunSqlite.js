@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODb, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODbMemoryDataSet, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr, OINOLog, OINOResult } from "@oino-ts/db";
+import { OINODb, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODbMemoryDataSet, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr, OINOLog, OINOResult, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 import { Database as BunSqliteDb } from "bun:sqlite";
 /**
  * Implmentation of OINODbDataSet for BunSqlite.
@@ -198,7 +198,7 @@ export class OINODbBunSqlite extends OINODb {
             // OINOLog.debug("OINODbBunSqlite.sqlSelect", {result:result})
         }
         catch (e) {
-            result = new OINOBunSqliteDataset([[]], ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
         }
         OINOBenchmark.end("OINODb", "sqlSelect");
         return Promise.resolve(result);
@@ -214,10 +214,10 @@ export class OINODbBunSqlite extends OINODb {
         let result;
         try {
             this._db?.exec(sql);
-            result = new OINOBunSqliteDataset([[]], []);
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, []);
         }
         catch (e) {
-            result = new OINOBunSqliteDataset([[]], [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
         OINOBenchmark.end("OINODb", "sqlExec");
         return Promise.resolve(result);

@@ -8,7 +8,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbPostgresql = void 0;
 const db_1 = require("@oino-ts/db");
 const pg_1 = require("pg");
-const EMPTY_ROW = [];
 /**
  * Implmentation of OINODbDataSet for Postgresql.
  *
@@ -73,8 +72,15 @@ class OINOPostgresqlData extends db_1.OINODbDataSet {
             return this._rows[this._currentRow];
         }
         else {
-            return EMPTY_ROW;
+            return db_1.OINODB_EMPTY_ROW;
         }
+    }
+    /**
+     * Gets all rows of data.
+     *
+     */
+    async getAllRows() {
+        return this._rows; // at the moment theres no result streaming, so we can just return the rows
     }
 }
 /**
@@ -123,10 +129,18 @@ class OINODbPostgresql extends db_1.OINODb {
         return Promise.resolve(query_result.rows);
     }
     async _exec(sql) {
-        // OINOLog.debug("OINODbPostgresql._query", {sql:sql})
+        // OINOLog.debug("OINODbPostgresql._exec", {sql:sql})
         const query_result = await this._pool.query({ rowMode: "array", text: sql });
-        // OINOLog.debug("OINODbPostgresql._query", {result:query_result})
-        return Promise.resolve(query_result.rows);
+        // OINOLog.debug("OINODbPostgresql._exec", {result:query_result})
+        if (Array.isArray(query_result) == true) {
+            return Promise.resolve(query_result.flatMap((q) => q.rows));
+        }
+        else if (query_result.rows) {
+            return Promise.resolve(query_result.rows);
+        }
+        else {
+            return Promise.resolve(db_1.OINODB_EMPTY_ROWS); // return empty row if no rows returned
+        }
     }
     /**
      * Print a table name using database specific SQL escaping.
@@ -286,7 +300,7 @@ class OINODbPostgresql extends db_1.OINODb {
             result = new OINOPostgresqlData(rows, []);
         }
         catch (e) {
-            result = new OINOPostgresqlData([[]], [db_1.OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"]);
+            result = new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlSelect");
         return result;
@@ -306,7 +320,7 @@ class OINODbPostgresql extends db_1.OINODb {
             result = new OINOPostgresqlData(rows, []);
         }
         catch (e) {
-            result = new OINOPostgresqlData([[]], [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
+            result = new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlExec");
         return result;

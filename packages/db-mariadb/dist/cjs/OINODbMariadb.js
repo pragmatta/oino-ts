@@ -78,6 +78,13 @@ class OINOMariadbData extends db_1.OINODbDataSet {
             return db_1.OINODB_EMPTY_ROW;
         }
     }
+    /**
+     * Gets all rows of data.
+     *
+     */
+    async getAllRows() {
+        return this._rows; // at the moment theres no result streaming, so we can just return the rows
+    }
 }
 /**
  * Implementation of MariaDb/MySql-database.
@@ -98,7 +105,7 @@ class OINODbMariadb extends db_1.OINODb {
         if (this._params.type !== "OINODbMariadb") {
             throw new Error(db_1.OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type);
         }
-        this._pool = mariadb_1.default.createPool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, acquireTimeout: 2000, debug: false, rowsAsArray: true });
+        this._pool = mariadb_1.default.createPool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, acquireTimeout: 2000, debug: false, rowsAsArray: true, multipleStatements: true });
         delete this._params.password; // do not store password in db object
         // this._pool.on("acquire", (conn: mariadb.Connection) => {
         //     OINOLog.info("OINODbMariadb acquire", {conn:conn})
@@ -195,7 +202,7 @@ class OINODbMariadb extends db_1.OINODb {
         else if (cellValue === undefined) {
             return "UNDEFINED";
         }
-        else if ((sqlType == "int") || (sqlType == "smallint") || (sqlType == "float")) {
+        else if ((sqlType == "int") || (sqlType == "smallint") || (sqlType == "float") || (sqlType == "double")) {
             return cellValue.toString();
         }
         else if ((sqlType == "longblob") || (sqlType == "binary") || (sqlType == "varbinary")) {
@@ -339,7 +346,7 @@ class OINODbMariadb extends db_1.OINODb {
             result = new OINOMariadbData(sql_res, []);
         }
         catch (e) {
-            result = new OINOMariadbData([[]], [db_1.OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message]);
+            result = new OINOMariadbData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlSelect");
         return result;
@@ -359,7 +366,7 @@ class OINODbMariadb extends db_1.OINODb {
             result = new OINOMariadbData(sql_res, []);
         }
         catch (e) {
-            result = new OINOMariadbData([[]], [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
+            result = new OINOMariadbData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlExec");
         return result;

@@ -422,7 +422,6 @@ CREATE TABLE [OrderDetails](
     PRIMARY KEY ("OrderID","ProductID"),
     CHECK ([Discount]>=(0) AND [Discount]<=(1)),
     CHECK ([Quantity]>(0)),
-    CHECK ([UnitPrice]>=(0)),
 	FOREIGN KEY ([OrderID]) REFERENCES [Orders] ([OrderID]) 
 		ON DELETE NO ACTION ON UPDATE NO ACTION,
 	FOREIGN KEY ([ProductID]) REFERENCES [Products] ([ProductID]) 

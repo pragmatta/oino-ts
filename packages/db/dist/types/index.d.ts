@@ -26,6 +26,8 @@ export type OINODbApiParams = {
     failOnUpdateOnAutoinc?: boolean;
     /** Reject POST-requests without primary key value (can work if DB-side ) */
     failOnInsertWithoutKey?: boolean;
+    /** Reject POST-requests without primary key value (can work if DB-side ) */
+    failOnAnyInvalidRows?: boolean;
     /** Treat date type fields as just strings and use the native formatting instead of the ISO 8601 format */
     useDatesAsString?: Boolean;
     /** Include given fields from the API and exclude rest (if defined) */
