@@ -3,6 +3,11 @@
   "bin": {
     "tsc": "./db/node_modules/.bin/tsc.cmd"
   },
+  "dependencies": {
+    "@types/node": "^22.0.0",
+    "@types/bun": "^1.0.0",
+    "typedoc": "^0.25.13"
+  },
   "scripts": {
     "build:js": "npx tsc -p ./tsconfig.cjs.json && npx tsc -p ./tsconfig.esm.json",
     "build:types": "npx tsc -p ./tsconfig.types.json",

@@ -30,6 +30,8 @@ export class OINODbFactory {
      * Create database from parameters from the registered classes.
      * 
      * @param params database connection parameters
+     * @param connect if true, connects to the database
+     * @param validate if true, validates the database connection
      */
     static async createDb(params:OINODbParams, connect:boolean = true, validate:boolean = true):Promise<OINODb> {
         let result:OINODb
