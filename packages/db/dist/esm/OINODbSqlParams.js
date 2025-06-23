@@ -169,7 +169,7 @@ export class OINODbSqlFilter {
         }
         else {
             const value = field.deserializeCell(this._rightSide);
-            if (!value) {
+            if ((value == null) || (value === "")) {
                 OINOLog.error("OINODbSqlFilter.toSql: Invalid value!", { value: value });
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbSqlFilter.toSql - Invalid value '" + value + "'"); // invalid value could be a security risk, stop processing
             }
