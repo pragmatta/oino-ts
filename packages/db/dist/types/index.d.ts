@@ -1,3 +1,5 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { OINOContentType } from "@oino-ts/common";
 export { OINOContentType };
 export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult, OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common";
@@ -48,6 +50,7 @@ export type OINODbApiParams = {
 /**
  * Database class (constructor) type
  * @param dbParams database parameters
+ * @return OINODb instance
  */
 export type OINODbConstructor = new (dbParams: OINODbParams) => OINODb;
 /** Database parameters */

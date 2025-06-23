@@ -97,8 +97,12 @@ class OINODbDataModel {
                 if ((f instanceof index_js_1.OINONumberDataField) && (this.api.hashid)) {
                     value = this.api.hashid.decode(value);
                 }
+                value = f.printCellAsSqlValue(value);
+                if (value == "") { // ids are user input and could be specially crafted to be empty
+                    throw new Error(index_js_1.OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName);
+                }
                 // OINOLog.debug("OINODbDataModel._printSqlPrimaryKeyCondition", {field:f.name, value:value, id_value:id_value})
-                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(value);
+                result += f.printSqlColumnName() + "=" + value;
                 i = i + 1;
             }
         }

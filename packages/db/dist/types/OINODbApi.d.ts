@@ -1,3 +1,5 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { OINODbApiParams, OINODb, OINODbDataModel, OINODataRow, OINODbModelSet, OINODbApiRequestParams, OINOHttpResult, OINOHtmlTemplate } from "./index.js";
 import { OINOResult } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid";
