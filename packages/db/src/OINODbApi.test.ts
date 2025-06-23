@@ -347,11 +347,11 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     }
 
     target_group = "[BATCH UPDATE]"
-    const string_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return ((field instanceof OINOStringDataField) || (field instanceof OINONumberDataField)) && (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isForeignKey == false) })
-    if (string_fields.length == 0) {
+    const reversable_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return ((field instanceof OINOStringDataField) || (field instanceof OINONumberDataField)) && (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isForeignKey == false) })
+    if (reversable_fields.length == 0) {
         OINOLog.info("BATCH UPDATE table " + testParams.apiParams.tableName + " does not have numeric fields and batch update tests are skipped")
     } else {
-        const batch_field = string_fields[0]
+        const batch_field = reversable_fields[0]
         const batch_field_name:string = batch_field.name
         const batch_field_index:number = api.datamodel.findFieldIndexByName(batch_field_name)
         const batch_value = testParams.putRow[batch_field_index] 
