@@ -27,13 +27,12 @@ async function findBestTemplateId(apiName:string, operation:string, statusCode:s
 	}
 	const template_file:BunFile = Bun.file("./templates/" + template_id + ".htmx")
 	if (await template_file.exists()) {
-		OINOLog.debug("index.ts / findBestTemplateId", { template_id:template_id })
 		return template_file
 	}
 	return null
 }
 async function getTemplate(apiName:string, method:string, command:string, statusCode:string):Promise<OINODbHtmlTemplate> {
-	OINOLog.debug("index.ts / getTemplate", { apiName:apiName, method:method, command:command, statusCode:statusCode})
+	OINOLog.debug("@oinots/db", "htmxApp", "getTemplate", "Enter", { apiName:apiName, method:method, command:command, statusCode:statusCode})
 	const template_file = await findBestTemplateId(apiName, command, statusCode) ||
 						await findBestTemplateId(apiName, method, statusCode) ||
 						await findBestTemplateId(apiName, command, "") ||
@@ -76,7 +75,8 @@ try {
 		port: 8080,
 		async fetch(request:Request) {
 			let url = new URL(request.url)
-			OINOLog.debug("index.ts / fetch", {url:url, pathname:url.pathname, headers:request.headers, method:request.method }) 
+			OINOLog.info("@oinots/db", "htmxApp", "fetch", "Request", {pathname:url.pathname, method:request.method }) 
+			OINOLog.debug("@oinots/db", "htmxApp", "fetch", "Request", {url:url, headers:request.headers}) 
 
 			let response:Response|null = null
 			if (request.method == "OPTIONS") {
@@ -99,12 +99,12 @@ try {
 				const api_name:string = path_matches[1]?.toLowerCase() || ""
 				const id:string = path_matches[2]?.toLowerCase() || ""
 				const operation:string = path_matches[3]?.toLowerCase() || ""
-				OINOLog.debug("index.ts / request", {api_name:api_name, id:id, operation:operation }) 
+				OINOLog.info("@oinots/db", "htmxApp", "fetch", "Api request", {api_name:api_name, id:id, operation:operation}) 
 
 				const params:OINODbApiRequestParams = OINODbFactory.createParamsFromRequest(request)
 				const api:OINODbApi|null = apis[api_name]
 				const body:Buffer = Buffer.from(await request.arrayBuffer())
-				OINOLog.debug("index.ts / api", {params:params, body:body }) 
+				OINOLog.debug("@oinots/db", "htmxApp", "fetch", "Api request input", {params:params, body:body}) 
 				let api_result:OINODbApiResult
 				if (api_name == "") {
 					const template:OINODbHtmlTemplate = await getTemplate(id, "", operation, "")
@@ -117,13 +117,10 @@ try {
 				} else if (api) {
 					api_result = await api.doRequest(request.method, id, body, params)
 					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
-					// OINOLog.debug("index.ts / template", {template:template}) 
 					if (api_result.data?.dataset) {
-						OINOLog.debug("index.ts / template render", {is_empty:api_result.data.dataset.isEmpty()}) 
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
 						response = await http_result.getHttpResponse(response_headers)
 					} else {
-						OINOLog.debug("index.ts / template with id") 
 						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getHttpResponse(response_headers)
 					}
 					if (request.method == "POST") {
@@ -146,9 +143,8 @@ try {
 	);
 	
 	
-} catch (error:any) {
-	OINOLog.info('index.ts initialization exception: ' + error.message)
-	OINOLog.info(error.stack)
+} catch (e:any) {
+	OINOLog.exception("@oinots/db", "htmxApp", "initialization", "Exception", {message:e.message, stack:e.stack}) 
 	process.exit(129)
 }
 

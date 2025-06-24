@@ -59,7 +59,6 @@ class OINOPostgresqlData extends OINODbDataSet {
      *
      */
     async next():Promise<boolean> {
-        // OINOLog.debug("OINODbDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length-1) {
             this._currentRow = this._currentRow + 1
         } else {
@@ -104,7 +103,6 @@ export class OINODbPostgresql extends OINODb {
     constructor(params:OINODbParams) {
         super(params)
 
-        // OINOLog.debug("OINODbPostgresql.constructor", {params:params})
         if (this._params.type !== "OINODbPostgresql") {
             throw new Error(OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type)
         } 
@@ -113,17 +111,8 @@ export class OINODbPostgresql extends OINODb {
         delete this._params.password
 
         this._pool.on("error", (err: any) => {
-            OINOLog.error("OINODbPostgresql error event", {err:err})
+            OINOLog.error("@oinots/db-postgresql", "OINODbPostgresql", ".on(error)", "Error-event", {err:err}) 
         })
-        // this._pool.on("connect", (message: any) => {
-        //     OINOLog.info("OINODbPostgresql connect")
-        // })
-        // this._pool.on("release", (message: any) => {
-        //     OINOLog.info("OINODbPostgresql notice")
-        // })
-        // this._pool.on("acquire", () => {
-        //     OINOLog.info("OINODbPostgresql end")
-        // })
     }
 
     private _parseFieldLength(fieldLength:OINODataCell):number {
@@ -135,16 +124,12 @@ export class OINODbPostgresql extends OINODb {
     }
 
     private async _query(sql:string):Promise<OINODataRow[]> {
-        // OINOLog.debug("OINODbPostgresql._query", {sql:sql})
         const query_result:QueryResult = await this._pool.query({rowMode: "array", text: sql})
-        // OINOLog.debug("OINODbPostgresql._query", {result:query_result})
         return Promise.resolve(query_result.rows)
     }
 
     private async _exec(sql:string):Promise<OINODataRow[]> {
-        // OINOLog.debug("OINODbPostgresql._exec", {sql:sql})
         const query_result:QueryResult = await this._pool.query({rowMode: "array", text: sql})
-        // OINOLog.debug("OINODbPostgresql._exec", {result:query_result})
         if (Array.isArray(query_result) == true) {
             return Promise.resolve(query_result.flatMap((q) => q.rows))
         } else if (query_result.rows) {
@@ -259,13 +244,12 @@ export class OINODbPostgresql extends OINODb {
         let result:OINOResult = new OINOResult()
         try {
             // make sure that any items are correctly URL encoded in the connection string
-            // OINOLog.debug("OINODbPostgresql.connect")
             await this._pool.connect()
             this.isConnected = true
 
-        } catch (err:any) {
-            result.setError(500, "Exception connecting to database: " + err.message, "OINODbPostgresql.connect")
-            OINOLog.error(result.statusMessage, {error:err})
+        } catch (e:any) {
+            result.setError(500, "Exception connecting to database: " + e.message, "OINODbPostgresql.connect")
+            OINOLog.exception("@oinots/db-postgresql", "OINODbMsSql", "connect", "Exception", {message:e.message, stack:e.stack}) 
         }        
         return result
     }
@@ -279,9 +263,7 @@ export class OINODbPostgresql extends OINODb {
         let result:OINOResult = new OINOResult()
         try {
             const sql = this._getValidateSql(this._params.database)
-            // OINOLog.debug("OINODbPostgresql.validate", {sql:sql})
             const sql_res:OINODbDataSet = await this.sqlSelect(sql)
-            // OINOLog.debug("OINODbPostgresql.validate", {sql_res:sql_res})
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate")
 
@@ -294,9 +276,9 @@ export class OINODbPostgresql extends OINODb {
             } else {
                 this.isValidated = true
             }
-        } catch (err:any) {
-            result.setError(500, "Exception validating connection: " + err.message, "OINODbPostgresql.validate")
-            OINOLog.error(result.statusMessage, {error:err})
+        } catch (e:any) {
+            result.setError(500, "Exception validating connection: " + e.message, "OINODbPostgresql.validate")
+            OINOLog.exception("@oinots/db-postgresql", "OINODbMsSql", "validate", "Exception", {message:e.message, stack:e.stack}) 
         }
         OINOBenchmark.end("OINODb", "validate")
         return result
@@ -313,7 +295,6 @@ export class OINODbPostgresql extends OINODb {
         let result:OINODbDataSet
         try {
             const rows:OINODataRow[] = await this._query(sql)
-            // OINOLog.debug("OINODbPostgresql.sqlSelect", {rows:rows})
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
@@ -334,7 +315,6 @@ export class OINODbPostgresql extends OINODb {
         let result:OINODbDataSet
         try {
             const rows:OINODataRow[] = await this._exec(sql)
-            // OINOLog.debug("OINODbPostgresql.sqlExec", {rows:rows})
             result = new OINOPostgresqlData(rows, [])
 
         } catch (e:any) {
@@ -402,11 +382,9 @@ WHERE col.table_catalog = '${dbName}'`
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()))
-        // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: table description ", {res: res })
-        while (!res.isEof()) {
-            const row:OINODataRow = res.getRow()
-            // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: next row ", {row: row })
+        const schema_res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()))
+        while (!schema_res.isEof()) {
+            const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""
             const sql_type:string = row[1]?.toString() || ""
             const field_length:number = this._parseFieldLength(row[2])
@@ -421,13 +399,12 @@ WHERE col.table_catalog = '${dbName}'`
                 isAutoInc: default_val.startsWith("nextval(")
             }            
             if (api.isFieldIncluded(field_name) == false) {
-                OINOLog.info("OINODbPostgresql.initializeApiDatamodel: field excluded in API parameters.", {field:field_name})
+                OINOLog.info("@oinots/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Field excluded in API parameters.", {field:field_name})
                 if (field_params.isPrimaryKey) {
                     throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name)
                 }
 
             } else {
-                // OINOLog.debug("OINODbPostgresql.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
                 if ((sql_type == "integer") || (sql_type == "smallint") || (sql_type == "real")) {
                     api.datamodel.addField(new OINONumberDataField(this, field_name, sql_type, field_params ))
 
@@ -451,13 +428,13 @@ WHERE col.table_catalog = '${dbName}'`
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1))
 
                 } else {
-                    OINOLog.info("OINODbPostgresql.initializeApiDatamodel: unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
+                    OINOLog.info("@oinots/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }
             }
-            await res.next()
+            await schema_res.next()
         }
-        OINOLog.debug("OINODbPostgresql.initializeDatasetModel:\n" + api.datamodel.printDebug("\n"))
+        OINOLog.info("@oinots/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"))
         return Promise.resolve()
     }
 }

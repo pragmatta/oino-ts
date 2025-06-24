@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbParams, OINODbApi, OINODataCell, OINO_ERROR_PREFIX, OINODataRow, OINODB_EMPTY_ROW, OINOResult } from "./index.js"
+import { OINODbParams, OINODbApi, OINODataCell, OINO_ERROR_PREFIX, OINODataRow, OINODB_EMPTY_ROW, OINOResult, OINOLog } from "./index.js"
 
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data 
@@ -124,7 +124,6 @@ export abstract class OINODb {
      */
     printSqlSelect(tableName:string, columnNames:string, whereCondition:string, orderCondition:string, limitCondition:string, groupByCondition: string): string {
         let result:string = "SELECT " + columnNames + " FROM " + tableName;
-        // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
         if (whereCondition != "")  {
             result += " WHERE " + whereCondition
         }
@@ -138,7 +137,7 @@ export abstract class OINODb {
             result += " LIMIT " + limitCondition 
         }
         result += ";"
-        // OINOLog.debug("OINODb.printSqlSelect", {result:result})
+        OINOLog.debug("@oinots/db", "OINODb", "printSqlSelect", "Result", {sql:result})
         return result;
     }
 }
