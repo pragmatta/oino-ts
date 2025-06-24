@@ -39,7 +39,6 @@ export class OINODbDataField {
         this.maxLength = maxLength;
         this.sqlType = sqlType;
         this.fieldParams = fieldParams;
-        // OINOLog.debug("OINODbDataField.constructor", {this:this})
     }
     /**
      * Pring debug information for the field
@@ -242,7 +241,7 @@ export class OINONumberDataField extends OINODbDataField {
         else {
             const result = parseFloat(value);
             if (isNaN(result)) {
-                OINOLog.error("OINONumberDataField.toSql: Invalid value!", { value: value });
+                OINOLog.error("@oinots/db", "OINONumberDataField", "toSql", "Invalid value!", { value: value });
                 throw new Error(OINO_ERROR_PREFIX + ": OINONumberDataField.deserializeCell - Invalid value '" + value + "'"); // incorrectly formatted data could be a security risk, abort processing
             }
             return result;
@@ -274,7 +273,6 @@ export class OINOBlobDataField extends OINODbDataField {
      *
      */
     serializeCell(cellVal) {
-        // OINOLog.debug("OINOBlobDataField.serializeCell", {cellVal:cellVal})
         if ((cellVal === null) || (cellVal === undefined)) {
             return cellVal;
         }
@@ -324,10 +322,8 @@ export class OINODatetimeDataField extends OINODbDataField {
      *
      */
     serializeCell(cellVal) {
-        // OINOLog.debug("OINODatetimeDataField.serializeCell", {cellVal:cellVal, type:typeof(cellVal)})
         if (typeof (cellVal) == "string") {
             cellVal = this.db.parseSqlValueAsCell(cellVal, this.sqlType);
-            // OINOLog.debug("OINODatetimeDataField.serializeCell parsed", {cellVal:cellVal, type:typeof(cellVal)})
         }
         if ((cellVal === null) || (cellVal === undefined)) {
             return cellVal;
@@ -347,10 +343,8 @@ export class OINODatetimeDataField extends OINODbDataField {
      *
      */
     serializeCellWithLocale(cellVal, locale) {
-        // OINOLog.debug("OINODatetimeDataField.serializeCell", {cellVal:cellVal, type:typeof(cellVal)})
         if (typeof (cellVal) == "string") {
             cellVal = this.db.parseSqlValueAsCell(cellVal, this.sqlType);
-            // OINOLog.debug("OINODatetimeDataField.serializeCell parsed", {cellVal:cellVal, type:typeof(cellVal)})
         }
         if ((cellVal === null) || (cellVal === undefined)) {
             return cellVal;
@@ -369,7 +363,6 @@ export class OINODatetimeDataField extends OINODbDataField {
      *
      */
     deserializeCell(value) {
-        // OINOLog.debug("OINODatetimeDataField.deserializeCell", {strVal:strVal})
         if ((value === null) || (value === undefined)) {
             return value;
         }

@@ -26,7 +26,6 @@ class OINOMariadbData extends db_1.OINODbDataSet {
         else if (Array.isArray(data)) {
             this._rows = data;
         }
-        // OINOLog.debug("OINOMariadbData.constructor", {_rows:this._rows})
         if (this.isEmpty()) {
             this._currentRow = -1;
             this._eof = true;
@@ -57,7 +56,6 @@ class OINOMariadbData extends db_1.OINODbDataSet {
      *
      */
     async next() {
-        // OINOLog.debug("OINODbDataSet.next", {currentRow:this._currentRow, length:this.sqlResult.data.length})
         if (this._currentRow < this._rows.length - 1) {
             this._currentRow = this._currentRow + 1;
         }
@@ -101,24 +99,11 @@ class OINODbMariadb extends db_1.OINODb {
      */
     constructor(params) {
         super(params);
-        // OINOLog.debug("OINODbMariadb.constructor", {params:params})
         if (this._params.type !== "OINODbMariadb") {
             throw new Error(db_1.OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type);
         }
         this._pool = mariadb_1.default.createPool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, acquireTimeout: 2000, debug: false, rowsAsArray: true, multipleStatements: true });
         delete this._params.password; // do not store password in db object
-        // this._pool.on("acquire", (conn: mariadb.Connection) => {
-        //     OINOLog.info("OINODbMariadb acquire", {conn:conn})
-        // })
-        // this._pool.on("connection", (conn: mariadb.Connection) => {
-        //     OINOLog.info("OINODbMariadb connection", {conn:conn})
-        // })
-        // this._pool.on("release", (conn: mariadb.Connection) => {
-        //     OINOLog.info("OINODbMariadb release", {conn:conn})
-        // })
-        // this._pool.on("enqueue", () => {
-        //     OINOLog.info("OINODbMariadb enqueue", {})
-        // })
     }
     _parseFieldLength(fieldLengthStr) {
         let result = parseInt(fieldLengthStr);
@@ -128,27 +113,19 @@ class OINODbMariadb extends db_1.OINODb {
         return result;
     }
     async _query(sql) {
-        // OINOLog.debug("OINODbMariadb._query", {sql:sql})
         let connection = null;
         try {
             connection = await this._pool.getConnection();
             const result = await connection.query(sql);
-            // console.log("OINODbMariadb._query rows="+result)
             return Promise.resolve(result);
-        }
-        catch (err) {
-            // console.log("OINODbMariadb._query err=" + err); 
-            throw err;
         }
         finally {
             if (connection) {
                 await connection.end();
             }
         }
-        // OINOLog.debug("OINODbMariadb._query", {result:query_result})
     }
     async _exec(sql) {
-        // OINOLog.debug("OINODbMariadb._exec", {sql:sql})
         let connection = null;
         try {
             connection = await this._pool.getConnection();
@@ -156,17 +133,11 @@ class OINODbMariadb extends db_1.OINODb {
             // console.log(result); 
             return Promise.resolve(result);
         }
-        catch (err) {
-            const msg_parts = err.message.match(OINODbMariadb._sqlExceptionMessageRegex) || [];
-            // OINOLog.debug("OINODbMariadb._exec exception", {connection: msg_parts[1], message:msg_parts[2], sql:msg_parts[3]}) // print connection info just to log so tests don't break on runtime output
-            throw new Error(msg_parts[2]);
-        }
         finally {
             if (connection) {
                 await connection.end();
             }
         }
-        // OINOLog.debug("OINODbMariadb._query", {result:query_result})
     }
     /**
      * Print a table name using database specific SQL escaping.
@@ -195,7 +166,6 @@ class OINODbMariadb extends db_1.OINODb {
      *
      */
     printCellAsSqlValue(cellValue, sqlType) {
-        // OINOLog.debug("OINODbMariadb.printCellAsSqlValue", {cellValue:cellValue, sqlType:sqlType})
         if (cellValue === null) {
             return "NULL";
         }
@@ -252,7 +222,6 @@ class OINODbMariadb extends db_1.OINODb {
      *
      */
     parseSqlValueAsCell(sqlValue, sqlType) {
-        // OINOLog.debug("OINODbMariadb.parseSqlValueAsCell", {sqlValue:sqlValue, sqlType:sqlType})
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null;
         }
@@ -283,14 +252,13 @@ class OINODbMariadb extends db_1.OINODb {
         let connection = null;
         try {
             // make sure that any items are correctly URL encoded in the connection string
-            // OINOLog.debug("OINODbMariadb.connect")
             connection = await this._pool.getConnection();
             this.isConnected = true;
         }
-        catch (err) {
-            const msg_parts = err.message.match(OINODbMariadb._connectionExceptionMessageRegex) || [];
+        catch (e) {
+            const msg_parts = e.message.match(OINODbMariadb._connectionExceptionMessageRegex) || [];
             result.setError(500, "Error connecting to server: " + msg_parts[2], "OINODbMariadb.connect");
-            db_1.OINOLog.error(result.statusMessage, { error: err });
+            db_1.OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "connect", result.statusMessage, { message: e.message, stack: e.stack });
         }
         finally {
             if (connection) {
@@ -308,9 +276,7 @@ class OINODbMariadb extends db_1.OINODb {
         let result = new db_1.OINOResult();
         try {
             const sql = this._getValidateSql(this._params.database);
-            // OINOLog.debug("OINODbMariadb.validate", {sql:sql})
             const sql_res = await this.sqlSelect(sql);
-            // OINOLog.debug("OINODbMariadb.validate", {sql_res:sql_res})
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate");
             }
@@ -324,9 +290,9 @@ class OINODbMariadb extends db_1.OINODb {
                 this.isValidated = true;
             }
         }
-        catch (err) {
-            result.setError(500, "Exception validating connection: " + err.message, "OINODbMariadb.validate");
-            db_1.OINOLog.error(result.statusMessage, { error: err });
+        catch (e) {
+            result.setError(500, "Exception validating connection: " + e.message, "OINODbMariadb.validate");
+            db_1.OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "validate", result.statusMessage, { message: e, stack: e.stack });
         }
         db_1.OINOBenchmark.end("OINODb", "validate");
         return result;
@@ -341,11 +307,11 @@ class OINODbMariadb extends db_1.OINODb {
         db_1.OINOBenchmark.start("OINODb", "sqlSelect");
         let result;
         try {
-            const sql_res = await this._query(sql);
-            // OINOLog.debug("OINODbMariadb.sqlSelect", {sql_res:sql_res})
-            result = new OINOMariadbData(sql_res, []);
+            const rows = await this._query(sql);
+            result = new OINOMariadbData(rows, []);
         }
         catch (e) {
+            db_1.OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "sqlSelect", "SQL select exception", { message: e.message, stack: e.stack });
             result = new OINOMariadbData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlSelect");
@@ -362,11 +328,12 @@ class OINODbMariadb extends db_1.OINODb {
         let result;
         try {
             const sql_res = await this._exec(sql);
-            // OINOLog.debug("OINODbMariadb.sqlExec", {sql_res:sql_res})
             result = new OINOMariadbData(sql_res, []);
         }
         catch (e) {
-            result = new OINOMariadbData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
+            const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || [];
+            db_1.OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "sqlExec", "SQL exec exception", { message: msg_parts[2], stack: e.stack });
+            result = new OINOMariadbData(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + msg_parts[2] + "]"]);
         }
         db_1.OINOBenchmark.end("OINODb", "sqlExec");
         return result;
@@ -402,13 +369,11 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
      *
      */
     async initializeApiDatamodel(api) {
-        const res = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName));
-        while (!res.isEof()) {
-            const row = res.getRow();
-            // OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { description:row })
+        const schema_res = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName));
+        while (!schema_res.isEof()) {
+            const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";
             const field_matches = OINODbMariadb._fieldLengthRegex.exec(row[1]?.toString() || "") || [];
-            // OINOLog.debug("OINODbMariadb.initializeApiDatamodel", { field_matches:field_matches })
             const sql_type = field_matches[1] || "";
             const field_length1 = this._parseFieldLength(field_matches[3] || "0");
             const field_length2 = this._parseFieldLength(field_matches[4] || "0");
@@ -420,13 +385,12 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
                 isNotNull: row[2] == "NO"
             };
             if (api.isFieldIncluded(field_name) == false) {
-                db_1.OINOLog.info("OINODbMariadb.initializeApiDatamodel: field excluded in API parameters.", { field: field_name });
+                db_1.OINOLog.info("@oinots/db-mariadb", "OINODbMariadb", ".initializeApiDatamodel", "Field excluded in API parameters", { field: field_name });
                 if (field_params.isPrimaryKey) {
                     throw new Error(db_1.OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name);
                 }
             }
             else {
-                // OINOLog.debug("OINODbMariadb.initializeApiDatamodel: next field ", {field_name: field_name, sql_type:sql_type, field_length1:field_length1, field_length2:field_length2, field_params:field_params })
                 if ((sql_type == "int") || (sql_type == "smallint") || (sql_type == "float") || (sql_type == "double")) {
                     api.datamodel.addField(new db_1.OINONumberDataField(this, field_name, sql_type, field_params));
                 }
@@ -456,13 +420,13 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
                     }
                 }
                 else {
-                    db_1.OINOLog.info("OINODbMariadb.initializeApiDatamodel: unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length1: field_length1, field_length2: field_length2, field_params: field_params });
+                    db_1.OINOLog.info("@oinots/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length1: field_length1, field_length2: field_length2, field_params: field_params });
                     api.datamodel.addField(new db_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
                 }
             }
-            await res.next();
+            await schema_res.next();
         }
-        db_1.OINOLog.debug("OINODbMariadb.initializeDatasetModel:\n" + api.datamodel.printDebug("\n"));
+        db_1.OINOLog.info("@oinots/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
         return Promise.resolve();
     }
 }

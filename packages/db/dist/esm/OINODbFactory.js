@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODbApi, OINOContentType, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlAggregate, OINODbSqlSelect } from "./index.js";
+import { OINODbApi, OINOContentType, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlAggregate, OINODbSqlSelect, OINOLog } from "./index.js";
 /**
  * Static factory class for easily creating things based on data
  *
@@ -18,7 +18,6 @@ export class OINODbFactory {
      * @param dbTypeClass constructor for creating a database of that type
      */
     static registerDb(dbName, dbTypeClass) {
-        // OINOLog.debug("OINODbFactory.registerDb", {dbType:dbName})
         this._dbRegistry[dbName] = dbTypeClass;
     }
     /**
@@ -106,12 +105,10 @@ export class OINODbFactory {
             result.requestType = OINOContentType.json;
         }
         const response_type = url.searchParams.get(OINODbConfig.OINODB_RESPONSE_TYPE) || request.headers.get("accept"); // accept header can be overridden by query parameter
-        // OINOLog.debug("createParamsFromRequest: accept headers", {accept:accept})
         const accept_types = response_type?.split(', ') || [];
         for (let i = 0; i < accept_types.length; i++) {
             if (Object.values(OINOContentType).includes(accept_types[i])) {
                 result.responseType = accept_types[i];
-                // OINOLog.debug("createParamsFromRequest: response type found", {respnse_type:result.responseType})
                 break;
             }
         }
@@ -126,7 +123,7 @@ export class OINODbFactory {
         if (etags) {
             result.etags = etags;
         }
-        // OINOLog.debug("createParamsFromRequest", {params:result})
+        OINOLog.debug("@oinots/db", "OINODbFactory", "createParamsFromRequest", "Result", { params: result });
         return result;
     }
 }

@@ -106,22 +106,18 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
         const api = modelset.datamodel.api;
         const modified_index = datamodel.findFieldIndexByName(api.params.cacheModifiedField || "");
         let last_modified = this.modified;
-        // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
         while (!dataset.isEof()) {
             const row = dataset.getRow();
             if (modified_index >= 0) {
                 last_modified = Math.max(last_modified, new Date(row[modified_index]).getTime());
-                // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
             }
             let row_id_seed = datamodel.getRowPrimarykeyValues(row).join(' ');
             let primary_key_values = [];
             this.clearVariables();
             this.setVariableFromValue(index_js_1.OINODbConfig.OINODB_ID_FIELD, "");
-            // let html_row:string = this.template.replaceAll('###' + OINODbConfig.OINODB_ID_FIELD + '###', '###createHtmlFromData_temporary_oinoid###')
             for (let i = 0; i < datamodel.fields.length; i++) {
                 const f = datamodel.fields[i];
                 let value;
-                // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {field:f.name, row_value:row[i], value_type:typeof row[i]})
                 if ((this._locale != null) && (f instanceof index_js_1.OINODatetimeDataField)) {
                     value = f.serializeCellWithLocale(row[i], this._locale);
                 }
@@ -136,16 +132,13 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
                         primary_key_values.push(value || "");
                     }
                 }
-                // OINOLog.debug("renderFromDbData replace field value", {field:f.name, value:value }) 
                 this.setVariableFromValue(f.name, value || "");
             }
             this.setVariableFromProperties(overrideValues);
             this.setVariableFromValue(index_js_1.OINODbConfig.OINODB_ID_FIELD, index_js_1.OINODbConfig.printOINOId(primary_key_values));
-            // html_row = html_row.replaceAll('###createHtmlFromData_temporary_oinoid###', OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.html)) 
             html += this._renderHtml() + "\r\n";
             await dataset.next();
         }
-        // OINOLog.debug("OINOHtmlTemplate.renderFromDbData", {last_modified:last_modified})
         this.modified = last_modified;
         const result = this._createHttpResult(html, false);
         index_js_1.OINOBenchmark.end("OINOHtmlTemplate", "renderFromDbData");
@@ -177,7 +170,6 @@ class OINODbApi {
      *
      */
     constructor(db, params) {
-        // OINOLog.debug("OINODbApi.constructor", {db:db, tableName:tableName, params:params})
         if (!params.tableName) {
             throw new Error(index_js_1.OINO_ERROR_PREFIX + ": OINODbApiParams needs to define a table name!");
         }
@@ -191,26 +183,11 @@ class OINODbApi {
             this.hashid = null;
         }
     }
-    _printSql(result, rows, requirePrimaryKey, printer) {
-        let sql = "";
-        for (let i = 0; i < rows.length; i++) {
-            this._validateRow(result, rows[i], requirePrimaryKey);
-            if (result.success) {
-                sql += printer(rows[i]);
-            }
-            else if (this.params.failOnAnyInvalidRows === false) {
-                result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
-            }
-        }
-        return sql;
-    }
     _validateRow(result, row, requirePrimaryKey) {
         let field;
         for (let i = 0; i < this.datamodel.fields.length; i++) {
             field = this.datamodel.fields[i];
-            // OINOLog.debug("OINODbApi.validateHttpValues", {field:field})
             const val = row[i];
-            // OINOLog.debug("OINODbApi.validateHttpValues", {val:val})
             if ((val === null) && ((field.fieldParams.isNotNull) || (field.fieldParams.isPrimaryKey))) { // null is a valid SQL value except if it's not allowed
                 result.setError(405, "Field '" + field.name + "' is not allowed to be NULL!", "ValidateRowValues");
             }
@@ -223,7 +200,6 @@ class OINODbApi {
             else {
                 if ((field instanceof index_js_1.OINOStringDataField) && ((field.maxLength > 0))) {
                     const str_val = val?.toString() || "";
-                    // OINOLog.debug("OINODbApi.validateHttpValues", {f:str_field, val:val})
                     if (str_val.length > field.maxLength) {
                         if (this.params.failOnOversizedValues) {
                             result.setError(405, "Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and can't be set!", "ValidateRowValues");
@@ -256,12 +232,13 @@ class OINODbApi {
         let sql = "";
         try {
             sql = this.datamodel.printSqlSelect(id, params.sqlParams || {});
-            // OINOLog.debug("OINODbApi.doGet sql", {sql:sql})
+            common_1.OINOLog.debug("@oinots/db", "OINODbApi", "_doGet", "Print SQL", { sql: sql });
             const sql_res = await this.db.sqlSelect(sql);
-            // OINOLog.debug("OINODbApi.doGet sql_res", {sql_res:sql_res})
             if (sql_res.hasErrors()) {
                 result.setError(500, sql_res.getFirstError(), "DoGet");
-                result.addDebug("OINO GET SQL [" + sql + "]", "DoPut");
+                if (this._debugOnError) {
+                    result.addDebug("OINO GET SQL [" + sql + "]", "DoPut");
+                }
             }
             else {
                 result.data = new index_js_1.OINODbModelSet(this.datamodel, sql_res, params.sqlParams);
@@ -269,7 +246,10 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet");
-            result.addDebug("OINO GET SQL [" + sql + "]", "DoGet");
+            common_1.OINOLog.exception("@oinots/db", "OINODbApi", "_doGet", "Exception", { message: e.message, stack: e.stack });
+            if (this._debugOnError) {
+                result.addDebug("OINO GET SQL [" + sql + "]", "DoGet");
+            }
         }
     }
     async _doPost(result, rows) {
@@ -288,7 +268,7 @@ class OINODbApi {
                 result.setError(405, "No valid rows for POST!", "DoPost");
             }
             else if (result.success) {
-                // OINOLog.debug("OINODbApi.doPost sql", {sql:sql})
+                common_1.OINOLog.debug("@oinots/db", "OINODbApi", "_doPost", "Print SQL", { sql: sql });
                 const sql_res = await this.db.sqlExec(sql);
                 // OINOLog.debug("OINODbApi.doPost sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
@@ -302,7 +282,10 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception in doPost: " + e.message, "DoPost");
-            result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
+            common_1.OINOLog.exception("@oinots/db", "OINODbApi", "_doGet", "Exception", { message: e.message, stack: e.stack });
+            if (this._debugOnError) {
+                result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
+            }
         }
     }
     async _doPut(result, id, rows) {
@@ -323,9 +306,8 @@ class OINODbApi {
                 result.setError(405, "No valid rows for PUT!", "DoPut"); // only set error if there are multiple rows and no valid sql was created
             }
             else if (result.success) {
-                // OINOLog.debug("OINODbApi.doPut sql", {sql:sql})
+                common_1.OINOLog.debug("@oinots/db", "OINODbApi", "_doPut", "Print SQL", { sql: sql });
                 const sql_res = await this.db.sqlExec(sql);
-                // OINOLog.debug("OINODbApi.doPut sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoPut");
                     if (this._debugOnError) {
@@ -337,7 +319,10 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception: " + e.message, "DoPut");
-            result.addDebug("OINO POST SQL [" + sql + "]", "DoPut");
+            common_1.OINOLog.exception("@oinots/db", "OINODbApi", "_doGet", "Exception", { message: e.message, stack: e.stack });
+            if (this._debugOnError) {
+                result.addDebug("OINO POST SQL [" + sql + "]", "DoPut");
+            }
         }
     }
     async _doDelete(result, id, rows) {
@@ -361,9 +346,8 @@ class OINODbApi {
                 result.setError(405, "No valid rows for DELETE!", "DoDelete"); // only set error if there are multiple rows and no valid sql was created
             }
             else if (result.success) {
-                // OINOLog.debug("OINODbApi.doDelete sql", {sql:sql})
+                common_1.OINOLog.debug("@oinots/db", "OINODbApi", "_doDelete", "Print SQL", { sql: sql });
                 const sql_res = await this.db.sqlExec(sql);
-                // OINOLog.debug("OINODbApi.doDelete sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoDelete");
                     if (this._debugOnError) {
@@ -375,7 +359,9 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception: " + e.message, "DoDelete");
-            result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete");
+            if (this._debugOnError) {
+                result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete");
+            }
         }
     }
     /**
@@ -398,7 +384,7 @@ class OINODbApi {
      */
     async doRequest(method, id, data, params = API_EMPTY_PARAMS) {
         index_js_1.OINOBenchmark.start("OINODbApi", "doRequest");
-        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
+        common_1.OINOLog.debug("@oinots/db", "OINODbApi", "doRequest", "Request", { method: method, id: id, data: data });
         let result = new OINODbApiResult(params);
         let rows = [];
         if ((method == "POST") || (method == "PUT")) {
@@ -432,7 +418,6 @@ class OINODbApi {
             }
             else {
                 try {
-                    // OINOLog.debug("OINODbApi.doRequest / POST", {rows:rows})
                     await this._doPost(result, rows);
                 }
                 catch (e) {
@@ -470,7 +455,7 @@ class OINODbApi {
      */
     async doBatchUpdate(method, data, params = API_EMPTY_PARAMS) {
         index_js_1.OINOBenchmark.start("OINODbApi", "doBatchUpdate");
-        // OINOLog.debug("OINODbApi.doRequest enter", {method:method, id:id, body:body, params:params})
+        common_1.OINOLog.debug("@oinots/db", "OINODbApi", "doBatchUpdate", "Request", { method: method, data: data, params: params });
         let result = new OINODbApiResult(params);
         let rows = [];
         if ((method == "PUT")) {
@@ -505,7 +490,6 @@ class OINODbApi {
      *
      */
     isFieldIncluded(fieldName) {
-        // OINOLog.debug("OINODbApi.isFieldIncluded", {fieldName:fieldName, included:this.params.includeFields})
         const params = this.params;
         return (((params.excludeFieldPrefix == undefined) || (params.excludeFieldPrefix == "") || (fieldName.startsWith(params.excludeFieldPrefix) == false)) &&
             ((params.excludeFields == undefined) || (params.excludeFields.length == 0) || (params.excludeFields.indexOf(fieldName) < 0)) &&

@@ -60,7 +60,7 @@ export class OINODbModelSet {
             }
             let value = f.serializeCell(row[i]);
             if (value === undefined) {
-                // OINOLog.info("OINODbModelSet._writeRowJson: undefined value skipped", {field_name:f.name})
+                OINOLog.info("@oinots/db", "OINODbModelSet", "_writeRowJson", "Undefined value skipped", { field_name: f.name });
             }
             else if (value === null) {
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":null";
@@ -76,7 +76,6 @@ export class OINODbModelSet {
             }
         }
         json_row = OINOStr.encode(OINODbConfig.OINODB_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.json) + json_row;
-        // OINOLog_debug("OINODbModelSet._writeRowJson="+json_row)
         return "{" + json_row + "}";
     }
     async _writeStringJson() {
@@ -86,12 +85,10 @@ export class OINODbModelSet {
                 result += ",\r\n";
             }
             const row = this.dataset.getRow();
-            // OINOLog.debug("OINODbModelSet._writeStringJson: row", {row:row})
             result += this._writeRowJson(row);
             await this.dataset.next();
         }
         result = "[\r\n" + result + "\r\n]";
-        // OINOLog_debug("OINODbModelSet._writeStringJson="+result)
         return result;
     }
     _writeHeaderCsv() {
@@ -101,11 +98,9 @@ export class OINODbModelSet {
         for (let i = 0; i < fields.length; i++) {
             csv_header += ",\"" + fields[i].name + "\"";
         }
-        // OINOLog_debug("OINODbModelSet._writeHeaderCsv="+csv_header)
         return csv_header;
     }
     _writeRowCsv(row) {
-        // OINOLog_debug("OINODbModelSet._writeRowCsv", {row:row})
         const model = this.datamodel;
         const fields = model.fields;
         let row_id_seed = model.getRowPrimarykeyValues(row).join(' ');
@@ -126,7 +121,6 @@ export class OINODbModelSet {
             }
         }
         csv_row = OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.csv) + csv_row;
-        // OINOLog_debug("OINODbModelSet._writeRowCsv="+csv_row)
         return csv_row;
     }
     async _writeStringCsv() {
@@ -136,11 +130,9 @@ export class OINODbModelSet {
                 result += "\r\n";
             }
             const row = this.dataset.getRow();
-            // OINOLog.debug("OINODbModelSet._writeStringCsv: row", {row:row})
             result += this._writeRowCsv(row);
             await this.dataset.next();
         }
-        // OINOLog_debug("OINODbModelSet._writeStringCsv="+result)
         return result;
     }
     _writeRowFormdataParameterBlock(blockName, blockValue, multipartBoundary) {
@@ -155,7 +147,6 @@ export class OINODbModelSet {
         return multipartBoundary + "\r\n" + "Content-Disposition: form-data; name=\"" + blockName + "\"; filename=" + blockName + "\"\r\nContent-Type: application/octet-stream\r\nContent-Transfer-Encoding: BASE64\r\n\r\n" + blockValue + "\r\n";
     }
     _writeRowFormdata(row) {
-        // console.log("OINODbModelSet._writeRowFormdata: row", row)
         const multipart_boundary = "---------OINOMultipartBoundary35424568"; // this method is just used for test data generation and we want it to be static
         const model = this.datamodel;
         const fields = model.fields;
@@ -171,7 +162,7 @@ export class OINODbModelSet {
             let formdata_block = "";
             let is_file = (f instanceof OINOBlobDataField);
             if (value === undefined) {
-                OINOLog.info("OINODbModelSet._writeRowFormdata: undefined value skipped.", { field: f.name });
+                OINOLog.info("@oinots/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", { field_name: f.name });
             }
             else if (value === null) {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary);
@@ -185,7 +176,6 @@ export class OINODbModelSet {
                     formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, value, multipart_boundary);
                 }
             }
-            // OINOLog.debug("OINODbModelSet._writeRowFormdata next block", {formdata_block:formdata_block})
             result += formdata_block;
         }
         result = this._writeRowFormdataParameterBlock(OINODbConfig.OINODB_ID_FIELD, OINODbConfig.printOINOId(primary_key_values), multipart_boundary) + result;
@@ -193,12 +183,10 @@ export class OINODbModelSet {
     }
     _writeStringFormdata() {
         const row = this.dataset.getRow();
-        // OINOLog.debug("OINODbModelSet._writeStringFormdata: row", {row:row})
         let result = this._writeRowFormdata(row);
         return result;
     }
     _writeRowUrlencode(row) {
-        // console.log("OINODbModelSet._writeRowUrlencode row=" + row)
         const model = this.datamodel;
         const fields = model.fields;
         let row_id_seed = model.getRowPrimarykeyValues(row).join(' ');
@@ -222,7 +210,6 @@ export class OINODbModelSet {
             }
         }
         urlencode_row = OINOStr.encode(OINODbConfig.OINODB_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row;
-        // OINOLog_debug("OINODbModelSet._writeRowCsv="+csv_row)
         return urlencode_row;
     }
     async _writeStringUrlencode() {
@@ -230,14 +217,12 @@ export class OINODbModelSet {
         let line_count = 0;
         while (!this.dataset.isEof()) {
             const row = this.dataset.getRow();
-            // OINOLog.debug("OINODbModelSet._writeStringUrlencode: row", {row:row})
             result += this._writeRowUrlencode(row) + "\r\n";
             await this.dataset.next();
             line_count += 1;
         }
-        // OINOLog_debug("OINODbModelSet._writeStringCsv="+result)
         if (line_count > 1) {
-            OINOLog.warning("OINODbModelSet._writeStringUrlencode: content type " + OINOContentType.urlencode + " does not officially support multiline content!");
+            OINOLog.warning("@oinots/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + OINOContentType.urlencode + " does not officially support multiline content!", {});
         }
         return result;
     }
@@ -262,7 +247,7 @@ export class OINODbModelSet {
             result += await this._writeStringUrlencode();
         }
         else {
-            OINOLog.error("OINODbModelSet.writeString: content type is only for input!", { contentType: contentType });
+            OINOLog.error("@oinots/db", "OINODbModelSet", "writeString", "Content type is only for input!", { contentType: contentType });
         }
         return result;
     }

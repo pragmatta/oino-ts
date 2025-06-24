@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX, OINODbConfig, OINONumberDataField, OINODB_UNDEFINED } from "./index.js";
+import { OINO_ERROR_PREFIX, OINODbConfig, OINONumberDataField, OINOLog, OINODB_UNDEFINED } from "./index.js";
 /**
  * OINO Datamodel object for representing one database table and it's columns.
  *
@@ -25,7 +25,6 @@ export class OINODbDataModel {
         this._columnLookup = {};
         this.api = api;
         this.fields = [];
-        // OINOLog_debug("OINODbDataModel (" + tableName + "):\n" + this._printTableDebug("\n"))
     }
     /**
      * Initialize datamodel from SQL schema.
@@ -71,7 +70,6 @@ export class OINODbDataModel {
         for (let i = 0; i < this.fields.length; i++) {
             const f = this.fields[i];
             const val = row[i];
-            // OINOLog_debug("OINODbDataModel._printSqlUpdateValues", {field:f.name, primary_key:f.fieldParams.isPrimaryKey, val:val})
             if ((!f.fieldParams.isPrimaryKey) && (val !== undefined)) {
                 if (result != "") {
                     result += ",";
@@ -98,7 +96,6 @@ export class OINODbDataModel {
                 if (value == "") { // ids are user input and could be specially crafted to be empty
                     throw new Error(OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName);
                 }
-                // OINOLog.debug("OINODbDataModel._printSqlPrimaryKeyCondition", {field:f.name, value:value, id_value:id_value})
                 result += f.printSqlColumnName() + "=" + value;
                 i = i + 1;
             }
@@ -125,7 +122,6 @@ export class OINODbDataModel {
      *
      */
     findFieldByName(name) {
-        // OINOLog.debug("OINODbDataModel.findFieldByName", {_columnLookup:this._columnLookup})
         const i = this._columnLookup[name];
         if (i >= 0) {
             return this.fields[i];
@@ -141,7 +137,6 @@ export class OINODbDataModel {
      *
      */
     findFieldIndexByName(name) {
-        // OINOLog.debug("OINODbDataModel.findFieldIndexByName", {_columnLookup:this._columnLookup})
         const i = this._columnLookup[name];
         if (i >= 0) {
             return i;
@@ -232,13 +227,11 @@ export class OINODbDataModel {
         else {
             column_names = this._printSqlColumnNames(params.select);
         }
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {column_names:column_names})
         const order_sql = params.order?.toSql(this) || "";
         const limit_sql = params.limit?.toSql(this) || "";
         const filter_sql = params.filter?.toSql(this) || "";
         const groupby_sql = params.aggregate?.toSql(this, params.select) || "";
         let where_sql = "";
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {order_sql:order_sql, limit_sql:limit_sql, filter_sql:filter_sql, groupby_sql:groupby_sql})
         if ((id != null) && (id != "") && (filter_sql != "")) {
             where_sql = this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
         }
@@ -249,7 +242,7 @@ export class OINODbDataModel {
             where_sql = filter_sql;
         }
         const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql);
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {result:result})
+        OINOLog.debug("@oinots/db", "OINODbDataModel", "printSqlSelect", "Result", { sql: result });
         return result;
     }
     /**
@@ -260,6 +253,7 @@ export class OINODbDataModel {
      */
     printSqlInsert(row) {
         let result = "INSERT INTO " + this.api.db.printSqlTablename(this.api.params.tableName) + " " + this._printSqlInsertColumnsAndValues(row) + ";";
+        OINOLog.debug("@oinots/db", "OINODbDataModel", "printSqlInsert", "Result", { sql: result });
         return result;
     }
     /**
@@ -271,7 +265,7 @@ export class OINODbDataModel {
      */
     printSqlUpdate(id, row) {
         let result = "UPDATE " + this.api.db.printSqlTablename(this.api.params.tableName) + " SET " + this._printSqlUpdateValues(row) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
-        // OINOLog.debug("OINODbDataModel.printSqlUpdate", {result:result, id:id, row:row})
+        OINOLog.debug("@oinots/db", "OINODbDataModel", "printSqlUpdate", "Result", { sql: result });
         return result;
     }
     /**
@@ -282,6 +276,7 @@ export class OINODbDataModel {
      */
     printSqlDelete(id) {
         let result = "DELETE FROM " + this.api.db.printSqlTablename(this.api.params.tableName) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
+        OINOLog.debug("@oinots/db", "OINODbDataModel", "printSqlDelete", "Result", { sql: result });
         return result;
     }
 }
