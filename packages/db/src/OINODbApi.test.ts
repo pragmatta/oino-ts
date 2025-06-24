@@ -126,13 +126,12 @@ const OWASP_CROSSCHECKS:string[] = [
 
 Math.random()
 
-OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
+OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.warning))
 OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 OINODbFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
 OINODbFactory.registerDb("OINODbMariadb", OINODbMariadb)
 OINODbFactory.registerDb("OINODbMsSql", OINODbMsSql)
 
-OINOLog.setLogLevel(OINOLogLevel.debug)
 OINOBenchmark.setEnabled(["doRequest"])
 OINOBenchmark.reset()
 
@@ -158,8 +157,6 @@ function createApiTemplate(api:OINODbApi):OINODbHtmlTemplate {
 }
 
 export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestParams) {
-    // OINOLog.info("OINOTestApi", {dbParams:dbParams, apiDataset:apiDataset})
-
     let target_name:string = ""
     if (testParams.name) {
         target_name = "[" + testParams.name + "]"
@@ -200,19 +197,13 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     
     // const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
-    // OINOLog.debug("OINOTestApi", {new_row_id:new_row_id})
 
     const empty_params:OINODbApiRequestParams = { sqlParams: {}}
     const request_params:OINODbApiRequestParams = Object.assign({}, testParams.requestParams)
     request_params.sqlParams = {}
     const request_params_with_filters:OINODbApiRequestParams = Object.assign({}, request_params)
     request_params_with_filters.sqlParams = testParams.requestParams.sqlParams
-    // OINOLog.debug("OINOTestApi", {request_params:request_params, request_params_with_filters:request_params_with_filters})
     
-    // await test("dummy", () => {
-    //     expect({foo:"h\\i"}).toMatchSnapshot()
-    // })
-
     target_group = "[SCHEMA]"
     await test(target_name + target_db + target_table + target_group + " public properties", async () => {
         expect(api.datamodel.printFieldPublicPropertiesJson()).toMatchSnapshot("SCHEMA")
@@ -244,7 +235,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
 
     target_group = "[HTTP POST]"
     const post_body_json:string = await post_modelset.writeString(OINOContentType.json)
-    // OINOLog.info("HTTP POST json", {post_body_json:post_body_json})
     await test(target_name + target_db + target_table + target_group + " insert with id", async () => {
         expect(encodeResult((await api.doRequest("POST", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("POST")
     })
@@ -262,7 +252,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     
     target_group = "[HTTP PUT]"
     const put_body_json = await put_modelset.writeString(OINOContentType.json)
-    // OINOLog.info("HTTP PUT JSON", {put_body_json:put_body_json})
     await test(target_name + target_db + target_table + target_group + " update JSON", async () => {
         request_params.requestType = OINOContentType.json
         expect(encodeResult((await api.doRequest("PUT", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("PUT JSON reset")
@@ -272,7 +261,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
 
     put_dataset.first()
     const put_body_csv = await put_modelset.writeString(OINOContentType.csv)
-    // OINOLog.info("HTTP PUT csv", {put_body_csv:put_body_csv})
     await test(target_name + target_db + target_table + target_group + " update CSV", async () => {
         request_params.requestType = OINOContentType.csv
         expect(encodeResult((await api.doRequest("PUT", new_row_id, post_body_json, empty_params)))).toMatchSnapshot("PUT CSV reset")
@@ -284,7 +272,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     let put_body_formdata = await put_modelset.writeString(OINOContentType.formdata)
     const multipart_boundary = put_body_formdata.substring(0, put_body_formdata.indexOf('\r'))
     put_body_formdata = put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
-    // OINOLog.info("HTTP PUT FORMDATA", {put_body_formdata:put_body_formdata})
     await test(target_name + target_db + target_table + target_group + " update FORMDATA", async () => {
         request_params.requestType = OINOContentType.formdata
         request_params.multipartBoundary = "---------OINO999999999"
@@ -296,7 +283,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     
     put_dataset.first()
     const put_body_urlencode = await put_modelset.writeString(OINOContentType.urlencode)
-    // OINOLog.info("HTTP PUT URLENCODE", {put_body_urlencode:put_body_urlencode})
     await test(target_name + target_db + target_table + target_group + " update URLENCODE", async () => {
         request_params.requestType = OINOContentType.urlencode
         request_params.multipartBoundary = undefined // for some reason this needs reset here so previous test value settings does not leak
@@ -311,7 +297,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
 
     const primary_keys:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return field.fieldParams.isPrimaryKey })
     if (primary_keys.length != 1) {
-        OINOLog.info("HTTP PUT table " + testParams.apiParams.tableName + " does not have an individual primary key so 'invalid null' and 'oversized data' tests are skipped")
+        OINOLog.info("@oinots/db", "OINODbApi.test.ts", "OINOTestApi", "HTTP PUT table " + testParams.apiParams.tableName + " does not have an individual primary key so 'invalid null' and 'oversized data' tests are skipped", {}) 
     } else {
         const id_field:string = primary_keys[0].name 
         const notnull_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isNotNull == true) })
@@ -331,7 +317,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
         const numeric_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINONumberDataField) && (field.fieldParams.isPrimaryKey == false) })
         if (numeric_fields.length > 0) {
             const nan_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + numeric_fields[0].name + "\":\"" + "; FOO" + "\"}]"
-            // OINOLog.debug("HTTP PUT NAN-value", {nan_value:nan_value})
             await test(target_name + target_db + target_table + target_group + " update NAN-value", async () => {
                 expect(encodeResult((await api.doRequest("PUT", new_row_id, nan_value, empty_params)))).toMatchSnapshot("PUT NAN-value")
             })
@@ -339,7 +324,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
         const date_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINODatetimeDataField) && (field.fieldParams.isPrimaryKey == false) })
         if (date_fields.length > 0) {
             const non_date = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + date_fields[0].name + "\":\"" + "; FOO" + "\"}]"
-            // OINOLog.debug("HTTP PUT invalid date value", {non_date:non_date})
             await test(target_name + target_db + target_table + target_group + " update invalid date value", async () => {
                 expect(encodeResult((await api.doRequest("PUT", new_row_id, non_date, empty_params)))).toMatchSnapshot("PUT invalid date value")
             })
@@ -349,7 +333,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     target_group = "[BATCH UPDATE]"
     const reversable_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return ((field instanceof OINOStringDataField) || (field instanceof OINONumberDataField)) && (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isForeignKey == false) })
     if (reversable_fields.length == 0) {
-        OINOLog.info("BATCH UPDATE table " + testParams.apiParams.tableName + " does not have numeric fields and batch update tests are skipped")
+        OINOLog.info("@oinots/db", "OINODbApi.test.ts", "OINOTestApi", "BATCH UPDATE table " + testParams.apiParams.tableName + " does not have numeric fields and batch update tests are skipped", {}) 
     } else {
         const batch_field = reversable_fields[0]
         const batch_field_name:string = batch_field.name
@@ -400,7 +384,6 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
 }
 
 export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestParams) {
-    // OINOLog.info("OINOTestOwasp", {dbParams:dbParams, apiDataset:testParams})
     const db:OINODb = await OINODbFactory.createDb( dbParams )
     const api:OINODbApi = await OINODbFactory.createApi(db, testParams.apiParams)
     
@@ -411,14 +394,12 @@ export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestP
     const put_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, put_dataset)
     
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
-    // OINOLog.debug("OINOTestOwasp", {new_row_id:new_row_id})
 
     const empty_params:OINODbApiRequestParams = { sqlParams: {}}
     const request_params:OINODbApiRequestParams = Object.assign({}, testParams.requestParams)
     request_params.sqlParams = {}
     const request_params_with_filters:OINODbApiRequestParams = Object.assign({}, request_params)
     request_params_with_filters.sqlParams = testParams.requestParams.sqlParams
-    // OINOLog.debug("OINOTestOwasp", {request_params:request_params, request_params_with_filters:request_params_with_filters})
     
     let target_name:string = ""
     if (testParams.name) {

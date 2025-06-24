@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODb, OINODbConstructor, OINODbApiRequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlParams, OINODbSqlAggregate, OINODbSqlSelect } from "./index.js"
+import { OINODbApi, OINODbApiParams, OINODbParams, OINOContentType, OINODb, OINODbConstructor, OINODbApiRequestParams, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlParams, OINODbSqlAggregate, OINODbSqlSelect, OINOLog } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -21,9 +21,7 @@ export class OINODbFactory {
      * @param dbTypeClass constructor for creating a database of that type
      */
     static registerDb(dbName:string, dbTypeClass: OINODbConstructor):void {
-        // OINOLog.debug("OINODbFactory.registerDb", {dbType:dbName})
         this._dbRegistry[dbName] = dbTypeClass
-
     }
 
     /**
@@ -115,12 +113,10 @@ export class OINODbFactory {
             result.requestType = OINOContentType.json
         }
         const response_type = url.searchParams.get(OINODbConfig.OINODB_RESPONSE_TYPE) || request.headers.get("accept") // accept header can be overridden by query parameter
-        // OINOLog.debug("createParamsFromRequest: accept headers", {accept:accept})
         const accept_types = response_type?.split(', ') || []
         for (let i=0; i<accept_types.length; i++) {
             if (Object.values(OINOContentType).includes(accept_types[i] as OINOContentType)) {
                 result.responseType = accept_types[i] as OINOContentType
-                // OINOLog.debug("createParamsFromRequest: response type found", {respnse_type:result.responseType})
                 break
             }
         }
@@ -136,7 +132,7 @@ export class OINODbFactory {
             result.etags = etags
         }
 
-        // OINOLog.debug("createParamsFromRequest", {params:result})
+        OINOLog.debug("@oinots/db", "OINODbFactory", "createParamsFromRequest", "Result", {params:result})
         return result
     }
 }

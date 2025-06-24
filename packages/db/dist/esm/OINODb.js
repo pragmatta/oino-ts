@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX, OINODB_EMPTY_ROW } from "./index.js";
+import { OINO_ERROR_PREFIX, OINODB_EMPTY_ROW, OINOLog } from "./index.js";
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data
  * between SQL and serialization formats.
@@ -36,7 +36,6 @@ export class OINODb {
      */
     printSqlSelect(tableName, columnNames, whereCondition, orderCondition, limitCondition, groupByCondition) {
         let result = "SELECT " + columnNames + " FROM " + tableName;
-        // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
         if (whereCondition != "") {
             result += " WHERE " + whereCondition;
         }
@@ -50,7 +49,7 @@ export class OINODb {
             result += " LIMIT " + limitCondition;
         }
         result += ";";
-        // OINOLog.debug("OINODb.printSqlSelect", {result:result})
+        OINOLog.debug("@oinots/db", "OINODb", "printSqlSelect", "Result", { sql: result });
         return result;
     }
 }

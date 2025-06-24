@@ -21,7 +21,6 @@ class OINODbFactory {
      * @param dbTypeClass constructor for creating a database of that type
      */
     static registerDb(dbName, dbTypeClass) {
-        // OINOLog.debug("OINODbFactory.registerDb", {dbType:dbName})
         this._dbRegistry[dbName] = dbTypeClass;
     }
     /**
@@ -109,12 +108,10 @@ class OINODbFactory {
             result.requestType = index_js_1.OINOContentType.json;
         }
         const response_type = url.searchParams.get(index_js_1.OINODbConfig.OINODB_RESPONSE_TYPE) || request.headers.get("accept"); // accept header can be overridden by query parameter
-        // OINOLog.debug("createParamsFromRequest: accept headers", {accept:accept})
         const accept_types = response_type?.split(', ') || [];
         for (let i = 0; i < accept_types.length; i++) {
             if (Object.values(index_js_1.OINOContentType).includes(accept_types[i])) {
                 result.responseType = accept_types[i];
-                // OINOLog.debug("createParamsFromRequest: response type found", {respnse_type:result.responseType})
                 break;
             }
         }
@@ -129,7 +126,7 @@ class OINODbFactory {
         if (etags) {
             result.etags = etags;
         }
-        // OINOLog.debug("createParamsFromRequest", {params:result})
+        index_js_1.OINOLog.debug("@oinots/db", "OINODbFactory", "createParamsFromRequest", "Result", { params: result });
         return result;
     }
 }

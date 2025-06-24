@@ -80,7 +80,6 @@ export declare class OINODbApi {
      *
      */
     constructor(db: OINODb, params: OINODbApiParams);
-    private _printSql;
     private _validateRow;
     private _parseData;
     private _doGet;
