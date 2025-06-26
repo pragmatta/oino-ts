@@ -52,11 +52,11 @@ export class OINODbParser {
             return this._createRowFromUrlencoded(datamodel, data);
         }
         else if (requestParams.requestType == OINOContentType.html) {
-            OINOLog.error("@oinots/db", "OINODbParser", "createRowsFromText", "HTML can't be used as an input content type!", { contentType: OINOContentType.html });
+            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "HTML can't be used as an input content type!", { contentType: OINOContentType.html });
             return [];
         }
         else {
-            OINOLog.error("@oinots/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", { contentType: requestParams.requestType });
+            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", { contentType: requestParams.requestType });
             return [];
         }
     }
@@ -82,11 +82,11 @@ export class OINODbParser {
             return this._createRowFromUrlencoded(datamodel, data.toString()); // data is urlencoded so it's a string
         }
         else if (requestParams.requestType == OINOContentType.html) {
-            OINOLog.error("@oinots/db", "OINODbParser", "createRowsFromBlob", "HTML can't be used as an input content type!", { contentType: OINOContentType.html });
+            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "HTML can't be used as an input content type!", { contentType: OINOContentType.html });
             return [];
         }
         else {
-            OINOLog.error("@oinots/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", { contentType: requestParams.requestType });
+            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", { contentType: requestParams.requestType });
             return [];
         }
     }
@@ -239,7 +239,7 @@ export class OINODbParser {
                 result.push(row);
             }
             else {
-                OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromCsv", "Empty row skipped", {});
+                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromCsv", "Empty row skipped", {});
             }
             start = end;
             end = start;
@@ -280,7 +280,7 @@ export class OINODbParser {
             return result;
         }
         else {
-            OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromJsonObj", "Empty row skipped", {});
+            OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromJsonObj", "Empty row skipped", {});
             return undefined;
         }
     }
@@ -338,7 +338,7 @@ export class OINODbParser {
                 start += l.length + 2;
                 const header_matches = OINODbParser._multipartHeaderRegex.exec(l);
                 if (!header_matches) {
-                    OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromFormdata", "Unsupported block skipped", { header_line: l });
+                    OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Unsupported block skipped", { header_line: l });
                     block_ok = false;
                 }
                 else {
@@ -347,7 +347,7 @@ export class OINODbParser {
                     let is_base64 = false;
                     const field_index = datamodel.findFieldIndexByName(field_name);
                     if (field_index < 0) {
-                        OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromFormdata", "Form field not found and skipped!", { field_name: field_name });
+                        OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Form field not found and skipped!", { field_name: field_name });
                         block_ok = false;
                     }
                     else {
@@ -355,7 +355,7 @@ export class OINODbParser {
                         l = this._parseMultipartLine(data, start);
                         while (block_ok && (l != '')) {
                             if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed') >= 0)) {
-                                OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromFormdata", "Mixed multipart files not supported and skipped!", { header_line: l });
+                                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Mixed multipart files not supported and skipped!", { header_line: l });
                                 block_ok = false;
                             }
                             else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64') >= 0)) {
@@ -366,7 +366,7 @@ export class OINODbParser {
                         }
                         start += 2;
                         if (!block_ok) {
-                            OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromFormdata", "Invalid block skipped", { field_name: field_name });
+                            OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Invalid block skipped", { field_name: field_name });
                         }
                         else if (start + multipartBoundary.length + 2 >= end) {
                             row[field_index] = null;
@@ -399,11 +399,11 @@ export class OINODbParser {
                 result.push(row);
             }
             else {
-                OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromFormdata", "Empty row skipped", {});
+                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Empty row skipped", {});
             }
         }
         catch (e) {
-            OINOLog.exception("@oinots/db", "OINODbParser", "_createRowFromFormdata", "Exception parsing formdata", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Exception parsing formdata", { message: e.message, stack: e.stack });
         }
         return result;
     }
@@ -419,7 +419,7 @@ export class OINODbParser {
                     const key = OINOStr.decodeUrlencode(param_parts[0]) || "";
                     const field_index = datamodel.findFieldIndexByName(key);
                     if (field_index < 0) {
-                        OINOLog.info("@oinots/db", "OINODbParser", "_createRowFromUrlencoded", "Param field not found", { field: key });
+                        OINOLog.info("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Param field not found", { field: key });
                     }
                     else {
                         const field = datamodel.fields[field_index];
@@ -437,11 +437,11 @@ export class OINODbParser {
                 result.push(row);
             }
             else {
-                OINOLog.warning("@oinots/db", "OINODbParser", "_createRowFromUrlencoded", "Empty row skipped", {});
+                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Empty row skipped", {});
             }
         }
         catch (e) {
-            OINOLog.exception("@oinots/db", "OINODbParser", "_createRowFromUrlencoded", "Exception parsing urlencoded data", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Exception parsing urlencoded data", { message: e.message, stack: e.stack });
         }
         return result;
     }

@@ -126,7 +126,7 @@ class OINODbFactory {
         if (etags) {
             result.etags = etags;
         }
-        index_js_1.OINOLog.debug("@oinots/db", "OINODbFactory", "createParamsFromRequest", "Result", { params: result });
+        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbFactory", "createParamsFromRequest", "Result", { params: result });
         return result;
     }
 }
