@@ -148,7 +148,7 @@ class OINODbBunSqlite extends db_1.OINODb {
         }
         catch (e) {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbBunSqlite.connect");
-            db_1.OINOLog.exception("@oinots/db", "OINODbBunSqlite", "connect", result.statusMessage, { message: e.message, stack: e.stack });
+            db_1.OINOLog.exception("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "connect", result.statusMessage, { message: e.message, stack: e.stack });
         }
         return result;
     }
@@ -274,7 +274,7 @@ class OINODbBunSqlite extends db_1.OINODb {
                         }
                     }
                     else {
-                        db_1.OINOLog.info("@oinots/db", "OINODbBunSqlite", "initializeApiDatamodel", "Unsupported field definition skipped.", { field: field_str });
+                        db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Unsupported field definition skipped.", { field: field_str });
                     }
                 }
                 else {
@@ -284,7 +284,7 @@ class OINODbBunSqlite extends db_1.OINODb {
                     const field_length = parseInt(field_match[4]) || 0;
                     if (api.isFieldIncluded(field_name) == false) {
                         excluded_fields.push(field_name);
-                        db_1.OINOLog.info("@oinots/db", "OINODbBunSqlite", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
+                        db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
                     }
                     else {
                         if ((sql_type == "INTEGER") || (sql_type == "REAL") || (sql_type == "DOUBLE") || (sql_type == "NUMERIC") || (sql_type == "DECIMAL")) {
@@ -308,14 +308,14 @@ class OINODbBunSqlite extends db_1.OINODb {
                             api.datamodel.addField(new db_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
                         }
                         else {
-                            db_1.OINOLog.info("@oinots/db", "OINODbBunSqlite", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length: field_length, field_params: field_params });
+                            db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length: field_length, field_params: field_params });
                             api.datamodel.addField(new db_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
                         }
                     }
                 }
             }
             ;
-            db_1.OINOLog.info("@oinots/db", "OINODbBunSqlite", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
+            db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
             return Promise.resolve();
         }
     }

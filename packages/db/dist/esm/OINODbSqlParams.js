@@ -55,7 +55,7 @@ export class OINODbSqlFilter {
             ((operation !== null) && (Object.values(OINODbSqlComparison).includes(operation)) && (typeof (leftSide) == "string") && (leftSide != "") && (typeof (rightSide) == "string") && (rightSide != "")) ||
             ((operation == OINODbSqlBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINODbSqlFilter)) ||
             (((operation == OINODbSqlBooleanOperation.and) || (operation == OINODbSqlBooleanOperation.or)) && (leftSide instanceof OINODbSqlFilter) && (rightSide instanceof OINODbSqlFilter)))) {
-            OINOLog.error("@oinots/db", "OINODbSqlFilter", "constructor", "Unsupported OINODbSqlFilter format", { leftSide: leftSide, operation: operation, rightSide: rightSide });
+            OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "constructor", "Unsupported OINODbSqlFilter format", { leftSide: leftSide, operation: operation, rightSide: rightSide });
             throw new Error(OINO_ERROR_PREFIX + ": Unsupported OINODbSqlFilter format!");
         }
         this._leftSide = leftSide;
@@ -88,7 +88,7 @@ export class OINODbSqlFilter {
                         return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1), OINODbSqlFilter.parse(boolean_parts[2]));
                     }
                     else {
-                        OINOLog.error("@oinots/db", "OINODbSqlFilter", "constructor", "Invalid filter", { filterString: filterString });
+                        OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "constructor", "Invalid filter", { filterString: filterString });
                         throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'"); // invalid filter could be a security risk, stop processing
                     }
                 }
@@ -156,7 +156,7 @@ export class OINODbSqlFilter {
         else {
             field = dataModel.findFieldByName(this._leftSide);
             if (!field) {
-                OINOLog.error("@oinots/db", "OINODbSqlFilter", "toSql", "Invalid field!", { field: this._leftSide });
+                OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "toSql", "Invalid field!", { field: this._leftSide });
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbSqlFilter.toSql - Invalid field '" + this._leftSide + "'"); // invalid field name could be a security risk, stop processing
             }
             result += dataModel.api.db.printSqlColumnname(field?.name || this._leftSide);
@@ -168,13 +168,13 @@ export class OINODbSqlFilter {
         else {
             const value = field.deserializeCell(this._rightSide);
             if ((value == null) || (value === "")) {
-                OINOLog.error("@oinots/db", "OINODbSqlFilter", "toSql", "Invalid value!", { value: value });
+                OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "toSql", "Invalid value!", { value: value });
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbSqlFilter.toSql - Invalid value '" + value + "'"); // invalid value could be a security risk, stop processing
             }
             result += field.printCellAsSqlValue(value);
         }
         result = "(" + result + ")";
-        OINOLog.debug("@oinots/db", "OINODbSqlFilter", "toSql", "Result", { sql: result });
+        OINOLog.debug("@oino-ts/db", "OINODbSqlFilter", "toSql", "Result", { sql: result });
         return result;
     }
 }
@@ -248,7 +248,7 @@ export class OINODbSqlOrder {
         for (let i = 0; i < this._columns.length; i++) {
             const field = dataModel.findFieldByName(this._columns[i]);
             if (!field) {
-                OINOLog.error("@oinots/db", "OINODbSqlOrder", "toSql", "Invalid field!", { field: this._columns[i] });
+                OINOLog.error("@oino-ts/db", "OINODbSqlOrder", "toSql", "Invalid field!", { field: this._columns[i] });
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbSqlOrder.toSql - Invalid field '" + this._columns[i] + "'"); // invalid field name could be a security risk, stop processing
             }
             if (result) {
@@ -262,7 +262,7 @@ export class OINODbSqlOrder {
                 result += "ASC";
             }
         }
-        OINOLog.debug("@oinots/db", "OINODbSqlOrder", "toSql", "Result", { sql: result });
+        OINOLog.debug("@oino-ts/db", "OINODbSqlOrder", "toSql", "Result", { sql: result });
         return result;
     }
 }
@@ -324,7 +324,7 @@ export class OINODbSqlLimit {
         if (this._page > 0) {
             result += " OFFSET " + (this._limit * (this._page - 1) + 1).toString();
         }
-        OINOLog.debug("@oinots/db", "OINODbSqlLimit", "toSql", "Result", { sql: result });
+        OINOLog.debug("@oino-ts/db", "OINODbSqlLimit", "toSql", "Result", { sql: result });
         return result;
     }
 }
@@ -404,7 +404,7 @@ export class OINODbSqlAggregate {
             }
         }
         result = result.substring(0, result.length - 1);
-        OINOLog.debug("@oinots/db", "OINODbSqlAggregate", "toSql", "Result", { sql: result });
+        OINOLog.debug("@oino-ts/db", "OINODbSqlAggregate", "toSql", "Result", { sql: result });
         return result;
     }
     /**

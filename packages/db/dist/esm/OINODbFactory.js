@@ -123,7 +123,7 @@ export class OINODbFactory {
         if (etags) {
             result.etags = etags;
         }
-        OINOLog.debug("@oinots/db", "OINODbFactory", "createParamsFromRequest", "Result", { params: result });
+        OINOLog.debug("@oino-ts/db", "OINODbFactory", "createParamsFromRequest", "Result", { params: result });
         return result;
     }
 }

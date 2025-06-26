@@ -276,7 +276,7 @@ export class OINODbMariadb extends OINODb {
         } catch (e:any) {
             const msg_parts = (e as Error).message.match(OINODbMariadb._connectionExceptionMessageRegex) || []
             result.setError(500, "Error connecting to server: " + msg_parts[2], "OINODbMariadb.connect")
-            OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "connect", result.statusMessage, {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "connect", result.statusMessage, {message:e.message, stack:e.stack})
         } finally {
             if (connection) {
                 await connection.end()
@@ -310,7 +310,7 @@ export class OINODbMariadb extends OINODb {
             }
         } catch (e:any) {
             result.setError(500, "Exception validating connection: " + e.message, "OINODbMariadb.validate")
-            OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "validate", result.statusMessage, {message:e, stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "validate", result.statusMessage, {message:e, stack:e.stack})
         }
         OINOBenchmark.end("OINODb", "validate")
         return result
@@ -330,7 +330,7 @@ export class OINODbMariadb extends OINODb {
             result = new OINOMariadbData(rows, [])
 
         } catch (e:any) {
-            OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "sqlSelect", "SQL select exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlSelect", "SQL select exception", {message:e.message, stack:e.stack})
             result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.end("OINODb", "sqlSelect")
@@ -352,7 +352,7 @@ export class OINODbMariadb extends OINODb {
 
         } catch (e:any) {
             const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || []
-            OINOLog.exception("@oinots/db-mariadb", "OINODbMariadb", "sqlExec", "SQL exec exception", {message:msg_parts[2], stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlExec", "SQL exec exception", {message:msg_parts[2], stack:e.stack})
             result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + msg_parts[2] + "]"])
         }
         OINOBenchmark.end("OINODb", "sqlExec")
@@ -412,7 +412,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
                 isNotNull: row[2] == "NO"
             }            
             if (api.isFieldIncluded(field_name)==false) {
-                OINOLog.info("@oinots/db-mariadb", "OINODbMariadb", ".initializeApiDatamodel", "Field excluded in API parameters", {field:field_name})
+                OINOLog.info("@oino-ts/db-mariadb", "OINODbMariadb", ".initializeApiDatamodel", "Field excluded in API parameters", {field:field_name})
                 if (field_params.isPrimaryKey) {
                     throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name)
                 }
@@ -445,13 +445,13 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
                     }
 
                 } else {
-                    OINOLog.info("@oinots/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "Unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length1:field_length1, field_length2:field_length2, field_params:field_params })
+                    OINOLog.info("@oino-ts/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "Unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length1:field_length1, field_length2:field_length2, field_params:field_params })
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }   
             }
             await schema_res.next()
         }
-        OINOLog.info("@oinots/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"))
+        OINOLog.info("@oino-ts/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"))
         return Promise.resolve()
     }
 }

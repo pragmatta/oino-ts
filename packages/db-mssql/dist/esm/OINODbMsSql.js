@@ -125,7 +125,7 @@ export class OINODbMsSql extends OINODb {
         });
         delete this._params.password; // do not store password in db object
         this._pool.on("error", (conn) => {
-            OINOLog.error("@oinots/db", "OINODbMsSql", "constructor", "OINODbMsSql error event", conn);
+            OINOLog.error("@oino-ts/db-mssql", "OINODbMsSql", "constructor", "OINODbMsSql error event", conn);
         });
     }
     async _query(sql) {
@@ -252,7 +252,7 @@ export class OINODbMsSql extends OINODb {
         }
         if ((limitCondition != "") && (limit_parts.length == 2)) {
             if (orderCondition == "") {
-                OINOLog.error("@oinots/db", "OINODbMsSql", "printSqlSelect", "LIMIT without ORDER BY is not supported in MS SQL Server");
+                OINOLog.error("@oino-ts/db-mssql", "OINODbMsSql", "printSqlSelect", "LIMIT without ORDER BY is not supported in MS SQL Server");
                 throw new Error(OINO_ERROR_PREFIX + "LIMIT without ORDER BY is not supported in MS SQL Server");
             }
             else {
@@ -260,7 +260,7 @@ export class OINODbMsSql extends OINODb {
             }
         }
         result += ";";
-        OINOLog.debug("@oinots/db", "OINODbMsSql", "printSqlSelect", "Result", { sql: result });
+        OINOLog.debug("@oino-ts/db-mssql", "OINODbMsSql", "printSqlSelect", "Result", { sql: result });
         return result;
     }
     /**
@@ -277,7 +277,7 @@ export class OINODbMsSql extends OINODb {
         catch (e) {
             // ... error checks
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbMsSql.connect");
-            OINOLog.exception("@oinots/db", "OINODbMsSql", "connect", "Exception", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "connect", "Exception", { message: e.message, stack: e.stack });
         }
         return Promise.resolve(result);
     }
@@ -311,7 +311,7 @@ export class OINODbMsSql extends OINODb {
         }
         catch (e) {
             result.setError(500, "Exception in validating connection: " + e.message, "OINODbMsSql.validate");
-            OINOLog.exception("@oinots/db", "OINODbMsSql", "validate", "Exception", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "validate", "Exception", { message: e.message, stack: e.stack });
         }
         OINOBenchmark.end("OINODb", "validate");
         return result;
@@ -329,7 +329,7 @@ export class OINODbMsSql extends OINODb {
             result = await this._query(sql);
         }
         catch (e) {
-            OINOLog.exception("@oinots/db", "OINODbMsSql", "sqlSelect", "SQL select exception", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlSelect", "SQL select exception", { message: e.message, stack: e.stack });
             result = new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMsSql.sqlSelect exception in _db.query: " + e.message]);
         }
         OINOBenchmark.end("OINODb", "sqlSelect");
@@ -348,7 +348,7 @@ export class OINODbMsSql extends OINODb {
             result = await this._exec(sql);
         }
         catch (e) {
-            OINOLog.exception("@oinots/db", "OINODbMsSql", "sqlExec", "SQL exec exception", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlExec", "SQL exec exception", { message: e.message, stack: e.stack });
             result = new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
         OINOBenchmark.end("OINODb", "sqlExec");
@@ -418,7 +418,7 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
                 isNotNull: row[1] == "NO"
             };
             if (api.isFieldIncluded(field_name) == false) {
-                OINOLog.info("@oinots/db", "OINODbMsSql", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
+                OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
                 if (field_params.isPrimaryKey) {
                     throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name);
                 }
@@ -448,13 +448,13 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
                     api.datamodel.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params));
                 }
                 else {
-                    OINOLog.info("@oinots/db", "OINODbMsSql", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, char_length: char_field_length, numeric_field_length1: numeric_field_length1, numeric_field_length2: numeric_field_length2, field_params: field_params });
+                    OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, char_length: char_field_length, numeric_field_length1: numeric_field_length1, numeric_field_length2: numeric_field_length2, field_params: field_params });
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0));
                 }
             }
             await schema_res.next();
         }
-        OINOLog.info("@oinots/db", "OINODbMsSql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
+        OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
         return Promise.resolve();
     }
 }

@@ -63,7 +63,7 @@ class OINODbModelSet {
             }
             let value = f.serializeCell(row[i]);
             if (value === undefined) {
-                index_js_1.OINOLog.info("@oinots/db", "OINODbModelSet", "_writeRowJson", "Undefined value skipped", { field_name: f.name });
+                index_js_1.OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowJson", "Undefined value skipped", { field_name: f.name });
             }
             else if (value === null) {
                 json_row += "," + index_js_1.OINOStr.encode(f.name, index_js_1.OINOContentType.json) + ":null";
@@ -165,7 +165,7 @@ class OINODbModelSet {
             let formdata_block = "";
             let is_file = (f instanceof index_js_1.OINOBlobDataField);
             if (value === undefined) {
-                index_js_1.OINOLog.info("@oinots/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", { field_name: f.name });
+                index_js_1.OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", { field_name: f.name });
             }
             else if (value === null) {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary);
@@ -225,7 +225,7 @@ class OINODbModelSet {
             line_count += 1;
         }
         if (line_count > 1) {
-            index_js_1.OINOLog.warning("@oinots/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + index_js_1.OINOContentType.urlencode + " does not officially support multiline content!", {});
+            index_js_1.OINOLog.warning("@oino-ts/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + index_js_1.OINOContentType.urlencode + " does not officially support multiline content!", {});
         }
         return result;
     }
@@ -250,7 +250,7 @@ class OINODbModelSet {
             result += await this._writeStringUrlencode();
         }
         else {
-            index_js_1.OINOLog.error("@oinots/db", "OINODbModelSet", "writeString", "Content type is only for input!", { contentType: contentType });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbModelSet", "writeString", "Content type is only for input!", { contentType: contentType });
         }
         return result;
     }

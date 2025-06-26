@@ -297,7 +297,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
 
     const primary_keys:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return field.fieldParams.isPrimaryKey })
     if (primary_keys.length != 1) {
-        OINOLog.info("@oinots/db", "OINODbApi.test.ts", "OINOTestApi", "HTTP PUT table " + testParams.apiParams.tableName + " does not have an individual primary key so 'invalid null' and 'oversized data' tests are skipped", {}) 
+        OINOLog.info("@oino-ts/db", "OINODbApi.test.ts", "OINOTestApi", "HTTP PUT table " + testParams.apiParams.tableName + " does not have an individual primary key so 'invalid null' and 'oversized data' tests are skipped", {}) 
     } else {
         const id_field:string = primary_keys[0].name 
         const notnull_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isNotNull == true) })
@@ -333,7 +333,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     target_group = "[BATCH UPDATE]"
     const reversable_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return ((field instanceof OINOStringDataField) || (field instanceof OINONumberDataField)) && (field.fieldParams.isPrimaryKey == false) && (field.fieldParams.isForeignKey == false) })
     if (reversable_fields.length == 0) {
-        OINOLog.info("@oinots/db", "OINODbApi.test.ts", "OINOTestApi", "BATCH UPDATE table " + testParams.apiParams.tableName + " does not have numeric fields and batch update tests are skipped", {}) 
+        OINOLog.info("@oino-ts/db", "OINODbApi.test.ts", "OINOTestApi", "BATCH UPDATE table " + testParams.apiParams.tableName + " does not have numeric fields and batch update tests are skipped", {}) 
     } else {
         const batch_field = reversable_fields[0]
         const batch_field_name:string = batch_field.name

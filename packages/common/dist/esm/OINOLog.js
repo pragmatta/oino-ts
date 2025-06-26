@@ -25,7 +25,7 @@ export var OINOLogLevel;
  */
 export class OINOLog {
     static _instance;
-    _logLevels = { "*|*|*": OINOLogLevel.warning };
+    _logLevels = { "||": OINOLogLevel.warning };
     /**
      * Abstract logging method to implement the actual logging operation.
      *
@@ -34,7 +34,7 @@ export class OINOLog {
      */
     constructor(logLevel = OINOLogLevel.warning) {
         // console.log("OINOLog.constructor: logLevel=" + logLevel)
-        this._logLevels["*|*|*"] = logLevel;
+        this._logLevels["||"] = logLevel;
     }
     /**
      * Abstract logging method to implement the actual logging operation.
@@ -49,9 +49,11 @@ export class OINOLog {
         const log_levels = OINOLog._instance._logLevels;
         // console.log(log_levels)
         const min_level = log_levels[domain + "|" + channel + "|" + method] ||
-            log_levels[domain + "|" + channel + "|*"] ||
-            log_levels[domain + "|*|*"] ||
-            log_levels["*|*|*"];
+            log_levels[domain + "||" + method] ||
+            log_levels[domain + "|" + channel + "|"] ||
+            log_levels["|" + channel + "|"] ||
+            log_levels[domain + "||"] ||
+            log_levels["||"];
         // console.log("_log: level=" + level + ", min_level=" + min_level + ", levelStr=" + levelStr + ", message=" + message, data)
         if ((OINOLog._instance) && (level >= min_level)) {
             OINOLog._instance?._writeLog(levelStr, domain, channel, method, message, data);
@@ -84,7 +86,7 @@ export class OINOLog {
      * @param method method of the log event (default: "*" for all)
      *
      */
-    static setLogLevel(logLevel, domain = "*", channel = "*", method = "*") {
+    static setLogLevel(logLevel, domain = "", channel = "", method = "") {
         if (OINOLog._instance) {
             OINOLog._instance._logLevels[domain + "|" + channel + "|" + method] = logLevel;
         }

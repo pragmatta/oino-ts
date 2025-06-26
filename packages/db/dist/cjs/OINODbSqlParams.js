@@ -58,7 +58,7 @@ class OINODbSqlFilter {
             ((operation !== null) && (Object.values(OINODbSqlComparison).includes(operation)) && (typeof (leftSide) == "string") && (leftSide != "") && (typeof (rightSide) == "string") && (rightSide != "")) ||
             ((operation == OINODbSqlBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINODbSqlFilter)) ||
             (((operation == OINODbSqlBooleanOperation.and) || (operation == OINODbSqlBooleanOperation.or)) && (leftSide instanceof OINODbSqlFilter) && (rightSide instanceof OINODbSqlFilter)))) {
-            index_js_1.OINOLog.error("@oinots/db", "OINODbSqlFilter", "constructor", "Unsupported OINODbSqlFilter format", { leftSide: leftSide, operation: operation, rightSide: rightSide });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "constructor", "Unsupported OINODbSqlFilter format", { leftSide: leftSide, operation: operation, rightSide: rightSide });
             throw new Error(index_js_1.OINO_ERROR_PREFIX + ": Unsupported OINODbSqlFilter format!");
         }
         this._leftSide = leftSide;
@@ -91,7 +91,7 @@ class OINODbSqlFilter {
                         return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1), OINODbSqlFilter.parse(boolean_parts[2]));
                     }
                     else {
-                        index_js_1.OINOLog.error("@oinots/db", "OINODbSqlFilter", "constructor", "Invalid filter", { filterString: filterString });
+                        index_js_1.OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "constructor", "Invalid filter", { filterString: filterString });
                         throw new Error(index_js_1.OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'"); // invalid filter could be a security risk, stop processing
                     }
                 }
@@ -159,7 +159,7 @@ class OINODbSqlFilter {
         else {
             field = dataModel.findFieldByName(this._leftSide);
             if (!field) {
-                index_js_1.OINOLog.error("@oinots/db", "OINODbSqlFilter", "toSql", "Invalid field!", { field: this._leftSide });
+                index_js_1.OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "toSql", "Invalid field!", { field: this._leftSide });
                 throw new Error(index_js_1.OINO_ERROR_PREFIX + ": OINODbSqlFilter.toSql - Invalid field '" + this._leftSide + "'"); // invalid field name could be a security risk, stop processing
             }
             result += dataModel.api.db.printSqlColumnname(field?.name || this._leftSide);
@@ -171,13 +171,13 @@ class OINODbSqlFilter {
         else {
             const value = field.deserializeCell(this._rightSide);
             if ((value == null) || (value === "")) {
-                index_js_1.OINOLog.error("@oinots/db", "OINODbSqlFilter", "toSql", "Invalid value!", { value: value });
+                index_js_1.OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "toSql", "Invalid value!", { value: value });
                 throw new Error(index_js_1.OINO_ERROR_PREFIX + ": OINODbSqlFilter.toSql - Invalid value '" + value + "'"); // invalid value could be a security risk, stop processing
             }
             result += field.printCellAsSqlValue(value);
         }
         result = "(" + result + ")";
-        index_js_1.OINOLog.debug("@oinots/db", "OINODbSqlFilter", "toSql", "Result", { sql: result });
+        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbSqlFilter", "toSql", "Result", { sql: result });
         return result;
     }
 }
@@ -252,7 +252,7 @@ class OINODbSqlOrder {
         for (let i = 0; i < this._columns.length; i++) {
             const field = dataModel.findFieldByName(this._columns[i]);
             if (!field) {
-                index_js_1.OINOLog.error("@oinots/db", "OINODbSqlOrder", "toSql", "Invalid field!", { field: this._columns[i] });
+                index_js_1.OINOLog.error("@oino-ts/db", "OINODbSqlOrder", "toSql", "Invalid field!", { field: this._columns[i] });
                 throw new Error(index_js_1.OINO_ERROR_PREFIX + ": OINODbSqlOrder.toSql - Invalid field '" + this._columns[i] + "'"); // invalid field name could be a security risk, stop processing
             }
             if (result) {
@@ -266,7 +266,7 @@ class OINODbSqlOrder {
                 result += "ASC";
             }
         }
-        index_js_1.OINOLog.debug("@oinots/db", "OINODbSqlOrder", "toSql", "Result", { sql: result });
+        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbSqlOrder", "toSql", "Result", { sql: result });
         return result;
     }
 }
@@ -329,7 +329,7 @@ class OINODbSqlLimit {
         if (this._page > 0) {
             result += " OFFSET " + (this._limit * (this._page - 1) + 1).toString();
         }
-        index_js_1.OINOLog.debug("@oinots/db", "OINODbSqlLimit", "toSql", "Result", { sql: result });
+        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbSqlLimit", "toSql", "Result", { sql: result });
         return result;
     }
 }
@@ -410,7 +410,7 @@ class OINODbSqlAggregate {
             }
         }
         result = result.substring(0, result.length - 1);
-        index_js_1.OINOLog.debug("@oinots/db", "OINODbSqlAggregate", "toSql", "Result", { sql: result });
+        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbSqlAggregate", "toSql", "Result", { sql: result });
         return result;
     }
     /**
