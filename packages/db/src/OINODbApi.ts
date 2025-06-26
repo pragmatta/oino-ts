@@ -242,7 +242,7 @@ export class OINODbApi {
         let sql:string = ""
         try {
             sql = this.datamodel.printSqlSelect(id, params.sqlParams || {})
-            OINOLog.debug("@oinots/db", "OINODbApi", "_doGet", "Print SQL", {sql:sql})
+            OINOLog.debug("@oino-ts/db", "OINODbApi", "_doGet", "Print SQL", {sql:sql})
             const sql_res:OINODbDataSet = await this.db.sqlSelect(sql)
             if (sql_res.hasErrors()) {
                 result.setError(500, sql_res.getFirstError(), "DoGet")
@@ -254,7 +254,7 @@ export class OINODbApi {
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet")
-            OINOLog.exception("@oinots/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
             if (this._debugOnError) {
                 result.addDebug("OINO GET SQL [" + sql + "]", "DoGet")
             }
@@ -277,7 +277,7 @@ export class OINODbApi {
                 result.setError(405, "No valid rows for POST!", "DoPost")
 
             } else if (result.success) {
-                OINOLog.debug("@oinots/db", "OINODbApi", "_doPost", "Print SQL", {sql:sql})
+                OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPost", "Print SQL", {sql:sql})
                 const sql_res:OINODbDataSet = await this.db.sqlExec(sql)
                 // OINOLog.debug("OINODbApi.doPost sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
@@ -290,7 +290,7 @@ export class OINODbApi {
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception in doPost: " + e.message, "DoPost")
-            OINOLog.exception("@oinots/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
             if (this._debugOnError) {
                 result.addDebug("OINO POST SQL [" + sql + "]", "DoPost")
             }
@@ -315,7 +315,7 @@ export class OINODbApi {
                 result.setError(405, "No valid rows for PUT!", "DoPut") // only set error if there are multiple rows and no valid sql was created
 
             } else if (result.success) {
-                OINOLog.debug("@oinots/db", "OINODbApi", "_doPut", "Print SQL", {sql:sql})
+                OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPut", "Print SQL", {sql:sql})
                 const sql_res:OINODbDataSet = await this.db.sqlExec(sql)
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoPut")
@@ -327,7 +327,7 @@ export class OINODbApi {
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception: " + e.message, "DoPut")
-            OINOLog.exception("@oinots/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
             if (this._debugOnError) {
                 result.addDebug("OINO POST SQL [" + sql + "]", "DoPut")
             }
@@ -354,7 +354,7 @@ export class OINODbApi {
 
             } else if (result.success) {
             
-                OINOLog.debug("@oinots/db", "OINODbApi", "_doDelete", "Print SQL", {sql:sql})
+                OINOLog.debug("@oino-ts/db", "OINODbApi", "_doDelete", "Print SQL", {sql:sql})
                 const sql_res:OINODbDataSet = await this.db.sqlExec(sql)
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoDelete")
@@ -393,7 +393,7 @@ export class OINODbApi {
      */
     async doRequest(method:string, id: string, data:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("OINODbApi", "doRequest")
-        OINOLog.debug("@oinots/db", "OINODbApi", "doRequest", "Request", {method:method, id:id, data:data})
+        OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", {method:method, id:id, data:data})
         let result:OINODbApiResult = new OINODbApiResult(params)
         let rows:OINODataRow[] = []
         if ((method == "POST") || (method == "PUT")) {
@@ -462,7 +462,7 @@ export class OINODbApi {
      */
     async doBatchUpdate(method:string, data:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.start("OINODbApi", "doBatchUpdate")
-        OINOLog.debug("@oinots/db", "OINODbApi", "doBatchUpdate", "Request", {method:method, data:data, params:params})
+        OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", {method:method, data:data, params:params})
         let result:OINODbApiResult = new OINODbApiResult(params)
         let rows:OINODataRow[] = []
         if ((method == "PUT")) {

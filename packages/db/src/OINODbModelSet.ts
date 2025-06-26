@@ -69,7 +69,7 @@ export class OINODbModelSet {
             }
             let value:string|null|undefined = f.serializeCell(row[i])
             if (value === undefined) {
-                OINOLog.info("@oinots/db", "OINODbModelSet", "_writeRowJson", "Undefined value skipped", {field_name:f.name})
+                OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowJson", "Undefined value skipped", {field_name:f.name})
 
             } else if (value === null) {
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":null"
@@ -179,7 +179,7 @@ export class OINODbModelSet {
             let is_file = (f instanceof OINOBlobDataField)
 
             if (value === undefined) {
-                OINOLog.info("@oinots/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", {field_name:f.name})
+                OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", {field_name:f.name})
 
             } else if (value === null) {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary)
@@ -242,7 +242,7 @@ export class OINODbModelSet {
             line_count += 1
         }
         if (line_count > 1) {
-            OINOLog.warning("@oinots/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + OINOContentType.urlencode + " does not officially support multiline content!", {}) 
+            OINOLog.warning("@oino-ts/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + OINOContentType.urlencode + " does not officially support multiline content!", {}) 
         }
         return result
     }
@@ -268,7 +268,7 @@ export class OINODbModelSet {
             result += await this._writeStringUrlencode()
             
         } else {
-            OINOLog.error("@oinots/db", "OINODbModelSet", "writeString", "Content type is only for input!", {contentType:contentType})
+            OINOLog.error("@oino-ts/db", "OINODbModelSet", "writeString", "Content type is only for input!", {contentType:contentType})
         }
         return result
     }

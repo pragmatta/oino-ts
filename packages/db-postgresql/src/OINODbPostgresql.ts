@@ -111,7 +111,7 @@ export class OINODbPostgresql extends OINODb {
         delete this._params.password
 
         this._pool.on("error", (err: any) => {
-            OINOLog.error("@oinots/db-postgresql", "OINODbPostgresql", ".on(error)", "Error-event", {err:err}) 
+            OINOLog.error("@oino-ts/db-postgresql", "OINODbPostgresql", ".on(error)", "Error-event", {err:err}) 
         })
     }
 
@@ -249,7 +249,7 @@ export class OINODbPostgresql extends OINODb {
 
         } catch (e:any) {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbPostgresql.connect")
-            OINOLog.exception("@oinots/db-postgresql", "OINODbMsSql", "connect", "Exception", {message:e.message, stack:e.stack}) 
+            OINOLog.exception("@oino-ts/db-postgresql", "OINODbMsSql", "connect", "Exception", {message:e.message, stack:e.stack}) 
         }        
         return result
     }
@@ -278,7 +278,7 @@ export class OINODbPostgresql extends OINODb {
             }
         } catch (e:any) {
             result.setError(500, "Exception validating connection: " + e.message, "OINODbPostgresql.validate")
-            OINOLog.exception("@oinots/db-postgresql", "OINODbMsSql", "validate", "Exception", {message:e.message, stack:e.stack}) 
+            OINOLog.exception("@oino-ts/db-postgresql", "OINODbMsSql", "validate", "Exception", {message:e.message, stack:e.stack}) 
         }
         OINOBenchmark.end("OINODb", "validate")
         return result
@@ -399,7 +399,7 @@ WHERE col.table_catalog = '${dbName}'`
                 isAutoInc: default_val.startsWith("nextval(")
             }            
             if (api.isFieldIncluded(field_name) == false) {
-                OINOLog.info("@oinots/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Field excluded in API parameters.", {field:field_name})
+                OINOLog.info("@oino-ts/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Field excluded in API parameters.", {field:field_name})
                 if (field_params.isPrimaryKey) {
                     throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name)
                 }
@@ -428,13 +428,13 @@ WHERE col.table_catalog = '${dbName}'`
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1))
 
                 } else {
-                    OINOLog.info("@oinots/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
+                    OINOLog.info("@oino-ts/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, field_length:field_length, field_params:field_params })
                     api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }
             }
             await schema_res.next()
         }
-        OINOLog.info("@oinots/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"))
+        OINOLog.info("@oino-ts/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"))
         return Promise.resolve()
     }
 }
