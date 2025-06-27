@@ -26,6 +26,7 @@ export var OINOLogLevel;
 export class OINOLog {
     static _instance;
     _logLevels = { "||": OINOLogLevel.warning };
+    _defaultLogLevel = OINOLogLevel.warning;
     /**
      * Abstract logging method to implement the actual logging operation.
      *
@@ -35,6 +36,7 @@ export class OINOLog {
     constructor(logLevel = OINOLogLevel.warning) {
         // console.log("OINOLog.constructor: logLevel=" + logLevel)
         this._logLevels["||"] = logLevel;
+        this._defaultLogLevel = logLevel;
     }
     /**
      * Abstract logging method to implement the actual logging operation.
@@ -155,6 +157,48 @@ export class OINOLog {
      */
     static debug(domain, channel, method, message, data) {
         OINOLog._log(OINOLogLevel.debug, "DEBUG", domain, channel, method, message, data);
+    }
+    /**
+     * Get current log levels as an array of objects with domain, channel, method and level.
+     *
+     */
+    static exportLogLevels() {
+        let result = [];
+        if (OINOLog._instance) {
+            for (const key in OINOLog._instance._logLevels) {
+                const level = OINOLog._instance._logLevels[key];
+                if (level) {
+                    const parts = key.split("|");
+                    result.push({
+                        domain: parts[0],
+                        channel: parts[1],
+                        method: parts[2],
+                        level: level
+                    });
+                }
+            }
+        }
+        return result;
+    }
+    /**
+     * Import log levels from an array of objects with domain, channel, method and level.
+     *
+     * @param logLevels array of log level objects
+     *
+     */
+    static importLogLevels(logLevels) {
+        if (OINOLog._instance) {
+            OINOLog._instance._logLevels = { "||": OINOLog._instance._defaultLogLevel }; // reset to default log level
+            for (const logLevel of logLevels) {
+                const domain = logLevel.domain || "";
+                const channel = logLevel.channel || "";
+                const method = logLevel.method || "";
+                const level = logLevel.level;
+                if (level && OINOLogLevel[level]) {
+                    OINOLog._instance._logLevels[domain + "|" + channel + "|" + method] = level;
+                }
+            }
+        }
     }
 }
 /**

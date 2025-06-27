@@ -20,6 +20,7 @@ export declare enum OINOLogLevel {
 export declare abstract class OINOLog {
     protected static _instance: OINOLog;
     protected _logLevels: Record<string, OINOLogLevel>;
+    protected _defaultLogLevel: OINOLogLevel;
     /**
      * Abstract logging method to implement the actual logging operation.
      *
@@ -127,6 +128,18 @@ export declare abstract class OINOLog {
      *
      */
     static debug(domain: string, channel: string, method: string, message: string, data?: any): void;
+    /**
+     * Get current log levels as an array of objects with domain, channel, method and level.
+     *
+     */
+    static exportLogLevels(): any[];
+    /**
+     * Import log levels from an array of objects with domain, channel, method and level.
+     *
+     * @param logLevels array of log level objects
+     *
+     */
+    static importLogLevels(logLevels: any[]): void;
 }
 /**
  * Logging implementation based on console.log.
