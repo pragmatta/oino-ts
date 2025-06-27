@@ -100,7 +100,9 @@ export class OINOHtmlTemplate {
      *
      */
     render(removeUnusedTags = true) {
-        return this._createHttpResult(this._renderHtml(), removeUnusedTags);
+        const html = this._renderHtml();
+        this.clearVariables(); // clear variables after rendering
+        return this._createHttpResult(html, removeUnusedTags);
     }
     /**
      * Creates HTML Response from a key-value-pair.
