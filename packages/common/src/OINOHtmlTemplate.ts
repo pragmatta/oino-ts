@@ -110,7 +110,9 @@ export class OINOHtmlTemplate {
      * 
      */
     render(removeUnusedTags:boolean = true):OINOHttpResult {
-        return this._createHttpResult(this._renderHtml(), removeUnusedTags)
+        const html:string = this._renderHtml()
+        this.clearVariables() // clear variables after rendering
+        return this._createHttpResult(html, removeUnusedTags)
     }
 
     /**
