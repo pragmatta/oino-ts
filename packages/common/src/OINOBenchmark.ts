@@ -101,6 +101,11 @@ export abstract class OINOBenchmark {
     }
 }
 
+/**
+ * OINOMemoryBenchmark is a memory-based benchmark implementation.
+ * It stores the benchmark data in memory and allows to reset, start, end and get benchmark data.
+ * 
+ */
 export class OINOMemoryBenchmark extends OINOBenchmark {
 
     private _benchmarkCount:Record<string, number> = {}

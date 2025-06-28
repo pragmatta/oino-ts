@@ -2,7 +2,7 @@
 /// <reference types="node" />
 import { OINOContentType } from "@oino-ts/common";
 export { OINOContentType };
-export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult, OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common";
+export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOMemoryBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult, OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common";
 import { OINODb } from "./OINODb.js";
 import { OINODbDataField } from "./OINODbDataField.js";
 import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder, OINODbSqlSelect } from "./OINODbSqlParams.js";
