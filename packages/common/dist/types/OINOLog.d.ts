@@ -51,12 +51,12 @@ export declare abstract class OINOLog {
      */
     protected static _log(level: OINOLogLevel, levelStr: string, domain: string, channel: string, method: string, message: string, data?: any): void;
     /**
-     * Set active logger and log level.
+     * Set active logger instance.
      *
-     * @param logger logger instance
+     * @param instance OINOLog instance
      *
      */
-    static setLogger(logger: OINOLog): void;
+    static setInstance(instance: OINOLog): void;
     /**
      * Set log level for given combination of domain/channel/method. Not defining dimension(s) means they match any value.
      * Multiple settings can be combined to set different logging accuracy specifically

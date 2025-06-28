@@ -8,27 +8,43 @@
  *
  */
 export class OINOBenchmark {
-    static _benchmarkCount = {};
-    static _benchmarkData = {};
-    static _benchmarkEnabled = {};
-    static _benchmarkStart = {};
+    static _instance;
+    static _enabled = {};
+    /**
+     * Create a new OINOBenchmark instance.
+     *
+     * @param enabledModules array of those benchmarks that are enabled
+     */
+    constructor(enabledModules = []) {
+        OINOBenchmark.setEnabled(enabledModules);
+    }
+    /**
+     * Set active benchmarking instance.
+     *
+     * @param instance OINOBenchmark instance
+     *
+     */
+    static setInstance(instance) {
+        if (instance) {
+            OINOBenchmark._instance = instance;
+        }
+    }
     /**
      * Reset benchmark data (but not what is enabled).
      *
      */
     static reset() {
-        this._benchmarkData = {};
-        this._benchmarkCount = {};
+        OINOBenchmark._instance?._reset();
     }
     /**
      *  Set benchmark names that are enabled.
      *
-     *  @param module array of those benchmarks that are enabled
+     *  @param modules array of those benchmarks that are enabled
      */
-    static setEnabled(module) {
-        this._benchmarkEnabled = {};
-        module.forEach(module_name => {
-            this._benchmarkEnabled[module_name] = true;
+    static setEnabled(modules) {
+        OINOBenchmark._enabled = {};
+        modules.forEach(module_name => {
+            this._enabled[module_name] = true;
         });
     }
     /**
@@ -38,8 +54,62 @@ export class OINOBenchmark {
      * @param method of the benchmark
      */
     static start(module, method) {
+        OINOBenchmark._instance?._start(module, method);
+    }
+    /**
+     * Complete benchmark timing
+     *
+     * @param module of the benchmark
+     * @param method of the benchmark
+     * @param category optional subcategory of the benchmark
+     */
+    static end(module, method, category) {
+        return OINOBenchmark._instance?._end(module, method, category) || 0;
+    }
+    /**
+     * Get given benchmark data.
+     *
+     * @param module of the benchmark
+     * @param method of the benchmark
+     *
+     */
+    static get(module, method) {
+        return OINOBenchmark._instance?._get(module, method);
+    }
+    /**
+     * Get all benchmark data.
+     *
+     */
+    static getAll() {
+        return OINOBenchmark._instance?._getAll();
+    }
+}
+/**
+ * OINOMemoryBenchmark is a memory-based benchmark implementation.
+ * It stores the benchmark data in memory and allows to reset, start, end and get benchmark data.
+ *
+ */
+export class OINOMemoryBenchmark extends OINOBenchmark {
+    _benchmarkCount = {};
+    _benchmarkData = {};
+    _benchmarkStart = {};
+    /**
+     * Reset benchmark data (but not what is enabled).
+     *
+     */
+    _reset() {
+        this._benchmarkData = {};
+        this._benchmarkCount = {};
+    }
+    /**
+     * Start benchmark timing.
+     *
+     * @param module of the benchmark
+     * @param method of the benchmark
+     */
+    _start(module, method) {
         const name = module + "." + method;
-        if (this._benchmarkEnabled[module]) {
+        if (OINOBenchmark._enabled[module]) {
             if (this._benchmarkCount[name] == undefined) {
                 this._benchmarkCount[name] = 0;
                 this._benchmarkData[name] = 0;
@@ -54,10 +124,10 @@ export class OINOBenchmark {
      * @param method of the benchmark
      * @param category optional subcategory of the benchmark
      */
-    static end(module, method, category) {
+    _end(module, method, category) {
         const name = module + "." + method;
         let result = 0;
-        if (this._benchmarkEnabled[module]) {
+        if (OINOBenchmark._enabled[module]) {
             const duration = performance.now() - this._benchmarkStart[name];
             this._benchmarkCount[name] += 1;
             this._benchmarkData[name] += duration;
@@ -81,9 +151,9 @@ export class OINOBenchmark {
      * @param method of the benchmark
      *
      */
-    static get(module, method) {
+    _get(module, method) {
         const name = module + "." + method;
-        if (this._benchmarkEnabled[module]) {
+        if (OINOBenchmark._enabled[module] && (this._benchmarkCount[name] > 0)) {
             return this._benchmarkData[module] / this._benchmarkCount[module];
         }
         return -1;
@@ -92,7 +162,7 @@ export class OINOBenchmark {
      * Get all benchmark data.
      *
      */
-    static getAll() {
+    _getAll() {
         let result = {};
         for (const name in this._benchmarkData) {
             if (this._benchmarkCount[name] > 0) {

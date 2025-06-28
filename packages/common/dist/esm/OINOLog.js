@@ -62,15 +62,15 @@ export class OINOLog {
         }
     }
     /**
-     * Set active logger and log level.
+     * Set active logger instance.
      *
-     * @param logger logger instance
+     * @param instance OINOLog instance
      *
      */
-    static setLogger(logger) {
+    static setInstance(instance) {
         // console.log("setLogger: " + log)
-        if (logger) {
-            OINOLog._instance = logger;
+        if (instance) {
+            OINOLog._instance = instance;
         }
     }
     /**

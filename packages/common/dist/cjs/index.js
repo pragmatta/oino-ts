@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OINOContentType = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOHtmlTemplate = exports.OINOStr = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOBenchmark = void 0;
+exports.OINOContentType = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOHtmlTemplate = exports.OINOStr = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOMemoryBenchmark = exports.OINOBenchmark = void 0;
 var OINOBenchmark_js_1 = require("./OINOBenchmark.js");
 Object.defineProperty(exports, "OINOBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOBenchmark; } });
+Object.defineProperty(exports, "OINOMemoryBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOMemoryBenchmark; } });
 var OINOLog_js_1 = require("./OINOLog.js");
 Object.defineProperty(exports, "OINOLog", { enumerable: true, get: function () { return OINOLog_js_1.OINOLog; } });
 Object.defineProperty(exports, "OINOLogLevel", { enumerable: true, get: function () { return OINOLog_js_1.OINOLogLevel; } });

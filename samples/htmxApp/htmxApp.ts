@@ -13,7 +13,7 @@ const response_headers:HeadersInit = {
 	'Access-Control-Allow-Methods': 'PUT, POST, GET, DELETE, OPTIONS'
 }
 
-OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug))
+OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.debug))
 OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 
 const API_PATH_REGEX = /\/([^\/]*)\/?([^\/]*)\/?([^\/]*)/

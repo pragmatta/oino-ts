@@ -1,4 +1,4 @@
-export { OINOBenchmark } from "./OINOBenchmark.js"
+export { OINOBenchmark, OINOMemoryBenchmark } from "./OINOBenchmark.js"
 export { OINOLog, OINOLogLevel, OINOConsoleLog } from "./OINOLog.js"
 export { OINOResult, OINOHttpResult } from "./OINOResult.js"
 export { OINOStr } from "./OINOStr.js"
