@@ -11,7 +11,7 @@ import { OINOLog, OINOConsoleLog, OINOLogLevel } from "@oino-ts/common"
 
 Math.random()
 
-OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
+OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.error))
 
 function benchmarkOINOHashId(hashid: OINOHashid, id: string, iterations: number = 1000): number {
     const start = performance.now();
