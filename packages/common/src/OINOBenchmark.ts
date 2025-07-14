@@ -104,13 +104,13 @@ export abstract class OINOBenchmark {
 /**
  * OINOMemoryBenchmark is a memory-based benchmark implementation.
  * It stores the benchmark data in memory and allows to reset, start, end and get benchmark data.
- * 
+ * In case of recursively/iteratively starting a benchmark, it will honor the first start and ignore the rest. * 
  */
 export class OINOMemoryBenchmark extends OINOBenchmark {
 
-    private _benchmarkCount:Record<string, number> = {}
-    private _benchmarkData:Record<string, number> = {}
-    private _benchmarkStart:Record<string, number> = {}
+    protected _benchmarkCount:Record<string, number> = {}
+    protected _benchmarkData:Record<string, number> = {}
+    protected _benchmarkStart:Record<string, number> = {}
 
     /**
      * Reset benchmark data (but not what is enabled).
@@ -129,7 +129,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      */
     protected _start(module:string, method:string):void {
         const name:string = module + "." + method
-        if (OINOBenchmark._enabled[module]) {
+        if (OINOBenchmark._enabled[module] && ((this._benchmarkStart[name] === undefined) || (this._benchmarkStart[name] === 0))) { // if benchmark is already started (e.g. loop/recursion), do not start it again
             if (this._benchmarkCount[name] == undefined) {
                 this._benchmarkCount[name] = 0
                 this._benchmarkData[name] = 0
@@ -162,6 +162,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
                 this._benchmarkData[category_name] += duration
             }
             result = this._benchmarkData[name] / this._benchmarkCount[name]
+            this._benchmarkStart[name] = 0 
         }
         return result
     }

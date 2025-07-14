@@ -1,7 +1,7 @@
 import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINODbSwagger, OINODbApiResult, OINOLog, OINOLogLevel, OINODbHtmlTemplate, OINODbApiRequestParams } from "@oino-ts/db";
 
 import { OINODbConfig } from "@oino-ts/db"
-import { OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common"
+import { OINOHttpResult, OINOHtmlTemplate, OINOMemoryBenchmark } from "@oino-ts/common"
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { BunFile } from "bun";
 import { existsSync, readFileSync } from "fs";
@@ -62,13 +62,12 @@ try {
 	const db:OINODb = await OINODbFactory.createDb(db_params)
 
 	const apis:Record<string, OINODbApi> = {
-		"employees": await OINODbFactory.createApi(db, { tableName: "Employees", hashidKey: "" }),
+		"employees": await OINODbFactory.createApi(db, { tableName: "Employees", apiName: "Employees", hashidKey: "" }),
 	};
 	const api_array:OINODbApi[] = Object.entries(apis).map(([path, api]) => (api));
 	
 	
-	OINOBenchmark.reset()
-	OINOBenchmark.setEnabled(["doRequest", "sqlSelect", "sqlExec"])
+	OINOBenchmark.setInstance(new OINOMemoryBenchmark(["OINODb"]))
 		
 	const server = Bun.serve({
 		development: true,
