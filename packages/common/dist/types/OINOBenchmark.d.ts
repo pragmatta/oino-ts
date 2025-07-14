@@ -66,12 +66,12 @@ export declare abstract class OINOBenchmark {
 /**
  * OINOMemoryBenchmark is a memory-based benchmark implementation.
  * It stores the benchmark data in memory and allows to reset, start, end and get benchmark data.
- *
+ * In case of recursively/iteratively starting a benchmark, it will honor the first start and ignore the rest. *
  */
 export declare class OINOMemoryBenchmark extends OINOBenchmark {
-    private _benchmarkCount;
-    private _benchmarkData;
-    private _benchmarkStart;
+    protected _benchmarkCount: Record<string, number>;
+    protected _benchmarkData: Record<string, number>;
+    protected _benchmarkStart: Record<string, number>;
     /**
      * Reset benchmark data (but not what is enabled).
      *
