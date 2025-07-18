@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINOConsoleLog = exports.OINOLog = exports.OINOLogLevel = void 0;
+const OINOBenchmark_1 = require("./OINOBenchmark");
 /** Logging levels */
 var OINOLogLevel;
 (function (OINOLogLevel) {
@@ -108,6 +109,7 @@ class OINOLog {
      */
     static exception(domain, channel, method, message, data) {
         OINOLog._log(OINOLogLevel.exception, "EXCEPTION", domain, channel, method, message, data);
+        OINOBenchmark_1.OINOBenchmark.trackException(domain + "." + channel, method, "Exception", message, data?.message || "", data?.stack || "");
     }
     /**
      * Log error event. Error events are printed as a single line.

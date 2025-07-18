@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+import { OINOBenchmark } from "./OINOBenchmark";
 /** Logging levels */
 export var OINOLogLevel;
 (function (OINOLogLevel) {
@@ -105,6 +106,7 @@ export class OINOLog {
      */
     static exception(domain, channel, method, message, data) {
         OINOLog._log(OINOLogLevel.exception, "EXCEPTION", domain, channel, method, message, data);
+        OINOBenchmark.trackException(domain + "." + channel, method, "Exception", message, data?.message || "", data?.stack || "");
     }
     /**
      * Log error event. Error events are printed as a single line.

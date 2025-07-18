@@ -246,7 +246,7 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet");
-            common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", { message: e.message, stack: e.stack });
+            common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "exception in get request", { message: e.message, stack: e.stack });
             if (this._debugOnError) {
                 result.addDebug("OINO GET SQL [" + sql + "]", "DoGet");
             }
@@ -282,7 +282,7 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception in doPost: " + e.message, "DoPost");
-            common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", { message: e.message, stack: e.stack });
+            common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doPost", "exception in post request", { message: e.message, stack: e.stack });
             if (this._debugOnError) {
                 result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
             }
@@ -319,7 +319,7 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception: " + e.message, "DoPut");
-            common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", { message: e.message, stack: e.stack });
+            common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doPut", "exception in put request", { message: e.message, stack: e.stack });
             if (this._debugOnError) {
                 result.addDebug("OINO POST SQL [" + sql + "]", "DoPut");
             }
@@ -359,6 +359,7 @@ class OINODbApi {
         }
         catch (e) {
             result.setError(500, "Unhandled exception: " + e.message, "DoDelete");
+            common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doDelete", "exception in delete request", { message: e.message, stack: e.stack });
             if (this._debugOnError) {
                 result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete");
             }
