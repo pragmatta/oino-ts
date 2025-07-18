@@ -99,7 +99,7 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
      *
      */
     async renderFromDbData(modelset, overrideValues) {
-        index_js_1.OINOBenchmark.start("OINOHtmlTemplate", "renderFromDbData");
+        index_js_1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromDbData");
         let html = "";
         const dataset = modelset.dataset;
         const datamodel = modelset.datamodel;
@@ -141,7 +141,7 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
         }
         this.modified = last_modified;
         const result = this._createHttpResult(html, false);
-        index_js_1.OINOBenchmark.end("OINOHtmlTemplate", "renderFromDbData");
+        index_js_1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromDbData");
         return result;
     }
 }
@@ -383,7 +383,7 @@ class OINODbApi {
      *
      */
     async doRequest(method, id, data, params = API_EMPTY_PARAMS) {
-        index_js_1.OINOBenchmark.start("OINODbApi", "doRequest");
+        index_js_1.OINOBenchmark.startMetric("OINODbApi", "doRequest");
         common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", { method: method, id: id, data: data });
         let result = new OINODbApiResult(params);
         let rows = [];
@@ -441,7 +441,7 @@ class OINODbApi {
         else {
             result.setError(405, "Unsupported HTTP method '" + method + "' for REST request", "DoRequest");
         }
-        index_js_1.OINOBenchmark.end("OINODbApi", "doRequest", method);
+        index_js_1.OINOBenchmark.endMetric("OINODbApi", "doRequest", method);
         return Promise.resolve(result);
     }
     /**
@@ -454,7 +454,7 @@ class OINODbApi {
      *
      */
     async doBatchUpdate(method, data, params = API_EMPTY_PARAMS) {
-        index_js_1.OINOBenchmark.start("OINODbApi", "doBatchUpdate");
+        index_js_1.OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate");
         common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", { method: method, data: data, params: params });
         let result = new OINODbApiResult(params);
         let rows = [];
@@ -480,7 +480,7 @@ class OINODbApi {
         else {
             result.setError(405, "Unsupported HTTP method '" + method + "' for batch update", "DoBatchUpdate");
         }
-        index_js_1.OINOBenchmark.end("OINODbApi", "doBatchUpdate", method);
+        index_js_1.OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate", method);
         return Promise.resolve(result);
     }
     /**

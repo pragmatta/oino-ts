@@ -101,7 +101,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
      * 
      */
     async renderFromDbData(modelset:OINODbModelSet, overrideValues?:any):Promise<OINOHttpResult> {
-        OINOBenchmark.start("OINOHtmlTemplate", "renderFromDbData")
+        OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromDbData")
         let html:string = ""
         const dataset:OINODbDataSet|undefined = modelset.dataset
         const datamodel:OINODbDataModel = modelset.datamodel
@@ -143,7 +143,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
         }
         this.modified = last_modified
         const result:OINOHttpResult = this._createHttpResult(html, false)
-        OINOBenchmark.end("OINOHtmlTemplate", "renderFromDbData")
+        OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromDbData")
         return result
     }
 
@@ -392,7 +392,7 @@ export class OINODbApi {
      *
      */
     async doRequest(method:string, id: string, data:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
-        OINOBenchmark.start("OINODbApi", "doRequest")
+        OINOBenchmark.startMetric("OINODbApi", "doRequest")
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", {method:method, id:id, data:data})
         let result:OINODbApiResult = new OINODbApiResult(params)
         let rows:OINODataRow[] = []
@@ -447,7 +447,7 @@ export class OINODbApi {
         } else {
             result.setError(405, "Unsupported HTTP method '" + method + "' for REST request", "DoRequest")
         }
-        OINOBenchmark.end("OINODbApi", "doRequest", method)
+        OINOBenchmark.endMetric("OINODbApi", "doRequest", method)
         return Promise.resolve(result)
     }
 
@@ -461,7 +461,7 @@ export class OINODbApi {
      *
      */
     async doBatchUpdate(method:string, data:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
-        OINOBenchmark.start("OINODbApi", "doBatchUpdate")
+        OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate")
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", {method:method, data:data, params:params})
         let result:OINODbApiResult = new OINODbApiResult(params)
         let rows:OINODataRow[] = []
@@ -487,7 +487,7 @@ export class OINODbApi {
         } else {
             result.setError(405, "Unsupported HTTP method '" + method + "' for batch update", "DoBatchUpdate")
         }
-        OINOBenchmark.end("OINODbApi", "doBatchUpdate", method)
+        OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate", method)
         return Promise.resolve(result)
     }
 

@@ -269,7 +269,7 @@ export class OINODbMariadb extends OINODb {
      *
      */
     async validate() {
-        OINOBenchmark.start("OINODb", "validate");
+        OINOBenchmark.startMetric("OINODb", "validate");
         let result = new OINOResult();
         try {
             const sql = this._getValidateSql(this._params.database);
@@ -291,7 +291,7 @@ export class OINODbMariadb extends OINODb {
             result.setError(500, "Exception validating connection: " + e.message, "OINODbMariadb.validate");
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "validate", result.statusMessage, { message: e, stack: e.stack });
         }
-        OINOBenchmark.end("OINODb", "validate");
+        OINOBenchmark.endMetric("OINODb", "validate");
         return result;
     }
     /**
@@ -301,7 +301,7 @@ export class OINODbMariadb extends OINODb {
      *
      */
     async sqlSelect(sql) {
-        OINOBenchmark.start("OINODb", "sqlSelect");
+        OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result;
         try {
             const rows = await this._query(sql);
@@ -311,7 +311,7 @@ export class OINODbMariadb extends OINODb {
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlSelect", "SQL select exception", { message: e.message, stack: e.stack });
             result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message]);
         }
-        OINOBenchmark.end("OINODb", "sqlSelect");
+        OINOBenchmark.endMetric("OINODb", "sqlSelect");
         return result;
     }
     /**
@@ -321,7 +321,7 @@ export class OINODbMariadb extends OINODb {
      *
      */
     async sqlExec(sql) {
-        OINOBenchmark.start("OINODb", "sqlExec");
+        OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result;
         try {
             const sql_res = await this._exec(sql);
@@ -332,7 +332,7 @@ export class OINODbMariadb extends OINODb {
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlExec", "SQL exec exception", { message: msg_parts[2], stack: e.stack });
             result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + msg_parts[2] + "]"]);
         }
-        OINOBenchmark.end("OINODb", "sqlExec");
+        OINOBenchmark.endMetric("OINODb", "sqlExec");
         return result;
     }
     _getSchemaSql(dbName, tableName) {
