@@ -22,7 +22,7 @@ import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 ```
 
 ### Register database and logger
-Register your database implementation and logger (see [`OINOConsoleLog`](https://pragmatta.github.io/oino-ts/classes/types_src.OINOConsoleLog.html) how to implement your own)
+Register your database implementation and logger (see [`OINOConsoleLog`](https://pragmatta.github.io/oino-ts/classes/common_src.OINOConsoleLog.html) how to implement your own)
 
 ```
 OINOLog.setLogger(new OINOConsoleLog())
@@ -103,7 +103,7 @@ Currently supported databases:
 To support tables with multipart primary keys OINO generates a composite key `_OINOID_` that is included in the result and can be used as the REST ID. For example in the example above table `OrderDetails` has two primary keys `OrderID` and `ProductID` making the `_OINOID_` of form `11077:99`. 
 
 ## Power Of SQL
-Since OINO is just generating SQL, WHERE-conditions can be defined with [`OINOSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html), order with [`OINOSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html) and limits/paging with [`OINOSqlLimit`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlLimit.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
+Since OINO is just generating SQL, WHERE-conditions can be defined with [`OINODbSqlFilter`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlFilter.html), order with [`OINODbSqlOrder`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlOrder.html), limits/paging with [`OINODbSqlLimit`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlLimit.html) and aggregation with [`OINODbSqlAggregate`](https://pragmatta.github.io/oino-ts/classes/db_src.OINODbSqlAggregate.html) that are passed as HTTP request parameters. No more API development where you make unique API endpoints for each filter that fetch all data with original API and filter in backend code. Every API can be filtered when and as needed without unnessecary data tranfer and utilizing SQL indexing when available.
 
 ## Swagger Support
 Swagger is great as long as the definitions are updated and with OINO you can automatically get a Swagger definition including a data model schema.
