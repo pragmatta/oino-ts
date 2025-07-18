@@ -140,6 +140,7 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async connect() {
+        db_1.OINOBenchmark.startMetric("OINODb", "connect");
         let result = new db_1.OINOResult();
         const filepath = this._params.url.substring(7);
         try {
@@ -150,6 +151,7 @@ class OINODbBunSqlite extends db_1.OINODb {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbBunSqlite.connect");
             db_1.OINOLog.exception("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "connect", result.statusMessage, { message: e.message, stack: e.stack });
         }
+        db_1.OINOBenchmark.endMetric("OINODb", "connect");
         return result;
     }
     /**
@@ -157,7 +159,7 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async validate() {
-        db_1.OINOBenchmark.start("OINODb", "validate");
+        db_1.OINOBenchmark.startMetric("OINODb", "validate");
         let result = new db_1.OINOResult();
         try {
             const sql = this._getValidateSql(this._params.database);
@@ -178,7 +180,7 @@ class OINODbBunSqlite extends db_1.OINODb {
         catch (e) {
             result.setError(500, db_1.OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate");
         }
-        db_1.OINOBenchmark.end("OINODb", "validate");
+        db_1.OINOBenchmark.endMetric("OINODb", "validate");
         return result;
     }
     /**
@@ -188,7 +190,7 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async sqlSelect(sql) {
-        db_1.OINOBenchmark.start("OINODb", "sqlSelect");
+        db_1.OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result;
         try {
             result = new OINOBunSqliteDataset(this._db?.query(sql).values(), []);
@@ -196,7 +198,7 @@ class OINODbBunSqlite extends db_1.OINODb {
         catch (e) {
             result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
         }
-        db_1.OINOBenchmark.end("OINODb", "sqlSelect");
+        db_1.OINOBenchmark.endMetric("OINODb", "sqlSelect");
         return Promise.resolve(result);
     }
     /**
@@ -206,7 +208,7 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async sqlExec(sql) {
-        db_1.OINOBenchmark.start("OINODb", "sqlExec");
+        db_1.OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result;
         try {
             this._db?.exec(sql);
@@ -215,7 +217,7 @@ class OINODbBunSqlite extends db_1.OINODb {
         catch (e) {
             result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
-        db_1.OINOBenchmark.end("OINODb", "sqlExec");
+        db_1.OINOBenchmark.endMetric("OINODb", "sqlExec");
         return Promise.resolve(result);
     }
     _getSchemaSql(dbName, tableName) {

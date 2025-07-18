@@ -113,10 +113,10 @@ export class OINOHtmlTemplate {
      *
      */
     renderFromKeyValue(key, value, removeUnusedTags = true) {
-        OINOBenchmark.start("OINOHtmlTemplate", "renderFromKeyValue");
+        OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromKeyValue");
         this.setVariableFromValue(key, value);
         const result = this.render(removeUnusedTags);
-        OINOBenchmark.end("OINOHtmlTemplate", "renderFromKeyValue");
+        OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromKeyValue");
         return result;
     }
     /**
@@ -127,10 +127,10 @@ export class OINOHtmlTemplate {
      *
      */
     renderFromObject(object, removeUnusedTags = true) {
-        OINOBenchmark.start("OINOHtmlTemplate", "renderFromObject");
+        OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromObject");
         this.setVariableFromProperties(object);
         const result = this.render(removeUnusedTags);
-        OINOBenchmark.end("OINOHtmlTemplate", "renderFromObject");
+        OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromObject");
         return result;
     }
     /**
@@ -146,7 +146,7 @@ export class OINOHtmlTemplate {
      *
      */
     renderFromResult(result, removeUnusedTags = true, messageSeparator = "", includeErrorMessages = false, includeWarningMessages = false, includeInfoMessages = false, includeDebugMessages = false) {
-        OINOBenchmark.start("OINOHtmlTemplate", "renderFromResult");
+        OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromResult");
         this.setVariableFromValue("statusCode", result.statusCode.toString());
         this.setVariableFromValue("statusMessage", result.statusMessage.toString());
         let messages = [];
@@ -168,7 +168,7 @@ export class OINOHtmlTemplate {
             this.setVariableFromValue("messages", messages.join(messageSeparator), false); // messages have been escaped already
         }
         const http_result = this.render(removeUnusedTags);
-        OINOBenchmark.end("OINOHtmlTemplate", "renderFromResult");
+        OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromResult");
         return http_result;
     }
 }

@@ -291,7 +291,7 @@ export class OINODbMsSql extends OINODb {
             result.setError(400, "Database is not connected!", "OINODbMsSql.validate");
             return result;
         }
-        OINOBenchmark.start("OINODb", "validate");
+        OINOBenchmark.startMetric("OINODb", "validate");
         try {
             const sql = this._getValidateSql(this._params.database);
             const sql_res = await this.sqlSelect(sql);
@@ -313,7 +313,7 @@ export class OINODbMsSql extends OINODb {
             result.setError(500, "Exception in validating connection: " + e.message, "OINODbMsSql.validate");
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "validate", "Exception", { message: e.message, stack: e.stack });
         }
-        OINOBenchmark.end("OINODb", "validate");
+        OINOBenchmark.endMetric("OINODb", "validate");
         return result;
     }
     /**
@@ -323,7 +323,7 @@ export class OINODbMsSql extends OINODb {
      *
      */
     async sqlSelect(sql) {
-        OINOBenchmark.start("OINODb", "sqlSelect");
+        OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result;
         try {
             result = await this._query(sql);
@@ -332,7 +332,7 @@ export class OINODbMsSql extends OINODb {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlSelect", "SQL select exception", { message: e.message, stack: e.stack });
             result = new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMsSql.sqlSelect exception in _db.query: " + e.message]);
         }
-        OINOBenchmark.end("OINODb", "sqlSelect");
+        OINOBenchmark.endMetric("OINODb", "sqlSelect");
         return result;
     }
     /**
@@ -342,7 +342,7 @@ export class OINODbMsSql extends OINODb {
      *
      */
     async sqlExec(sql) {
-        OINOBenchmark.start("OINODb", "sqlExec");
+        OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result;
         try {
             result = await this._exec(sql);
@@ -351,7 +351,7 @@ export class OINODbMsSql extends OINODb {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlExec", "SQL exec exception", { message: e.message, stack: e.stack });
             result = new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
-        OINOBenchmark.end("OINODb", "sqlExec");
+        OINOBenchmark.endMetric("OINODb", "sqlExec");
         return result;
     }
     _getSchemaSql(dbName, tableName) {

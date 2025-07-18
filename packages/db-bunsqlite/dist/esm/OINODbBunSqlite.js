@@ -137,6 +137,7 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async connect() {
+        OINOBenchmark.startMetric("OINODb", "connect");
         let result = new OINOResult();
         const filepath = this._params.url.substring(7);
         try {
@@ -147,6 +148,7 @@ export class OINODbBunSqlite extends OINODb {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbBunSqlite.connect");
             OINOLog.exception("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "connect", result.statusMessage, { message: e.message, stack: e.stack });
         }
+        OINOBenchmark.endMetric("OINODb", "connect");
         return result;
     }
     /**
@@ -154,7 +156,7 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async validate() {
-        OINOBenchmark.start("OINODb", "validate");
+        OINOBenchmark.startMetric("OINODb", "validate");
         let result = new OINOResult();
         try {
             const sql = this._getValidateSql(this._params.database);
@@ -175,7 +177,7 @@ export class OINODbBunSqlite extends OINODb {
         catch (e) {
             result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate");
         }
-        OINOBenchmark.end("OINODb", "validate");
+        OINOBenchmark.endMetric("OINODb", "validate");
         return result;
     }
     /**
@@ -185,7 +187,7 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async sqlSelect(sql) {
-        OINOBenchmark.start("OINODb", "sqlSelect");
+        OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result;
         try {
             result = new OINOBunSqliteDataset(this._db?.query(sql).values(), []);
@@ -193,7 +195,7 @@ export class OINODbBunSqlite extends OINODb {
         catch (e) {
             result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
         }
-        OINOBenchmark.end("OINODb", "sqlSelect");
+        OINOBenchmark.endMetric("OINODb", "sqlSelect");
         return Promise.resolve(result);
     }
     /**
@@ -203,7 +205,7 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async sqlExec(sql) {
-        OINOBenchmark.start("OINODb", "sqlExec");
+        OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result;
         try {
             this._db?.exec(sql);
@@ -212,7 +214,7 @@ export class OINODbBunSqlite extends OINODb {
         catch (e) {
             result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
-        OINOBenchmark.end("OINODb", "sqlExec");
+        OINOBenchmark.endMetric("OINODb", "sqlExec");
         return Promise.resolve(result);
     }
     _getSchemaSql(dbName, tableName) {
