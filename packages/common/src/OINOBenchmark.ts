@@ -105,9 +105,9 @@ export abstract class OINOBenchmark {
      * Track a metric value
      * 
      * @param value of the metric
-     * @param module of the benchmark
-     * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
+     * @param module of the metric
+     * @param method of the metric
+     * @param category optional subcategory of the metric
      * 
      */
     static trackMetric(module:string, method:string, category:string, value:number):void {
@@ -116,7 +116,31 @@ export abstract class OINOBenchmark {
         }
     }
 
+    protected abstract _trackException(module:string, method:string, category:string, name:string, message:string, stack: string):void
+    /**
+     * Track an exception
+     * 
+     * @param module of the benchmark
+     * @param method of the benchmark
+     * @param category optional subcategory of the benchmark
+     * @param name of the exception
+     * @param message of the exception
+     * @param stack trace of the exception
+     */
+    static trackException(module:string, method:string, category:string, name:string, message:string, stack:string):void {
+        if (OINOBenchmark._enabled[module]) {
+            OINOBenchmark._instance?._trackException(module, method, category, name, message, stack)
+        }
+    }
 
+    protected abstract _getExceptions():any[]
+    /**
+     * Get all tracked exceptions.
+     * 
+     */
+    static getExceptions():any[] {
+        return OINOBenchmark._instance?._getExceptions()
+    }
 }
 
 /**
@@ -129,6 +153,8 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
     protected _benchmarkCount:Record<string, number> = {}
     protected _benchmarkData:Record<string, number> = {}
     protected _benchmarkStart:Record<string, number> = {}
+
+    protected _exceptions:any[] = []
 
     /**
      * Reset benchmark data (but not what is enabled).
@@ -198,15 +224,6 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         return result
     }
 
-    /**
-     * Track a metric value
-     * 
-     * @param value of the metric
-     * @param module of the benchmark
-     * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
-     * 
-     */
     protected _trackMetric(module:string, method:string, category:string, value:number):void {
         const name:string = module + "." + method
         if (this._benchmarkCount[name] == undefined) {
@@ -227,5 +244,14 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         }
 
         this._benchmarkStart[name] = 0 
+    }
+
+    protected _trackException(module:string, method:string, category:string, name:string, message:string, stack:string):void {
+        const exception = { module, method, category, name, message, stack }
+        this._exceptions.push(exception)
+    }
+
+    protected _getExceptions():any[] {
+        return this._exceptions
     }
 }
