@@ -56,18 +56,18 @@ export abstract class OINOBenchmark {
         });
     }
 
-    protected abstract _start(module:string, method:string):void
+    protected abstract _startMetric(module:string, method:string):void
     /**
      * Start benchmark timing.
      *
      * @param module of the benchmark
      * @param method of the benchmark
      */
-    static start(module:string, method:string):void {
-        OINOBenchmark._instance?._start(module, method)
+    static startMetric(module:string, method:string):void {
+        OINOBenchmark._instance?._startMetric(module, method)
     }
 
-    protected abstract _end(module:string, method:string, category?:string):number
+    protected abstract _endMetric(module:string, method:string, category:string):void
     /**
      * Complete benchmark timing
      * 
@@ -75,11 +75,11 @@ export abstract class OINOBenchmark {
      * @param method of the benchmark
      * @param category optional subcategory of the benchmark
      */
-    static end(module:string, method:string, category?:string):number {
-        return OINOBenchmark._instance?._end(module, method, category) || 0
+    static endMetric(module:string, method:string, category:string = "OK"):void {
+        OINOBenchmark._instance?._endMetric(module, method, category)
     }
 
-    protected abstract _get(module:string, method:string):number
+    protected abstract _getMetric(module:string, method:string):number
     /**
      * Get given benchmark data.
      * 
@@ -87,18 +87,36 @@ export abstract class OINOBenchmark {
      * @param method of the benchmark
      * 
      */
-    static get(module:string, method:string):number {
-        return OINOBenchmark._instance?._get(module, method)
+    static getMetric(module:string, method:string):number {
+        return OINOBenchmark._instance?._getMetric(module, method)
     }
 
-    protected abstract _getAll():Record<string, number>
+    protected abstract _getMetrics():Record<string, number>
     /**
      * Get all benchmark data.
      * 
      */
-    static getAll():Record<string, number> {
-        return OINOBenchmark._instance?._getAll()
+    static getMetrics():Record<string, number> {
+        return OINOBenchmark._instance?._getMetrics()
     }
+
+    protected abstract _trackMetric(module:string, method:string, category:string, value:number):void
+    /**
+     * Track a metric value
+     * 
+     * @param value of the metric
+     * @param module of the benchmark
+     * @param method of the benchmark
+     * @param category optional subcategory of the benchmark
+     * 
+     */
+    static trackMetric(module:string, method:string, category:string, value:number):void {
+        if (OINOBenchmark._enabled[module]) {
+            OINOBenchmark._instance?._trackMetric(module, method, category, value)
+        }
+    }
+
+
 }
 
 /**
@@ -127,13 +145,9 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      * @param module of the benchmark
      * @param method of the benchmark
      */
-    protected _start(module:string, method:string):void {
+    protected _startMetric(module:string, method:string):void {
         const name:string = module + "." + method
         if (OINOBenchmark._enabled[module] && ((this._benchmarkStart[name] === undefined) || (this._benchmarkStart[name] === 0))) { // if benchmark is already started (e.g. loop/recursion), do not start it again
-            if (this._benchmarkCount[name] == undefined) {
-                this._benchmarkCount[name] = 0
-                this._benchmarkData[name] = 0
-            }
             this._benchmarkStart[name] = performance.now()
         }
     }
@@ -145,26 +159,14 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      * @param method of the benchmark
      * @param category optional subcategory of the benchmark
      */
-    protected _end(module:string, method:string, category?:string):number {
+    protected _endMetric(module:string, method:string, category:string):void {
         const name:string = module + "." + method
         let result:number = 0
-        if (OINOBenchmark._enabled[module]) {
+        if (OINOBenchmark._enabled[module] && (this._benchmarkStart[name] > 0)) { // if benchmark is started, end it
             const duration = performance.now() - this._benchmarkStart[name]
-            this._benchmarkCount[name] += 1
-            this._benchmarkData[name] += duration
-            if (category) {
-                const category_name = name + "." + category
-                if (this._benchmarkCount[category_name] == undefined) {
-                    this._benchmarkCount[category_name] = 0
-                    this._benchmarkData[category_name] = 0
-                }
-                this._benchmarkCount[category_name] += 1
-                this._benchmarkData[category_name] += duration
-            }
-            result = this._benchmarkData[name] / this._benchmarkCount[name]
-            this._benchmarkStart[name] = 0 
+            this._trackMetric(module, method, category, duration)
         }
-        return result
+        return
     }
 
     /**
@@ -174,7 +176,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      * @param method of the benchmark
      * 
      */
-    protected _get(module:string, method:string):number {
+    protected _getMetric(module:string, method:string):number {
         const name:string = module + "." + method
         if (OINOBenchmark._enabled[module] && (this._benchmarkCount[name] > 0)) {
             return this._benchmarkData[module] / this._benchmarkCount[module]
@@ -186,7 +188,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      * Get all benchmark data.
      * 
      */
-    protected _getAll():Record<string, number> {
+    protected _getMetrics():Record<string, number> {
         let result:Record<string, number> = {}
         for (const name in this._benchmarkData) {
             if (this._benchmarkCount[name] > 0) {
@@ -194,5 +196,36 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
             }
         }
         return result
+    }
+
+    /**
+     * Track a metric value
+     * 
+     * @param value of the metric
+     * @param module of the benchmark
+     * @param method of the benchmark
+     * @param category optional subcategory of the benchmark
+     * 
+     */
+    protected _trackMetric(module:string, method:string, category:string, value:number):void {
+        const name:string = module + "." + method
+        if (this._benchmarkCount[name] == undefined) {
+            this._benchmarkCount[name] = 1
+            this._benchmarkData[name] = value
+        } else {
+            this._benchmarkCount[name] += 1
+            this._benchmarkData[name] += value
+        }
+
+        const category_name = name + "." + category
+        if (this._benchmarkCount[category_name] == undefined) {
+            this._benchmarkCount[category_name] = 1
+            this._benchmarkData[category_name] = value
+        } else {
+            this._benchmarkCount[category_name] += 1
+            this._benchmarkData[category_name] += value
+        }
+
+        this._benchmarkStart[name] = 0 
     }
 }
