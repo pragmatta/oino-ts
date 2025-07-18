@@ -254,7 +254,7 @@ export class OINODbApi {
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception in doGet: " + e.message, "DoGet")
-            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "exception in get request", {message:e.message, stack:e.stack})
             if (this._debugOnError) {
                 result.addDebug("OINO GET SQL [" + sql + "]", "DoGet")
             }
@@ -290,7 +290,7 @@ export class OINODbApi {
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception in doPost: " + e.message, "DoPost")
-            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doPost", "exception in post request", {message:e.message, stack:e.stack})
             if (this._debugOnError) {
                 result.addDebug("OINO POST SQL [" + sql + "]", "DoPost")
             }
@@ -327,7 +327,7 @@ export class OINODbApi {
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception: " + e.message, "DoPut")
-            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doGet", "Exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doPut", "exception in put request", {message:e.message, stack:e.stack})
             if (this._debugOnError) {
                 result.addDebug("OINO POST SQL [" + sql + "]", "DoPut")
             }
@@ -366,6 +366,7 @@ export class OINODbApi {
             }
         } catch (e:any) {
             result.setError(500, "Unhandled exception: " + e.message, "DoDelete")
+            OINOLog.exception("@oino-ts/db", "OINODbApi", "_doDelete", "exception in delete request", {message:e.message, stack:e.stack})
             if (this._debugOnError) {
                 result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete")
             }

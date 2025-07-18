@@ -4,6 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { OINOBenchmark } from "./OINOBenchmark"
+
 /** Logging levels */
 export enum OINOLogLevel { 
     /** Debug messages */
@@ -127,6 +129,7 @@ export abstract class OINOLog {
      */
     static exception(domain:string, channel:string, method:string, message:string, data?:any) {
         OINOLog._log(OINOLogLevel.exception, "EXCEPTION", domain, channel, method, message, data)
+        OINOBenchmark.trackException(domain + "." + channel, method, "Exception", message, data?.message || "", data?.stack || "")
     }
 
     /**

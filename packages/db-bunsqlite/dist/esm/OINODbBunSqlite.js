@@ -146,7 +146,7 @@ export class OINODbBunSqlite extends OINODb {
         }
         catch (e) {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbBunSqlite.connect");
-            OINOLog.exception("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "connect", result.statusMessage, { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "connect", "exception in connect", { message: e.message, stack: e.stack });
         }
         OINOBenchmark.endMetric("OINODb", "connect");
         return result;

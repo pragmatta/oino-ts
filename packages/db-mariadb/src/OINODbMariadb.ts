@@ -276,7 +276,7 @@ export class OINODbMariadb extends OINODb {
         } catch (e:any) {
             const msg_parts = (e as Error).message.match(OINODbMariadb._connectionExceptionMessageRegex) || []
             result.setError(500, "Error connecting to server: " + msg_parts[2], "OINODbMariadb.connect")
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "connect", result.statusMessage, {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "connect", "exception in connect", {message:e.message, stack:e.stack})
         } finally {
             if (connection) {
                 await connection.end()
@@ -310,7 +310,7 @@ export class OINODbMariadb extends OINODb {
             }
         } catch (e:any) {
             result.setError(500, "Exception validating connection: " + e.message, "OINODbMariadb.validate")
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "validate", result.statusMessage, {message:e, stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "validate", "exception in validate", {message:e.message, stack:e.stack})
         }
         OINOBenchmark.endMetric("OINODb", "validate")
         return result
@@ -330,7 +330,7 @@ export class OINODbMariadb extends OINODb {
             result = new OINOMariadbData(rows, [])
 
         } catch (e:any) {
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlSelect", "SQL select exception", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlSelect", "exception in SQL select", {message:e.message, stack:e.stack})
             result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
         }
         OINOBenchmark.endMetric("OINODb", "sqlSelect")
@@ -352,7 +352,7 @@ export class OINODbMariadb extends OINODb {
 
         } catch (e:any) {
             const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || []
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlExec", "SQL exec exception", {message:msg_parts[2], stack:e.stack})
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlExec", "exception in SQL exec", {message:msg_parts[2], stack:e.stack})
             result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + msg_parts[2] + "]"])
         }
         OINOBenchmark.endMetric("OINODb", "sqlExec")
