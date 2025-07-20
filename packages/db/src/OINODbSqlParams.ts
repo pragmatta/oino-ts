@@ -219,6 +219,8 @@ export class OINODbSqlOrder {
      * - `column` - order by column in ascending order
      * - `column ASC|DESC` - order by single either ascending or descending order
      * - `column+|-` - order by single either ascending or descending order
+     * 
+     * @param orderString string representation of order from HTTP-request
      *
      */
     static parse(orderString: string):OINODbSqlOrder {

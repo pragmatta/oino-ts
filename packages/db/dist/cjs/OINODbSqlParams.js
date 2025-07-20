@@ -68,6 +68,11 @@ class OINODbSqlFilter {
     /**
      * Constructor for `OINODbSqlFilter` as parser of http parameter.
      *
+     * Supports three types of statements:
+     * - comparison: (field)-lt|le|eq|ge|gt|like(value)
+     * - negation: -not(filter)
+     * - conjunction/disjunction: (filter)-and|or(filter)
+     *
      * @param filterString string representation of filter from HTTP-request
      *
      */
@@ -214,7 +219,12 @@ class OINODbSqlOrder {
     /**
      * Constructor for `OINODbSqlOrder` as parser of http parameter.
      *
-     * @param orderString string representation of ordering from HTTP-request
+     * Supports comma separated list of column orders formatted as :
+     * - `column` - order by column in ascending order
+     * - `column ASC|DESC` - order by single either ascending or descending order
+     * - `column+|-` - order by single either ascending or descending order
+     *
+     * @param orderString string representation of order from HTTP-request
      *
      */
     static parse(orderString) {
@@ -276,7 +286,7 @@ exports.OINODbSqlOrder = OINODbSqlOrder;
  *
  */
 class OINODbSqlLimit {
-    static _limitRegex = /^(\d+)(\spage\s)?(\d+)?$/i;
+    static _limitRegex = /^(\d+)(\spage\s|\.)?(\d+)?$/i;
     _limit;
     _page;
     /**
@@ -292,6 +302,11 @@ class OINODbSqlLimit {
     }
     /**
      * Constructor for `OINODbSqlLimit` as parser of http parameter.
+     *
+     * Supports limit and page formatted as:
+     * - `limit` - limit number of items to return
+     * - `limit page n` - limit number of items to return and return page n (starting from 1)
+     * - `limit.n` - limit number of items to return and return page n (starting from 1)
      *
      * @param limitString string representation of limit from HTTP-request
      *
@@ -367,6 +382,11 @@ class OINODbSqlAggregate {
     }
     /**
      * Constructor for `OINODbSqlAggregate` as parser of http parameter.
+     *
+     * Supports comma separated list of aggregates formatted as:
+     * - `function(field)`
+     *
+     * Supported functions are count, sum, avg, min, max.
      *
      * @param aggregatorString string representation of limit from HTTP-request
      *
@@ -468,7 +488,7 @@ class OINODbSqlSelect {
     /**
      * Constructor for `OINODbSqlSelect` as parser of http parameter.
      *
-     * @param columns comma separatef string selected columns from HTTP-request
+     * @param columns comma separated string selected columns from HTTP-request
      *
      */
     static parse(columns) {

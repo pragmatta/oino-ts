@@ -1,6 +1,6 @@
 {
   "name": "oinoreadmeapp",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "scripts": {
     "dev": "/_GIT/oino-ts/update_src.cmd /_GIT/oino-ts/samples/readmeApp && bun run ./readmeApp.ts --watch",
     "app": "bun run ./readmeApp.ts"
@@ -9,10 +9,10 @@
     "@types/node": "^22.10.1",
     "@oino-ts/db": "latest",
     "@oino-ts/db-bunsqlite": "latest",
-    "@oino-ts/common": "0.10.1"
+    "@oino-ts/common": "0.10.2"
   },
   "devDependencies": {
-    "@oino-ts/types": "0.10.1",
+    "@oino-ts/types": "0.10.2",
     "@types/bun": "latest"
   },
   "module": "readme.ts"
