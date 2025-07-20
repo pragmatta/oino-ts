@@ -256,7 +256,7 @@ class OINODbMsSql extends db_1.OINODb {
         if ((limitCondition != "") && (limit_parts.length == 2)) {
             if (orderCondition == "") {
                 db_1.OINOLog.error("@oino-ts/db-mssql", "OINODbMsSql", "printSqlSelect", "LIMIT without ORDER BY is not supported in MS SQL Server");
-                throw new Error(db_1.OINO_ERROR_PREFIX + "LIMIT without ORDER BY is not supported in MS SQL Server");
+                throw new Error(db_1.OINO_ERROR_PREFIX + ": LIMIT without ORDER BY is not supported in MS SQL Server");
             }
             else {
                 result += " OFFSET " + limit_parts[1] + " ROWS FETCH NEXT " + limit_parts[0] + " ROWS ONLY";
