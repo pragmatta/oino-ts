@@ -59,17 +59,17 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
     static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/;
     /** Locale formatter */
     _locale;
-    _numberOfDecimals = -1;
+    _numberDecimals = -1;
     /**
      * Constructor of OINODbHtmlTemplate.
      *
      * @param template HTML template string
-     * @param numberOfDecimals Number of decimals to use for numbers, -1 for no formatting
+     * @param numberDecimals Number of decimals to use for numbers, -1 for no formatting
      * @param dateLocaleStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
      * @param dateLocaleStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
      *
      */
-    constructor(template, numberOfDecimals = -1, dateLocaleStr = "", dateLocaleStyle = "") {
+    constructor(template, numberDecimals = -1, dateLocaleStr = "", dateLocaleStyle = "") {
         super(template);
         let locale_opts;
         if ((dateLocaleStyle == null) || (dateLocaleStyle == "")) {
@@ -82,7 +82,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             locale_opts = dateLocaleStyle;
         }
         this._locale = null;
-        this._numberOfDecimals = numberOfDecimals;
+        this._numberDecimals = numberDecimals;
         if ((dateLocaleStr != null) && (dateLocaleStr != "") && OINODbHtmlTemplate.LOCALE_REGEX.test(dateLocaleStr)) {
             try {
                 this._locale = new Intl.DateTimeFormat(dateLocaleStr, locale_opts);
@@ -120,8 +120,8 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
                 if ((f instanceof OINODatetimeDataField) && (this._locale != null)) {
                     value = f.serializeCellWithLocale(row[i], this._locale);
                 }
-                else if ((f instanceof OINONumberDataField) && (this._numberOfDecimals >= 0) && (typeof row[i] === "number")) {
-                    value = row[i].toFixed(this._numberOfDecimals);
+                else if ((f instanceof OINONumberDataField) && (this._numberDecimals >= 0) && (typeof row[i] === "number")) {
+                    value = row[i].toFixed(this._numberDecimals);
                 }
                 else {
                     value = f.serializeCell(row[i]);
