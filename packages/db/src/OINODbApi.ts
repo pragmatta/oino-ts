@@ -123,12 +123,12 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             this.setVariableFromValue(OINODbConfig.OINODB_ID_FIELD, "")
             for (let i=0; i<datamodel.fields.length; i++) {
                 const f:OINODbDataField = datamodel.fields[i]
-                let value:string|null|undefined
+                let value:string|null|undefined 
                 if ((f instanceof OINODatetimeDataField) && (this._locale != null)) {
                     value = f.serializeCellWithLocale(row[i], this._locale)
 
-                } else if ((f instanceof OINONumberDataField) && (this._numberOfDecimals >= 0) && (typeof row[i] == "number")) {
-                    value = row[i].toFixed(this._numberOfDecimals)
+                } else if ((f instanceof OINONumberDataField) && (this._numberOfDecimals >= 0) && (typeof row[i] === "number")) {
+                    value = (row[i]! as number).toFixed(this._numberOfDecimals)
 
                 } else {
                     value = f.serializeCell(row[i])

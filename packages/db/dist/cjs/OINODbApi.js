@@ -63,15 +63,17 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
     static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/;
     /** Locale formatter */
     _locale;
+    _numberOfDecimals = -1;
     /**
      * Constructor of OINODbHtmlTemplate.
      *
      * @param template HTML template string
+     * @param numberOfDecimals Number of decimals to use for numbers, -1 for no formatting
      * @param dateLocaleStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
      * @param dateLocaleStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
      *
      */
-    constructor(template, dateLocaleStr, dateLocaleStyle) {
+    constructor(template, numberOfDecimals = -1, dateLocaleStr = "", dateLocaleStyle = "") {
         super(template);
         let locale_opts;
         if ((dateLocaleStyle == null) || (dateLocaleStyle == "")) {
@@ -84,6 +86,7 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
             locale_opts = dateLocaleStyle;
         }
         this._locale = null;
+        this._numberOfDecimals = numberOfDecimals;
         if ((dateLocaleStr != null) && (dateLocaleStr != "") && OINODbHtmlTemplate.LOCALE_REGEX.test(dateLocaleStr)) {
             try {
                 this._locale = new Intl.DateTimeFormat(dateLocaleStr, locale_opts);
@@ -118,8 +121,11 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
             for (let i = 0; i < datamodel.fields.length; i++) {
                 const f = datamodel.fields[i];
                 let value;
-                if ((this._locale != null) && (f instanceof index_js_1.OINODatetimeDataField)) {
+                if ((f instanceof index_js_1.OINODatetimeDataField) && (this._locale != null)) {
                     value = f.serializeCellWithLocale(row[i], this._locale);
+                }
+                else if ((f instanceof index_js_1.OINONumberDataField) && (this._numberOfDecimals >= 0) && (typeof row[i] === "number")) {
+                    value = row[i].toFixed(this._numberOfDecimals);
                 }
                 else {
                     value = f.serializeCell(row[i]);
