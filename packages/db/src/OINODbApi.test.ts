@@ -153,7 +153,7 @@ function createApiTemplate(api:OINODbApi):OINODbHtmlTemplate {
 	for (let i=0; i<api.datamodel.fields.length; i++) {
 		template_str += "<input type='text' name='" + api.datamodel.fields[i].name + "' value='###" + api.datamodel.fields[i].name + "###'></input>"
 	}
-	return new OINODbHtmlTemplate(template_str, "fi", "medium")
+	return new OINODbHtmlTemplate(template_str, -1, "fi", "medium")
 }
 
 export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestParams) {
