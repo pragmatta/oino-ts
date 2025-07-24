@@ -38,17 +38,17 @@ export declare class OINODbHtmlTemplate extends OINOHtmlTemplate {
     static LOCALE_REGEX: RegExp;
     /** Locale formatter */
     protected _locale: Intl.DateTimeFormat | null;
-    protected _numberOfDecimals: number;
+    protected _numberDecimals: number;
     /**
      * Constructor of OINODbHtmlTemplate.
      *
      * @param template HTML template string
-     * @param numberOfDecimals Number of decimals to use for numbers, -1 for no formatting
+     * @param numberDecimals Number of decimals to use for numbers, -1 for no formatting
      * @param dateLocaleStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
      * @param dateLocaleStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
      *
      */
-    constructor(template: string, numberOfDecimals?: number, dateLocaleStr?: string, dateLocaleStyle?: string | any);
+    constructor(template: string, numberDecimals?: number, dateLocaleStr?: string, dateLocaleStyle?: string | any);
     /**
      * Creates HTML Response from API modelset.
      *
