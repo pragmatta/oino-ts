@@ -245,7 +245,6 @@ class OINODbDataModel {
             where_sql = filter_sql;
         }
         const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql);
-        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlSelect", "Result", { sql: result });
         return result;
     }
     /**
@@ -256,7 +255,6 @@ class OINODbDataModel {
      */
     printSqlInsert(row) {
         let result = "INSERT INTO " + this.api.db.printSqlTablename(this.api.params.tableName) + " " + this._printSqlInsertColumnsAndValues(row) + ";";
-        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlInsert", "Result", { sql: result });
         return result;
     }
     /**
@@ -268,7 +266,6 @@ class OINODbDataModel {
      */
     printSqlUpdate(id, row) {
         let result = "UPDATE " + this.api.db.printSqlTablename(this.api.params.tableName) + " SET " + this._printSqlUpdateValues(row) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
-        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlUpdate", "Result", { sql: result });
         return result;
     }
     /**
@@ -279,7 +276,6 @@ class OINODbDataModel {
      */
     printSqlDelete(id) {
         let result = "DELETE FROM " + this.api.db.printSqlTablename(this.api.params.tableName) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
-        index_js_1.OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlDelete", "Result", { sql: result });
         return result;
     }
 }

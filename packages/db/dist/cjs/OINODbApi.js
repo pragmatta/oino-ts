@@ -125,6 +125,7 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
                     value = f.serializeCellWithLocale(row[i], this._locale);
                 }
                 else if ((f instanceof index_js_1.OINONumberDataField) && (this._numberDecimals >= 0) && (typeof row[i] === "number")) {
+                    // console.debug("renderFromDbData number decimals", { field: f.name, value: row[i], type: typeof row[i] });
                     value = row[i].toFixed(this._numberDecimals);
                 }
                 else {
@@ -276,7 +277,6 @@ class OINODbApi {
             else if (result.success) {
                 common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPost", "Print SQL", { sql: sql });
                 const sql_res = await this.db.sqlExec(sql);
-                // OINOLog.debug("OINODbApi.doPost sql_res", {sql_res:sql_res})
                 if (sql_res.hasErrors()) {
                     result.setError(500, sql_res.getFirstError(), "DoPost");
                     if (this._debugOnError) {

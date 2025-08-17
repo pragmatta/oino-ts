@@ -50,7 +50,6 @@ export type OINODbApiParams = {
 /**
  * Database class (constructor) type
  * @param dbParams database parameters
- * @return OINODb instance
  */
 export type OINODbConstructor = new (dbParams: OINODbParams) => OINODb;
 /** Database parameters */

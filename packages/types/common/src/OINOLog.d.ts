@@ -134,7 +134,14 @@ export declare abstract class OINOLog {
      */
     static exportLogLevels(): any[];
     /**
-     * Import log levels from an array of objects with domain, channel, method and level.
+     * Set log levels from an array of objects with domain, channel, method and level overwriting existing values (i.e. non-existing values are not affected).
+     *
+     * @param logLevels array of log level objects
+     *
+     */
+    static setLogLevels(logLevels: any[]): void;
+    /**
+     * Import log levels from an array of objects with domain, channel, method and level resetting existing values (i.e. non-existing values get removed).
      *
      * @param logLevels array of log level objects
      *
