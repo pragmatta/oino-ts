@@ -252,7 +252,6 @@ export class OINODbDataModel {
             where_sql = filter_sql
         }
         const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql)
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlSelect", "Result", {sql:result})
         return result;
     }
 
@@ -264,7 +263,6 @@ export class OINODbDataModel {
      */
     printSqlInsert(row: OINODataRow): string {
         let result: string = "INSERT INTO " + this.api.db.printSqlTablename(this.api.params.tableName) + " " + this._printSqlInsertColumnsAndValues(row) + ";";
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlInsert", "Result", {sql:result})
         return result;
     }
 
@@ -277,7 +275,6 @@ export class OINODbDataModel {
      */
     printSqlUpdate(id: string, row: OINODataRow): string {
         let result: string = "UPDATE " + this.api.db.printSqlTablename(this.api.params.tableName) + " SET " + this._printSqlUpdateValues(row) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlUpdate", "Result", {sql:result})
         return result;
     }
 
@@ -289,7 +286,6 @@ export class OINODbDataModel {
      */
     printSqlDelete(id: string): string {
         let result: string = "DELETE FROM " + this.api.db.printSqlTablename(this.api.params.tableName) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlDelete", "Result", {sql:result})
         return result;
     }
 }

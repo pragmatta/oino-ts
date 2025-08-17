@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX, OINODbConfig, OINONumberDataField, OINOLog, OINODB_UNDEFINED } from "./index.js";
+import { OINO_ERROR_PREFIX, OINODbConfig, OINONumberDataField, OINODB_UNDEFINED } from "./index.js";
 /**
  * OINO Datamodel object for representing one database table and it's columns.
  *
@@ -242,7 +242,6 @@ export class OINODbDataModel {
             where_sql = filter_sql;
         }
         const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql);
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlSelect", "Result", { sql: result });
         return result;
     }
     /**
@@ -253,7 +252,6 @@ export class OINODbDataModel {
      */
     printSqlInsert(row) {
         let result = "INSERT INTO " + this.api.db.printSqlTablename(this.api.params.tableName) + " " + this._printSqlInsertColumnsAndValues(row) + ";";
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlInsert", "Result", { sql: result });
         return result;
     }
     /**
@@ -265,7 +263,6 @@ export class OINODbDataModel {
      */
     printSqlUpdate(id, row) {
         let result = "UPDATE " + this.api.db.printSqlTablename(this.api.params.tableName) + " SET " + this._printSqlUpdateValues(row) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlUpdate", "Result", { sql: result });
         return result;
     }
     /**
@@ -276,7 +273,6 @@ export class OINODbDataModel {
      */
     printSqlDelete(id) {
         let result = "DELETE FROM " + this.api.db.printSqlTablename(this.api.params.tableName) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
-        OINOLog.debug("@oino-ts/db", "OINODbDataModel", "printSqlDelete", "Result", { sql: result });
         return result;
     }
 }

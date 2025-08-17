@@ -137,7 +137,6 @@ export abstract class OINODb {
             result += " LIMIT " + limitCondition 
         }
         result += ";"
-        OINOLog.debug("@oino-ts/db", "OINODb", "printSqlSelect", "Result", {sql:result})
         return result;
     }
 }

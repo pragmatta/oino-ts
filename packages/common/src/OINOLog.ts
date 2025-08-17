@@ -213,14 +213,13 @@ export abstract class OINOLog {
 
 
     /**
-     * Import log levels from an array of objects with domain, channel, method and level.
+     * Set log levels from an array of objects with domain, channel, method and level overwriting existing values (i.e. non-existing values are not affected).
      * 
      * @param logLevels array of log level objects
      * 
      */
-    static importLogLevels(logLevels:any[]):void {
+    static setLogLevels(logLevels:any[]):void {
         if (OINOLog._instance) {
-            OINOLog._instance._logLevels = {"||": OINOLog._instance._defaultLogLevel} // reset to default log level
             for (const logLevel of logLevels) {
                 const domain = logLevel.domain || ""
                 const channel = logLevel.channel || ""
@@ -230,6 +229,19 @@ export abstract class OINOLog {
                     OINOLog._instance._logLevels[domain + "|" + channel + "|" + method] = level
                 }
             }
+        }
+    }
+
+    /**
+     * Import log levels from an array of objects with domain, channel, method and level resetting existing values (i.e. non-existing values get removed).
+     * 
+     * @param logLevels array of log level objects
+     * 
+     */
+    static importLogLevels(logLevels:any[]):void {
+        if (OINOLog._instance) {
+            OINOLog._instance._logLevels = {"||": OINOLog._instance._defaultLogLevel} // reset to default log level
+            this.setLogLevels(logLevels)
         }
     }
 }

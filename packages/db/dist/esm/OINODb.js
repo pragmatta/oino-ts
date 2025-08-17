@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX, OINODB_EMPTY_ROW, OINOLog } from "./index.js";
+import { OINO_ERROR_PREFIX, OINODB_EMPTY_ROW } from "./index.js";
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data
  * between SQL and serialization formats.
@@ -49,7 +49,6 @@ export class OINODb {
             result += " LIMIT " + limitCondition;
         }
         result += ";";
-        OINOLog.debug("@oino-ts/db", "OINODb", "printSqlSelect", "Result", { sql: result });
         return result;
     }
 }

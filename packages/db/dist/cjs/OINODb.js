@@ -52,7 +52,6 @@ class OINODb {
             result += " LIMIT " + limitCondition;
         }
         result += ";";
-        index_js_1.OINOLog.debug("@oino-ts/db", "OINODb", "printSqlSelect", "Result", { sql: result });
         return result;
     }
 }
