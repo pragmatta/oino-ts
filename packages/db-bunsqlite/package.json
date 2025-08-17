@@ -23,8 +23,9 @@
     "@oino-ts/db": "^0.10.4"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "@types/node": "^20.12.7",
-    "@types/bun": "latest"
+    "typescript": "~5.9.0"
   },
   "files": [
     "src/*.ts",

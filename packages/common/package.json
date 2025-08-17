@@ -19,7 +19,9 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@oino-ts/types": "0.10.4"
+    "@oino-ts/types": "0.10.4",
+    "@types/node": "^22.0.0",
+    "typescript": "~5.9.0"
   },
   "files": [
     "src/*.ts",

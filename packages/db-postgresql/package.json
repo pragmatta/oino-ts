@@ -24,9 +24,10 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "@types/node": "^20.12.7",
     "@types/pg": "^8.11.5",
-    "@types/bun": "latest"
+    "typescript": "~5.9.0"
   },
   "files": [
     "src/*.ts",

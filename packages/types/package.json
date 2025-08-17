@@ -18,6 +18,8 @@
   "dependencies": {
   },
   "devDependencies": {
+    "typescript": "~5.9.0",
+    "@types/node": "^22.0.0"
   },
   "files": [
     "index.d.ts",
