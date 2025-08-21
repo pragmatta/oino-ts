@@ -38,10 +38,7 @@ export class OINOHtmlTemplate {
 		return this.template == ""
 	}
 
-    protected _createHttpResult(html:string, removeUnusedTags:boolean):OINOHttpResult {
-        if (removeUnusedTags) {
-            html = html.replace(this._tagCleanRegex, "")
-        }
+    protected _createHttpResult(html:string):OINOHttpResult {
         const result:OINOHttpResult = new OINOHttpResult(html)
         if (this.expires >= 1) {
             result.expires = Math.round(this.expires)
@@ -105,14 +102,12 @@ export class OINOHtmlTemplate {
 
     /**
      * Creates HTML Response from set variables.
-     *
-     * @param removeUnusedTags whether to remove unused tags
      * 
      */
-    render(removeUnusedTags:boolean = true):OINOHttpResult {
+    render():OINOHttpResult {
         const html:string = this._renderHtml()
         this.clearVariables() // clear variables after rendering
-        return this._createHttpResult(html, removeUnusedTags)
+        return this._createHttpResult(html)
     }
 
     /**
@@ -120,13 +115,12 @@ export class OINOHtmlTemplate {
      *
      * @param key key
      * @param value value
-     * @param removeUnusedTags whether to remove unused tags
      * 
      */
-    renderFromKeyValue(key:string, value:string, removeUnusedTags:boolean = true):OINOHttpResult {
+    renderFromKeyValue(key:string, value:string):OINOHttpResult {
         OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromKeyValue")
         this.setVariableFromValue(key, value)
-        const result:OINOHttpResult = this.render(removeUnusedTags)
+        const result:OINOHttpResult = this.render()
         OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromKeyValue")
         return result
     }
@@ -135,13 +129,12 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from object properties.
      *
      * @param object object
-     * @param removeUnusedTags whether to remove unused tags
      * 
      */
-    renderFromObject(object:any, removeUnusedTags:boolean = true):OINOHttpResult {
+    renderFromObject(object:any = true):OINOHttpResult {
         OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromObject")
         this.setVariableFromProperties(object)
-        const result:OINOHttpResult = this.render(removeUnusedTags)
+        const result:OINOHttpResult = this.render()
         OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromObject")
         return result
     }
@@ -150,7 +143,6 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from API result.
      *
      * @param result OINOResult-object
-     * @param removeUnusedTags whether to remove unused tags
      * @param messageSeparator HTML separator for messages
      * @param includeErrorMessages include debug messages in result
      * @param includeWarningMessages include debug messages in result
@@ -158,7 +150,7 @@ export class OINOHtmlTemplate {
      * @param includeDebugMessages include debug messages in result
      * 
      */
-    renderFromResult(result:OINOResult, removeUnusedTags:boolean=true, messageSeparator:string = "", includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
+    renderFromResult(result:OINOResult, messageSeparator:string = "", includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
         OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromResult")
         this.setVariableFromValue("statusCode", result.statusCode.toString())
         this.setVariableFromValue("statusMessage", result.statusMessage.toString())
@@ -181,7 +173,7 @@ export class OINOHtmlTemplate {
         if (messageSeparator && (messages.length > 0)) {
             this.setVariableFromValue("messages", messages.join(messageSeparator), false) // messages have been escaped already
         }        
-        const http_result:OINOHttpResult = this.render(removeUnusedTags)
+        const http_result:OINOHttpResult = this.render()
         OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromResult")
         return http_result
     }
