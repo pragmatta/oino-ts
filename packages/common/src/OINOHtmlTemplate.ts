@@ -7,6 +7,10 @@ export class OINOHtmlTemplate {
     private _tag:string
     private _tagCleanRegex:RegExp 
     private _variables:Record<string, string> = {}
+    private _tagStart:number[] = []
+    private _tagEnd:number[] = []
+    private _tagVariable:string[] = []
+    private _tagCount:number = 0
     /** HTML template string */
 	template: string;
 
@@ -29,6 +33,7 @@ export class OINOHtmlTemplate {
 		this.expires = 0
         this._tag = tag
         this._tagCleanRegex = new RegExp(tag + ".*" + tag, "g")
+        this._parseTemplate()
 	}
 
     /**
@@ -37,6 +42,21 @@ export class OINOHtmlTemplate {
 	isEmpty():boolean {
 		return this.template == ""
 	}
+
+    protected _parseTemplate() {
+        const tag_length = this._tag.length
+        let tag_start_pos = this.template.indexOf(this._tag, 0) 
+        let tag_end_pos = this.template.indexOf(this._tag, tag_start_pos + tag_length) + tag_length
+        while ((tag_start_pos >= 0) && (tag_end_pos > tag_start_pos)) {
+            this._tagStart.push(tag_start_pos)
+            this._tagEnd.push(tag_end_pos)
+            this._tagVariable.push(this.template.slice(tag_start_pos+tag_length, tag_end_pos - tag_length))
+            this._tagCount = this._tagCount + 1
+            // console.log("tag_start_pos:", tag_start_pos, "tag_end_pos:", tag_end_pos, "variable:", this._tagVariable[this._tagCount-1])
+            tag_start_pos = this.template.indexOf(this._tag, tag_end_pos) 
+            tag_end_pos = this.template.indexOf(this._tag, tag_start_pos + tag_length) + tag_length
+        }
+    }
 
     protected _createHttpResult(html:string):OINOHttpResult {
         const result:OINOHttpResult = new OINOHttpResult(html)
@@ -50,11 +70,22 @@ export class OINOHtmlTemplate {
     }
 
     protected _renderHtml():string {
-        let html:string = this.template
-        for (let key in this._variables) {
-            const value = this._variables[key]
-            html = html.replaceAll(this._tag + key + this._tag, value)
+        let html:string = ""
+        let start_pos = 0
+        let end_pos = 0
+        for (let i=0; i<this._tagCount; i++) {
+            end_pos = this._tagStart[i]
+            const key = this._tagVariable[i]
+            const value = this._variables[key] || ""
+            html += this.template.slice(start_pos, end_pos) + (value ? value : "")
+            start_pos = this._tagEnd[i]
         }
+        html += this.template.slice(start_pos)
+        // let html:string = this.template
+        // for (let key in this._variables) {
+        //     const value = this._variables[key]
+        //     html = html.replaceAll(this._tag + key + this._tag, value)
+        // }
         return html
     }
 
