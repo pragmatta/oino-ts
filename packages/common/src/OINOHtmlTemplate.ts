@@ -5,8 +5,8 @@ import { OINO_EMPTY_FORMATTER, OINOFormatter } from "./OINOFormatter"
  * Class for rendering HTML from data. 
  */
 export class OINOHtmlTemplate {
-    private _tag:string
-    private _tagCleanRegex:RegExp 
+    private _tagOpen:string
+    private _tagClose:string
     private _variables:Record<string, string> = {}
     private _tagStart:number[] = []
     private _tagEnd:number[] = []
@@ -30,12 +30,12 @@ export class OINOHtmlTemplate {
      * @param tag tag to identify variables in template
      * 
      */
-	constructor (template:string, tag:string = "###") {
+	constructor (template:string, tagOpen:string = "{{{", tagClose:string = "}}}") {
 		this.template = template
 		this.modified = 0
 		this.expires = 0
-        this._tag = tag
-        this._tagCleanRegex = new RegExp(tag + ".*" + tag, "g")
+        this._tagOpen = tagOpen
+        this._tagClose = tagClose
         this._parseTemplate()
 	}
 
@@ -47,13 +47,14 @@ export class OINOHtmlTemplate {
 	}
 
     protected _parseTemplate() {
-        const tag_length = this._tag.length
-        let tag_start_pos = this.template.indexOf(this._tag, 0) 
-        let tag_end_pos = this.template.indexOf(this._tag, tag_start_pos + tag_length) + tag_length
+        const tag_open_length = this._tagOpen.length
+        const tag_close_length = this._tagClose.length
+        let tag_start_pos = this.template.indexOf(this._tagOpen, 0) 
+        let tag_end_pos = this.template.indexOf(this._tagClose, tag_start_pos + tag_open_length) + tag_close_length
         while ((tag_start_pos >= 0) && (tag_end_pos > tag_start_pos)) {
             this._tagStart.push(tag_start_pos)
             this._tagEnd.push(tag_end_pos)
-            let variable = this.template.slice(tag_start_pos+tag_length, tag_end_pos - tag_length)
+            let variable = this.template.slice(tag_start_pos+tag_open_length, tag_end_pos - tag_close_length)
             const variable_parts = variable.split("|")
             if (variable_parts.length > 1) {
                 const formatter: OINOFormatter = OINOFormatter.parse(variable_parts.slice(1))
@@ -63,8 +64,8 @@ export class OINOHtmlTemplate {
             }
             this._tagVariable.push(variable_parts[0])
             this._tagCount = this._tagCount + 1
-            tag_start_pos = this.template.indexOf(this._tag, tag_end_pos) 
-            tag_end_pos = this.template.indexOf(this._tag, tag_start_pos + tag_length) + tag_length
+            tag_start_pos = this.template.indexOf(this._tagOpen, tag_end_pos) 
+            tag_end_pos = this.template.indexOf(this._tagClose, tag_start_pos + tag_open_length) + tag_close_length
         }
     }
 

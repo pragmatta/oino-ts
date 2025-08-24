@@ -15,17 +15,17 @@ Math.random()
 OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.error))
 
 const VARIABLE_OPTIONS = [
-    "###var{i}###", // 0 nothing
-    "###var{i}|trim()###", // 1 trim
-    "###var{i}|trimLeft()###", // 2 trimLeft
-    "###var{i}|trimRight()###", // 3 trimRight
-    "###var{i}|toLower()###", // 4 toLower
-    "###var{i}|cropLeft(1)###", // 5 cropLeft
-    "###var{i}|cropRight(1)###", // 6 cropRight
-    "###var{i}|cropToDelimiter(¤,1)###", // 7 cropToDelimiter
-    "###var{i}|cropFromDelimiter(¤,0)###", // 8 cropFromDelimiter
-    "###var{i}|substring(2,10)###", // 9 substring
-    "###var{i}|replace(¤,a)###" // 10 replace
+    "{{{var{i}}}}", // 0 nothing
+    "{{{var{i}|trim()}}}", // 1 trim
+    "{{{var{i}|trimLeft()}}}", // 2 trimLeft
+    "{{{var{i}|trimRight()}}}", // 3 trimRight
+    "{{{var{i}|toLower()}}}", // 4 toLower
+    "{{{var{i}|cropLeft(1)}}}", // 5 cropLeft
+    "{{{var{i}|cropRight(1)}}}", // 6 cropRight
+    "{{{var{i}|cropToDelimiter(¤,1)}}}", // 7 cropToDelimiter
+    "{{{var{i}|cropFromDelimiter(¤,0)}}}", // 8 cropFromDelimiter
+    "{{{var{i}|substring(2,10)}}}", // 9 substring
+    "{{{var{i}|replace(¤,a)}}}" // 10 replace
 ]
 const VARIABLE_VALUES = [
     "value{i}",   // 0 nothing
@@ -47,11 +47,11 @@ function _generateTemplateVariable(i:number): string {
 }
 
 function _generateTemplateHtml(variableCount: number): string {
-    let template = "###header###\n<div>\n" // edge case: tag at the start of the template
+    let template = "{{{header}}}\n<div>\n" // edge case: tag at the start of the template
     for (let i = 1; i <= variableCount; i++) {
         template += `<p>${_generateTemplateVariable(i)}</p>\n`
     }
-    template += "</div>\n###footer###" // edge case: tag at the end of the template
+    template += "</div>\n{{{footer}}}" // edge case: tag at the end of the template
     return template
 }
 
