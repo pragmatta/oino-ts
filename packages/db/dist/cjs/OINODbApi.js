@@ -147,7 +147,7 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
             await dataset.next();
         }
         this.modified = last_modified;
-        const result = this._createHttpResult(html, false);
+        const result = this._createHttpResult(html);
         index_js_1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromDbData");
         return result;
     }
