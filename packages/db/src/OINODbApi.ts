@@ -150,7 +150,7 @@ export class OINODbHtmlTemplate extends OINOHtmlTemplate {
             await dataset.next()
         }
         this.modified = last_modified
-        const result:OINOHttpResult = this._createHttpResult(html, false)
+        const result:OINOHttpResult = this._createHttpResult(html)
         OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromDbData")
         return result
     }

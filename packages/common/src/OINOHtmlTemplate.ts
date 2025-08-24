@@ -1,4 +1,5 @@
 import { OINOStr, OINOContentType, OINOResult, OINOHttpResult, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOBenchmark } from "."
+import { OINO_EMPTY_FORMATTER, OINOFormatter } from "./OINOFormatter"
 
 /**
  * Class for rendering HTML from data. 
@@ -10,7 +11,9 @@ export class OINOHtmlTemplate {
     private _tagStart:number[] = []
     private _tagEnd:number[] = []
     private _tagVariable:string[] = []
+    private _tagFormatters:OINOFormatter[] = []
     private _tagCount:number = 0
+
     /** HTML template string */
 	template: string;
 
@@ -50,9 +53,16 @@ export class OINOHtmlTemplate {
         while ((tag_start_pos >= 0) && (tag_end_pos > tag_start_pos)) {
             this._tagStart.push(tag_start_pos)
             this._tagEnd.push(tag_end_pos)
-            this._tagVariable.push(this.template.slice(tag_start_pos+tag_length, tag_end_pos - tag_length))
+            let variable = this.template.slice(tag_start_pos+tag_length, tag_end_pos - tag_length)
+            const variable_parts = variable.split("|")
+            if (variable_parts.length > 1) {
+                const formatter: OINOFormatter = OINOFormatter.parse(variable_parts.slice(1))
+                this._tagFormatters.push(formatter)
+            } else {
+                this._tagFormatters.push(OINO_EMPTY_FORMATTER)
+            }
+            this._tagVariable.push(variable_parts[0])
             this._tagCount = this._tagCount + 1
-            // console.log("tag_start_pos:", tag_start_pos, "tag_end_pos:", tag_end_pos, "variable:", this._tagVariable[this._tagCount-1])
             tag_start_pos = this.template.indexOf(this._tag, tag_end_pos) 
             tag_end_pos = this.template.indexOf(this._tag, tag_start_pos + tag_length) + tag_length
         }
@@ -76,8 +86,8 @@ export class OINOHtmlTemplate {
         for (let i=0; i<this._tagCount; i++) {
             end_pos = this._tagStart[i]
             const key = this._tagVariable[i]
-            const value = this._variables[key] || ""
-            html += this.template.slice(start_pos, end_pos) + (value ? value : "")
+            const value = this._tagFormatters[i].format(this._variables[key] || "")
+            html += this.template.slice(start_pos, end_pos) + value
             start_pos = this._tagEnd[i]
         }
         html += this.template.slice(start_pos)
