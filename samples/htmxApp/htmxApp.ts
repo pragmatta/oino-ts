@@ -137,10 +137,7 @@ try {
 		},
 	})
 		
-	OINOLog.info(
-	  `🦊 Server is running at ${server.hostname}:${server.port}`
-	);
-	
+	console.log(`🦊 Server is running at ${server.hostname}:${server.port}`);
 	
 } catch (e:any) {
 	OINOLog.exception("@oino-ts/db", "htmxApp", "initialization", "Exception", {message:e.message, stack:e.stack}) 
