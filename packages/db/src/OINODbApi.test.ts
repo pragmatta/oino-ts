@@ -151,7 +151,7 @@ function encodeResult(o:any|undefined):string {
 function createApiTemplate(api:OINODbApi):OINODbHtmlTemplate {
 	let template_str = ""
 	for (let i=0; i<api.datamodel.fields.length; i++) {
-		template_str += "<input type='text' name='" + api.datamodel.fields[i].name + "' value='###" + api.datamodel.fields[i].name + "###'></input>"
+		template_str += "<input type='text' name='" + api.datamodel.fields[i].name + "' value='{{{" + api.datamodel.fields[i].name + "}}}'></input>"
 	}
 	return new OINODbHtmlTemplate(template_str, -1, "fi", "medium")
 }

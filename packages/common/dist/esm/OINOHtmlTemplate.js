@@ -1,11 +1,17 @@
 import { OINOStr, OINOContentType, OINOHttpResult, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOBenchmark } from ".";
+import { OINO_EMPTY_FORMATTER, OINOFormatter } from "./OINOFormatter";
 /**
  * Class for rendering HTML from data.
  */
 export class OINOHtmlTemplate {
-    _tag;
-    _tagCleanRegex;
+    _tagOpen;
+    _tagClose;
     _variables = {};
+    _tagStart = [];
+    _tagEnd = [];
+    _tagVariable = [];
+    _tagFormatters = [];
+    _tagCount = 0;
     /** HTML template string */
     template;
     /** Cache modified value for template */
@@ -19,12 +25,13 @@ export class OINOHtmlTemplate {
      * @param tag tag to identify variables in template
      *
      */
-    constructor(template, tag = "###") {
+    constructor(template, tagOpen = "{{{", tagClose = "}}}") {
         this.template = template;
         this.modified = 0;
         this.expires = 0;
-        this._tag = tag;
-        this._tagCleanRegex = new RegExp(tag + ".*" + tag, "g");
+        this._tagOpen = tagOpen;
+        this._tagClose = tagClose;
+        this._parseTemplate();
     }
     /**
      * @returns whether template is empty
@@ -32,10 +39,30 @@ export class OINOHtmlTemplate {
     isEmpty() {
         return this.template == "";
     }
-    _createHttpResult(html, removeUnusedTags) {
-        if (removeUnusedTags) {
-            html = html.replace(this._tagCleanRegex, "");
+    _parseTemplate() {
+        const tag_open_length = this._tagOpen.length;
+        const tag_close_length = this._tagClose.length;
+        let tag_start_pos = this.template.indexOf(this._tagOpen, 0);
+        let tag_end_pos = this.template.indexOf(this._tagClose, tag_start_pos + tag_open_length) + tag_close_length;
+        while ((tag_start_pos >= 0) && (tag_end_pos > tag_start_pos)) {
+            this._tagStart.push(tag_start_pos);
+            this._tagEnd.push(tag_end_pos);
+            let variable = this.template.slice(tag_start_pos + tag_open_length, tag_end_pos - tag_close_length);
+            const variable_parts = variable.split("|");
+            if (variable_parts.length > 1) {
+                const formatter = OINOFormatter.parse(variable_parts.slice(1));
+                this._tagFormatters.push(formatter);
+            }
+            else {
+                this._tagFormatters.push(OINO_EMPTY_FORMATTER);
+            }
+            this._tagVariable.push(variable_parts[0]);
+            this._tagCount = this._tagCount + 1;
+            tag_start_pos = this.template.indexOf(this._tagOpen, tag_end_pos);
+            tag_end_pos = this.template.indexOf(this._tagClose, tag_start_pos + tag_open_length) + tag_close_length;
         }
+    }
+    _createHttpResult(html) {
         const result = new OINOHttpResult(html);
         if (this.expires >= 1) {
             result.expires = Math.round(this.expires);
@@ -46,11 +73,22 @@ export class OINOHtmlTemplate {
         return result;
     }
     _renderHtml() {
-        let html = this.template;
-        for (let key in this._variables) {
-            const value = this._variables[key];
-            html = html.replaceAll(this._tag + key + this._tag, value);
+        let html = "";
+        let start_pos = 0;
+        let end_pos = 0;
+        for (let i = 0; i < this._tagCount; i++) {
+            end_pos = this._tagStart[i];
+            const key = this._tagVariable[i];
+            const value = this._tagFormatters[i].format(this._variables[key] || "");
+            html += this.template.slice(start_pos, end_pos) + value;
+            start_pos = this._tagEnd[i];
         }
+        html += this.template.slice(start_pos);
+        // let html:string = this.template
+        // for (let key in this._variables) {
+        //     const value = this._variables[key]
+        //     html = html.replaceAll(this._tag + key + this._tag, value)
+        // }
         return html;
     }
     /**
@@ -96,26 +134,23 @@ export class OINOHtmlTemplate {
     /**
      * Creates HTML Response from set variables.
      *
-     * @param removeUnusedTags whether to remove unused tags
-     *
      */
-    render(removeUnusedTags = true) {
+    render() {
         const html = this._renderHtml();
         this.clearVariables(); // clear variables after rendering
-        return this._createHttpResult(html, removeUnusedTags);
+        return this._createHttpResult(html);
     }
     /**
      * Creates HTML Response from a key-value-pair.
      *
      * @param key key
      * @param value value
-     * @param removeUnusedTags whether to remove unused tags
      *
      */
-    renderFromKeyValue(key, value, removeUnusedTags = true) {
+    renderFromKeyValue(key, value) {
         OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromKeyValue");
         this.setVariableFromValue(key, value);
-        const result = this.render(removeUnusedTags);
+        const result = this.render();
         OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromKeyValue");
         return result;
     }
@@ -123,13 +158,12 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from object properties.
      *
      * @param object object
-     * @param removeUnusedTags whether to remove unused tags
      *
      */
-    renderFromObject(object, removeUnusedTags = true) {
+    renderFromObject(object = true) {
         OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromObject");
         this.setVariableFromProperties(object);
-        const result = this.render(removeUnusedTags);
+        const result = this.render();
         OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromObject");
         return result;
     }
@@ -137,7 +171,6 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from API result.
      *
      * @param result OINOResult-object
-     * @param removeUnusedTags whether to remove unused tags
      * @param messageSeparator HTML separator for messages
      * @param includeErrorMessages include debug messages in result
      * @param includeWarningMessages include debug messages in result
@@ -145,7 +178,7 @@ export class OINOHtmlTemplate {
      * @param includeDebugMessages include debug messages in result
      *
      */
-    renderFromResult(result, removeUnusedTags = true, messageSeparator = "", includeErrorMessages = false, includeWarningMessages = false, includeInfoMessages = false, includeDebugMessages = false) {
+    renderFromResult(result, messageSeparator = "", includeErrorMessages = false, includeWarningMessages = false, includeInfoMessages = false, includeDebugMessages = false) {
         OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromResult");
         this.setVariableFromValue("statusCode", result.statusCode.toString());
         this.setVariableFromValue("statusMessage", result.statusMessage.toString());
@@ -167,7 +200,7 @@ export class OINOHtmlTemplate {
         if (messageSeparator && (messages.length > 0)) {
             this.setVariableFromValue("messages", messages.join(messageSeparator), false); // messages have been escaped already
         }
-        const http_result = this.render(removeUnusedTags);
+        const http_result = this.render();
         OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromResult");
         return http_result;
     }

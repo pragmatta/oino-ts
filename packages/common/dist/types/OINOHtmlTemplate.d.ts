@@ -3,9 +3,14 @@ import { OINOResult, OINOHttpResult } from ".";
  * Class for rendering HTML from data.
  */
 export declare class OINOHtmlTemplate {
-    private _tag;
-    private _tagCleanRegex;
+    private _tagOpen;
+    private _tagClose;
     private _variables;
+    private _tagStart;
+    private _tagEnd;
+    private _tagVariable;
+    private _tagFormatters;
+    private _tagCount;
     /** HTML template string */
     template: string;
     /** Cache modified value for template */
@@ -19,12 +24,13 @@ export declare class OINOHtmlTemplate {
      * @param tag tag to identify variables in template
      *
      */
-    constructor(template: string, tag?: string);
+    constructor(template: string, tagOpen?: string, tagClose?: string);
     /**
      * @returns whether template is empty
      */
     isEmpty(): boolean;
-    protected _createHttpResult(html: string, removeUnusedTags: boolean): OINOHttpResult;
+    protected _parseTemplate(): void;
+    protected _createHttpResult(html: string): OINOHttpResult;
     protected _renderHtml(): string;
     /**
      * Clear template variables.
@@ -51,32 +57,27 @@ export declare class OINOHtmlTemplate {
     /**
      * Creates HTML Response from set variables.
      *
-     * @param removeUnusedTags whether to remove unused tags
-     *
      */
-    render(removeUnusedTags?: boolean): OINOHttpResult;
+    render(): OINOHttpResult;
     /**
      * Creates HTML Response from a key-value-pair.
      *
      * @param key key
      * @param value value
-     * @param removeUnusedTags whether to remove unused tags
      *
      */
-    renderFromKeyValue(key: string, value: string, removeUnusedTags?: boolean): OINOHttpResult;
+    renderFromKeyValue(key: string, value: string): OINOHttpResult;
     /**
      * Creates HTML Response from object properties.
      *
      * @param object object
-     * @param removeUnusedTags whether to remove unused tags
      *
      */
-    renderFromObject(object: any, removeUnusedTags?: boolean): OINOHttpResult;
+    renderFromObject(object?: any): OINOHttpResult;
     /**
      * Creates HTML Response from API result.
      *
      * @param result OINOResult-object
-     * @param removeUnusedTags whether to remove unused tags
      * @param messageSeparator HTML separator for messages
      * @param includeErrorMessages include debug messages in result
      * @param includeWarningMessages include debug messages in result
@@ -84,5 +85,5 @@ export declare class OINOHtmlTemplate {
      * @param includeDebugMessages include debug messages in result
      *
      */
-    renderFromResult(result: OINOResult, removeUnusedTags?: boolean, messageSeparator?: string, includeErrorMessages?: boolean, includeWarningMessages?: boolean, includeInfoMessages?: boolean, includeDebugMessages?: boolean): OINOHttpResult;
+    renderFromResult(result: OINOResult, messageSeparator?: string, includeErrorMessages?: boolean, includeWarningMessages?: boolean, includeInfoMessages?: boolean, includeDebugMessages?: boolean): OINOHttpResult;
 }

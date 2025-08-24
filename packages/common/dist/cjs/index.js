@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OINOContentType = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOHtmlTemplate = exports.OINOStr = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOMemoryBenchmark = exports.OINOBenchmark = void 0;
+exports.OINOContentType = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINO_EMPTY_FORMATTER = exports.OINOFormatter = exports.OINOHtmlTemplate = exports.OINOStr = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOMemoryBenchmark = exports.OINOBenchmark = void 0;
 var OINOBenchmark_js_1 = require("./OINOBenchmark.js");
 Object.defineProperty(exports, "OINOBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOBenchmark; } });
 Object.defineProperty(exports, "OINOMemoryBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOMemoryBenchmark; } });
@@ -15,6 +15,9 @@ var OINOStr_js_1 = require("./OINOStr.js");
 Object.defineProperty(exports, "OINOStr", { enumerable: true, get: function () { return OINOStr_js_1.OINOStr; } });
 var OINOHtmlTemplate_js_1 = require("./OINOHtmlTemplate.js");
 Object.defineProperty(exports, "OINOHtmlTemplate", { enumerable: true, get: function () { return OINOHtmlTemplate_js_1.OINOHtmlTemplate; } });
+var OINOFormatter_js_1 = require("./OINOFormatter.js");
+Object.defineProperty(exports, "OINOFormatter", { enumerable: true, get: function () { return OINOFormatter_js_1.OINOFormatter; } });
+Object.defineProperty(exports, "OINO_EMPTY_FORMATTER", { enumerable: true, get: function () { return OINOFormatter_js_1.OINO_EMPTY_FORMATTER; } });
 /** OINO error message prefix */
 exports.OINO_ERROR_PREFIX = "OINO ERROR";
 /** OINO warning message prefix */
