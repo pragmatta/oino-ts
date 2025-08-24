@@ -61,7 +61,10 @@ export class OINOFormatter {
                 } else {
                     const formatter_type = match[1].toLowerCase().substring(0, match[1].indexOf('('))
                     const formatter_params: any[] = []
-                    if (formatter_type === "cropleft") {
+                    if ((formatter_type === "trim") || (formatter_type === "trimleft") || (formatter_type === "trimright") || (formatter_type === "toupper") || (formatter_type === "tolower")) {
+                        // no parameters
+
+                    } else if (formatter_type=== "cropleft") {
                         formatter_params.push(parseInt(match[7]))
 
                     } else if (formatter_type === "cropright") {
