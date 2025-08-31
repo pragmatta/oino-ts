@@ -64,3 +64,4 @@ packages/db-mariadb/package-lock.json
 packages/db-postgresql/package-lock.json
 packages/hashid/package-lock.json
 packages/types/package-lock.json
+samples/nodeApp/update_templates.ps1
