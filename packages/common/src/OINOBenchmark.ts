@@ -247,7 +247,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
     }
 
     protected _trackException(module:string, method:string, category:string, name:string, message:string, stack:string):void {
-        const exception = { module, method, category, name, message, stack }
+        const exception = { module, method, category, name, message, stack, timestamp: Date.now() }
         this._exceptions.push(exception)
     }
 
