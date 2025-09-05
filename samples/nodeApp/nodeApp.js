@@ -5,7 +5,7 @@ import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { createServer } from "node:http"
 import fs from "fs";
 
-const PATH_REGEX = /\/(\w+)\/?(.+)?\/?(.+)?\/?(.+)?/i;
+const API_PATH_REGEX = /\/([^\/]+)\/([^\/]+)\/?([^\/]*)\/?([^\/]*)/
 const DATABASES = {}
 const APIS = {}
 const TOKENS = {}
@@ -33,6 +33,28 @@ async function initializeDatabases() {
     }
 }
 
+function _parseFieldList(fieldListStr){
+    if (fieldListStr) {
+        return fieldListStr.split(",").map(f => f.trim())
+    }
+    return undefined
+}
+
+function _parseApiParams(path) {
+    const path_matches = API_PATH_REGEX.exec(path) 
+    if (path_matches) {
+        return {
+            apiName: path_matches[1] == '_' ? "" : path_matches[1] || "",
+            tokenId: path_matches[2] == '_' ? "" : path_matches[2] || "",
+            rowId: path_matches[3] == '_' ? "" : path_matches[3] || "",
+            commandId: path_matches[4] == '_' ? "" : path_matches[4] || ""
+        }
+    } else {
+        return {}
+    }
+}
+
+
 async function initializeApis() {
     const api_configs = JSON.parse(fs.readFileSync("./apis.json", "utf8"))
     
@@ -41,6 +63,12 @@ async function initializeApis() {
             const db = DATABASES[api_conf.databaseId]
             if (!db) {
                 console.error("No database found for API", api_conf)
+                continue
+            }
+            api_conf.excludeFields = _parseFieldList(api_conf.excludeFields) || []
+            api_conf.includeFields = _parseFieldList(api_conf.includeFields) || []
+            if (!api_conf.apiName || !api_conf.tableName || !api_conf.databaseId) {
+                console.error("Invalid API configuration", api_conf)
                 continue
             }
             const api = await OINODbFactory.createApi(db, api_conf)
@@ -123,16 +151,11 @@ function writeResponse(response, statusCode, body, contentType) {
 async function handleRequest(request, response) {
     response.statusCode = 200;
     response.setHeader('Content-Type', OINOContentType.json);
-    let pathname = request.url.toLowerCase();
-    let path_matches = pathname.match(PATH_REGEX) || []
-    let api_name = (path_matches[1] || "").toLowerCase()
-    let token_id = (path_matches[2] || "").toLowerCase()
-    let row_id = path_matches[3] || ""
-    let command_id = path_matches[4] || ""
-    let api = APIS[api_name]
-    OINOLog.debug("nodeApp", "nodeApp.js", "handleRequest", "New request", { method: request.method, api_name, token_id, row_id, command_id })
+    const api_params = _parseApiParams(request.url.toLowerCase())
+    let api = APIS[api_params.apiName]
+    OINOLog.debug("nodeApp", "nodeApp.js", "handleRequest", "New request", { method: request.method, apiName:api_params.apiName, tokenId: api_params.tokenId, rowId: api_params.rowId, commandId: api_params.commandId })
 
-    if (pathname == "/swagger.json") {
+    if (request.url == "/swagger.json") {
         const api_array = Object.entries(APIS).map(([path, api]) => (api))
         const json = JSON.stringify(OINODbSwagger.getApiDefinition(api_array))
         writeResponse(response, 200, json, OINOContentType.json)
@@ -140,7 +163,7 @@ async function handleRequest(request, response) {
     } else if (!api) {
         writeResponse(response, 404, "Not Found", 'text/plain')
 
-    } else if ((validateToken(TOKENS[token_id], api, request.method, row_id) == false)) {
+    } else if ((validateToken(TOKENS[api_params.tokenId], api, request.method, api_params.rowId) == false)) {
         writeResponse(response, 403, "Forbidden", 'text/plain')
 
     } else {
@@ -148,16 +171,16 @@ async function handleRequest(request, response) {
         request.on("data", (chunk) => { body += chunk })
         request.on("end", async () => {
             const request_params = { sqlParams: {}}
-            const api_res = await api.doRequest(request.method, row_id, body, request_params)
+            const api_res = await api.doRequest(request.method, api_params.rowId, body, request_params)
             if (api_res.success && api_res.data.dataset) {
                 if ((request.headers['accept'] || '').includes(OINOContentType.html)) {
-                    const template = await getTemplate(api_name, request.method, api_res.statusCode, command_id)
+                    const template = await getTemplate(api_params.apiName, request.method, api_res.statusCode, api_params.commandId)
                     if (template) {
                         const html = (await template.renderFromDbData(api_res.data)).body
                         writeResponse(response, 200, html, OINOContentType.html)
 
                     } else {
-                        OINOLog.warning("nodeApp", "nodeApp.js", "handleRequest", "Template not found", { api_name, method: request.method, statusCode: api_res.statusCode, command_id })
+                        OINOLog.warning("nodeApp", "nodeApp.js", "handleRequest", "Template not found", { apiName: api_params.apiName, method: request.method, statusCode: api_res.statusCode, commandId: api_params.commandId })
                         const json = await api_res.data.writeString(OINOContentType.json)
                         writeResponse(response, 200, json, OINOContentType.json)
                     }
