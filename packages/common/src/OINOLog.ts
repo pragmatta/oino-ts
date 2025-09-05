@@ -69,17 +69,19 @@ export abstract class OINOLog {
      *
      */
     protected static _log(level:OINOLogLevel, levelStr:string, domain:string, channel:string, method:string, message:string, data?:any):void {
-        const log_levels = OINOLog._instance!._logLevels
-        // console.log(log_levels)
-        const min_level = log_levels[domain + "|" + channel + "|" + method] ||
-            log_levels[domain + "||" + method] || 
-            log_levels[domain + "|" + channel + "|"] || 
-            log_levels["|" + channel + "|"] || 
-            log_levels[domain + "||"] ||
-            log_levels["||"]
-        // console.log("_log: level=" + level + ", min_level=" + min_level + ", levelStr=" + levelStr + ", message=" + message, data)
-        if ((OINOLog._instance) && (level >= min_level)) {
-            OINOLog._instance?._writeLog(levelStr, domain, channel, method, message, data)
+        if (OINOLog._instance) {
+            const log_levels = OINOLog._instance._logLevels
+            // console.log(log_levels)
+            const min_level = log_levels[domain + "|" + channel + "|" + method] ||
+                log_levels[domain + "||" + method] || 
+                log_levels[domain + "|" + channel + "|"] || 
+                log_levels["|" + channel + "|"] || 
+                log_levels[domain + "||"] ||
+                log_levels["||"]
+            // console.log("_log: level=" + level + ", min_level=" + min_level + ", levelStr=" + levelStr + ", message=" + message, data)
+            if (level >= min_level) {
+                OINOLog._instance?._writeLog(levelStr, domain, channel, method, message, data)
+            }
         }
     }
 
