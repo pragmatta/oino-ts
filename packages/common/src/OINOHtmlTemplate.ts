@@ -27,8 +27,8 @@ export class OINOHtmlTemplate {
      * Creates HTML Response from a key-value-pair.
      *
      * @param template template string
-     * @param tag tag to identify variables in template
-     * 
+     * @param tagOpen tag to start variable in template
+     * @param tagClose tag to end variables in template
      */
 	constructor (template:string, tagOpen:string = "{{{", tagClose:string = "}}}") {
 		this.template = template
