@@ -219,7 +219,7 @@ class OINOMemoryBenchmark extends OINOBenchmark {
         this._benchmarkStart[name] = 0;
     }
     _trackException(module, method, category, name, message, stack) {
-        const exception = { module, method, category, name, message, stack };
+        const exception = { module, method, category, name, message, stack, timestamp: Date.now() };
         this._exceptions.push(exception);
     }
     _getExceptions() {
