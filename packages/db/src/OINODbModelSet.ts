@@ -69,7 +69,7 @@ export class OINODbModelSet {
             }
             let value:string|null|undefined = f.serializeCell(row[i])
             if (value === undefined) {
-                OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowJson", "Undefined value skipped", {field_name:f.name})
+                // skip undefined values
 
             } else if (value === null) {
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":null"
@@ -247,6 +247,35 @@ export class OINODbModelSet {
         return result
     }
 
+    private _exportRow(row:OINODataRow):any {
+        // console.log("OINODbModelSet._exportRow: row=" + row)
+        const model:OINODbDataModel = this.datamodel
+        const fields:OINODbDataField[] = model.fields
+        let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
+        let primary_key_values:string[] = []
+        let result:any = {}
+        for (let i=0; i<fields.length; i++) {
+            const f = fields[i]
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue
+            }
+            let value:string|null|undefined = f.serializeCell(row[i])
+            if (value === undefined) {
+                // skip undefined values
+                
+            } else if (value === null) {
+                result[f.name] = null
+
+            } else {
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.json, primary_key_values, f.name + " " + row_id_seed)
+                result[f.name] = value
+            }
+        }
+        result[OINODbConfig.OINODB_ID_FIELD] = OINODbConfig.printOINOId(primary_key_values)
+        return result
+    }
+
+
     /**
      * Serialize model set in the given format.
      * 
@@ -295,5 +324,16 @@ export class OINODbModelSet {
         }
         return result
     }
-}
 
+    async exportAsRecord():Promise<Record<string, any>> {
+        const result:Record<string, any> = {}
+        while (!this.dataset.isEof()) {
+            const row_data:OINODataRow = this.dataset.getRow()
+            const row_export = this._exportRow(row_data)
+            result[row_export[OINODbConfig.OINODB_ID_FIELD]] = row_export
+            await this.dataset.next()
+        }
+        return result
+    }
+
+}
