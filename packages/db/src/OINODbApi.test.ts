@@ -128,6 +128,7 @@ const OWASP_CROSSCHECKS:string[] = [
 Math.random()
 
 OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.warning))
+// OINOLog.setLogLevel(OINOLogLevel.debug, "@oino-ts/db-mssql", "OINODbMsSql", "printSqlSelect")
 OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 OINODbFactory.registerDb("OINODbPostgresql", OINODbPostgresql)
 OINODbFactory.registerDb("OINODbMariadb", OINODbMariadb)

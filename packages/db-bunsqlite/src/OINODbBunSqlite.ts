@@ -139,6 +139,15 @@ export class OINODbBunSqlite extends OINODb {
         } else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (typeof(sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue)
 
+        } else if ((sqlType == "BOOLEAN")) {
+            return sqlValue == 1
+
+        } else if ((sqlType == "BLOB")) {
+            if (sqlValue instanceof Uint8Array) {
+                return Buffer.from(sqlValue)
+            } else {
+                return sqlValue
+            }
         } else {
             return sqlValue
         }
@@ -265,6 +274,7 @@ export class OINODbBunSqlite extends OINODb {
                 field_str = field_str.trim()
                 let field_params = this._parseDbFieldParams(field_str)
                 let field_match = OINODbBunSqlite._tableFieldTypeRegex.exec(field_str)
+                // console.log("OINODbBunSqlite.initializeApiDatamodel: field_match", field_match)
                 if ((!field_match) || (field_match.length < 3))  {
                     let primarykey_match = OINODbBunSqlite._tablePrimarykeyRegex.exec(field_str)
                     let foreignkey_match = OINODbBunSqlite._tableForeignkeyRegex.exec(field_str)
