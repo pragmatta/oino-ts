@@ -256,6 +256,9 @@ export class OINODbModelSet {
         let result:any = {}
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
+            if (f.fieldParams.isPrimaryKey) {
+                primary_key_values.push(f.serializeCell(row[i]) || "")
+            }
             if (this.sqlParams?.select?.isSelected(f) === false) {
                 continue
             }
