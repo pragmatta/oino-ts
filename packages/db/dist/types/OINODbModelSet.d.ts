@@ -35,6 +35,7 @@ export declare class OINODbModelSet {
     private _writeStringFormdata;
     private _writeRowUrlencode;
     private _writeStringUrlencode;
+    private _exportRow;
     /**
      * Serialize model set in the given format.
      *
@@ -51,4 +52,5 @@ export declare class OINODbModelSet {
      *
      */
     getValueByFieldName(fieldName: string, serialize?: boolean): OINODataCell;
+    exportAsRecord(): Promise<Record<string, any>>;
 }

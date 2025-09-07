@@ -108,6 +108,7 @@ const OWASP_TESTS:OINOTestParams[] = [
 const API_CROSSCHECKS:string[] = [
     "[HTTP GET] select *: GET JSON 1",
     "[HTTP GET] select * with template: GET HTML 1",
+    "[HTTP GET] select *: GET RECORD 1",
     "[HTTP POST] insert: GET JSON 1",
     "[HTTP POST] insert: GET CSV 1",
     "[HTTP PUT] update JSON: GET JSON 1",
@@ -218,6 +219,10 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
         expect(encodeData(await (await api.doRequest("GET", "", "", empty_params)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
     })
 
+    await test(target_name + target_db + target_table + target_group + " select *", async () => {
+        expect(encodeData(JSON.stringify(await (await api.doRequest("GET", "", "", empty_params)).data?.exportAsRecord()))).toMatchSnapshot("GET RECORD")
+    })
+
     await test(target_name + target_db + target_table + target_group + " select * with template", async () => {
         const template = createApiTemplate(api)
         const api_result:OINODbApiResult = await api.doRequest("GET", "", "", empty_params)
@@ -228,6 +233,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     await test(target_name + target_db + target_table + target_group + " select * with filter", async () => {
         expect(encodeData(await (await api.doRequest("GET", "", "", request_params_with_filters)).data?.writeString())).toMatchSnapshot("GET JSON FILTER")
     })
+
     
     // remove filter so it does not affect rest of the tests
     request_params.sqlParams.filter = undefined 
