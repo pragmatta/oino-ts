@@ -222,6 +222,9 @@ class OINODbMsSql extends db_1.OINODb {
         else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
+        else if (sqlType == "bit") {
+            return (sqlValue === 1) || (sqlValue === true); // sometimes boolean and sometimes number
+        }
         else {
             return sqlValue;
         }

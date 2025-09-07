@@ -233,11 +233,16 @@ class OINODbMariadb extends db_1.OINODb {
         }
         else if ((sqlType == "bit") && (sqlValue instanceof Buffer)) { // mariadb returns a buffer for bit-fields
             const buf = sqlValue;
-            let result = "";
-            for (let i = 0; i < buf.length; i++) {
-                result += buf[i].toString(2).padStart(8, '0');
+            if (buf.length == 1) {
+                return buf.readUInt8(0) === 1;
             }
-            return result;
+            else {
+                let result = "";
+                for (let i = 0; i < buf.length; i++) {
+                    result += buf[i].toString(2).padStart(8, '0');
+                }
+                return result;
+            }
         }
         else {
             return sqlValue;
@@ -372,6 +377,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
         const schema_res = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
+            // console.log("OINODbMariadb.initializeApiDatamodel row", row)
             const field_name = row[0]?.toString() || "";
             const field_matches = OINODbMariadb._fieldLengthRegex.exec(row[1]?.toString() || "") || [];
             const sql_type = field_matches[1] || "";

@@ -241,15 +241,14 @@ class OINODbModelSet {
             if (this.sqlParams?.select?.isSelected(f) === false) {
                 continue;
             }
-            let value = f.serializeCell(row[i]);
+            let value = f.db.parseSqlValueAsCell(row[i], f.sqlType); // retain original value without serialization
             if (value === undefined) {
                 // skip undefined values
             }
-            else if (value === null) {
+            else if (value === null) { // differentiate null and undefined
                 result[f.name] = null;
             }
             else {
-                value = this._encodeAndHashFieldValue(f, value, index_js_1.OINOContentType.json, primary_key_values, f.name + " " + row_id_seed);
                 result[f.name] = value;
             }
         }
@@ -303,6 +302,10 @@ class OINODbModelSet {
         }
         return result;
     }
+    /**
+     * Export all rows as a record with OINOId as key and object with row cells as values.
+     *
+     */
     async exportAsRecord() {
         const result = {};
         while (!this.dataset.isEof()) {

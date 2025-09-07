@@ -280,14 +280,18 @@ class OINOBlobDataField extends OINODbDataField {
      *
      */
     serializeCell(cellVal) {
+        // console.log("OINOBlobDataField.serializeCell: cellVal", cellVal, typeof(cellVal))
         if ((cellVal === null) || (cellVal === undefined)) {
             return cellVal;
+        }
+        else if (cellVal instanceof Buffer) {
+            return cellVal.toString('base64');
         }
         else if (cellVal instanceof Uint8Array) {
             return Buffer.from(cellVal).toString('base64');
         }
         else {
-            return cellVal.toString();
+            return this.db.parseSqlValueAsCell(cellVal, this.sqlType)?.toString();
         }
     }
     /**
