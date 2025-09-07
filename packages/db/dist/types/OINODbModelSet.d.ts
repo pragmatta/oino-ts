@@ -52,5 +52,9 @@ export declare class OINODbModelSet {
      *
      */
     getValueByFieldName(fieldName: string, serialize?: boolean): OINODataCell;
+    /**
+     * Export all rows as a record with OINOId as key and object with row cells as values.
+     *
+     */
     exportAsRecord(): Promise<Record<string, any>>;
 }
