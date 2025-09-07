@@ -325,6 +325,11 @@ export class OINODbModelSet {
         return result
     }
 
+    /**
+     * Export all rows as a record with OINOId as key and object with row cells as values.
+     *
+     */
+     
     async exportAsRecord():Promise<Record<string, any>> {
         const result:Record<string, any> = {}
         while (!this.dataset.isEof()) {

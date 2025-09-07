@@ -63,7 +63,7 @@ class OINODbModelSet {
             }
             let value = f.serializeCell(row[i]);
             if (value === undefined) {
-                index_js_1.OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowJson", "Undefined value skipped", { field_name: f.name });
+                // skip undefined values
             }
             else if (value === null) {
                 json_row += "," + index_js_1.OINOStr.encode(f.name, index_js_1.OINOContentType.json) + ":null";
@@ -229,6 +229,33 @@ class OINODbModelSet {
         }
         return result;
     }
+    _exportRow(row) {
+        // console.log("OINODbModelSet._exportRow: row=" + row)
+        const model = this.datamodel;
+        const fields = model.fields;
+        let row_id_seed = model.getRowPrimarykeyValues(row).join(' ');
+        let primary_key_values = [];
+        let result = {};
+        for (let i = 0; i < fields.length; i++) {
+            const f = fields[i];
+            if (this.sqlParams?.select?.isSelected(f) === false) {
+                continue;
+            }
+            let value = f.serializeCell(row[i]);
+            if (value === undefined) {
+                // skip undefined values
+            }
+            else if (value === null) {
+                result[f.name] = null;
+            }
+            else {
+                value = this._encodeAndHashFieldValue(f, value, index_js_1.OINOContentType.json, primary_key_values, f.name + " " + row_id_seed);
+                result[f.name] = value;
+            }
+        }
+        result[index_js_1.OINODbConfig.OINODB_ID_FIELD] = index_js_1.OINODbConfig.printOINOId(primary_key_values);
+        return result;
+    }
     /**
      * Serialize model set in the given format.
      *
@@ -273,6 +300,16 @@ class OINODbModelSet {
                     result = this.datamodel.fields[field_index].serializeCell(result);
                 }
             }
+        }
+        return result;
+    }
+    async exportAsRecord() {
+        const result = {};
+        while (!this.dataset.isEof()) {
+            const row_data = this.dataset.getRow();
+            const row_export = this._exportRow(row_data);
+            result[row_export[index_js_1.OINODbConfig.OINODB_ID_FIELD]] = row_export;
+            await this.dataset.next();
         }
         return result;
     }
