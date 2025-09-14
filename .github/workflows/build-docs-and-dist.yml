@@ -10,34 +10,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
   build-and-commit:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: cd packages
-      - run: ls -r
-      - run: npm run build:all
-      - name: Commit build results
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: build and commit
         run: |
+          cd packages
+          npm install 
+          npm install ./common
+          npm install ./db
+          npm install ./db-bunsqlite
+          npm install ./db-mariadb
+          npm install ./db-mssql
+          npm install ./db-postgresql
+          npm install ./hashid
+          npm install ./types
+          bun run build:all
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git checkout main
           git add ./common/dist ./db/dist ./db-bunsqlite/dist ./db-mariadb/dist ./db-mssql/dist ./db-postgresql/dist ./hashid/dist ./types
           git add ../docs
           git commit -m "chore: commit docs and dist [skip ci]" || echo "No changes to commit"
