@@ -17,22 +17,21 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           registry-url: https://registry.npmjs.org/
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: build and commit
         run: |
           cd packages
-          npm install 
-          npm install ./common
-          npm install ./db
-          npm install ./db-bunsqlite
-          npm install ./db-mariadb
-          npm install ./db-mssql
-          npm install ./db-postgresql
-          npm install ./hashid
-          npm install ./types
+          npm install --verbose
+          npm install ./common --verbose
+          npm install ./db --verbose
+          npm install ./db-bunsqlite --verbose
+          npm install ./db-mariadb --verbose
+          npm install ./db-mssql --verbose
+          npm install ./db-postgresql --verbose
+          npm install ./hashid --verbose
           bun run build:all
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
