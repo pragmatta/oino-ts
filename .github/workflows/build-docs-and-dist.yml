@@ -24,14 +24,14 @@ jobs:
       - name: build and commit
         run: |
           cd packages
-          npm install --production 
-          npm install ./common --production 
-          npm install ./db --production 
-          npm install ./db-bunsqlite --production 
-          npm install ./db-mariadb --production 
-          npm install ./db-mssql --production 
-          npm install ./db-postgresql --production 
-          npm install ./hashid --production 
+          npm install  
+          npm install ./common 
+          npm install ./db 
+          npm install ./db-bunsqlite 
+          npm install ./db-mariadb 
+          npm install ./db-mssql 
+          npm install ./db-postgresql 
+          npm install ./hashid 
           bun run build:all
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
