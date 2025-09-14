@@ -55,6 +55,7 @@ export declare class OINODbModelSet {
     /**
      * Export all rows as a record with OINOId as key and object with row cells as values.
      *
+     * @param idFieldName optional field name to use as key instead of OINOId
      */
-    exportAsRecord(): Promise<Record<string, any>>;
+    exportAsRecord(idFieldName?: string): Promise<Record<string, any>>;
 }

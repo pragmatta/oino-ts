@@ -12,7 +12,7 @@ const index_js_1 = require("./index.js");
  *
  */
 class OINODbDataModel {
-    _columnLookup;
+    _fieldIndexLookup;
     /** Database refererence of the table */
     api;
     /** Field refererences of the API */
@@ -25,7 +25,7 @@ class OINODbDataModel {
      *
      */
     constructor(api) {
-        this._columnLookup = {};
+        this._fieldIndexLookup = {};
         this.api = api;
         this.fields = [];
     }
@@ -116,7 +116,7 @@ class OINODbDataModel {
      */
     addField(field) {
         this.fields.push(field);
-        this._columnLookup[field.name] = this.fields.length - 1;
+        this._fieldIndexLookup[field.name] = this.fields.length - 1;
     }
     /**
      * Find a field of a given name if any.
@@ -125,7 +125,7 @@ class OINODbDataModel {
      *
      */
     findFieldByName(name) {
-        const i = this._columnLookup[name];
+        const i = this._fieldIndexLookup[name];
         if (i >= 0) {
             return this.fields[i];
         }
@@ -140,7 +140,7 @@ class OINODbDataModel {
      *
      */
     findFieldIndexByName(name) {
-        const i = this._columnLookup[name];
+        const i = this._fieldIndexLookup[name];
         if (i >= 0) {
             return i;
         }
