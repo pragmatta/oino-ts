@@ -24,14 +24,14 @@ jobs:
       - name: build and commit
         run: |
           cd packages
-          bun install 
-          bun install ./common 
-          bun install ./db 
-          bun install ./db-bunsqlite 
-          bun install ./db-mariadb 
-          bun install ./db-mssql 
-          bun install ./db-postgresql 
-          bun install ./hashid 
+          bun install --verbose
+          bun install ./common --verbose
+          bun install ./db --verbose
+          bun install ./db-bunsqlite --verbose
+          bun install ./db-mariadb --verbose
+          bun install ./db-mssql --verbose
+          bun install ./db-postgresql --verbose
+          bun install ./hashid --verbose
           bun run build:all
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
