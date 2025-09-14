@@ -24,7 +24,7 @@ jobs:
       - name: build and commit
         run: |
           cd packages
-          bun install
+          npm install
           bun run build:all
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
