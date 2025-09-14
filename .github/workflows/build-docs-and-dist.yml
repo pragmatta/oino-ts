@@ -24,6 +24,7 @@ jobs:
       - name: build and commit
         run: |
           cd packages
+          npm install 
           npm install ./common
           npm install ./db
           npm install ./db-bunsqlite
