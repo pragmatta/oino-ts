@@ -308,13 +308,16 @@ class OINODbModelSet {
     /**
      * Export all rows as a record with OINOId as key and object with row cells as values.
      *
+     * @param idFieldName optional field name to use as key instead of OINOId
      */
-    async exportAsRecord() {
+    async exportAsRecord(idFieldName) {
         const result = {};
+        const row_id_field = idFieldName || index_js_1.OINODbConfig.OINODB_ID_FIELD;
         while (!this.dataset.isEof()) {
             const row_data = this.dataset.getRow();
             const row_export = this._exportRow(row_data);
-            result[row_export[index_js_1.OINODbConfig.OINODB_ID_FIELD]] = row_export;
+            const row_id = row_export[row_id_field];
+            result[row_id] = row_export;
             await this.dataset.next();
         }
         return result;

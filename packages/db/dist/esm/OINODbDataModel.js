@@ -9,7 +9,7 @@ import { OINO_ERROR_PREFIX, OINODbConfig, OINONumberDataField, OINODB_UNDEFINED 
  *
  */
 export class OINODbDataModel {
-    _columnLookup;
+    _fieldIndexLookup;
     /** Database refererence of the table */
     api;
     /** Field refererences of the API */
@@ -22,7 +22,7 @@ export class OINODbDataModel {
      *
      */
     constructor(api) {
-        this._columnLookup = {};
+        this._fieldIndexLookup = {};
         this.api = api;
         this.fields = [];
     }
@@ -113,7 +113,7 @@ export class OINODbDataModel {
      */
     addField(field) {
         this.fields.push(field);
-        this._columnLookup[field.name] = this.fields.length - 1;
+        this._fieldIndexLookup[field.name] = this.fields.length - 1;
     }
     /**
      * Find a field of a given name if any.
@@ -122,7 +122,7 @@ export class OINODbDataModel {
      *
      */
     findFieldByName(name) {
-        const i = this._columnLookup[name];
+        const i = this._fieldIndexLookup[name];
         if (i >= 0) {
             return this.fields[i];
         }
@@ -137,7 +137,7 @@ export class OINODbDataModel {
      *
      */
     findFieldIndexByName(name) {
-        const i = this._columnLookup[name];
+        const i = this._fieldIndexLookup[name];
         if (i >= 0) {
             return i;
         }
