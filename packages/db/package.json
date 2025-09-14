@@ -19,8 +19,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/common": "0.13.4",
-    "oino-ts": "file:.."
+    "@oino-ts/common": "0.13.4"
   },
   "devDependencies": {
     "@oino-ts/types": "0.13.4",

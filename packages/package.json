@@ -4,13 +4,13 @@
     "tsc": "./db/node_modules/.bin/tsc.cmd"
   },
   "dependencies": {
-    "@oino-ts/common": "latest",
-    "@oino-ts/db": "latest",
-    "@oino-ts/db-bunsqlite": "latest",
-    "@oino-ts/db-mariadb": "latest",
-    "@oino-ts/db-mssql": "latest",
-    "@oino-ts/db-postgresql": "latest",
-    "@oino-ts/hashid": "latest"
+    "@oino-ts/common": "0.13.4",
+    "@oino-ts/db": "0.13.4",
+    "@oino-ts/db-bunsqlite": "0.13.4",
+    "@oino-ts/db-mariadb": "0.13.4",
+    "@oino-ts/db-mssql": "0.13.4",
+    "@oino-ts/db-postgresql": "0.13.4",
+    "@oino-ts/hashid": "0.13.4"
   },
   "devDependencies": {
     "@types/bun": "^1.0.0",
