@@ -11,7 +11,7 @@ import { OINODbDataField, OINODbApi, OINODataRow, OINO_ERROR_PREFIX, OINODbDataF
  *
  */
 export class OINODbDataModel {
-    private _columnLookup:Record<string, number>;
+    private _fieldIndexLookup:Record<string, number>;
 
     /** Database refererence of the table */
     readonly api:OINODbApi 
@@ -27,7 +27,7 @@ export class OINODbDataModel {
      *
      */
     constructor(api:OINODbApi) {
-        this._columnLookup = {}
+        this._fieldIndexLookup = {}
         this.api = api
         this.fields = []
     }
@@ -122,7 +122,7 @@ export class OINODbDataModel {
      */
     addField(field:OINODbDataField) {
         this.fields.push(field)
-        this._columnLookup[field.name] = this.fields.length-1
+        this._fieldIndexLookup[field.name] = this.fields.length-1
     }
 
     /**
@@ -132,7 +132,7 @@ export class OINODbDataModel {
      *
      */
     findFieldByName(name:string):OINODbDataField|null {
-        const i:number = this._columnLookup[name]
+        const i:number = this._fieldIndexLookup[name]
         if (i >= 0) {
             return this.fields[i]
         } else {
@@ -147,7 +147,7 @@ export class OINODbDataModel {
      *
      */
     findFieldIndexByName(name:string):number {
-        const i:number = this._columnLookup[name]
+        const i:number = this._fieldIndexLookup[name]
         if (i >= 0) {
             return i
         } else {
