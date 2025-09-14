@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@types/bun": "^1.1.14",
-    "@types/node": "^20.12.7",
+    "@types/node": "^22.0.0",
     "typescript": "~5.9.0"
   },
   "files": [
