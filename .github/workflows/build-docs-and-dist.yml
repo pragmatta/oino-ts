@@ -20,7 +20,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-  publish-npm:
+  build-and-commit:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +29,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
+      - run: cd packages
       - run: ls -r
       - run: npm run build:all
       - name: Commit build results
@@ -37,6 +38,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git checkout main
-          git add -A
-          git commit -m "chore: commit build results [skip ci]" || echo "No changes to commit"
+          git add ./common/dist ./db/dist ./db-bunsqlite/dist ./db-mariadb/dist ./db-mssql/dist ./db-postgresql/dist ./hashid/dist ./types
+          git add ../docs
+          git commit -m "chore: commit docs and dist [skip ci]" || echo "No changes to commit"
           git push origin main
