@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: cd packages
+      - run: cd ./packages
       - run: ls -r
       - run: bun run build:all
       - name: Commit build results
