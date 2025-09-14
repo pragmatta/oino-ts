@@ -19,15 +19,6 @@
     "allowSyntheticDefaultImports": true,
 
     "paths": {
-      "@oino-ts/common": ["./common/src/index.ts"],
-      "@oino-ts/db": ["./db/src/index.ts"],
-      "@oino-ts/hashid": ["./hashid/src/index.ts"],
-      "@types/node": ["./db/node_modules/@types/node/index.d.ts"],
-      "@types/bun": ["./db/node_modules/@types/bun/index.d.ts"],
-      "pg": ["./db-postgresql/node_modules/@types/pg/index.d.ts"],
-      "mariadb": ["./db-mariadb/node_modules/mariadb/types/index.d.ts"],
-      "mssql": ["./db-mssql/node_modules/@types/mssql/index.d.ts"],
-      "bun:sqlite": ["./db/node_modules/@types/bun/index.d.ts"]
     },
     "types": ["@types/node", "@types/bun"]
   },

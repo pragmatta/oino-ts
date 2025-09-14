@@ -4,15 +4,24 @@
     "tsc": "./db/node_modules/.bin/tsc.cmd"
   },
   "dependencies": {
-    "@types/node": "^22.0.0",
+    "@oino-ts/common": "latest",
+    "@oino-ts/db": "latest",
+    "@oino-ts/db-bunsqlite": "latest",
+    "@oino-ts/db-mariadb": "latest",
+    "@oino-ts/db-mssql": "latest",
+    "@oino-ts/db-postgresql": "latest",
+    "@oino-ts/hashid": "latest"
+  },
+  "devDependencies": {
     "@types/bun": "^1.0.0",
+    "@types/node": "^22.0.0",
     "typedoc": "^0.28.0"
   },
   "scripts": {
     "build:js": "npx tsc -p ./tsconfig.cjs.json && npx tsc -p ./tsconfig.esm.json",
     "build:types": "npx tsc -p ./tsconfig.types.json",
     "build:docs": "bunx typedoc --options ./typedoc.json",
-    "build:all": "bun run build:js && bun run build:types && bun run build:docs && bun run packages:update",
+    "build:all": "tsc -v && bun run build:js && bun run build:types && bun run build:docs && bun run packages:update",
     "snapshots:update": "../packages/update_snapshots.cmd",
     "packages:update": "bun run bunsh_update_packages.ts"
   }
