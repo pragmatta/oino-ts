@@ -1,8 +1,9 @@
-export { OINOBenchmark } from "./OINOBenchmark.js";
+export { OINOBenchmark, OINOMemoryBenchmark } from "./OINOBenchmark.js";
 export { OINOLog, OINOLogLevel, OINOConsoleLog } from "./OINOLog.js";
 export { OINOResult, OINOHttpResult } from "./OINOResult.js";
 export { OINOStr } from "./OINOStr.js";
 export { OINOHtmlTemplate } from "./OINOHtmlTemplate.js";
+export { OINOFormatter, OINO_EMPTY_FORMATTER } from "./OINOFormatter.js";
 /** OINO error message prefix */
 export declare const OINO_ERROR_PREFIX = "OINO ERROR";
 /** OINO warning message prefix */

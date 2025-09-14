@@ -1,7 +1,7 @@
 import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINODbSwagger, OINODbApiResult, OINOLog, OINOLogLevel, OINODbHtmlTemplate, OINODbApiRequestParams } from "@oino-ts/db";
 
 import { OINODbConfig } from "@oino-ts/db"
-import { OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common"
+import { OINOHttpResult, OINOHtmlTemplate, OINOMemoryBenchmark } from "@oino-ts/common"
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { BunFile } from "bun";
 import { existsSync, readFileSync } from "fs";
@@ -13,7 +13,7 @@ const response_headers:HeadersInit = {
 	'Access-Control-Allow-Methods': 'PUT, POST, GET, DELETE, OPTIONS'
 }
 
-OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug))
+OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.debug))
 OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 
 const API_PATH_REGEX = /\/([^\/]*)\/?([^\/]*)\/?([^\/]*)/
@@ -27,13 +27,12 @@ async function findBestTemplateId(apiName:string, operation:string, statusCode:s
 	}
 	const template_file:BunFile = Bun.file("./templates/" + template_id + ".htmx")
 	if (await template_file.exists()) {
-		OINOLog.debug("index.ts / findBestTemplateId", { template_id:template_id })
 		return template_file
 	}
 	return null
 }
 async function getTemplate(apiName:string, method:string, command:string, statusCode:string):Promise<OINODbHtmlTemplate> {
-	OINOLog.debug("index.ts / getTemplate", { apiName:apiName, method:method, command:command, statusCode:statusCode})
+	OINOLog.debug("@oino-ts/db", "htmxApp", "getTemplate", "Enter", { apiName:apiName, method:method, command:command, statusCode:statusCode})
 	const template_file = await findBestTemplateId(apiName, command, statusCode) ||
 						await findBestTemplateId(apiName, method, statusCode) ||
 						await findBestTemplateId(apiName, command, "") ||
@@ -51,7 +50,7 @@ function hostFile(path: string, contentType: string, data?:any): Response {
 		let file_content: string = readFileSync("." + path, { encoding: "utf8" });
 		const template:OINOHtmlTemplate = new OINOHtmlTemplate(file_content)
 		const http_result = template.renderFromObject(data)
-		return http_result.getResponse( { "Content-Type": contentType })
+		return http_result.getHttpResponse( { "Content-Type": contentType })
 	} else {
 		return new Response("", { status: 404, statusText: "File not found" });
 	}
@@ -63,20 +62,20 @@ try {
 	const db:OINODb = await OINODbFactory.createDb(db_params)
 
 	const apis:Record<string, OINODbApi> = {
-		"employees": await OINODbFactory.createApi(db, { tableName: "Employees", hashidKey: "" }),
+		"employees": await OINODbFactory.createApi(db, { tableName: "Employees", apiName: "Employees", hashidKey: "" }),
 	};
 	const api_array:OINODbApi[] = Object.entries(apis).map(([path, api]) => (api));
 	
 	
-	OINOBenchmark.reset()
-	OINOBenchmark.setEnabled(["doRequest", "sqlSelect", "sqlExec"])
+	OINOBenchmark.setInstance(new OINOMemoryBenchmark(["OINODb"]))
 		
 	const server = Bun.serve({
 		development: true,
 		port: 8080,
 		async fetch(request:Request) {
 			let url = new URL(request.url)
-			OINOLog.debug("index.ts / fetch", {url:url, pathname:url.pathname, headers:request.headers, method:request.method }) 
+			OINOLog.info("@oino-ts/db", "htmxApp", "fetch", "Request", {pathname:url.pathname, method:request.method }) 
+			OINOLog.debug("@oino-ts/db", "htmxApp", "fetch", "Request", {url:url, headers:request.headers}) 
 
 			let response:Response|null = null
 			if (request.method == "OPTIONS") {
@@ -99,32 +98,29 @@ try {
 				const api_name:string = path_matches[1]?.toLowerCase() || ""
 				const id:string = path_matches[2]?.toLowerCase() || ""
 				const operation:string = path_matches[3]?.toLowerCase() || ""
-				OINOLog.debug("index.ts / request", {api_name:api_name, id:id, operation:operation }) 
+				OINOLog.info("@oino-ts/db", "htmxApp", "fetch", "Api request", {api_name:api_name, id:id, operation:operation}) 
 
 				const params:OINODbApiRequestParams = OINODbFactory.createParamsFromRequest(request)
 				const api:OINODbApi|null = apis[api_name]
 				const body:Buffer = Buffer.from(await request.arrayBuffer())
-				OINOLog.debug("index.ts / api", {params:params, body:body }) 
+				OINOLog.debug("@oino-ts/db", "htmxApp", "fetch", "Api request input", {params:params, body:body}) 
 				let api_result:OINODbApiResult
 				if (api_name == "") {
 					const template:OINODbHtmlTemplate = await getTemplate(id, "", operation, "")
 					if (template) {
 						const http_result:OINOHttpResult = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id)
-						response = http_result.getResponse(response_headers)
+						response = http_result.getHttpResponse(response_headers)
 					} else {
 						response = new Response("Template not found!", {status:404, statusText: "Template not found!", headers: response_headers })	
 					}
 				} else if (api) {
 					api_result = await api.doRequest(request.method, id, body, params)
 					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
-					// OINOLog.debug("index.ts / template", {template:template}) 
 					if (api_result.data?.dataset) {
-						OINOLog.debug("index.ts / template render", {is_empty:api_result.data.dataset.isEmpty()}) 
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
-						response = await http_result.getResponse(response_headers)
+						response = await http_result.getHttpResponse(response_headers)
 					} else {
-						OINOLog.debug("index.ts / template with id") 
-						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getResponse(response_headers)
+						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getHttpResponse(response_headers)
 					}
 					if (request.method == "POST") {
 						response.headers.set('HX-Trigger', 'OINODbApiTrigger-' + api.params.tableName)
@@ -141,14 +137,10 @@ try {
 		},
 	})
 		
-	OINOLog.info(
-	  `🦊 Server is running at ${server.hostname}:${server.port}`
-	);
+	console.log(`🦊 Server is running at ${server.hostname}:${server.port}`);
 	
-	
-} catch (error:any) {
-	OINOLog.info('index.ts initialization exception: ' + error.message)
-	OINOLog.info(error.stack)
+} catch (e:any) {
+	OINOLog.exception("@oino-ts/db", "htmxApp", "initialization", "Exception", {message:e.message, stack:e.stack}) 
 	process.exit(129)
 }
 

@@ -1,6 +1,8 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { OINOContentType } from "@oino-ts/common";
 export { OINOContentType };
-export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult, OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common";
+export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOStr, OINOBenchmark, OINOMemoryBenchmark, OINOLog, OINOLogLevel, OINOConsoleLog, OINOResult, OINOHttpResult, OINOHtmlTemplate } from "@oino-ts/common";
 import { OINODb } from "./OINODb.js";
 import { OINODbDataField } from "./OINODbDataField.js";
 import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder, OINODbSqlSelect } from "./OINODbSqlParams.js";
@@ -26,6 +28,8 @@ export type OINODbApiParams = {
     failOnUpdateOnAutoinc?: boolean;
     /** Reject POST-requests without primary key value (can work if DB-side ) */
     failOnInsertWithoutKey?: boolean;
+    /** Reject POST-requests without primary key value (can work if DB-side ) */
+    failOnAnyInvalidRows?: boolean;
     /** Treat date type fields as just strings and use the native formatting instead of the ISO 8601 format */
     useDatesAsString?: Boolean;
     /** Include given fields from the API and exclude rest (if defined) */

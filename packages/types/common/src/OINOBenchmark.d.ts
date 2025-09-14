@@ -2,11 +2,23 @@
  * Static class for benchmarking functions.
  *
  */
-export declare class OINOBenchmark {
-    private static _benchmarkCount;
-    private static _benchmarkData;
-    private static _benchmarkEnabled;
-    private static _benchmarkStart;
+export declare abstract class OINOBenchmark {
+    protected static _instance: OINOBenchmark;
+    protected static _enabled: Record<string, boolean>;
+    /**
+     * Create a new OINOBenchmark instance.
+     *
+     * @param enabledModules array of those benchmarks that are enabled
+     */
+    constructor(enabledModules?: string[]);
+    /**
+     * Set active benchmarking instance.
+     *
+     * @param instance OINOBenchmark instance
+     *
+     */
+    static setInstance(instance: OINOBenchmark): void;
+    protected abstract _reset(): void;
     /**
      * Reset benchmark data (but not what is enabled).
      *
@@ -15,16 +27,18 @@ export declare class OINOBenchmark {
     /**
      *  Set benchmark names that are enabled.
      *
-     *  @param module array of those benchmarks that are enabled
+     *  @param modules array of those benchmarks that are enabled
      */
-    static setEnabled(module: string[]): void;
+    static setEnabled(modules: string[]): void;
+    protected abstract _startMetric(module: string, method: string): void;
     /**
      * Start benchmark timing.
      *
      * @param module of the benchmark
      * @param method of the benchmark
      */
-    static start(module: string, method: string): void;
+    static startMetric(module: string, method: string): void;
+    protected abstract _endMetric(module: string, method: string, category: string): void;
     /**
      * Complete benchmark timing
      *
@@ -32,7 +46,8 @@ export declare class OINOBenchmark {
      * @param method of the benchmark
      * @param category optional subcategory of the benchmark
      */
-    static end(module: string, method: string, category?: string): number;
+    static endMetric(module: string, method: string, category?: string): void;
+    protected abstract _getMetric(module: string, method: string): number;
     /**
      * Get given benchmark data.
      *
@@ -40,10 +55,87 @@ export declare class OINOBenchmark {
      * @param method of the benchmark
      *
      */
-    static get(module: string, method: string): number;
+    static getMetric(module: string, method: string): number;
+    protected abstract _getMetrics(): Record<string, number>;
     /**
      * Get all benchmark data.
      *
      */
-    static getAll(): number;
+    static getMetrics(): Record<string, number>;
+    protected abstract _trackMetric(module: string, method: string, category: string, value: number): void;
+    /**
+     * Track a metric value
+     *
+     * @param value of the metric
+     * @param module of the metric
+     * @param method of the metric
+     * @param category optional subcategory of the metric
+     *
+     */
+    static trackMetric(module: string, method: string, category: string, value: number): void;
+    protected abstract _trackException(module: string, method: string, category: string, name: string, message: string, stack: string): void;
+    /**
+     * Track an exception
+     *
+     * @param module of the benchmark
+     * @param method of the benchmark
+     * @param category optional subcategory of the benchmark
+     * @param name of the exception
+     * @param message of the exception
+     * @param stack trace of the exception
+     */
+    static trackException(module: string, method: string, category: string, name: string, message: string, stack: string): void;
+    protected abstract _getExceptions(): any[];
+    /**
+     * Get all tracked exceptions.
+     *
+     */
+    static getExceptions(): any[];
+}
+/**
+ * OINOMemoryBenchmark is a memory-based benchmark implementation.
+ * It stores the benchmark data in memory and allows to reset, start, end and get benchmark data.
+ * In case of recursively/iteratively starting a benchmark, it will honor the first start and ignore the rest. *
+ */
+export declare class OINOMemoryBenchmark extends OINOBenchmark {
+    protected _benchmarkCount: Record<string, number>;
+    protected _benchmarkData: Record<string, number>;
+    protected _benchmarkStart: Record<string, number>;
+    protected _exceptions: any[];
+    /**
+     * Reset benchmark data (but not what is enabled).
+     *
+     */
+    protected _reset(): void;
+    /**
+     * Start benchmark timing.
+     *
+     * @param module of the benchmark
+     * @param method of the benchmark
+     */
+    protected _startMetric(module: string, method: string): void;
+    /**
+     * Complete benchmark timing
+     *
+     * @param module of the benchmark
+     * @param method of the benchmark
+     * @param category optional subcategory of the benchmark
+     */
+    protected _endMetric(module: string, method: string, category: string): void;
+    /**
+     * Get given benchmark data.
+     *
+     * @param module of the benchmark
+     * @param method of the benchmark
+     *
+     */
+    protected _getMetric(module: string, method: string): number;
+    /**
+     * Get all benchmark data.
+     *
+     */
+    protected _getMetrics(): Record<string, number>;
+    protected _trackMetric(module: string, method: string, category: string, value: number): void;
+    protected _trackException(module: string, method: string, category: string, name: string, message: string, stack: string): void;
+    protected _getExceptions(): any[];
 }

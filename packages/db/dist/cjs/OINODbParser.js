@@ -55,11 +55,11 @@ class OINODbParser {
             return this._createRowFromUrlencoded(datamodel, data);
         }
         else if (requestParams.requestType == index_js_1.OINOContentType.html) {
-            index_js_1.OINOLog.error("HTML can't be used as an input content type!", { contentType: index_js_1.OINOContentType.html });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "HTML can't be used as an input content type!", { contentType: index_js_1.OINOContentType.html });
             return [];
         }
         else {
-            index_js_1.OINOLog.error("Unrecognized input content type!", { contentType: requestParams.requestType });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", { contentType: requestParams.requestType });
             return [];
         }
     }
@@ -85,11 +85,11 @@ class OINODbParser {
             return this._createRowFromUrlencoded(datamodel, data.toString()); // data is urlencoded so it's a string
         }
         else if (requestParams.requestType == index_js_1.OINOContentType.html) {
-            index_js_1.OINOLog.error("HTML can't be used as an input content type!", { contentType: index_js_1.OINOContentType.html });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "HTML can't be used as an input content type!", { contentType: index_js_1.OINOContentType.html });
             return [];
         }
         else {
-            index_js_1.OINOLog.error("Unrecognized input content type!", { contentType: requestParams.requestType });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", { contentType: requestParams.requestType });
             return [];
         }
     }
@@ -202,7 +202,6 @@ class OINODbParser {
             field_to_header_mapping[i] = headers.indexOf(datamodel.fields[i].name);
             headers_found = headers_found || (field_to_header_mapping[i] >= 0);
         }
-        // OINOLog.debug("createRowFromCsv", {headers:headers, field_to_header_mapping:field_to_header_mapping})
         if (!headers_found) {
             return result;
         }
@@ -243,7 +242,7 @@ class OINODbParser {
                 result.push(row);
             }
             else {
-                index_js_1.OINOLog.warning("createRowFromCsv: empty row skipped");
+                index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromCsv", "Empty row skipped", {});
             }
             start = end;
             end = start;
@@ -284,7 +283,7 @@ class OINODbParser {
             return result;
         }
         else {
-            index_js_1.OINOLog.warning("createRowFromJsonObj: empty row skipped");
+            index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromJsonObj", "Empty row skipped", {});
             return undefined;
         }
     }
@@ -334,18 +333,15 @@ class OINODbParser {
             const n = data.length;
             let start = this._findMultipartBoundary(data, multipartBoundary, 0);
             let end = this._findMultipartBoundary(data, multipartBoundary, start);
-            // OINOLog.debug("createRowFromFormdata: enter", {start:start, end:end, multipartBoundary:multipartBoundary})
             const row = new Array(datamodel.fields.length);
             let has_data = false;
             while (end < n) {
-                // OINOLog.debug("createRowFromFormdata: next block", {start:start, end:end, block:data.substring(start, end)})
                 let block_ok = true;
                 let l = this._parseMultipartLine(data, start);
-                // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
                 start += l.length + 2;
                 const header_matches = OINODbParser._multipartHeaderRegex.exec(l);
                 if (!header_matches) {
-                    index_js_1.OINOLog.warning("OINODbFactory.createRowFromFormdata: unsupported block skipped!", { header_line: l });
+                    index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Unsupported block skipped", { header_line: l });
                     block_ok = false;
                 }
                 else {
@@ -353,18 +349,16 @@ class OINODbParser {
                     const is_file = header_matches[3] != null;
                     let is_base64 = false;
                     const field_index = datamodel.findFieldIndexByName(field_name);
-                    // OINOLog.debug("createRowFromFormdata: header", {field_name:field_name, field_index:field_index, is_file:is_file, is_base64:is_base64})
                     if (field_index < 0) {
-                        index_js_1.OINOLog.warning("OINODbFactory.createRowFromFormdata: form field not found and skipped!", { field_name: field_name });
+                        index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Form field not found and skipped!", { field_name: field_name });
                         block_ok = false;
                     }
                     else {
                         const field = datamodel.fields[field_index];
                         l = this._parseMultipartLine(data, start);
-                        // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
                         while (block_ok && (l != '')) {
                             if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed') >= 0)) {
-                                index_js_1.OINOLog.warning("OINODbFactory.createRowFromFormdata: mixed multipart files not supported and skipped!", { header_line: l });
+                                index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Mixed multipart files not supported and skipped!", { header_line: l });
                                 block_ok = false;
                             }
                             else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64') >= 0)) {
@@ -372,14 +366,12 @@ class OINODbParser {
                             }
                             start += l.length + 2;
                             l = this._parseMultipartLine(data, start);
-                            // OINOLog.debug("createRowFromFormdata: next line", {start:start, end:end, line:l})
                         }
                         start += 2;
                         if (!block_ok) {
-                            index_js_1.OINOLog.warning("OINODbFactory.createRowFromFormdata: invalid block skipped", { field_name: field_name });
+                            index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Invalid block skipped", { field_name: field_name });
                         }
                         else if (start + multipartBoundary.length + 2 >= end) {
-                            // OINOLog.debug("OINODbFactory.createRowFromFormdata: null value", {field_name:field_name})
                             row[field_index] = null;
                         }
                         else if (is_file) {
@@ -392,11 +384,9 @@ class OINODbParser {
                                 const value = data.subarray(start, e - 2);
                                 row[field_index] = value;
                             }
-                            // console.log("OINODbFactory.createRowFromFormdata: file field", {field_name:field_name, value:row[field_index]})
                         }
                         else {
                             let value = index_js_1.OINOStr.decode(this._parseMultipartLine(data, start).trim(), index_js_1.OINOContentType.formdata);
-                            // OINOLog.debug("OINODbFactory.createRowFromFormdata: parse form field", {field_name:field_name, value:value})
                             if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof index_js_1.OINONumberDataField) && (datamodel.api.hashid)) {
                                 value = datamodel.api.hashid.decode(value);
                             }
@@ -408,21 +398,19 @@ class OINODbParser {
                 start = end;
                 end = this._findMultipartBoundary(data, multipartBoundary, start);
             }
-            // OINOLog.debug("createRowFromFormdata: next row", {row:row})
             if (has_data) {
                 result.push(row);
             }
             else {
-                index_js_1.OINOLog.warning("createRowFromFormdata: empty row skipped");
+                index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Empty row skipped", {});
             }
         }
         catch (e) {
-            index_js_1.OINOLog.error("createRowFromFormdata: error parsing formdata", { exception: e.message });
+            index_js_1.OINOLog.exception("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Exception parsing formdata", { message: e.message, stack: e.stack });
         }
         return result;
     }
     static _createRowFromUrlencoded(datamodel, data) {
-        // OINOLog.debug("createRowFromUrlencoded: enter", {data:data})
         let result = [];
         const row = new Array(datamodel.fields.length);
         let has_data = false;
@@ -430,12 +418,11 @@ class OINODbParser {
         try {
             for (let i = 0; i < data_parts.length; i++) {
                 const param_parts = data_parts[i].split('=');
-                // OINOLog.debug("createRowFromUrlencoded: next param", {param_parts:param_parts})
                 if (param_parts.length == 2) {
                     const key = index_js_1.OINOStr.decodeUrlencode(param_parts[0]) || "";
                     const field_index = datamodel.findFieldIndexByName(key);
                     if (field_index < 0) {
-                        index_js_1.OINOLog.info("createRowFromUrlencoded: param field not found", { field: key });
+                        index_js_1.OINOLog.info("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Param field not found", { field: key });
                     }
                     else {
                         const field = datamodel.fields[field_index];
@@ -453,13 +440,12 @@ class OINODbParser {
                 result.push(row);
             }
             else {
-                index_js_1.OINOLog.warning("createRowFromUrlencoded: empty row skipped");
+                index_js_1.OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Empty row skipped", {});
             }
         }
         catch (e) {
-            index_js_1.OINOLog.error("createRowFromUrlencoded: error parsing urlencoded data", { exception: e.message });
+            index_js_1.OINOLog.exception("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Exception parsing urlencoded data", { message: e.message, stack: e.stack });
         }
-        // console.log("createRowFromUrlencoded: next row=" + row)
         return result;
     }
 }

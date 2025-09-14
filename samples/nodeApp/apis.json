@@ -1,0 +1,6 @@
+[
+{"apiId":1,"databaseId":1,"apiName":"OrderDetails","tableName":"OrderDetails","excludeFieldPrefix":"","excludeFields":"","includeFields":null,"hashidKey":"","hashidLength":null,"hashidStaticIds":false,"useDatesAsString":false,"failOnOversizedValues":false,"failOnUpdateOnAutoinc":false,"failOnInsertWithoutKey":false,"cacheModifiedField":null},
+{"apiId":2,"databaseId":1,"apiName":"Orders","tableName":"Orders","excludeFieldPrefix":"","excludeFields":"","includeFields":null,"hashidKey":"","hashidLength":null,"hashidStaticIds":false,"useDatesAsString":false,"failOnOversizedValues":false,"failOnUpdateOnAutoinc":false,"failOnInsertWithoutKey":false,"cacheModifiedField":null},
+{"apiId":3,"databaseId":1,"apiName":"Products","tableName":"Products","excludeFieldPrefix":"","excludeFields":"","includeFields":null,"hashidKey":"","hashidLength":null,"hashidStaticIds":false,"useDatesAsString":false,"failOnOversizedValues":false,"failOnUpdateOnAutoinc":false,"failOnInsertWithoutKey":false,"cacheModifiedField":null},
+{"apiId":4,"databaseId":1,"apiName":"Employees","tableName":"Employees","excludeFieldPrefix":"","excludeFields":"","includeFields":null,"hashidKey":"","hashidLength":null,"hashidStaticIds":false,"useDatesAsString":false,"failOnOversizedValues":false,"failOnUpdateOnAutoinc":false,"failOnInsertWithoutKey":false,"cacheModifiedField":null}
+]

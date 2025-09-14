@@ -1,11 +1,12 @@
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell, OINOResult } from "@oino-ts/db";
 /**
  * Implementation of MariaDb/MySql-database.
  *
  */
 export declare class OINODbMariadb extends OINODb {
     private static _fieldLengthRegex;
-    private static _exceptionMessageRegex;
+    private static _connectionExceptionMessageRegex;
+    private static _sqlExceptionMessageRegex;
     private _pool;
     /**
      * Constructor of `OINODbMariadb`
@@ -58,7 +59,12 @@ export declare class OINODbMariadb extends OINODb {
      * Connect to database.
      *
      */
-    connect(): Promise<boolean>;
+    connect(): Promise<OINOResult>;
+    /**
+     * Validate connection to database is working.
+     *
+     */
+    validate(): Promise<OINOResult>;
     /**
      * Execute a select operation.
      *
@@ -74,6 +80,7 @@ export declare class OINODbMariadb extends OINODb {
      */
     sqlExec(sql: string): Promise<OINODbDataSet>;
     private _getSchemaSql;
+    private _getValidateSql;
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
      * the model.

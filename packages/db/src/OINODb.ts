@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbParams, OINODbApi, OINODataCell, OINO_ERROR_PREFIX, OINODataRow, OINODB_EMPTY_ROW } from "./index.js"
+import { OINODbParams, OINODbApi, OINODataCell, OINO_ERROR_PREFIX, OINODataRow, OINODB_EMPTY_ROW, OINOResult, OINOLog } from "./index.js"
 
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data 
@@ -18,20 +18,29 @@ export abstract class OINODb {
     /** Name of the database */
     readonly name:string
 
+    protected isConnected:boolean = false
+    protected isValidated:boolean = false
+
     /**
      * Constructor for `OINODb`.
      * @param params database parameters
      */
     constructor(params:OINODbParams) {
-        this._params = params
-        this.name = params.database
+        this._params = { ...params } // make a shallow copy of params so that changes to them do not affect the original object
+        this.name = this._params.database
     }
 
     /**
      * Connect to database.
      *
      */
-    abstract connect(): Promise<boolean>
+    abstract connect(): Promise<OINOResult>
+    
+    /**
+     * Validate connection to database is working. 
+     *
+     */
+    abstract validate(): Promise<OINOResult>
     
     /**
      * Print a table name using database specific SQL escaping.
@@ -115,7 +124,6 @@ export abstract class OINODb {
      */
     printSqlSelect(tableName:string, columnNames:string, whereCondition:string, orderCondition:string, limitCondition:string, groupByCondition: string): string {
         let result:string = "SELECT " + columnNames + " FROM " + tableName;
-        // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
         if (whereCondition != "")  {
             result += " WHERE " + whereCondition
         }
@@ -129,7 +137,6 @@ export abstract class OINODb {
             result += " LIMIT " + limitCondition 
         }
         result += ";"
-        // OINOLog.debug("OINODb.printSqlSelect", {result:result})
         return result;
     }
 }
@@ -184,6 +191,13 @@ export abstract class OINODbDataSet {
      *
      */
     abstract getRow(): OINODataRow;
+
+    /**
+     * Gets all rows of data. 
+     * 
+     * NOTE: This is left abstract instead of just using `getRow()` so that DB implementations can hopefully optimize not duplicating data     *
+     */
+    abstract getAllRows(): Promise<OINODataRow[]>;
 
     /**
      * Checks if the messages contain errors.
@@ -283,6 +297,14 @@ export class OINODbMemoryDataSet extends OINODbDataSet {
         } else {
             return OINODB_EMPTY_ROW;
         }
+    }
+
+    /**
+     * Gets all rows of data.
+     *
+     */
+    async getAllRows(): Promise<OINODataRow[]> {
+        return this._rows // at the moment theres no result streaming, so we can just return the rows
     }
 
     /**

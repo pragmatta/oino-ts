@@ -4,7 +4,7 @@ import { OINODbDataField, OINODbApi, OINODataRow, OINODbDataFieldFilter, OINODbS
  *
  */
 export declare class OINODbDataModel {
-    private _columnLookup;
+    private _fieldIndexLookup;
     /** Database refererence of the table */
     readonly api: OINODbApi;
     /** Field refererences of the API */

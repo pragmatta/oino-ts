@@ -1,6 +1,6 @@
 {
   "name": "oinonodeapp",
-  "version": "0.4.2",
+  "version": "0.13.4",
   "type": "module",
   "scripts": {
     "app": "node ./nodeApp.js",
@@ -10,6 +10,8 @@
 	  "@oino-ts/common":"latest",
 	  "@oino-ts/hashid":"latest",
 	  "@oino-ts/db":"latest",
+	  "@oino-ts/db-mariadb":"latest",
+	  "@oino-ts/db-mssql":"latest",
 	  "@oino-ts/db-postgresql":"latest"
   },
   "devDependencies": {

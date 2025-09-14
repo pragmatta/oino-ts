@@ -12,7 +12,7 @@ const index_js_1 = require("./index.js");
  *
  */
 class OINODbDataModel {
-    _columnLookup;
+    _fieldIndexLookup;
     /** Database refererence of the table */
     api;
     /** Field refererences of the API */
@@ -25,10 +25,9 @@ class OINODbDataModel {
      *
      */
     constructor(api) {
-        this._columnLookup = {};
+        this._fieldIndexLookup = {};
         this.api = api;
         this.fields = [];
-        // OINOLog_debug("OINODbDataModel (" + tableName + "):\n" + this._printTableDebug("\n"))
     }
     /**
      * Initialize datamodel from SQL schema.
@@ -74,7 +73,6 @@ class OINODbDataModel {
         for (let i = 0; i < this.fields.length; i++) {
             const f = this.fields[i];
             const val = row[i];
-            // OINOLog_debug("OINODbDataModel._printSqlUpdateValues", {field:f.name, primary_key:f.fieldParams.isPrimaryKey, val:val})
             if ((!f.fieldParams.isPrimaryKey) && (val !== undefined)) {
                 if (result != "") {
                     result += ",";
@@ -97,7 +95,11 @@ class OINODbDataModel {
                 if ((f instanceof index_js_1.OINONumberDataField) && (this.api.hashid)) {
                     value = this.api.hashid.decode(value);
                 }
-                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(value);
+                value = f.printCellAsSqlValue(value);
+                if (value == "") { // ids are user input and could be specially crafted to be empty
+                    throw new Error(index_js_1.OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName);
+                }
+                result += f.printSqlColumnName() + "=" + value;
                 i = i + 1;
             }
         }
@@ -114,7 +116,7 @@ class OINODbDataModel {
      */
     addField(field) {
         this.fields.push(field);
-        this._columnLookup[field.name] = this.fields.length - 1;
+        this._fieldIndexLookup[field.name] = this.fields.length - 1;
     }
     /**
      * Find a field of a given name if any.
@@ -123,8 +125,7 @@ class OINODbDataModel {
      *
      */
     findFieldByName(name) {
-        // OINOLog.debug("OINODbDataModel.findFieldByName", {_columnLookup:this._columnLookup})
-        const i = this._columnLookup[name];
+        const i = this._fieldIndexLookup[name];
         if (i >= 0) {
             return this.fields[i];
         }
@@ -139,8 +140,7 @@ class OINODbDataModel {
      *
      */
     findFieldIndexByName(name) {
-        // OINOLog.debug("OINODbDataModel.findFieldIndexByName", {_columnLookup:this._columnLookup})
-        const i = this._columnLookup[name];
+        const i = this._fieldIndexLookup[name];
         if (i >= 0) {
             return i;
         }
@@ -230,13 +230,11 @@ class OINODbDataModel {
         else {
             column_names = this._printSqlColumnNames(params.select);
         }
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {column_names:column_names})
         const order_sql = params.order?.toSql(this) || "";
         const limit_sql = params.limit?.toSql(this) || "";
         const filter_sql = params.filter?.toSql(this) || "";
         const groupby_sql = params.aggregate?.toSql(this, params.select) || "";
         let where_sql = "";
-        // OINOLog.debug("OINODbDataModel.printSqlSelect", {order_sql:order_sql, limit_sql:limit_sql, filter_sql:filter_sql, aggregate_sql:aggregate_sql})
         if ((id != null) && (id != "") && (filter_sql != "")) {
             where_sql = this._printSqlPrimaryKeyCondition(id) + " AND " + filter_sql;
         }
@@ -247,7 +245,6 @@ class OINODbDataModel {
             where_sql = filter_sql;
         }
         const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql);
-        index_js_1.OINOLog.debug("OINODbDataModel.printSqlSelect", { result: result });
         return result;
     }
     /**

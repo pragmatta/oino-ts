@@ -1,5 +1,5 @@
-<div id="OINOApiRow-employees-###_OINOID_###" class="row"
-    hx-get="http://localhost:8080/employees/###_OINOID_###" 
+<div id="OINOApiRow-employees-{{{_OINOID_}}}" class="row"
+    hx-get="http://localhost:8080/employees/{{{_OINOID_}}}" 
     hx-trigger="load"
     hx-target="this" 
     hx-swap="outerHTML"

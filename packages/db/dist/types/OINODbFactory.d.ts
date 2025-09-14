@@ -17,8 +17,10 @@ export declare class OINODbFactory {
      * Create database from parameters from the registered classes.
      *
      * @param params database connection parameters
+     * @param connect if true, connects to the database
+     * @param validate if true, validates the database connection
      */
-    static createDb(params: OINODbParams): Promise<OINODb>;
+    static createDb(params: OINODbParams, connect?: boolean, validate?: boolean): Promise<OINODb>;
     /**
      * Create API from parameters and calls initDatamodel on the datamodel.
      *

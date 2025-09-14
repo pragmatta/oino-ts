@@ -3939,9 +3939,6 @@ ALTER TABLE `Orders` ADD CONSTRAINT `FK_Orders_Employees`
 ALTER TABLE `Orders` ADD CONSTRAINT `FK_Orders_Shippers` 
     FOREIGN KEY (`ShipVia`) REFERENCES `Shippers` (`ShipperID`);
 
-ALTER TABLE `Products` ADD CONSTRAINT `FK_Products_Categories` 
-    FOREIGN KEY (`CategoryID`) REFERENCES `Categories` (`CategoryID`);
-
 ALTER TABLE `Products` ADD CONSTRAINT `FK_Products_Suppliers` 
     FOREIGN KEY (`SupplierID`) REFERENCES `Suppliers` (`SupplierID`);
 

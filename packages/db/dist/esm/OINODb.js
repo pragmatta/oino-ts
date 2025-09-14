@@ -13,13 +13,15 @@ export class OINODb {
     _params;
     /** Name of the database */
     name;
+    isConnected = false;
+    isValidated = false;
     /**
      * Constructor for `OINODb`.
      * @param params database parameters
      */
     constructor(params) {
-        this._params = params;
-        this.name = params.database;
+        this._params = { ...params }; // make a shallow copy of params so that changes to them do not affect the original object
+        this.name = this._params.database;
     }
     /**
      * Print SQL select statement with DB specific formatting.
@@ -34,7 +36,6 @@ export class OINODb {
      */
     printSqlSelect(tableName, columnNames, whereCondition, orderCondition, limitCondition, groupByCondition) {
         let result = "SELECT " + columnNames + " FROM " + tableName;
-        // OINOLog.debug("OINODb.printSqlSelect", {tableName:tableName, columnNames:columnNames, whereCondition:whereCondition, orderCondition:orderCondition, limitCondition:limitCondition })
         if (whereCondition != "") {
             result += " WHERE " + whereCondition;
         }
@@ -48,7 +49,6 @@ export class OINODb {
             result += " LIMIT " + limitCondition;
         }
         result += ";";
-        // OINOLog.debug("OINODb.printSqlSelect", {result:result})
         return result;
     }
 }
@@ -169,6 +169,13 @@ export class OINODbMemoryDataSet extends OINODbDataSet {
         else {
             return OINODB_EMPTY_ROW;
         }
+    }
+    /**
+     * Gets all rows of data.
+     *
+     */
+    async getAllRows() {
+        return this._rows; // at the moment theres no result streaming, so we can just return the rows
     }
     /**
      * Rewinds data set to the first row, returns !isEof().

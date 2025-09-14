@@ -13,6 +13,9 @@
     "skipErrorChecking": true,
     "excludePrivate": true,
     "excludeProtected": true,
+    "excludeNotDocumentedKinds": [
+        "ConstructorSignature"
+    ],
     "validation": {
         "invalidLink": true,
         "notDocumented": true,

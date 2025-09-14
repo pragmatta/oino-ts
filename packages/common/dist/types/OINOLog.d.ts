@@ -1,13 +1,15 @@
 /** Logging levels */
 export declare enum OINOLogLevel {
     /** Debug messages */
-    debug = 0,
+    debug = 1,
     /** Informational messages */
-    info = 1,
+    info = 2,
     /** Warning messages */
-    warn = 2,
+    warning = 3,
     /** Error messages */
-    error = 3
+    error = 4,
+    /** Exception messages */
+    exception = 5
 }
 /**
  * Abstract base class for logging implementations supporting
@@ -17,11 +19,12 @@ export declare enum OINOLogLevel {
  */
 export declare abstract class OINOLog {
     protected static _instance: OINOLog;
-    protected _logLevel: OINOLogLevel;
+    protected _logLevels: Record<string, OINOLogLevel>;
+    protected _defaultLogLevel: OINOLogLevel;
     /**
      * Abstract logging method to implement the actual logging operation.
      *
-     * @param logLevel level of the log events
+     * @param logLevel default loglevel for all log events
      *
      */
     constructor(logLevel?: OINOLogLevel);
@@ -29,11 +32,14 @@ export declare abstract class OINOLog {
      * Abstract logging method to implement the actual logging operation.
      *
      * @param levelStr level string of the log event
+     * @param domain domain of the log event
+     * @param channel channel of the log event
+     * @param method method of the log event
      * @param message message of the log event
      * @param data structured data associated with the log event
      *
      */
-    protected abstract _writeLog(levelStr: string, message: string, data?: any): void;
+    protected abstract _writeLog(levelStr: string, domain: string, channel: string, method: string, message: string, data?: any): void;
     /**
      * Abstract logging method to implement the actual logging operation.
      *
@@ -43,53 +49,104 @@ export declare abstract class OINOLog {
      * @param data structured data associated with the log event
      *
      */
-    protected static _log(level: OINOLogLevel, levelStr: string, message: string, data?: any): void;
+    protected static _log(level: OINOLogLevel, levelStr: string, domain: string, channel: string, method: string, message: string, data?: any): void;
     /**
-     * Set active logger and log level.
+     * Set active logger instance.
      *
-     * @param logger logger instance
+     * @param instance OINOLog instance
      *
      */
-    static setLogger(logger: OINOLog): void;
+    static setInstance(instance: OINOLog): void;
     /**
-     * Set log level.
+     * Set log level for given combination of domain/channel/method. Not defining dimension(s) means they match any value.
+     * Multiple settings can be combined to set different logging accuracy specifically
+     *
+     * For example:
+     * logLevel: warning, domain: *, channel: *, method: * will only output error events.
+     * logLevel: debug, domain: d1, channel: c1, method: "*" will enable debug events for channel c1 of domain d1.
+     * logLevel: info, domain: d1, channel: c1, method: m1 will supress debug events for method m1.
      *
      * @param logLevel log level to use
+     * @param domain domain of the log event (default: "*" for all)
+     * @param channel channel of the log event (default: "*" for all)
+     * @param method method of the log event (default: "*" for all)
      *
      */
-    static setLogLevel(logLevel: OINOLogLevel): void;
+    static setLogLevel(logLevel: OINOLogLevel, domain?: string, channel?: string, method?: string): void;
     /**
-     * Log error event.
+     * Log exception event. Exception events are prettyprinted and preserve newlines so that stack traces are readable.
      *
+     * @param domain domain of the log event
+     * @param channel channel of the log event
+     * @param method method of the log event
      * @param message message of the log event
      * @param data structured data associated with the log event
      *
      */
-    static error(message: string, data?: any): void;
+    static exception(domain: string, channel: string, method: string, message: string, data?: any): void;
     /**
-     * Log warning event.
+     * Log error event. Error events are printed as a single line.
      *
+     * @param domain domain of the log event
+     * @param channel channel of the log event
+     * @param method method of the log event
      * @param message message of the log event
      * @param data structured data associated with the log event
      *
      */
-    static warning(message: string, data?: any): void;
+    static error(domain: string, channel: string, method: string, message: string, data?: any): void;
     /**
-     * Log info event.
+     * Log warning event. Warning events are printed as a single line.
      *
+     * @param domain domain of the log event
+     * @param channel channel of the log event
+     * @param method method of the log event
      * @param message message of the log event
      * @param data structured data associated with the log event
      *
      */
-    static info(message: string, data?: any): void;
+    static warning(domain: string, channel: string, method: string, message: string, data?: any): void;
     /**
-     * Log debug event.
+     * Log info event. Info events are printed as a single line.
      *
+     * @param domain domain of the log event
+     * @param channel channel of the log event
+     * @param method method of the log event
      * @param message message of the log event
      * @param data structured data associated with the log event
      *
      */
-    static debug(message: string, data?: any): void;
+    static info(domain: string, channel: string, method: string, message: string, data?: any): void;
+    /**
+     * Log debug event. Debug events are prettyprinted.
+     *
+     * @param domain domain of the log event
+     * @param channel channel of the log event
+     * @param method method of the log event
+     * @param message message of the log event
+     * @param data structured data associated with the log event
+     *
+     */
+    static debug(domain: string, channel: string, method: string, message: string, data?: any): void;
+    /**
+     * Get current log levels as an array of objects with domain, channel, method and level.
+     *
+     */
+    static exportLogLevels(): any[];
+    /**
+     * Set log levels from an array of objects with domain, channel, method and level overwriting existing values (i.e. non-existing values are not affected).
+     *
+     * @param logLevels array of log level objects
+     *
+     */
+    static setLogLevels(logLevels: any[]): void;
+    /**
+     * Import log levels from an array of objects with domain, channel, method and level resetting existing values (i.e. non-existing values get removed).
+     *
+     * @param logLevels array of log level objects
+     *
+     */
+    static importLogLevels(logLevels: any[]): void;
 }
 /**
  * Logging implementation based on console.log.
@@ -101,5 +158,5 @@ export declare class OINOConsoleLog extends OINOLog {
      * @param logLevel logging level
      */
     constructor(logLevel?: OINOLogLevel);
-    protected _writeLog(level: string, message: string, data?: any): void;
+    protected _writeLog(level: string, domain: string, channel: string, method: string, message: string, data?: any): void;
 }

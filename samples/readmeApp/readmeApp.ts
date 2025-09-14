@@ -4,7 +4,7 @@ import { OINOLog, OINOLogLevel } from "@oino-ts/common"
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 
 OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
-OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.debug))
+OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.debug))
 
 const response_headers:HeadersInit = {
     'Access-Control-Allow-Headers': '*',

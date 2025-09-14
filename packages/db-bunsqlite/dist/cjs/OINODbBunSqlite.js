@@ -37,7 +37,6 @@ class OINODbBunSqlite extends db_1.OINODb {
         if (!this._params.url.startsWith("file://")) {
             throw new Error(db_1.OINO_ERROR_PREFIX + ": OINODbBunSqlite url must be a file://-url!");
         }
-        // OINOLog.debug("OINODbBunSqlite.constructor", {params:params})
         if (this._params.type !== "OINODbBunSqlite") {
             throw new Error(db_1.OINO_ERROR_PREFIX + ": Not OINODbBunSqlite-type: " + this._params.type);
         }
@@ -49,7 +48,6 @@ class OINODbBunSqlite extends db_1.OINODb {
             isAutoInc: fieldStr.indexOf("AUTOINCREMENT") >= 0,
             isNotNull: fieldStr.indexOf("NOT NULL") >= 0
         };
-        // OINOLog.debug("OINODbBunSqlite._parseDbFieldParams", {fieldStr:fieldStr, result:result})
         return result;
     }
     /**
@@ -79,7 +77,6 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     printCellAsSqlValue(cellValue, sqlType) {
-        // OINOLog.debug("OINODbBunSqlite.printCellAsSqlValue", {cellValue:cellValue, sqlType:sqlType, type:typeof(cellValue)})
         if (cellValue === null) {
             return "NULL";
         }
@@ -131,8 +128,19 @@ class OINODbBunSqlite extends db_1.OINODb {
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (typeof (sqlValue) == "string")) {
+        else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
+        }
+        else if ((sqlType == "BOOLEAN")) {
+            return sqlValue == 1;
+        }
+        else if ((sqlType == "BLOB")) {
+            if (sqlValue instanceof Uint8Array) {
+                return Buffer.from(sqlValue);
+            }
+            else {
+                return sqlValue;
+            }
         }
         else {
             return sqlValue;
@@ -142,17 +150,49 @@ class OINODbBunSqlite extends db_1.OINODb {
      * Connect to database.
      *
      */
-    connect() {
+    async connect() {
+        db_1.OINOBenchmark.startMetric("OINODb", "connect");
+        let result = new db_1.OINOResult();
         const filepath = this._params.url.substring(7);
         try {
-            // OINOLog.debug("OINODbBunSqlite.connect", {params:this._params})
             this._db = bun_sqlite_1.Database.open(filepath, { create: true, readonly: false, readwrite: true });
-            // OINOLog.debug("OINODbBunSqlite.connect done")
-            return Promise.resolve(true);
+            this.isConnected = true;
         }
-        catch (err) {
-            throw new Error(db_1.OINO_ERROR_PREFIX + ": Error connecting to Sqlite database (" + filepath + "): " + err);
+        catch (e) {
+            result.setError(500, "Exception connecting to database: " + e.message, "OINODbBunSqlite.connect");
+            db_1.OINOLog.exception("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "connect", "exception in connect", { message: e.message, stack: e.stack });
         }
+        db_1.OINOBenchmark.endMetric("OINODb", "connect");
+        return result;
+    }
+    /**
+     * Validate connection to database is working.
+     *
+     */
+    async validate() {
+        db_1.OINOBenchmark.startMetric("OINODb", "validate");
+        let result = new db_1.OINOResult();
+        try {
+            const sql = this._getValidateSql(this._params.database);
+            const sql_res = await this.sqlSelect(sql);
+            if (sql_res.isEmpty()) {
+                result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow().length == 0) {
+                result.setError(400, "DB returned no values for database!", "OINODbBunSqlite.validate");
+            }
+            else if (sql_res.getRow()[0] == "0") {
+                result.setError(400, "DB returned no schema for database!", "OINODbBunSqlite.validate");
+            }
+            else {
+                this.isValidated = true;
+            }
+        }
+        catch (e) {
+            result.setError(500, db_1.OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate");
+        }
+        db_1.OINOBenchmark.endMetric("OINODb", "validate");
+        return result;
     }
     /**
      * Execute a select operation.
@@ -161,16 +201,15 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async sqlSelect(sql) {
-        db_1.OINOBenchmark.start("OINODb", "sqlSelect");
+        db_1.OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result;
         try {
             result = new OINOBunSqliteDataset(this._db?.query(sql).values(), []);
-            // OINOLog.debug("OINODbBunSqlite.sqlSelect", {result:result})
         }
         catch (e) {
-            result = new OINOBunSqliteDataset([[]], ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
         }
-        db_1.OINOBenchmark.end("OINODb", "sqlSelect");
+        db_1.OINOBenchmark.endMetric("OINODb", "sqlSelect");
         return Promise.resolve(result);
     }
     /**
@@ -180,17 +219,25 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async sqlExec(sql) {
-        db_1.OINOBenchmark.start("OINODb", "sqlExec");
+        db_1.OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result;
         try {
             this._db?.exec(sql);
-            result = new OINOBunSqliteDataset([[]], []);
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, []);
         }
         catch (e) {
-            result = new OINOBunSqliteDataset([[]], [db_1.OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, [db_1.OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
         }
-        db_1.OINOBenchmark.end("OINODb", "sqlExec");
+        db_1.OINOBenchmark.endMetric("OINODb", "sqlExec");
         return Promise.resolve(result);
+    }
+    _getSchemaSql(dbName, tableName) {
+        const sql = "SELECT sql from sqlite_schema WHERE name='" + tableName + "'";
+        return sql;
+    }
+    _getValidateSql(dbName) {
+        const sql = "SELECT count(*) as COLUMN_COUNT from sqlite_schema";
+        return sql;
     }
     /**
      * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
@@ -200,28 +247,24 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async initializeApiDatamodel(api) {
-        const res = await this.sqlSelect("select sql from sqlite_schema WHERE name='" + api.params.tableName + "'");
+        const schema_sql = this._getSchemaSql(this._params.database, api.params.tableName);
+        const res = await this.sqlSelect(schema_sql);
         const sql_desc = (res?.getRow()[0]);
         const excluded_fields = [];
-        // OINOLog.debug("OINODbBunSqlite.initDatamodel.sql_desc=" + sql_desc)
         let table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc);
-        // OINOLog.debug("OINODbBunSqlite.initDatamodel", {table_matches:table_matches})
         if (!table_matches || table_matches?.length < 2) {
             throw new Error("Table " + api.params.tableName + " not recognized as a valid Sqlite table!");
         }
         else {
-            // OINOBenchmark.start("OINODbBunSqlite.initDatamodel")
             let field_strings = db_1.OINOStr.splitExcludingBrackets(table_matches[1], ',', '(', ')');
-            // OINOLog.debug("OINODbBunSqlite.initDatamodel", {table_match:table_matches[1], field_strings:field_strings})
             for (let field_str of field_strings) {
                 field_str = field_str.trim();
                 let field_params = this._parseDbFieldParams(field_str);
                 let field_match = OINODbBunSqlite._tableFieldTypeRegex.exec(field_str);
-                // OINOLog.debug("initDatamodel next field", {field_str:field_str, field_match:field_match, field_params:field_params})
+                // console.log("OINODbBunSqlite.initializeApiDatamodel: field_match", field_match)
                 if ((!field_match) || (field_match.length < 3)) {
                     let primarykey_match = OINODbBunSqlite._tablePrimarykeyRegex.exec(field_str);
                     let foreignkey_match = OINODbBunSqlite._tableForeignkeyRegex.exec(field_str);
-                    // OINOLog.debug("initDatamodel non-field definition", {primarykey_match:primarykey_match, foreignkey_match:foreignkey_match})
                     if (primarykey_match && primarykey_match.length >= 2) {
                         const primary_keys = primarykey_match[1].replaceAll("\"", "").split(','); // not sure if will have space or not so split by comma and trim later
                         for (let i = 0; i < primary_keys.length; i++) {
@@ -245,19 +288,17 @@ class OINODbBunSqlite extends db_1.OINODb {
                         }
                     }
                     else {
-                        db_1.OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: Unsupported field definition skipped.", { field: field_str });
+                        db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Unsupported field definition skipped.", { field: field_str });
                     }
                 }
                 else {
                     // field_str = "NAME TYPE (M, N)" -> 1:NAME, 2:TYPE, 4:M, 5:N
-                    // OINOLog.debug("OINODbBunSqlite.initializeApiDatamodel: field regex matches", { field_match: field_match })
                     const field_name = field_match[1];
                     const sql_type = field_match[2];
                     const field_length = parseInt(field_match[4]) || 0;
-                    // OINOLog.debug("OINODbBunSqlite.initializeApiDatamodel: field regex matches", { api.params: api.params, field_name:field_name })
                     if (api.isFieldIncluded(field_name) == false) {
                         excluded_fields.push(field_name);
-                        db_1.OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: field excluded in API parameters.", { field: field_name });
+                        db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
                     }
                     else {
                         if ((sql_type == "INTEGER") || (sql_type == "REAL") || (sql_type == "DOUBLE") || (sql_type == "NUMERIC") || (sql_type == "DECIMAL")) {
@@ -281,15 +322,14 @@ class OINODbBunSqlite extends db_1.OINODb {
                             api.datamodel.addField(new db_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
                         }
                         else {
-                            db_1.OINOLog.info("OINODbBunSqlite.initializeApiDatamodel: unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length: field_length, field_params: field_params });
+                            db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length: field_length, field_params: field_params });
                             api.datamodel.addField(new db_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
                         }
                     }
                 }
             }
             ;
-            // OINOBenchmark.end("OINODbBunSqlite.initializeApiDatamodel")
-            db_1.OINOLog.debug("OINODbBunSqlite.initializeDatasetModel:\n" + api.datamodel.printDebug("\n"));
+            db_1.OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
             return Promise.resolve();
         }
     }

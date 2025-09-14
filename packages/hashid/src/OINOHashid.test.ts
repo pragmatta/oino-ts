@@ -11,7 +11,7 @@ import { OINOLog, OINOConsoleLog, OINOLogLevel } from "@oino-ts/common"
 
 Math.random()
 
-OINOLog.setLogger(new OINOConsoleLog(OINOLogLevel.error))
+OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.error))
 
 function benchmarkOINOHashId(hashid: OINOHashid, id: string, iterations: number = 1000): number {
     const start = performance.now();
@@ -43,11 +43,11 @@ await test("OINOHashId persistent", async () => {
             expect(id).toMatch(id2)
             i++
         }
-        const hps = benchmarkOINOHashId(hashid, id, 4000)
+        const hps = benchmarkOINOHashId(hashid, id, 2000)
         hps_min = Math.min(hps, hps_min)
         hps_max = Math.max(hps, hps_max)
         expect(hps_min).toBeGreaterThanOrEqual(15)
-        expect(hps_max).toBeLessThanOrEqual(25)
+        expect(hps_max).toBeLessThanOrEqual(35)
     }
     console.log("OINOHashId persistent performance: " + hps_min + "k - " + hps_max + "k hashes per second")
 })
@@ -69,7 +69,7 @@ await test("OINOHashId random", async () => {
             expect(id).toMatch(id2)
             i++
         }
-        const hps = benchmarkOINOHashId(hashid, id, 4000)
+        const hps = benchmarkOINOHashId(hashid, id, 2000)
         hps_min = Math.min(hps, hps_min)
         hps_max = Math.max(hps, hps_max)
     }

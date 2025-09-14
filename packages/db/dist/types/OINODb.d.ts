@@ -1,4 +1,4 @@
-import { OINODbParams, OINODbApi, OINODataCell, OINODataRow } from "./index.js";
+import { OINODbParams, OINODbApi, OINODataCell, OINODataRow, OINOResult } from "./index.js";
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data
  * between SQL and serialization formats.
@@ -8,6 +8,8 @@ export declare abstract class OINODb {
     protected _params: OINODbParams;
     /** Name of the database */
     readonly name: string;
+    protected isConnected: boolean;
+    protected isValidated: boolean;
     /**
      * Constructor for `OINODb`.
      * @param params database parameters
@@ -17,7 +19,12 @@ export declare abstract class OINODb {
      * Connect to database.
      *
      */
-    abstract connect(): Promise<boolean>;
+    abstract connect(): Promise<OINOResult>;
+    /**
+     * Validate connection to database is working.
+     *
+     */
+    abstract validate(): Promise<OINOResult>;
     /**
      * Print a table name using database specific SQL escaping.
      *
@@ -133,6 +140,12 @@ export declare abstract class OINODbDataSet {
      */
     abstract getRow(): OINODataRow;
     /**
+     * Gets all rows of data.
+     *
+     * NOTE: This is left abstract instead of just using `getRow()` so that DB implementations can hopefully optimize not duplicating data     *
+     */
+    abstract getAllRows(): Promise<OINODataRow[]>;
+    /**
      * Checks if the messages contain errors.
      *
      */
@@ -180,6 +193,11 @@ export declare class OINODbMemoryDataSet extends OINODbDataSet {
      *
      */
     getRow(): OINODataRow;
+    /**
+     * Gets all rows of data.
+     *
+     */
+    getAllRows(): Promise<OINODataRow[]>;
     /**
      * Rewinds data set to the first row, returns !isEof().
      *
