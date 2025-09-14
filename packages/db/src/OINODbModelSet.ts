@@ -329,15 +329,22 @@ export class OINODbModelSet {
 
     /**
      * Export all rows as a record with OINOId as key and object with row cells as values.
-     *
+     * 
+     * @param idFieldName optional field name to use as key instead of OINOId
      */
 
-    async exportAsRecord():Promise<Record<string, any>> {
+    async exportAsRecord(idFieldName:string = ""):Promise<Record<string, any>> {
         const result:Record<string, any> = {}
         while (!this.dataset.isEof()) {
             const row_data:OINODataRow = this.dataset.getRow()
             const row_export = this._exportRow(row_data)
-            result[row_export[OINODbConfig.OINODB_ID_FIELD]] = row_export
+            let row_id
+            if (idFieldName) {
+                row_id = row_export[idFieldName]
+            } else {
+                row_id = row_export[OINODbConfig.OINODB_ID_FIELD]
+            }
+            result[row_id] = row_export
             await this.dataset.next()
         }
         return result
