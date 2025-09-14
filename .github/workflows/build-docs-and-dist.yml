@@ -24,12 +24,17 @@ jobs:
       - name: build and commit
         run: |
           cd packages
-          npm install
+          npm install ./common
+          npm install ./db
+          npm install ./db-bunsqlite
+          npm install ./db-mariadb
+          npm install ./db-mssql
+          npm install ./db-postgresql
+          npm install ./hashid
+          npm install ./types
           bun run build:all
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git checkout main
           git add ./common/dist ./db/dist ./db-bunsqlite/dist ./db-mariadb/dist ./db-mssql/dist ./db-postgresql/dist ./hashid/dist ./types
           git add ../docs
           git commit -m "chore: commit docs and dist [skip ci]" || echo "No changes to commit"
