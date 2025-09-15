@@ -1,5 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
 import { OINODbDataModel, OINODataRow, OINODbApiRequestParams } from "./index.js";
 /**
  * Static factory class for easily creating things based on data
