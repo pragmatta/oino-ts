@@ -18,7 +18,14 @@ export enum OINODbSqlBooleanOperation { and = "and", or = "or", not = "not" }
  * Supported logical conjunctions in filter predicates.
  * @enum
  */
-export enum OINODbSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt = "gt", like = "like" } 
+export enum OINODbSqlComparison { lt = "lt", le = "le", eq = "eq", ne = "ne", ge = "ge", gt = "gt", like = "like" } 
+
+/**
+ * Supported logical conjunctions in filter predicates.
+ * @enum
+ */
+export enum OINODbSqlNullCheck { isnull = "isnull", isnotnull = "isnotnull" } 
+
 
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions. 
@@ -31,12 +38,13 @@ export enum OINODbSqlComparison { lt = "lt", le = "le", eq = "eq", ge = "ge", gt
  */
 export class OINODbSqlFilter {
     private static _booleanOperationRegex = /^\s?\-(and|or)\s?$/i
-    private static _negationRegex = /^-(not|)\((.+)\)$/i
-    private static _filterComparisonRegex = /^\(([^'"\(\)]+)\)\s?\-(lt|le|eq|ge|gt|like)\s?\(([^'"\(\)]+)\)$/i
+    private static _negationRegex = /^-(not)\((.+)\)$/i
+    private static _filterComparisonRegex = /^\(([^'"\(\)]+)\)\s?\-(lt|le|eq|ne|ge|gt|like)\s?\(([^'"\(\)]+)\)$/i
+    private static _filterNullCheckRegex = /^-(isnull|isnotnull)\((.+)\)$/i
     
     private _leftSide: OINODbSqlFilter | string
     private _rightSide: OINODbSqlFilter | string
-    private _operator:OINODbSqlComparison|OINODbSqlBooleanOperation|null
+    private _operator:OINODbSqlComparison|OINODbSqlBooleanOperation|OINODbSqlNullCheck|null
 
     /**
      * Constructor of `OINODbSqlFilter`
@@ -44,11 +52,12 @@ export class OINODbSqlFilter {
      * @param operation operation of the filter, either `OINODbSqlComparison` or `OINODbSqlBooleanOperation`
      * @param rightSide right side of the filter, either another filter or a value
      */
-    constructor(leftSide:OINODbSqlFilter|string, operation:OINODbSqlComparison|OINODbSqlBooleanOperation|null, rightSide:OINODbSqlFilter|string) {
+    constructor(leftSide:OINODbSqlFilter|string, operation:OINODbSqlComparison|OINODbSqlBooleanOperation|OINODbSqlNullCheck|null, rightSide:OINODbSqlFilter|string) {
         if (!(
             ((operation === null) && (leftSide == "") && (rightSide == "")) ||
             ((operation !== null) && (Object.values(OINODbSqlComparison).includes(operation as OINODbSqlComparison)) && (typeof(leftSide) == "string") && (leftSide != "") && (typeof(rightSide) == "string") && (rightSide != "")) ||
             ((operation == OINODbSqlBooleanOperation.not) && (leftSide == "") && (rightSide instanceof OINODbSqlFilter)) ||
+            (((operation == OINODbSqlNullCheck.isnull) || (operation == OINODbSqlNullCheck.isnotnull)) && (typeof(leftSide) == "string") && (rightSide == "")) ||
             (((operation == OINODbSqlBooleanOperation.and) || (operation == OINODbSqlBooleanOperation.or)) && (leftSide instanceof OINODbSqlFilter) && (rightSide instanceof OINODbSqlFilter))
         )) {
             OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "constructor", "Unsupported OINODbSqlFilter format", {leftSide:leftSide, operation:operation, rightSide:rightSide})
@@ -66,6 +75,7 @@ export class OINODbSqlFilter {
      * - comparison: (field)-lt|le|eq|ge|gt|like(value)
      * - negation: -not(filter)
      * - conjunction/disjunction: (filter)-and|or(filter)
+     * - null check: -isnull(field) or -isnotnull(field)
      * 
      * @param filterString string representation of filter from HTTP-request
      *
@@ -76,20 +86,28 @@ export class OINODbSqlFilter {
 
         } else {
             let match = OINODbSqlFilter._filterComparisonRegex.exec(filterString)
-            if (match != null) {
+            if ((match != null) && (match.length == 4)) {
                 return new OINODbSqlFilter(match[1], match[2].toLowerCase() as OINODbSqlComparison, match[3])
+
             } else {
                 let match = OINODbSqlFilter._negationRegex.exec(filterString)
                 if (match != null) {
                     return new OINODbSqlFilter("", OINODbSqlBooleanOperation.not, OINODbSqlFilter.parse(match[3]))
+
                 } else {
                     let boolean_parts = OINOStr.splitByBrackets(filterString, true, false, '(', ')')
                     if (boolean_parts.length == 3 && (boolean_parts[1].match(OINODbSqlFilter._booleanOperationRegex))) {
                         return new OINODbSqlFilter(OINODbSqlFilter.parse(boolean_parts[0]), boolean_parts[1].trim().toLowerCase().substring(1) as OINODbSqlBooleanOperation, OINODbSqlFilter.parse(boolean_parts[2]))
-        
+
                     } else {
-                        OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "constructor", "Invalid filter", {filterString:filterString})
-                        throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'") // invalid filter could be a security risk, stop processing
+                        let match = OINODbSqlFilter._filterNullCheckRegex.exec(filterString)
+                        if ((match != null)) {
+                            return new OINODbSqlFilter(match[2], match[1].toLowerCase() as OINODbSqlComparison, "")
+
+                        } else {
+                            OINOLog.error("@oino-ts/db", "OINODbSqlFilter", "constructor", "Invalid filter", {filterString:filterString})
+                            throw new Error(OINO_ERROR_PREFIX + ": Invalid filter '" + filterString + "'") // invalid filter could be a security risk, stop processing
+                        }
                     }                
                 }            
             }
@@ -119,6 +137,53 @@ export class OINODbSqlFilter {
         }
     }
 
+    /**
+     * Combine two filters with an AND operation.
+     *
+     * @param leftSide left side filter
+     * @param rightSide right side filter
+     *
+     */
+    static and(leftSide:OINODbSqlFilter, rightSide:OINODbSqlFilter):OINODbSqlFilter|undefined {
+        if ((leftSide) && (!leftSide.isEmpty()) && (rightSide) && (!rightSide.isEmpty())) {
+            return new OINODbSqlFilter(leftSide, OINODbSqlBooleanOperation.and, rightSide)
+
+        } else {
+            return undefined
+        }
+    }
+
+    /**
+     * Combine two filters with an OR operation.
+     *
+     * @param leftSide left side filter
+     * @param rightSide right side filter
+     *
+     */
+    static or(leftSide:OINODbSqlFilter, rightSide:OINODbSqlFilter):OINODbSqlFilter|undefined {
+        if ((leftSide) && (!leftSide.isEmpty()) && (rightSide) && (!rightSide.isEmpty())) {
+            return new OINODbSqlFilter(leftSide, OINODbSqlBooleanOperation.or, rightSide)
+
+        } else {
+            return undefined
+        }
+    }
+
+    /**
+     * Negate a filter with a NOT operation.
+     *
+     * @param leftSide left side filter
+     *
+     */
+    static not(leftSide:OINODbSqlFilter):OINODbSqlFilter|undefined {
+        if ((leftSide) && (!leftSide.isEmpty())) {
+            return new OINODbSqlFilter(leftSide, OINODbSqlBooleanOperation.not, "")
+
+        } else {
+            return undefined
+        }
+    }
+
 
     private _operatorToSql():string {
         switch (this._operator) {
@@ -128,9 +193,12 @@ export class OINODbSqlFilter {
             case "lt": return " < "
             case "le": return " <= "
             case "eq": return " = "
+            case "ne": return " != "
             case "ge": return " >= "
             case "gt": return " > "
             case "like": return " LIKE "
+            case "isnull": return " IS NULL"
+            case "isnotnull": return " IS NOT NULL"
         }
         return " "
     }
@@ -168,6 +236,8 @@ export class OINODbSqlFilter {
         result += this._operatorToSql()
         if (this._rightSide instanceof OINODbSqlFilter) {
             result += this._rightSide.toSql(dataModel)
+        } else if (this._operator == OINODbSqlNullCheck.isnull || this._operator == OINODbSqlNullCheck.isnotnull) {
+            // nothing to do, IS NULL and IS NOT NULL do not have a right side
         } else {
             const value = field!.deserializeCell(this._rightSide)
             if ((value == null) || (value === "")) {

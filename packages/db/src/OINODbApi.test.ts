@@ -6,7 +6,7 @@
 
 import { expect, test } from "bun:test";
 
-import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINODbSqlComparison, OINONumberDataField, OINODatetimeDataField, OINODbApiRequestParams, OINODbHtmlTemplate, OINODbParser } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINODbSqlComparison, OINONumberDataField, OINODatetimeDataField, OINODbApiRequestParams, OINODbHtmlTemplate, OINODbParser, OINODbSqlBooleanOperation } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
@@ -40,7 +40,13 @@ const API_TESTS:OINOTestParams[] = [
         name: "API 1",
         apiParams: { apiName: "Orders", tableName: "Orders" },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), order: OINODbSqlOrder.parse("ShipPostalCode-,Freight+"), limit: OINODbSqlLimit.parse("5 page 2") }
+            sqlParams: { filter: OINODbSqlFilter.and(
+                    OINODbSqlFilter.parse("(ShipPostalCode)-like(0502%)"), 
+                    OINODbSqlFilter.parse("-isnull(ShipRegion)")
+                ), 
+                order: OINODbSqlOrder.parse("ShipPostalCode-,Freight+"), 
+                limit: OINODbSqlLimit.parse("5 page 2") 
+            }
         },
         postRow: [30000,"CACTU",1,new Date("2024-04-05"),new Date("2024-04-06"),new Date("2024-04-07"),2,"184.75","a'b\"c%d_e\tf\rg\nh\\i","Garden House Crowther Way","Cowes","British Isles","PO31 7PJ","UK"],
         putRow: [30000,"CACTU",1,new Date("2023-04-05"),new Date("2023-04-06"),new Date("2023-04-07"),2,"847.51","k'l\"m%n_o\tp\rq\nr\\s","59 rue de l'Abbaye","Cowes2","Western Europe","PO31 8PJ","UK"]
@@ -49,7 +55,13 @@ const API_TESTS:OINOTestParams[] = [
         name: "API 2",
         apiParams: { apiName: "Products", tableName: "Products", failOnOversizedValues: true },
         requestParams: {
-            sqlParams: { filter: OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), order: OINODbSqlOrder.parse("UnitsInStock,UnitPrice"), limit: OINODbSqlLimit.parse("7") }
+            sqlParams: { filter: OINODbSqlFilter.and(
+                    OINODbSqlFilter.parse("(UnitsInStock)-le(5)"), 
+                    OINODbSqlFilter.parse("(UnitsInStock)-ne(4)"),
+                ), 
+                order: OINODbSqlOrder.parse("UnitsInStock,UnitPrice"), 
+                limit: OINODbSqlLimit.parse("7") 
+            }
         },
         postRow: [99, "Umeshu", 1, 1, "500 ml", 12.99, 2, 0, 20, 0],
         putRow: [99, "Umeshu", 1, 1, undefined, 24.99, 3, 0, 20, 0]
