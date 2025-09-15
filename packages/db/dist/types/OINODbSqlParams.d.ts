@@ -16,9 +16,18 @@ export declare enum OINODbSqlComparison {
     lt = "lt",
     le = "le",
     eq = "eq",
+    ne = "ne",
     ge = "ge",
     gt = "gt",
     like = "like"
+}
+/**
+ * Supported logical conjunctions in filter predicates.
+ * @enum
+ */
+export declare enum OINODbSqlNullCheck {
+    isnull = "isnull",
+    isnotnull = "isnotnull"
 }
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions.
@@ -33,6 +42,7 @@ export declare class OINODbSqlFilter {
     private static _booleanOperationRegex;
     private static _negationRegex;
     private static _filterComparisonRegex;
+    private static _filterNullCheckRegex;
     private _leftSide;
     private _rightSide;
     private _operator;
@@ -42,7 +52,7 @@ export declare class OINODbSqlFilter {
      * @param operation operation of the filter, either `OINODbSqlComparison` or `OINODbSqlBooleanOperation`
      * @param rightSide right side of the filter, either another filter or a value
      */
-    constructor(leftSide: OINODbSqlFilter | string, operation: OINODbSqlComparison | OINODbSqlBooleanOperation | null, rightSide: OINODbSqlFilter | string);
+    constructor(leftSide: OINODbSqlFilter | string, operation: OINODbSqlComparison | OINODbSqlBooleanOperation | OINODbSqlNullCheck | null, rightSide: OINODbSqlFilter | string);
     /**
      * Constructor for `OINODbSqlFilter` as parser of http parameter.
      *
@@ -50,6 +60,7 @@ export declare class OINODbSqlFilter {
      * - comparison: (field)-lt|le|eq|ge|gt|like(value)
      * - negation: -not(filter)
      * - conjunction/disjunction: (filter)-and|or(filter)
+     * - null check: -isnull(field) or -isnotnull(field)
      *
      * @param filterString string representation of filter from HTTP-request
      *
@@ -64,6 +75,29 @@ export declare class OINODbSqlFilter {
      *
      */
     static combine(leftSide: OINODbSqlFilter | undefined, operation: OINODbSqlBooleanOperation, rightSide: OINODbSqlFilter | undefined): OINODbSqlFilter | undefined;
+    /**
+     * Combine two filters with an AND operation.
+     *
+     * @param leftSide left side filter
+     * @param rightSide right side filter
+     *
+     */
+    static and(leftSide: OINODbSqlFilter, rightSide: OINODbSqlFilter): OINODbSqlFilter | undefined;
+    /**
+     * Combine two filters with an OR operation.
+     *
+     * @param leftSide left side filter
+     * @param rightSide right side filter
+     *
+     */
+    static or(leftSide: OINODbSqlFilter, rightSide: OINODbSqlFilter): OINODbSqlFilter | undefined;
+    /**
+     * Negate a filter with a NOT operation.
+     *
+     * @param leftSide left side filter
+     *
+     */
+    static not(leftSide: OINODbSqlFilter): OINODbSqlFilter | undefined;
     private _operatorToSql;
     /**
      * Does filter contain any valid conditions.

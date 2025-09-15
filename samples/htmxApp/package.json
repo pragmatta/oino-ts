@@ -1,18 +1,18 @@
 {
   "name": "oinohtmxapp",
-  "version": "0.13.4",
+  "version": "0.14.0",
   "scripts": {
     "dev": "/_GIT/oino-ts/update_src.cmd /_GIT/oino-ts/samples/htmxApp && bun run ./htmxApp.ts",
     "app": "bun run ./htmxApp.ts"
   },
   "dependencies": {
-    "@oino-ts/common": "0.13.4",
+    "@oino-ts/common": "0.14.0",
     "@oino-ts/db": "latest",
     "@oino-ts/db-bunsqlite": "latest",
     "@oino-ts/hashid": "latest"
   },
   "devDependencies": {
-    "@oino-ts/types": "0.13.4",
+    "@oino-ts/types": "0.14.0",
     "@types/bun": "latest"
   },
   "module": "dev.ts"
