@@ -67,16 +67,15 @@ export abstract class OINOBenchmark {
         OINOBenchmark._instance?._startMetric(module, method)
     }
 
-    protected abstract _endMetric(module:string, method:string, category:string):void
+    protected abstract _endMetric(module:string, method:string):void
     /**
      * Complete benchmark timing
      * 
      * @param module of the benchmark
      * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
      */
-    static endMetric(module:string, method:string, category:string = "OK"):void {
-        OINOBenchmark._instance?._endMetric(module, method, category)
+    static endMetric(module:string, method:string):void {
+        OINOBenchmark._instance?._endMetric(module, method)
     }
 
     protected abstract _getMetric(module:string, method:string):number
@@ -100,36 +99,34 @@ export abstract class OINOBenchmark {
         return OINOBenchmark._instance?._getMetrics()
     }
 
-    protected abstract _trackMetric(module:string, method:string, category:string, value:number):void
+    protected abstract _trackMetric(module:string, method:string, value:number):void
     /**
      * Track a metric value
      * 
-     * @param value of the metric
      * @param module of the metric
      * @param method of the metric
-     * @param category optional subcategory of the metric
+     * @param value of the metric
      * 
      */
-    static trackMetric(module:string, method:string, category:string, value:number):void {
+    static trackMetric(module:string, method:string, value:number):void {
         if (OINOBenchmark._enabled[module]) {
-            OINOBenchmark._instance?._trackMetric(module, method, category, value)
+            OINOBenchmark._instance?._trackMetric(module, method, value)
         }
     }
 
-    protected abstract _trackException(module:string, method:string, category:string, name:string, message:string, stack: string):void
+    protected abstract _trackException(module:string, method:string, name:string, message:string, stack: string):void
     /**
      * Track an exception
      * 
      * @param module of the benchmark
      * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
      * @param name of the exception
      * @param message of the exception
      * @param stack trace of the exception
      */
-    static trackException(module:string, method:string, category:string, name:string, message:string, stack:string):void {
+    static trackException(module:string, method:string, name:string, message:string, stack:string):void {
         if (OINOBenchmark._enabled[module]) {
-            OINOBenchmark._instance?._trackException(module, method, category, name, message, stack)
+            OINOBenchmark._instance?._trackException(module, method, name, message, stack)
         }
     }
 
@@ -183,14 +180,14 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      * 
      * @param module of the benchmark
      * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
      */
-    protected _endMetric(module:string, method:string, category:string):void {
+    protected _endMetric(module:string, method:string):void {
         const name:string = module + "." + method
         let result:number = 0
         if (OINOBenchmark._enabled[module] && (this._benchmarkStart[name] > 0)) { // if benchmark is started, end it
+            this._benchmarkStart[name] = 0 
             const duration = performance.now() - this._benchmarkStart[name]
-            this._trackMetric(module, method, category, duration)
+            this._trackMetric(module, method, duration)
         }
         return
     }
@@ -224,7 +221,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         return result
     }
 
-    protected _trackMetric(module:string, method:string, category:string, value:number):void {
+    protected _trackMetric(module:string, method:string, value:number):void {
         const name:string = module + "." + method
         if (this._benchmarkCount[name] == undefined) {
             this._benchmarkCount[name] = 1
@@ -233,21 +230,10 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
             this._benchmarkCount[name] += 1
             this._benchmarkData[name] += value
         }
-
-        const category_name = name + "." + category
-        if (this._benchmarkCount[category_name] == undefined) {
-            this._benchmarkCount[category_name] = 1
-            this._benchmarkData[category_name] = value
-        } else {
-            this._benchmarkCount[category_name] += 1
-            this._benchmarkData[category_name] += value
-        }
-
-        this._benchmarkStart[name] = 0 
     }
 
-    protected _trackException(module:string, method:string, category:string, name:string, message:string, stack:string):void {
-        const exception = { module, method, category, name, message, stack, timestamp: Date.now() }
+    protected _trackException(module:string, method:string, name:string, message:string, stack:string):void {
+        const exception = { module, method, name, message, stack, timestamp: Date.now() }
         this._exceptions.push(exception)
     }
 

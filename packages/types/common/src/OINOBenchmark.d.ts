@@ -38,15 +38,14 @@ export declare abstract class OINOBenchmark {
      * @param method of the benchmark
      */
     static startMetric(module: string, method: string): void;
-    protected abstract _endMetric(module: string, method: string, category: string): void;
+    protected abstract _endMetric(module: string, method: string): void;
     /**
      * Complete benchmark timing
      *
      * @param module of the benchmark
      * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
      */
-    static endMetric(module: string, method: string, category?: string): void;
+    static endMetric(module: string, method: string): void;
     protected abstract _getMetric(module: string, method: string): number;
     /**
      * Get given benchmark data.
@@ -62,29 +61,27 @@ export declare abstract class OINOBenchmark {
      *
      */
     static getMetrics(): Record<string, number>;
-    protected abstract _trackMetric(module: string, method: string, category: string, value: number): void;
+    protected abstract _trackMetric(module: string, method: string, value: number): void;
     /**
      * Track a metric value
      *
-     * @param value of the metric
      * @param module of the metric
      * @param method of the metric
-     * @param category optional subcategory of the metric
+     * @param value of the metric
      *
      */
-    static trackMetric(module: string, method: string, category: string, value: number): void;
-    protected abstract _trackException(module: string, method: string, category: string, name: string, message: string, stack: string): void;
+    static trackMetric(module: string, method: string, value: number): void;
+    protected abstract _trackException(module: string, method: string, name: string, message: string, stack: string): void;
     /**
      * Track an exception
      *
      * @param module of the benchmark
      * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
      * @param name of the exception
      * @param message of the exception
      * @param stack trace of the exception
      */
-    static trackException(module: string, method: string, category: string, name: string, message: string, stack: string): void;
+    static trackException(module: string, method: string, name: string, message: string, stack: string): void;
     protected abstract _getExceptions(): any[];
     /**
      * Get all tracked exceptions.
@@ -119,9 +116,8 @@ export declare class OINOMemoryBenchmark extends OINOBenchmark {
      *
      * @param module of the benchmark
      * @param method of the benchmark
-     * @param category optional subcategory of the benchmark
      */
-    protected _endMetric(module: string, method: string, category: string): void;
+    protected _endMetric(module: string, method: string): void;
     /**
      * Get given benchmark data.
      *
@@ -135,7 +131,7 @@ export declare class OINOMemoryBenchmark extends OINOBenchmark {
      *
      */
     protected _getMetrics(): Record<string, number>;
-    protected _trackMetric(module: string, method: string, category: string, value: number): void;
-    protected _trackException(module: string, method: string, category: string, name: string, message: string, stack: string): void;
+    protected _trackMetric(module: string, method: string, value: number): void;
+    protected _trackException(module: string, method: string, name: string, message: string, stack: string): void;
     protected _getExceptions(): any[];
 }

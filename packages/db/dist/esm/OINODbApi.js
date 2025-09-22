@@ -385,7 +385,7 @@ export class OINODbApi {
      *
      */
     async doRequest(method, id, data, params = API_EMPTY_PARAMS) {
-        OINOBenchmark.startMetric("OINODbApi", "doRequest");
+        OINOBenchmark.startMetric("OINODbApi", "doRequest." + method);
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", { method: method, id: id, data: data });
         let result = new OINODbApiResult(params);
         let rows = [];
@@ -443,7 +443,7 @@ export class OINODbApi {
         else {
             result.setError(405, "Unsupported HTTP method '" + method + "' for REST request", "DoRequest");
         }
-        OINOBenchmark.endMetric("OINODbApi", "doRequest", method);
+        OINOBenchmark.endMetric("OINODbApi", "doRequest." + method);
         return Promise.resolve(result);
     }
     /**
@@ -456,7 +456,7 @@ export class OINODbApi {
      *
      */
     async doBatchUpdate(method, data, params = API_EMPTY_PARAMS) {
-        OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate");
+        OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate." + method);
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", { method: method, data: data, params: params });
         let result = new OINODbApiResult(params);
         let rows = [];
@@ -482,7 +482,7 @@ export class OINODbApi {
         else {
             result.setError(405, "Unsupported HTTP method '" + method + "' for batch update", "DoBatchUpdate");
         }
-        OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate", method);
+        OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate." + method);
         return Promise.resolve(result);
     }
     /**

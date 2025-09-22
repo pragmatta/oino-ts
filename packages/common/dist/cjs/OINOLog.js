@@ -111,7 +111,7 @@ class OINOLog {
      */
     static exception(domain, channel, method, message, data) {
         OINOLog._log(OINOLogLevel.exception, "EXCEPTION", domain, channel, method, message, data);
-        OINOBenchmark_1.OINOBenchmark.trackException(domain + "." + channel, method, "Exception", message, data?.message || "", data?.stack || "");
+        OINOBenchmark_1.OINOBenchmark.trackException(domain + "." + channel, method, message, data?.message || "", data?.stack || "");
     }
     /**
      * Log error event. Error events are printed as a single line.
