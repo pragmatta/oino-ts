@@ -131,7 +131,7 @@ export abstract class OINOLog {
      */
     static exception(domain:string, channel:string, method:string, message:string, data?:any) {
         OINOLog._log(OINOLogLevel.exception, "EXCEPTION", domain, channel, method, message, data)
-        OINOBenchmark.trackException(domain + "." + channel, method, "Exception", message, data?.message || "", data?.stack || "")
+        OINOBenchmark.trackException(domain + "." + channel, method, message, data?.message || "", data?.stack || "")
     }
 
     /**
