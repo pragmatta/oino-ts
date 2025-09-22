@@ -185,8 +185,8 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         const name:string = module + "." + method
         let result:number = 0
         if (OINOBenchmark._enabled[module] && (this._benchmarkStart[name] > 0)) { // if benchmark is started, end it
-            this._benchmarkStart[name] = 0 
             const duration = performance.now() - this._benchmarkStart[name]
+            this._benchmarkStart[name] = 0 
             this._trackMetric(module, method, duration)
         }
         return
