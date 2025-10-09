@@ -72,10 +72,9 @@ export abstract class OINOLog {
         if (OINOLog._instance) {
             const log_levels = OINOLog._instance._logLevels
             // console.log(log_levels)
-            const min_level = log_levels[domain + "|" + channel + "|" + method] ||
-                log_levels[domain + "||" + method] || 
+            const min_level = 
+                log_levels[domain + "|" + channel + "|" + method] ||
                 log_levels[domain + "|" + channel + "|"] || 
-                log_levels["|" + channel + "|"] || 
                 log_levels[domain + "||"] ||
                 log_levels["||"]
             // console.log("_log: level=" + level + ", min_level=" + min_level + ", levelStr=" + levelStr + ", message=" + message, data)
@@ -94,7 +93,7 @@ export abstract class OINOLog {
     static setInstance(instance: OINOLog) {
         // console.log("setLogger: " + log)
         if (instance) {
-            OINOLog._instance = instance
+            OINOLog._instance = instance    
         }
     }
 
