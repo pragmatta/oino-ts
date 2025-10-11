@@ -62,17 +62,17 @@ export declare abstract class OINOLog {
      * Multiple settings can be combined to set different logging accuracy specifically
      *
      * For example:
-     * logLevel: warning, domain: *, channel: *, method: * will only output error events.
-     * logLevel: debug, domain: d1, channel: c1, method: "*" will enable debug events for channel c1 of domain d1.
+     * logLevel: warning, domain: "", channel: "", method: "" will only output warning and higher events.
+     * logLevel: debug, domain: d1, channel: c1, method: "" will enable debug events for channel c1 of domain d1.
      * logLevel: info, domain: d1, channel: c1, method: m1 will supress debug events for method m1.
      *
      * @param logLevel log level to use
-     * @param domain domain of the log event (default: "*" for all)
-     * @param channel channel of the log event (default: "*" for all)
-     * @param method method of the log event (default: "*" for all)
-     *
+     * @param domain domain of the log event (default: "" for all)
+     * @param channel channel of the log event (default: "" for all)
+     * @param method method of the log event (default: "" for all)
+     * @param message message of the log event (default: "" for all)
      */
-    static setLogLevel(logLevel: OINOLogLevel, domain?: string, channel?: string, method?: string): void;
+    static setLogLevel(logLevel: OINOLogLevel, domain?: string, channel?: string, method?: string, message?: string): void;
     /**
      * Log exception event. Exception events are prettyprinted and preserve newlines so that stack traces are readable.
      *

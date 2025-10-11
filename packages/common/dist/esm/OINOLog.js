@@ -26,7 +26,7 @@ export var OINOLogLevel;
  */
 export class OINOLog {
     static _instance;
-    _logLevels = { "||": OINOLogLevel.warning };
+    _logLevels = { "|||": OINOLogLevel.warning };
     _defaultLogLevel = OINOLogLevel.warning;
     /**
      * Abstract logging method to implement the actual logging operation.
@@ -36,7 +36,7 @@ export class OINOLog {
      */
     constructor(logLevel = OINOLogLevel.warning) {
         // console.log("OINOLog.constructor: logLevel=" + logLevel)
-        this._logLevels["||"] = logLevel;
+        this._logLevels["|||"] = logLevel;
         this._defaultLogLevel = logLevel;
     }
     /**
@@ -52,10 +52,11 @@ export class OINOLog {
         if (OINOLog._instance) {
             const log_levels = OINOLog._instance._logLevels;
             // console.log(log_levels)
-            const min_level = log_levels[domain + "|" + channel + "|" + method] ||
-                log_levels[domain + "|" + channel + "|"] ||
-                log_levels[domain + "||"] ||
-                log_levels["||"];
+            const min_level = log_levels[domain + "|" + channel + "|" + method + "|" + message] ||
+                log_levels[domain + "|" + channel + "|" + method + "|"] ||
+                log_levels[domain + "|" + channel + "||"] ||
+                log_levels[domain + "|||"] ||
+                log_levels["|||"];
             // console.log("_log: level=" + level + ", min_level=" + min_level + ", levelStr=" + levelStr + ", message=" + message, data)
             if (level >= min_level) {
                 OINOLog._instance?._writeLog(levelStr, domain, channel, method, message, data);
@@ -79,19 +80,19 @@ export class OINOLog {
      * Multiple settings can be combined to set different logging accuracy specifically
      *
      * For example:
-     * logLevel: warning, domain: *, channel: *, method: * will only output error events.
-     * logLevel: debug, domain: d1, channel: c1, method: "*" will enable debug events for channel c1 of domain d1.
+     * logLevel: warning, domain: "", channel: "", method: "" will only output warning and higher events.
+     * logLevel: debug, domain: d1, channel: c1, method: "" will enable debug events for channel c1 of domain d1.
      * logLevel: info, domain: d1, channel: c1, method: m1 will supress debug events for method m1.
      *
      * @param logLevel log level to use
-     * @param domain domain of the log event (default: "*" for all)
-     * @param channel channel of the log event (default: "*" for all)
-     * @param method method of the log event (default: "*" for all)
-     *
+     * @param domain domain of the log event (default: "" for all)
+     * @param channel channel of the log event (default: "" for all)
+     * @param method method of the log event (default: "" for all)
+     * @param message message of the log event (default: "" for all)
      */
-    static setLogLevel(logLevel, domain = "", channel = "", method = "") {
+    static setLogLevel(logLevel, domain = "", channel = "", method = "", message = "") {
         if (OINOLog._instance) {
-            OINOLog._instance._logLevels[domain + "|" + channel + "|" + method] = logLevel;
+            OINOLog._instance._logLevels[domain + "|" + channel + "|" + method + "|" + message] = logLevel;
         }
     }
     /**
@@ -172,9 +173,10 @@ export class OINOLog {
                 if (level) {
                     const parts = key.split("|");
                     result.push({
-                        domain: parts[0],
-                        channel: parts[1],
-                        method: parts[2],
+                        domain: parts[0] || "",
+                        channel: parts[1] || "",
+                        method: parts[2] || "",
+                        message: parts[3] || "",
                         level: level
                     });
                 }
@@ -194,9 +196,10 @@ export class OINOLog {
                 const domain = logLevel.domain || "";
                 const channel = logLevel.channel || "";
                 const method = logLevel.method || "";
+                const message = logLevel.message || "";
                 const level = logLevel.level;
                 if (level && OINOLogLevel[level]) {
-                    OINOLog._instance._logLevels[domain + "|" + channel + "|" + method] = level;
+                    OINOLog._instance._logLevels[domain + "|" + channel + "|" + method + "|" + message] = level;
                 }
             }
         }
@@ -209,7 +212,7 @@ export class OINOLog {
      */
     static importLogLevels(logLevels) {
         if (OINOLog._instance) {
-            OINOLog._instance._logLevels = { "||": OINOLog._instance._defaultLogLevel }; // reset to default log level
+            OINOLog._instance._logLevels = { "|||": OINOLog._instance._defaultLogLevel }; // reset to default log level
             this.setLogLevels(logLevels);
         }
     }
