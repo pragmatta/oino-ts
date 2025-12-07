@@ -130,7 +130,7 @@ try {
 
 
 				} else {
-					response = new Response("API '" + url.pathname + "'not found!", {status:404, statusText: "API '" + url.pathname + "'not found!", headers: response_headers })
+					response = new Response("API '" + url.pathname + "' not found!", {status:404, statusText: "API '" + url.pathname + "' not found!", headers: response_headers })
 				}
 			}
 			return response
