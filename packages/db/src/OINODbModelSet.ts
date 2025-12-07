@@ -108,6 +108,9 @@ export class OINODbModelSet {
         const fields:OINODbDataField[] = model.fields
         let csv_header:string = "\"" + OINODbConfig.OINODB_ID_FIELD + "\""
         for (let i=0; i<fields.length; i++) {
+            if (this.sqlParams?.select?.isSelected(fields[i]) === false) {
+                continue
+            }
             csv_header += ",\"" + fields[i].name + "\""
         }
         return csv_header
