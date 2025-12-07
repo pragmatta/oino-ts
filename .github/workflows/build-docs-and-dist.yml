@@ -29,9 +29,12 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: cd packages
-      - run: ls -r
-      - run: npm run build:all
+      - name: Build packages
+        working-directory: ./packages
+        run: |
+          ls -la
+          npm install
+          npm run build:all
       - name: Commit build results
         run: |
           git config --global user.name "github-actions[bot]"
