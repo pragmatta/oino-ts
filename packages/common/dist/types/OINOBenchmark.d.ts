@@ -18,6 +18,11 @@ export declare abstract class OINOBenchmark {
      *
      */
     static setInstance(instance: OINOBenchmark): void;
+    /**
+     * Get active benchmarking instance.
+     *
+     */
+    static getInstance(): OINOBenchmark;
     protected abstract _reset(): void;
     /**
      * Reset benchmark data (but not what is enabled).

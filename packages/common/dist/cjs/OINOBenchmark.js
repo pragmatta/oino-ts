@@ -33,6 +33,13 @@ class OINOBenchmark {
         }
     }
     /**
+     * Get active benchmarking instance.
+     *
+     */
+    static getInstance() {
+        return OINOBenchmark._instance;
+    }
+    /**
      * Reset benchmark data (but not what is enabled).
      *
      */
