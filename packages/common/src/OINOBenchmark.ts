@@ -34,6 +34,13 @@ export abstract class OINOBenchmark {
         }
     }
 
+    /**
+     * Get active benchmarking instance.
+     * 
+     */
+    static getInstance(): OINOBenchmark {
+        return OINOBenchmark._instance
+    }
 
     protected abstract _reset():void
     /**

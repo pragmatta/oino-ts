@@ -96,7 +96,7 @@ class OINOHashid {
         const cryptotext = hashid.substring(this._minLength);
         const cryptobytes = Buffer.from(hashidEncoder.decode(cryptotext));
         const decipher = (0, node_crypto_1.createDecipheriv)('aes-128-gcm', this._key, this._iv);
-        const plaintext = decipher.update(cryptobytes, undefined, 'utf8'); //, cryptotext, 'base64url', 'utf8') 
+        const plaintext = decipher.update(cryptobytes, undefined, 'utf8');
         return plaintext.split(" ")[0];
     }
 }
