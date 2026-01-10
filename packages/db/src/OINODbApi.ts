@@ -231,7 +231,7 @@ export class OINODbApi {
         //logDebug("OINODbApi.validateHttpValues", {result:result})
     }
 
-    private _parseData(httpResult:OINODbApiResult, body:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams):OINODataRow[] {
+    private _parseData(httpResult:OINODbApiResult, body:string|OINODataRow[]|Buffer|Uint8Array|object, params:OINODbApiRequestParams):OINODataRow[] {
         let rows:OINODataRow[] = []
         try {
             if (Array.isArray(body)) {
@@ -395,11 +395,11 @@ export class OINODbApi {
      * 
      * @param method HTTP verb (uppercase)
      * @param id URL id of the REST request
-     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
+     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doRequest(method:string, id: string, data:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
+    async doRequest(method:string, id: string, data:string|OINODataRow[]|Buffer|Uint8Array|object, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.startMetric("OINODbApi", "doRequest." + method)
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", {method:method, id:id, data:data})
         let result:OINODbApiResult = new OINODbApiResult(params)
@@ -464,11 +464,11 @@ export class OINODbApi {
      * SQL select, insert, update and delete.
      * 
      * @param method HTTP verb (uppercase)
-     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
+     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param params HTTP URL parameters as key-value-pairs
      *
      */
-    async doBatchUpdate(method:string, data:string|OINODataRow[]|Buffer|any, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
+    async doBatchUpdate(method:string, data:string|OINODataRow[]|Buffer|Uint8Array|object, params:OINODbApiRequestParams = API_EMPTY_PARAMS):Promise<OINODbApiResult> {
         OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate." + method)
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", {method:method, data:data, params:params})
         let result:OINODbApiResult = new OINODbApiResult(params)

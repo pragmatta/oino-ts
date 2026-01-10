@@ -15,16 +15,16 @@ export class OINODbParser {
      * Create data rows from request body based on the datamodel. 
      * 
      * @param datamodel datamodel of the api
-     * @param data data as a string or Buffer or object
+     * @param data data as a string or Buffer or Uint8Array or object
      * @param requestParams parameters
      * 
      */
-    static createRows(datamodel:OINODbDataModel, data:string|Buffer|object, requestParams:OINODbApiRequestParams ):OINODataRow[] {
+    static createRows(datamodel:OINODbDataModel, data:string|Buffer|Uint8Array|object, requestParams:OINODbApiRequestParams ):OINODataRow[] {
         let result:OINODataRow[] = []
         if (typeof data == "string") {
             result = this.createRowsFromText(datamodel, data, requestParams)
 
-        } else if (data instanceof Buffer) {
+        } else if ((data instanceof Buffer) || (data instanceof Uint8Array)) {
             result = this.createRowsFromBlob(datamodel, data, requestParams)
 
         } else if (typeof data == "object") {
@@ -66,11 +66,14 @@ export class OINODbParser {
      * Create data rows from request body based on the datamodel. 
      * 
      * @param datamodel datamodel of the api
-     * @param data data as an Buffer
+     * @param data data as an Buffer or Uint8Array
      * @param requestParams parameters
      * 
      */
-    static createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer, requestParams:OINODbApiRequestParams ):OINODataRow[] {
+    static createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer|Uint8Array, requestParams:OINODbApiRequestParams ):OINODataRow[] {
+        if (data instanceof Uint8Array && !(data instanceof Buffer)) {
+            data = Buffer.from(data)
+        }
         if ((requestParams.requestType == OINOContentType.json) || (requestParams.requestType == undefined)) {
             return this._createRowFromJson(datamodel, data.toString()) // JSON is always a string
             
