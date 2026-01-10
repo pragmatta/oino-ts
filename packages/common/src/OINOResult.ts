@@ -165,18 +165,6 @@ export class OINOResult {
     printLog() {
         return "OINOResult: status=" + this.status + ", statusText=" + this.statusText + ", messages=[" + this.messages.join(", ") + "]"
     }
-
-    /**
-     * Get a Response object from the result values.
-     * 
-     * @param headers HTTP headers (overrides existing values)
-     */
-    getStatusResponse(headers?:Record<string, string>):Response {
-        const result:Response = new Response(this.statusText, {status:this.status, headers: headers})
-        result.headers.set('Content-Length', this.statusText.length.toString())
-        return result
-    }
-
 }
 
 /**
