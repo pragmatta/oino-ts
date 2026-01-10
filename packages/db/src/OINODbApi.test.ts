@@ -188,7 +188,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
 
             const connect_res = await wrong_pwd_db.connect()
             expect(connect_res.success).toBe(false)
-            expect(connect_res.statusMessage).toMatchSnapshot("CONNECTION ERROR")
+            expect(connect_res.statusText).toMatchSnapshot("CONNECTION ERROR")
         })
     }
 

@@ -17,10 +17,10 @@ export class OINOResult {
     success: boolean
 
     /** HTTP status code */
-    statusCode: number;
+    status: number;
 
     /** HTTP status message */
-    statusMessage: string;
+    statusText: string;
 
     /** Error / warning messages */
     messages: string[];
@@ -31,8 +31,8 @@ export class OINOResult {
      */
     constructor () {
         this.success = true
-        this.statusCode = 200
-        this.statusMessage = "OK"
+        this.status = 200
+        this.statusText = "OK"
         this.messages = []
     }
 
@@ -43,8 +43,8 @@ export class OINOResult {
      */
     copy(result: OINOResult) {
         this.success = result.success
-        this.statusCode = result.statusCode
-        this.statusMessage = result.statusMessage
+        this.status = result.status
+        this.statusText = result.statusText
         this.messages = result.messages.slice()
     }
 
@@ -54,28 +54,28 @@ export class OINOResult {
      */
     setOk() {
         this.success = true
-        this.statusCode = 200
-        this.statusMessage = "OK"
+        this.status = 200
+        this.statusText = "OK"
     }
 
     /**
      * Set HTTP error status using given code and message. Returns self reference for chaining.
      * 
-     * @param statusCode HTTP status code
-     * @param statusMessage HTTP status message
+     * @param status HTTP status code
+     * @param statusText HTTP status message
      * @param operation operation where error occured
      *
      */
-    setError(statusCode:number, statusMessage:string, operation:string):OINOResult {
+    setError(status:number, statusText:string, operation:string):OINOResult {
         this.success = false
-        this.statusCode = statusCode
-        if (this.statusMessage != "OK") {
-            this.messages.push(this.statusMessage) // latest error becomes status, but if there was something non-trivial, add it to the messages
+        this.status = status
+        if (this.statusText != "OK") {
+            this.messages.push(this.statusText) // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
-        if (statusMessage.startsWith(OINO_ERROR_PREFIX)) {
-            this.statusMessage = statusMessage
+        if (statusText.startsWith(OINO_ERROR_PREFIX)) {
+            this.statusText = statusText
         } else {
-            this.statusMessage = OINO_ERROR_PREFIX + " (" + operation + "): " + statusMessage
+            this.statusText = OINO_ERROR_PREFIX + " (" + operation + "): " + statusText
         }
         return this
     }
@@ -163,7 +163,7 @@ export class OINOResult {
      * 
      */
     printLog() {
-        return "OINOResult: statusCode=" + this.statusCode + ", statusMessage=" + this.statusMessage + ", messages=[" + this.messages.join(", ") + "]"
+        return "OINOResult: status=" + this.status + ", statusText=" + this.statusText + ", messages=[" + this.messages.join(", ") + "]"
     }
 
     /**
@@ -172,8 +172,8 @@ export class OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getStatusResponse(headers?:Record<string, string>):Response {
-        const result:Response = new Response(this.statusMessage, {status:this.statusCode, headers: headers})
-        result.headers.set('Content-Length', this.statusMessage.length.toString())
+        const result:Response = new Response(this.statusText, {status:this.status, headers: headers})
+        result.headers.set('Content-Length', this.statusText.length.toString())
         return result
     }
 
@@ -226,7 +226,7 @@ export class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getHttpResponse(headers?:Record<string, string>):Response {
-        const result:Response = new Response(this.body, {status:this.statusCode, statusText: this.statusMessage, headers: headers})
+        const result:Response = new Response(this.body, {status:this.status, statusText: this.statusText, headers: headers})
         result.headers.set('Content-Length', this.body.length.toString())
         if (this.lastModified > 0) {
             result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString())

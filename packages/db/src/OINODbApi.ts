@@ -45,9 +45,9 @@ export class OINODbApiResult extends OINOResult {
         let response:Response|null = null
         if (this.success && this.data) {
             const body = await this.data.writeString(this.params.responseType)
-            response = new Response(body, {status:this.statusCode, statusText: this.statusMessage, headers: headers })
+            response = new Response(body, {status:this.status, statusText: this.statusText, headers: headers })
         } else {
-            response = new Response(JSON.stringify(this, null, 3), {status:this.statusCode, statusText: this.statusMessage, headers: headers })
+            response = new Response(JSON.stringify(this, null, 3), {status:this.status, statusText: this.statusText, headers: headers })
         }
         for (let i=0; i<this.messages.length; i++) {
             response.headers.set('X-OINO-MESSAGE-' + i, this.messages[i])

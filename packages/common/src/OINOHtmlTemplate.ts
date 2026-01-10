@@ -194,8 +194,8 @@ export class OINOHtmlTemplate {
      */
     renderFromResult(result:OINOResult, messageSeparator:string = "", includeErrorMessages:boolean=false, includeWarningMessages:boolean=false, includeInfoMessages:boolean=false, includeDebugMessages:boolean=false):OINOHttpResult {
         OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromResult")
-        this.setVariableFromValue("statusCode", result.statusCode.toString())
-        this.setVariableFromValue("statusMessage", result.statusMessage.toString())
+        this.setVariableFromValue("status", result.status.toString())
+        this.setVariableFromValue("statusText", result.statusText.toString())
         let messages:string[] = []
         for (let i:number = 0; i<result.messages.length; i++) {
             if (includeErrorMessages && result.messages[i].startsWith(OINO_ERROR_PREFIX)) {

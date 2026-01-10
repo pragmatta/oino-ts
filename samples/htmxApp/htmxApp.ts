@@ -17,13 +17,13 @@ OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.debug))
 OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 
 const API_PATH_REGEX = /\/([^\/]*)\/?([^\/]*)\/?([^\/]*)/
-async function findBestTemplateId(apiName:string, operation:string, statusCode:string):Promise<BunFile|null> {
+async function findBestTemplateId(apiName:string, operation:string, status:string):Promise<BunFile|null> {
 	let template_id:string = apiName.toLowerCase()
 	if (operation) {
 		template_id += "-" + operation.toLowerCase()
 	}
-	if (statusCode) {
-		template_id += "-" + statusCode
+	if (status) {
+		template_id += "-" + status
 	}
 	const template_file:BunFile = Bun.file("./templates/" + template_id + ".htmx")
 	if (await template_file.exists()) {
@@ -31,10 +31,10 @@ async function findBestTemplateId(apiName:string, operation:string, statusCode:s
 	}
 	return null
 }
-async function getTemplate(apiName:string, method:string, command:string, statusCode:string):Promise<OINODbHtmlTemplate> {
-	OINOLog.debug("@oino-ts/db", "htmxApp", "getTemplate", "Enter", { apiName:apiName, method:method, command:command, statusCode:statusCode})
-	const template_file = await findBestTemplateId(apiName, command, statusCode) ||
-						await findBestTemplateId(apiName, method, statusCode) ||
+async function getTemplate(apiName:string, method:string, command:string, status:string):Promise<OINODbHtmlTemplate> {
+	OINOLog.debug("@oino-ts/db", "htmxApp", "getTemplate", "Enter", { apiName:apiName, method:method, command:command, status:status})
+	const template_file = await findBestTemplateId(apiName, command, status) ||
+						await findBestTemplateId(apiName, method, status) ||
 						await findBestTemplateId(apiName, command, "") ||
 						await findBestTemplateId(apiName, method, "") ||
 						await findBestTemplateId(apiName, "", "") || ""
@@ -115,7 +115,7 @@ try {
 					}
 				} else if (api) {
 					api_result = await api.doRequest(request.method, id, body, params)
-					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.statusCode.toString())
+					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.status.toString())
 					if (api_result.data?.dataset) {
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
 						response = await http_result.getHttpResponse(response_headers)

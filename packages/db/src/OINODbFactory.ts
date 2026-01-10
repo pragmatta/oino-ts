@@ -42,13 +42,13 @@ export class OINODbFactory {
         if (connect) {
             const connect_res = await result.connect()
             if (connect_res.success == false) {
-                throw new Error("Database connection failed: " + connect_res.statusMessage)
+                throw new Error("Database connection failed: " + connect_res.statusText)
             }
         }
         if (validate) {
             const validate_res = await result.validate()
             if (validate_res.success == false) {
-                throw new Error("Database validation failed: " + validate_res.statusMessage)
+                throw new Error("Database validation failed: " + validate_res.statusText)
             }
         }
         return result
