@@ -104,22 +104,6 @@ export type OINODbSqlParams = {
     select?:OINODbSqlSelect
 }
 
-/** Request options */
-export type OINODbApiRequestParams = {
-    /** Content type of the request body */
-    requestType?:OINOContentType
-    /** Content type of the response body */
-    responseType?:OINOContentType
-    /** Multipart boundary token */
-    multipartBoundary?:string
-    /** Request last-modified value */
-    lastModified?:number
-    /** Request etag values */
-    etags?:string[]
-    /** SQL parameters */
-    sqlParams?:OINODbSqlParams
-}
-
 /** A single column value of a data row */
 export type OINODataCell = string | bigint | number | boolean | Date | Uint8Array | Buffer | null | undefined
 /** A single data row */

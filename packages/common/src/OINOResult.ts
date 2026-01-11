@@ -7,6 +7,13 @@
 import { createHash, Hash } from "node:crypto";
 import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX } from ".";
 
+export interface OINOResultInit {
+    success?: boolean
+    status?: number
+    statusText?: string
+    messages?: string[]
+}
+
 /**
  * OINO API request result object with returned data and/or http status code/message and 
  * error / warning messages.
@@ -28,12 +35,14 @@ export class OINOResult {
     /**
      * Constructor of OINOResult.
      * 
+     * @param init initialization values
+     * 
      */
-    constructor () {
-        this.success = true
-        this.status = 200
-        this.statusText = "OK"
-        this.messages = []
+    constructor (init?: OINOResultInit) {
+        this.success =  init?.success ?? true
+        this.status = init?.status ?? 200
+        this.statusText = init?.statusText ?? "OK"
+        this.messages = init?.messages ?? []
     }
 
     /**
@@ -167,6 +176,12 @@ export class OINOResult {
     }
 }
 
+export interface OINOHttpResultInit extends OINOResultInit {
+    body?: string
+    expires?: number
+    lastModified?: number
+}
+
 /**
  * Specialized result for HTTP responses.
  */
@@ -176,7 +191,9 @@ export class OINOHttpResult extends OINOResult {
     /** HTTP body data */
     readonly body: string
 
-    /** HTTP cache expiration value */
+    /** HTTP cache expiration value 
+     * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
+    */
     expires: number
 
     /** HTTP cache last-modified value */
@@ -185,14 +202,14 @@ export class OINOHttpResult extends OINOResult {
     /**
      * Constructor for a `OINOHttpResult` 
      * 
-     * @param body HTTP body
+     * @param init initialization values
      * 
      */
-    constructor(body:string) {
-        super()
-        this.body = body
-        this.expires = 0
-        this.lastModified = 0
+    constructor(init?: OINOHttpResultInit) {
+        super(init)
+        this.body = init?.body ?? ""
+        this.expires = init?.expires ?? 0
+        this.lastModified = init?.lastModified ?? 0
         this._etag = ""
     }
 

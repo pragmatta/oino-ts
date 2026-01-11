@@ -70,7 +70,7 @@ export class OINOHtmlTemplate {
     }
 
     protected _createHttpResult(html:string):OINOHttpResult {
-        const result:OINOHttpResult = new OINOHttpResult(html)
+        const result:OINOHttpResult = new OINOHttpResult({body: html})
         if (this.expires >= 1) {
             result.expires = Math.round(this.expires)
         }
