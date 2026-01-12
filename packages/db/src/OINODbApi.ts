@@ -460,15 +460,26 @@ export class OINODbApi {
     }
 
     /**
-     * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
+     * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      * 
-     * @param request HTTP URL parameters as key-value-pairs
+     * @param method HTTP method of the REST request
      * @param rowId URL id of the REST request
      * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param sqlParams SQL parameters for the REST request
      *
      */
-    async doRequest(request:OINODbApiRequest):Promise<OINODbApiResult> {
+    async doRequest(method:string, rowId:string, data:string|OINODataRow[]|Buffer|Uint8Array|object|null, sqlParams:OINODbSqlParams):Promise<OINODbApiResult> {
+        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, data: data, sqlParams: sqlParams }))
+    }
+    /**
+     * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
+     * SQL select, insert, update and delete.
+     * 
+     * @param request OINO DB API request
+     *
+     */
+    async runRequest(request:OINODbApiRequest):Promise<OINODbApiResult> {
         OINOBenchmark.startMetric("OINODbApi", "doRequest." + request.method)
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", {method:request.method, id:request.rowId, data:request.data})
         let result:OINODbApiResult = new OINODbApiResult(request)
@@ -529,13 +540,23 @@ export class OINODbApi {
     }
 
     /**
-     * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
-     * SQL select, insert, update and delete.
+     * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
+     * 
+     * @param method HTTP method of the REST request
+     * @param rowId URL id of the REST request
+     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     *
+     */
+    async doBatchUpdate(method:string, rowId:string, data:string|OINODataRow[]|Buffer|Uint8Array|object|null):Promise<OINODbApiResult> {
+        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, data: data, sqlParams: sqlParams }))
+    }
+    /**
+     * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
      * 
      * @param request HTTP URL parameters as key-value-pairs
      *
      */
-    async doBatchUpdate(request:OINODbApiRequest):Promise<OINODbApiResult> {
+    async runBatchUpdate(request:OINODbApiRequest):Promise<OINODbApiResult> {
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", {request:request, data:request.data})
         let result:OINODbApiResult = new OINODbApiResult(request)
         if ((request.method != "PUT") && (request.method != "DELETE")) {
