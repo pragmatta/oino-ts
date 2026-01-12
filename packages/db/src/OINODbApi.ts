@@ -11,6 +11,8 @@ import { OINOHashid } from "@oino-ts/hashid"
 const API_EMPTY_PARAMS:OINODbApiRequestParams = { sqlParams: {} }
 
 export interface OINODbApiRequestInit extends OINOHttpRequestInit {
+    rowId?: string
+    data?: string|OINODataRow[]|Buffer|Uint8Array|object|null
     sqlParams?: OINODbSqlParams
     filter?: OINODbSqlFilter
     order?: OINODbSqlOrder
@@ -20,10 +22,14 @@ export interface OINODbApiRequestInit extends OINOHttpRequestInit {
 }
 
 export class OINODbApiRequest extends OINOHttpRequest {
+    readonly rowId:string
+    readonly data:string|OINODataRow[]|Buffer|Uint8Array|object|null
     readonly sqlParams:OINODbSqlParams
 
     constructor (init: OINODbApiRequestInit) {
         super(init)
+        this.rowId = init?.rowId || ""
+        this.data = init?.data || null
         this.sqlParams = init?.sqlParams || {}
 
         if (init?.filter) {
@@ -462,19 +468,19 @@ export class OINODbApi {
      * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      *
      */
-    async doRequest(request:OINODbApiRequest, rowId:string, data:string|OINODataRow[]|Buffer|Uint8Array|object|null):Promise<OINODbApiResult> {
+    async doRequest(request:OINODbApiRequest):Promise<OINODbApiResult> {
         OINOBenchmark.startMetric("OINODbApi", "doRequest." + request.method)
-        OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", {method:request.method, id:rowId, data:request.data})
+        OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", {method:request.method, id:request.rowId, data:request.data})
         let result:OINODbApiResult = new OINODbApiResult(request)
         let rows:OINODataRow[] = []
         if ((request.method == "POST") || (request.method == "PUT")) {
-            rows = this._parseData(result, data, request)
+            rows = this._parseData(result, request.data, request)
         }
         if (request.method == "GET") {
-            await this._doGet(result, rowId, request)
+            await this._doGet(result, request.rowId, request)
     
         } else if (request.method == "PUT") {
-            if (!rowId) {
+            if (!request.rowId) {
                 result.setError(400, "HTTP PUT method requires an URL ID for the row that is updated!", "DoRequest")
 
             } else if (rows.length != 1) {
@@ -482,14 +488,14 @@ export class OINODbApi {
     
             } else {
                 try {
-                    await this._doPut(result, rowId, rows)
+                    await this._doPut(result, request.rowId, rows)
 
                 } catch (e:any) {
                     result.setError(500, "Unhandled exception in HTTP PUT doRequest: " + e.message, "DoRequest")
                 }             
             }
         } else if (request.method == "POST") {
-            if (rowId) {
+            if (request.rowId) {
                 result.setError(400, "HTTP POST method must not have an URL ID as it does not target an existing row but creates a new one!", "DoRequest")
 
             } else if (rows.length == 0)  {
@@ -504,12 +510,12 @@ export class OINODbApi {
                 }
             }
         } else if (request.method == "DELETE") {
-            if (!rowId)  {
+            if (!request.rowId)  {
                 result.setError(400, "HTTP DELETE method requires an id!", "DoRequest")
 
             } else {
                 try {
-                    await this._doDelete(result, rowId, null)
+                    await this._doDelete(result, request.rowId, null)
 
                 } catch (e:any) {
                     result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message, "DoRequest")
@@ -529,16 +535,15 @@ export class OINODbApi {
      * @param request HTTP URL parameters as key-value-pairs
      *
      */
-    async doBatchUpdate(request:OINODbApiRequest, data:string|OINODataRow[]|Buffer|Uint8Array|object|null):Promise<OINODbApiResult> {
+    async doBatchUpdate(request:OINODbApiRequest):Promise<OINODbApiResult> {
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", {request:request, data:request.data})
         let result:OINODbApiResult = new OINODbApiResult(request)
-        let rows:OINODataRow[] = []
         if ((request.method != "PUT") && (request.method != "DELETE")) {
             result.setError(500, "Batch update only supports PUT and DELETE methods!", "DoBatchUpdate")
             return Promise.resolve(result)
         }
         OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate." + request.method)
-        rows = this._parseData(result, data, request)
+        const rows:OINODataRow[] = [] = this._parseData(result, request.data, request)
         if (request.method == "PUT") {
 
             try {

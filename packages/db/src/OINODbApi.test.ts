@@ -192,9 +192,14 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
 
     const post_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([testParams.postRow])
     const post_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, post_dataset)
+    const post_body_json:string = await post_modelset.writeString(OINOContentType.json)
     
     const put_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([testParams.putRow])
     const put_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, put_dataset)
+    const put_body_json = await put_modelset.writeString(OINOContentType.json)
+    const put_body_csv = await put_modelset.writeString(OINOContentType.csv)
+    const put_body_formdata = await put_modelset.writeString(OINOContentType.formdata)
+    const put_body_urlencode = await put_modelset.writeString(OINOContentType.urlencode)
     
     // const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
@@ -202,14 +207,22 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     const sql_params:OINODbApiRequestParams = Object.assign({}, testParams.sqlParams)
 
     const request_url = new URL("http://localhost/" + api.params.apiName)
+
     const get_request:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "GET" })
+    const get_request_with_rowid:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "GET", rowId: new_row_id })
     const get_request_with_sql_params:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "GET", sqlParams: sql_params })
-    const post_request:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "POST" })
-    const put_request:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT" })
-    const put_request_with_json:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.json })
-    const put_request_with_csv:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.csv })
-    const put_request_with_urlencode:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.urlencode })
-    const delete_request:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "DELETE" })
+
+    const post_request:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "POST", data: post_body_json })
+    const post_request_with_id:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "POST", rowId: new_row_id, data: post_body_json })    
+    const post_request_no_data:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "POST", data: "{}" })
+
+    const put_request:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", rowId: new_row_id, data: put_body_json })
+    const put_request_with_json:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.json, rowId: new_row_id, data: put_body_json })
+    const put_request_with_csv:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.csv, rowId: new_row_id, data: put_body_csv })
+    const put_request_with_urlencode:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.urlencode, rowId: new_row_id, data: put_body_urlencode })
+    const put_request_with_empty_data:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "PUT", rowId: new_row_id, data: "{}" })
+
+    const delete_request:OINODbApiRequest = new OINODbApiRequest({ url: request_url, method: "DELETE", rowId: new_row_id })
     
     target_group = "[SCHEMA]"
     await test(target_name + target_db + target_table + target_group + " public properties", async () => {
@@ -218,20 +231,20 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     
     target_group = "[HTTP GET]"
     await test(target_name + target_db + target_table + target_group + " select *", async () => {
-        expect(encodeData(await (await api.doRequest(get_request, "", null)).data?.writeString())).toMatchSnapshot("GET JSON")
+        expect(encodeData(await (await api.doRequest(get_request)).data?.writeString())).toMatchSnapshot("GET JSON")
     })
     
     await test(target_name + target_db + target_table + target_group + " select *", async () => {
-        expect(encodeData(await (await api.doRequest(get_request, "", null)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+        expect(encodeData(await (await api.doRequest(get_request)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
     })
 
     await test(target_name + target_db + target_table + target_group + " select *", async () => {
-        expect(encodeData(JSON.stringify(await (await api.doRequest(get_request, "", null)).data?.exportAsRecord()))).toMatchSnapshot("GET RECORD")
+        expect(encodeData(JSON.stringify(await (await api.doRequest(get_request)).data?.exportAsRecord()))).toMatchSnapshot("GET RECORD")
     })
 
     await test(target_name + target_db + target_table + target_group + " select * with template", async () => {
         const template = createApiTemplate(api)
-        const api_result:OINODbApiResult = await api.doRequest(get_request, "", null)
+        const api_result:OINODbApiResult = await api.doRequest(get_request)
         expect(api_result.success).toBe(true)
         const render_res = await template.renderFromDbData(api_result.data!)
         const html = render_res.body
@@ -239,63 +252,57 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     })
 
     await test(target_name + target_db + target_table + target_group + " select * with filter", async () => {
-        expect(encodeData(await (await api.doRequest(get_request_with_sql_params, "", null)).data?.writeString())).toMatchSnapshot("GET JSON FILTER")
+        expect(encodeData(await (await api.doRequest(get_request_with_sql_params)).data?.writeString())).toMatchSnapshot("GET JSON FILTER")
     })
 
     target_group = "[HTTP POST]"
-    const post_body_json:string = await post_modelset.writeString(OINOContentType.json)
     await test(target_name + target_db + target_table + target_group + " insert with id", async () => {
-        expect(encodeResult((await api.doRequest(post_request, new_row_id, post_body_json)))).toMatchSnapshot("POST")
+        expect(encodeResult((await api.doRequest(post_request_with_id)))).toMatchSnapshot("POST")
     })
     await test(target_name + target_db + target_table + target_group + " insert", async () => {
-        expect(encodeResult((await api.doRequest(post_request, "", post_body_json)))).toMatchSnapshot("POST")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, "")).data?.writeString())).toMatchSnapshot("GET JSON")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, "")).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+        expect(encodeResult((await api.doRequest(post_request)))).toMatchSnapshot("POST")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString())).toMatchSnapshot("GET JSON")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
     })
     await test(target_name + target_db + target_table + target_group + " insert no data", async () => {
-        expect(encodeResult((await api.doRequest(post_request, "", "{}")))).toMatchSnapshot("POST")
+        expect(encodeResult((await api.doRequest(post_request_no_data)))).toMatchSnapshot("POST")
     })
     await test(target_name + target_db + target_table + target_group + " insert duplicate", async () => {
-        expect(encodeResult((await api.doRequest(post_request, "", post_body_json)))).toMatchSnapshot("POST")
+        expect(encodeResult((await api.doRequest(post_request)))).toMatchSnapshot("POST")
     })
     
     target_group = "[HTTP PUT]"
-    const put_body_json = await put_modelset.writeString(OINOContentType.json)
     await test(target_name + target_db + target_table + target_group + " update JSON", async () => {
-        expect(encodeResult((await api.doRequest(put_request, new_row_id, post_body_json)))).toMatchSnapshot("PUT JSON reset")
-        expect(encodeResult((await api.doRequest(put_request_with_json, new_row_id, put_body_json)))).toMatchSnapshot("PUT JSON")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, null)).data?.writeString())).toMatchSnapshot("GET JSON")
+        expect(encodeResult((await api.doRequest(put_request)))).toMatchSnapshot("PUT JSON reset")
+        expect(encodeResult((await api.doRequest(put_request_with_json)))).toMatchSnapshot("PUT JSON")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString())).toMatchSnapshot("GET JSON")
     })
 
     put_dataset.first()
-    const put_body_csv = await put_modelset.writeString(OINOContentType.csv)
     await test(target_name + target_db + target_table + target_group + " update CSV", async () => {
-        expect(encodeResult((await api.doRequest(put_request, new_row_id, post_body_json)))).toMatchSnapshot("PUT CSV reset")
-        expect(encodeResult((await api.doRequest(put_request_with_csv, new_row_id, put_body_csv)))).toMatchSnapshot("PUT CSV")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, "")).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+        expect(encodeResult((await api.doRequest(put_request)))).toMatchSnapshot("PUT CSV reset")
+        expect(encodeResult((await api.doRequest(put_request_with_csv)))).toMatchSnapshot("PUT CSV")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
     })
     
     put_dataset.first()
-    let put_body_formdata = await put_modelset.writeString(OINOContentType.formdata)
     const multipart_boundary = put_body_formdata.substring(0, put_body_formdata.indexOf('\r'))
-    put_body_formdata = put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
+    const put_body_formdata_normalized = put_body_formdata.replaceAll(multipart_boundary, "---------OINO999999999")
     await test(target_name + target_db + target_table + target_group + " update FORMDATA", async () => {
-        console.log("PUT FORMDATA RESET", new_row_id, post_body_json)
-        expect(encodeResult(await (await api.doRequest(put_request, new_row_id, post_body_json)))).toMatchSnapshot("PUT FORMDATA reset")
-        expect(encodeResult(await (await api.doRequest(new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.formdata, multipartBoundary: "---------OINO999999999" }), new_row_id, put_body_formdata)))).toMatchSnapshot("PUT FORMDATA")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, "")).data?.writeString(OINOContentType.formdata))).toMatchSnapshot("GET FORMDATA")
+        expect(encodeResult(await (await api.doRequest(put_request)))).toMatchSnapshot("PUT FORMDATA reset")
+        expect(encodeResult(await (await api.doRequest(new OINODbApiRequest({ url: request_url, method: "PUT", requestType: OINOContentType.formdata, multipartBoundary: "---------OINO999999999", rowId: new_row_id, data: put_body_formdata_normalized }))))).toMatchSnapshot("PUT FORMDATA")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString(OINOContentType.formdata))).toMatchSnapshot("GET FORMDATA")
     })
     
     put_dataset.first()
-    const put_body_urlencode = await put_modelset.writeString(OINOContentType.urlencode)
     await test(target_name + target_db + target_table + target_group + " update URLENCODE", async () => {
-        expect(encodeResult((await api.doRequest(put_request, new_row_id, post_body_json)))).toMatchSnapshot("PUT URLENCODE reset")
-        expect(encodeResult((await api.doRequest(put_request_with_urlencode, new_row_id, put_body_urlencode)))).toMatchSnapshot("PUT URLENCODE")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, "")).data?.writeString(OINOContentType.urlencode))).toMatchSnapshot("GET URLENCODE")
+        expect(encodeResult((await api.doRequest(put_request)))).toMatchSnapshot("PUT URLENCODE reset")
+        expect(encodeResult((await api.doRequest(put_request_with_urlencode)))).toMatchSnapshot("PUT URLENCODE")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString(OINOContentType.urlencode))).toMatchSnapshot("GET URLENCODE")
     })
     
     await test(target_name + target_db + target_table + target_group + " update no data", async () => {
-        expect(encodeResult((await api.doRequest(put_request, new_row_id, "{}")))).toMatchSnapshot("PUT")
+        expect(encodeResult((await api.doRequest(put_request_with_empty_data)))).toMatchSnapshot("PUT")
     })
 
     const primary_keys:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return field.fieldParams.isPrimaryKey })
@@ -307,28 +314,28 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
         if (notnull_fields.length > 0) {
             const invalid_null_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + notnull_fields[0].name + "\":null}]"
             await test(target_name + target_db + target_table + target_group + " update with invalid null value", async () => {
-                expect(encodeResult((await api.doRequest(put_request, new_row_id, invalid_null_value)))).toMatchSnapshot("PUT invalid null")
+                expect(encodeResult((await api.doRequest(new OINODbApiRequest({ url: request_url, method: "PUT", rowId: new_row_id, data: invalid_null_value }))))).toMatchSnapshot("PUT invalid null")
             })
         }
         const maxsize_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINOStringDataField) && (field.fieldParams.isPrimaryKey == false) && (field.maxLength > 0) })
         if (maxsize_fields.length > 0) {
             const oversized_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + maxsize_fields[0].name + "\":\"" + "".padEnd(maxsize_fields[0].maxLength+1, "z") + "\"}]"
             await test(target_name + target_db + target_table + target_group + " update with oversized data", async () => {
-                expect(encodeResult((await api.doRequest(put_request, new_row_id, oversized_value)))).toMatchSnapshot("PUT oversized value")
+                expect(encodeResult((await api.doRequest(new OINODbApiRequest({ url: request_url, method: "PUT", rowId: new_row_id, data: oversized_value }))))).toMatchSnapshot("PUT oversized value")
             })
         }
         const numeric_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINONumberDataField) && (field.fieldParams.isPrimaryKey == false) })
         if (numeric_fields.length > 0) {
             const nan_value = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + numeric_fields[0].name + "\":\"" + "; FOO" + "\"}]"
             await test(target_name + target_db + target_table + target_group + " update NAN-value", async () => {
-                expect(encodeResult((await api.doRequest(put_request, new_row_id, nan_value)))).toMatchSnapshot("PUT NAN-value")
+                expect(encodeResult((await api.doRequest(new OINODbApiRequest({ url: request_url, method: "PUT", rowId: new_row_id, data: nan_value }))))).toMatchSnapshot("PUT NAN-value")
             })
         }
         const date_fields:OINODbDataField[] = api.datamodel.filterFields((field:OINODbDataField) => { return (field instanceof OINODatetimeDataField) && (field.fieldParams.isPrimaryKey == false) })
         if (date_fields.length > 0) {
             const non_date = "[{\"" + id_field + "\":\"" + new_row_id + "\",\"" + date_fields[0].name + "\":\"" + "; FOO" + "\"}]"
             await test(target_name + target_db + target_table + target_group + " update invalid date value", async () => {
-                expect(encodeResult((await api.doRequest(put_request, new_row_id, non_date)))).toMatchSnapshot("PUT invalid date value")
+                expect(encodeResult((await api.doRequest(new OINODbApiRequest({ url: request_url, method: "PUT", rowId: new_row_id, data: non_date }))))).toMatchSnapshot("PUT invalid date value")
             })
         }
     }
@@ -358,29 +365,29 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
             batch_rows[0][batch_field_index] = batch_reversed_value
             batch_rows[1][batch_field_index] = batch_value
             batch_rows[2][batch_field_index] = batch_reversed_value
-            const batch_update_result = await api.doBatchUpdate( put_request, batch_rows)
+            const batch_update_result = await api.doBatchUpdate( new OINODbApiRequest({ url: request_url, method: "PUT", data: batch_rows }))
             expect(batch_update_result.success).toBe(true)
             expect(encodeResult(batch_update_result)).toMatchSnapshot("PUT reversed data")
             
-            const get_reversed_data = await (await api.doRequest(get_request, new_row_id, null)).data?.writeString(OINOContentType.csv)
+            const get_reversed_data = await (await api.doRequest(get_request_with_rowid)).data?.writeString(OINOContentType.csv)
             expect(encodeData(get_reversed_data)).toMatchSnapshot("GET reversed data")
 
             batch_rows[0][batch_field_index] = batch_value
             batch_rows[1][batch_field_index] = batch_reversed_value
             batch_rows[2][batch_field_index] = batch_value
-            const batch_restore_result = await api.doBatchUpdate( put_request, batch_rows)
+            const batch_restore_result = await api.doBatchUpdate( new OINODbApiRequest({ url: request_url, method: "PUT", data: batch_rows }))
             expect(batch_restore_result.success).toBe(true)
             expect(encodeResult(batch_restore_result)).toMatchSnapshot("PUT restored data")
             
-            const get_restored_data = await (await api.doRequest(get_request, new_row_id, null)).data?.writeString(OINOContentType.csv)
+            const get_restored_data = await (await api.doRequest(get_request_with_rowid)).data?.writeString(OINOContentType.csv)
             expect(encodeData(get_restored_data)).toMatchSnapshot("GET restored data")
         })
     }
 
     target_group = "[HTTP DELETE]"
     await test(target_name + target_db + target_table + target_group + " remove", async () => {
-        expect(encodeResult((await api.doRequest(delete_request, new_row_id, null)))).toMatchSnapshot("DELETE")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, null)).data?.writeString())).toMatchSnapshot("GET JSON")
+        expect(encodeResult((await api.doRequest(delete_request)))).toMatchSnapshot("DELETE")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString())).toMatchSnapshot("GET JSON")
     })
    
 
@@ -392,21 +399,22 @@ export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestP
     
     const post_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([testParams.postRow])
     const post_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, post_dataset)
+    const post_body_json:string = await post_modelset.writeString(OINOContentType.json)
     
     const put_dataset:OINODbMemoryDataSet = new OINODbMemoryDataSet([testParams.putRow])
     const put_modelset:OINODbModelSet = new OINODbModelSet(api.datamodel, put_dataset)
+    const put_body_json:string = await put_modelset.writeString(OINOContentType.json)
     
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
 
-    const empty_params:OINODbApiRequestParams = { sqlParams: {}}
     const sql_params:OINODbApiRequestParams = Object.assign({}, testParams.sqlParams)
 
     const url = new URL("http://localhost/" + api.params.apiName)
-    const get_request = new OINODbApiRequest({ url: url, method: "GET" })
+    const get_request_with_rowid = new OINODbApiRequest({ url: url, method: "GET", rowId: new_row_id })
     const get_request_with_sql_params = new OINODbApiRequest({ url: url, method: "GET", sqlParams: sql_params })
-    const post_request = new OINODbApiRequest({ url: url, method: "POST" })
-    const put_request = new OINODbApiRequest({ url: url, method: "PUT" })
-    const delete_request = new OINODbApiRequest({ url: url, method: "DELETE" })
+    const post_request = new OINODbApiRequest({ url: url, method: "POST", data: post_body_json })
+    const put_request = new OINODbApiRequest({ url: url, method: "PUT", rowId: new_row_id, data: put_body_json })
+    const delete_request = new OINODbApiRequest({ url: url, method: "DELETE", rowId: new_row_id })
 
     let target_name:string = ""
     if (testParams.name) {
@@ -417,7 +425,7 @@ export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestP
 
     let target_group = "[OWASP GET]"
     await test(target_name + target_db + target_table + target_group + " GET with filter", async () => {
-        const get_res:OINODbApiResult = await api.doRequest(get_request_with_sql_params, "", null)
+        const get_res:OINODbApiResult = await api.doRequest(get_request_with_sql_params)
         if (get_res.success) {
             expect(encodeData(await get_res.data?.writeString())).toMatchSnapshot("OWASP GET DATA")
         } else {
@@ -426,24 +434,22 @@ export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestP
     })
     target_group = "[OWASP POST]"
     await test(target_name + target_db + target_table + target_group + " POST", async () => {
-        const post_body_json:string = await post_modelset.writeString(OINOContentType.json)
-        const post_res:OINODbApiResult = await api.doRequest(post_request, "", post_body_json)
+        const post_res:OINODbApiResult = await api.doRequest(post_request)
         expect(encodeResult(post_res)).toMatchSnapshot("OWASP POST RESULT")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, null)).data?.writeString())).toMatchSnapshot("POST JSON")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString())).toMatchSnapshot("POST JSON")
     })
 
     target_group = "[OWASP PUT]"
     await test(target_name + target_db + target_table + target_group + " PUT", async () => {
-        const put_body_json:string = await put_modelset.writeString(OINOContentType.json)
-        const post_res:OINODbApiResult = await api.doRequest( put_request, new_row_id, put_body_json)
+        const post_res:OINODbApiResult = await api.doRequest( put_request)
         expect(encodeResult(post_res)).toMatchSnapshot("OWASP PUT RESULT")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, null)).data?.writeString())).toMatchSnapshot("PUT JSON")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString())).toMatchSnapshot("PUT JSON")
     })
     
     target_group = "[OWASP DELETE]"
     await test(target_name + target_db + target_table + target_group + " DELETE", async () => {
-        expect(encodeResult((await api.doRequest(delete_request, new_row_id, null)))).toMatchSnapshot("DELETE")
-        expect(encodeData(await (await api.doRequest(get_request, new_row_id, null)).data?.writeString())).toMatchSnapshot("DELETE JSON")
+        expect(encodeResult((await api.doRequest(delete_request)))).toMatchSnapshot("DELETE")
+        expect(encodeData(await (await api.doRequest(get_request_with_rowid)).data?.writeString())).toMatchSnapshot("DELETE JSON")
     })
 }
 
