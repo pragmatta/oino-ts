@@ -7,7 +7,7 @@ import { OINODb } from "./OINODb.js"
 import { OINODbDataField } from "./OINODbDataField.js"
 import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder, OINODbSqlSelect } from "./OINODbSqlParams.js"
 
-export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi } from "./OINODbApi.js"
+export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi, OINODbApiRequest, type OINODbApiRequestInit } from "./OINODbApi.js"
 export { OINODbDataModel } from "./OINODbDataModel.js"
 export { OINODbModelSet } from "./OINODbModelSet.js"
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js"

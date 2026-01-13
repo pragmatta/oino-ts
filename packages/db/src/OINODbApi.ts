@@ -4,11 +4,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbApiRequestParams, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField, OINODbParser, OINODatetimeDataField, OINODbSqlParams, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit } from "./index.js"
+import { OINODbApiParams, OINODb, OINODbDataSet, OINODbDataModel, OINODbDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODataRow, OINODataCell, OINODbModelSet, OINOBenchmark, OINODbConfig, OINOHttpResult, OINOHtmlTemplate, OINONumberDataField, OINODbParser, OINODatetimeDataField, OINODbSqlParams, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit } from "./index.js"
 import { OINOLog, OINOResult, OINOHttpRequest, OINOHttpRequestInit } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid"
-
-const API_EMPTY_PARAMS:OINODbApiRequestParams = { sqlParams: {} }
 
 export interface OINODbApiRequestInit extends OINOHttpRequestInit {
     rowId?: string
@@ -36,7 +34,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
             this.sqlParams.filter = init.filter
         } 
         if (!this.sqlParams.filter) {
-            const filter_param = this.url.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM)
+            const filter_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM)
             if (filter_param) {
                 this.sqlParams.filter = OINODbSqlFilter.parse(filter_param)
             }
@@ -45,7 +43,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
             this.sqlParams.order = init.order
         } 
         if (!this.sqlParams.order) {
-            const order_param = this.url.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM)
+            const order_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM)
             if (order_param) {
                 this.sqlParams.order = OINODbSqlOrder.parse(order_param)
             }
@@ -54,7 +52,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
             this.sqlParams.limit = init.limit
         } 
         if (!this.sqlParams.limit) {
-            const limit_param = this.url.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
+            const limit_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
             if (limit_param) {
                 this.sqlParams.limit = OINODbSqlLimit.parse(limit_param)
             }
@@ -63,7 +61,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
             this.sqlParams.aggregate = init.aggregate
         } 
         if (!this.sqlParams.aggregate) {
-            const aggregate_param = this.url.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM)
+            const aggregate_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM)
             if (aggregate_param) {
                 this.sqlParams.aggregate = OINODbSqlAggregate.parse(aggregate_param)
             }
@@ -72,7 +70,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
             this.sqlParams.select = init.select
         } 
         if (!this.sqlParams.select) {
-            const select_param = this.url.searchParams.get(OINODbConfig.OINODB_SQL_SELECT_PARAM)
+            const select_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_SELECT_PARAM)
             if (select_param) {
                 this.sqlParams.select = OINODbSqlSelect.parse(select_param)
             }
@@ -87,7 +85,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
  */
 export class OINODbApiResult extends OINOResult {
     /** DbApi request params */
-    request: OINODbApiRequestParams
+    request: OINODbApiRequest
 
     /** Returned data if any */
     data?: OINODbModelSet;
@@ -95,11 +93,11 @@ export class OINODbApiResult extends OINOResult {
     /**
      * Constructor of OINODbApiResult.
      * 
-     * @param params DbApi request parameters
+     * @param request DbApi request parameters
      * @param data result data
      *
      */
-    constructor (request:OINODbApiRequestParams, data?:OINODbModelSet) {
+    constructor (request:OINODbApiRequest, data?:OINODbModelSet) {
         super()
         this.request = request
         this.data = data
@@ -301,13 +299,13 @@ export class OINODbApi {
         //logDebug("OINODbApi.validateHttpValues", {result:result})
     }
 
-    private _parseData(httpResult:OINODbApiResult, data:string|OINODataRow[]|Buffer|Uint8Array|object|null, params:OINODbApiRequestParams):OINODataRow[] {
+    private _parseData(httpResult:OINODbApiResult, request:OINODbApiRequest):OINODataRow[] {
         let rows:OINODataRow[] = []
         try {
-            if (Array.isArray(data)) {
-                rows = data as OINODataRow[]
-            } else if (data != null) {
-                rows = OINODbParser.createRows(this.datamodel, data, params)
+            if (Array.isArray(request.data)) {
+                rows = request.data as OINODataRow[]
+            } else if (request.data != null) {
+                rows = OINODbParser.createRows(this.datamodel, request.data, request)
             }
         
         } catch (e:any) {
@@ -485,7 +483,7 @@ export class OINODbApi {
         let result:OINODbApiResult = new OINODbApiResult(request)
         let rows:OINODataRow[] = []
         if ((request.method == "POST") || (request.method == "PUT")) {
-            rows = this._parseData(result, request.data, request)
+            rows = this._parseData(result, request)
         }
         if (request.method == "GET") {
             await this._doGet(result, request.rowId, request)
@@ -547,7 +545,7 @@ export class OINODbApi {
      * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      *
      */
-    async doBatchUpdate(method:string, rowId:string, data:string|OINODataRow[]|Buffer|Uint8Array|object|null):Promise<OINODbApiResult> {
+    async doBatchUpdate(method:string, rowId:string, data:string|OINODataRow[]|Buffer|Uint8Array|object|null, sqlParams?: OINODbSqlParams):Promise<OINODbApiResult> {
         return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, data: data, sqlParams: sqlParams }))
     }
     /**
@@ -564,7 +562,7 @@ export class OINODbApi {
             return Promise.resolve(result)
         }
         OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate." + request.method)
-        const rows:OINODataRow[] = [] = this._parseData(result, request.data, request)
+        const rows:OINODataRow[] = [] = this._parseData(result, request)
         if (request.method == "PUT") {
 
             try {

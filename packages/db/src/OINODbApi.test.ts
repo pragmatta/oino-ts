@@ -6,14 +6,13 @@
 
 import { expect, test } from "bun:test";
 
-import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINODbSqlComparison, OINONumberDataField, OINODatetimeDataField, OINODbApiRequestParams, OINODbHtmlTemplate, OINODbParser, OINODbSqlBooleanOperation } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINOContentType, OINODataRow, OINODbDataField, OINOStringDataField, OINODb, OINODbFactory, OINODbParams, OINODbMemoryDataSet, OINODbModelSet, OINOBenchmark, OINOConsoleLog, OINODbSqlFilter, OINODbConfig, OINODbSqlOrder, OINOLogLevel, OINOLog, OINODbSqlLimit, OINODbApiResult, OINONumberDataField, OINODatetimeDataField, OINODbHtmlTemplate, OINODbSqlParams } from "./index.js";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { OINODbMariadb } from "@oino-ts/db-mariadb"
 import { OINODbMsSql } from "@oino-ts/db-mssql"
-import { OINODbSqlAggregate, OINODbSqlSelect } from "./OINODbSqlParams.js";
-import { OINODbApiRequest, OINODbApiRequestInit } from "./OINODbApi.js";
+import { OINODbSqlAggregate, OINODbSqlSelect, OINODbApiRequest } from "./index.js";
 
 const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set") || ""
 const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set") || ""
@@ -24,7 +23,7 @@ const OINOCLOUD_MSSQL_TEST_PWD = process.env.OINOCLOUD_DB_NORTHWIND_PWD || conso
 type OINOTestParams = {
     name: string
     apiParams: OINODbApiParams
-    sqlParams: OINODbApiRequestInit
+    sqlParams: OINODbSqlParams
     postRow: OINODataRow
     putRow: OINODataRow
 }
@@ -204,7 +203,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     // const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(apiDataset.postRow))
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
 
-    const sql_params:OINODbApiRequestParams = Object.assign({}, testParams.sqlParams)
+    const sql_params:OINODbSqlParams = Object.assign({}, testParams.sqlParams)
 
     const request_url = new URL("http://localhost/" + api.params.apiName)
 
@@ -407,7 +406,7 @@ export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestP
     
     const new_row_id:string = OINODbConfig.printOINOId(post_modelset.datamodel.getRowPrimarykeyValues(testParams.postRow, true))
 
-    const sql_params:OINODbApiRequestParams = Object.assign({}, testParams.sqlParams)
+    const sql_params:OINODbSqlParams = Object.assign({}, testParams.sqlParams)
 
     const url = new URL("http://localhost/" + api.params.apiName)
     const get_request_with_rowid = new OINODbApiRequest({ url: url, method: "GET", rowId: new_row_id })

@@ -16,20 +16,20 @@ export class OINODbParser {
      * Create data rows from request body based on the datamodel. 
      * 
      * @param datamodel datamodel of the api
-     * @param data data as a string or Buffer or Uint8Array or object
+     * @param data data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param request parameters
      * 
      */
-    static createRows(datamodel:OINODbDataModel, data:string|Buffer|Uint8Array|object, request:OINODbApiRequest ):OINODataRow[] {
+    static createRows(datamodel:OINODbDataModel, data:string|object|Buffer|Uint8Array, request:OINODbApiRequest ):OINODataRow[] {
         let result:OINODataRow[] = []
         if (typeof data == "string") {
-            result = this.createRowsFromText(datamodel, data, request)
+            result = this._createRowsFromText(datamodel, data, request)
 
         } else if ((data instanceof Buffer) || (data instanceof Uint8Array)) {
-            result = this.createRowsFromBlob(datamodel, data, request)
+            result = this._createRowsFromBlob(datamodel, data, request)
 
         } else if (typeof data == "object") {
-            result = [this.createRowFromObject(datamodel, data)]
+            result = [this._createRowFromObject(datamodel, data)]
         }
         return result
     }
@@ -42,7 +42,7 @@ export class OINODbParser {
      * @param request request parameters
      * 
      */
-    static createRowsFromText(datamodel:OINODbDataModel, data:string, request:OINODbApiRequest ):OINODataRow[] {
+    private static _createRowsFromText(datamodel:OINODbDataModel, data:string, request:OINODbApiRequest ):OINODataRow[] {
         if ((request.requestType == OINOContentType.json) || (request.requestType == undefined)) {
             return this._createRowFromJson(datamodel, data)
             
@@ -71,7 +71,7 @@ export class OINODbParser {
      * @param request parameters
      * 
      */
-    static createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer|Uint8Array, request:OINODbApiRequest ):OINODataRow[] {
+    private static _createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer|Uint8Array, request:OINODbApiRequest ):OINODataRow[] {
         if (data instanceof Uint8Array && !(data instanceof Buffer)) {
             data = Buffer.from(data) as Buffer
         }
@@ -91,7 +91,7 @@ export class OINODbParser {
             OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "HTML can't be used as an input content type!", {contentType:OINOContentType.html})
             return []
         } else {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", {contentType:requestParams.requestType})
+            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", {contentType:request.requestType})
             return []
         }
     }
@@ -104,7 +104,7 @@ export class OINODbParser {
      * @param data data as javascript object
      * 
      */
-    static createRowFromObject(datamodel:OINODbDataModel, data:any):OINODataRow {
+    private static _createRowFromObject(datamodel:OINODbDataModel, data:any):OINODataRow {
         const fields:OINODbDataField[] = datamodel.fields
         let result:OINODataRow = new Array(fields.length)
         for (let i=0; i < fields.length; i++) {
