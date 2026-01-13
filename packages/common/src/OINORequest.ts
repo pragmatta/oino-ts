@@ -44,7 +44,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
     url?: URL
     method?: string
     headers?: Record<string, string>
-    body?: string
+    data?: string|Buffer|Uint8Array|object|null
     requestType?:OINOContentType
     responseType?:OINOContentType
     multipartBoundary?:string
@@ -58,7 +58,7 @@ export class OINOHttpRequest extends OINORequest {
     readonly url?: URL
     readonly method: string
     readonly headers: Record<string, string>
-    readonly body: string
+    readonly data: string|Buffer|Uint8Array|object|null
     readonly requestType:OINOContentType
     readonly responseType:OINOContentType
     readonly multipartBoundary?:string
@@ -76,7 +76,7 @@ export class OINOHttpRequest extends OINORequest {
         this.url = init.url 
         this.method = init.method ?? "GET"
         this.headers = init.headers ?? {}
-        this.body = init.body ?? ""
+        this.data = init.data ?? ""
         this.multipartBoundary = ""
         this.lastModified = init.lastModified
 
@@ -124,6 +124,16 @@ export class OINOHttpRequest extends OINORequest {
         if (etags) {
             this.etags = etags
         }
+    }
+
+    static async fromRequest(request: Request): Promise<OINOHttpRequest> {
+        const body = await request.arrayBuffer()
+        return new OINOHttpRequest({
+            url: new URL(request.url),
+            method: request.method,
+            headers: Object.fromEntries(request.headers),
+            data: Buffer.from(body),
+        })
     }
 
 }
