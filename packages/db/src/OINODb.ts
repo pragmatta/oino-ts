@@ -18,8 +18,8 @@ export abstract class OINODb {
     /** Name of the database */
     readonly name:string
 
-    protected isConnected:boolean = false
-    protected isValidated:boolean = false
+    isConnected:boolean = false
+    isValidated:boolean = false
 
     /**
      * Constructor for `OINODb`.

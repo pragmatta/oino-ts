@@ -22,12 +22,6 @@ export class OINODbConfig {
     /** Name of the OINODbSqlSelect-parameter in request */
     static OINODB_SQL_SELECT_PARAM:string = "oinosqlselect"
 
-    /** Name of the OINOContentType-parameter request */
-    static OINODB_REQUEST_TYPE:string = "oinorequesttype"
-
-    /** Name of the OINOContentType-parameter request */
-    static OINODB_RESPONSE_TYPE:string = "oinoresponsetype"
-
     /** 
      * Set the name of the OINO ID field 
      * @param idField name of the OINO ID field 

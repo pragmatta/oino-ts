@@ -1,4 +1,4 @@
-import { OINODbApi, OINODbApiParams, OINODbParams, OINODb, OINODbConstructor, OINODbApiRequestParams } from "./index.js";
+import { OINODbApi, OINODbApiParams, OINODbParams, OINODb, OINODbConstructor } from "./index.js";
 /**
  * Static factory class for easily creating things based on data
  *
@@ -28,10 +28,4 @@ export declare class OINODbFactory {
      * @param params parameters of the API
      */
     static createApi(db: OINODb, params: OINODbApiParams): Promise<OINODbApi>;
-    /**
-     * Creates a key-value-collection from Javascript URL parameters.
-     *
-     * @param request HTTP Request
-     */
-    static createParamsFromRequest(request: Request): OINODbApiRequestParams;
 }

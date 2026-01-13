@@ -1,6 +1,22 @@
-import { OINODbApiParams, OINODb, OINODbDataModel, OINODataRow, OINODbModelSet, OINODbApiRequestParams, OINOHttpResult, OINOHtmlTemplate } from "./index.js";
-import { OINOResult } from "@oino-ts/common";
+import { OINODbApiParams, OINODb, OINODbDataModel, OINODataRow, OINODbModelSet, OINOHttpResult, OINOHtmlTemplate, OINODbSqlParams, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit } from "./index.js";
+import { OINOResult, OINOHttpRequest, OINOHttpRequestInit } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid";
+export interface OINODbApiRequestInit extends OINOHttpRequestInit {
+    rowId?: string;
+    data?: string | OINODataRow[] | Buffer | Uint8Array | object | null;
+    sqlParams?: OINODbSqlParams;
+    filter?: OINODbSqlFilter;
+    order?: OINODbSqlOrder;
+    limit?: OINODbSqlLimit;
+    aggregate?: OINODbSqlAggregate;
+    select?: OINODbSqlSelect;
+}
+export declare class OINODbApiRequest extends OINOHttpRequest {
+    readonly rowId: string;
+    readonly data: string | OINODataRow[] | Buffer | Uint8Array | object | null;
+    readonly sqlParams: OINODbSqlParams;
+    constructor(init: OINODbApiRequestInit);
+}
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.
@@ -8,17 +24,17 @@ import { OINOHashid } from "@oino-ts/hashid";
  */
 export declare class OINODbApiResult extends OINOResult {
     /** DbApi request params */
-    params: OINODbApiRequestParams;
+    request: OINODbApiRequest;
     /** Returned data if any */
     data?: OINODbModelSet;
     /**
      * Constructor of OINODbApiResult.
      *
-     * @param params DbApi request parameters
+     * @param request DbApi request parameters
      * @param data result data
      *
      */
-    constructor(params: OINODbApiRequestParams, data?: OINODbModelSet);
+    constructor(request: OINODbApiRequest, data?: OINODbModelSet);
     /**
      * Creates a HTTP Response from API results.
      *
@@ -93,26 +109,40 @@ export declare class OINODbApi {
      */
     setDebugOnError(debugOnError: boolean): void;
     /**
-     * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
+     * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
-     * @param method HTTP verb (uppercase)
-     * @param id URL id of the REST request
-     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
-     * @param params HTTP URL parameters as key-value-pairs
+     * @param method HTTP method of the REST request
+     * @param rowId URL id of the REST request
+     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param sqlParams SQL parameters for the REST request
      *
      */
-    doRequest(method: string, id: string, data: string | OINODataRow[] | Buffer | any, params?: OINODbApiRequestParams): Promise<OINODbApiResult>;
+    doRequest(method: string, rowId: string, data: string | OINODataRow[] | Buffer | Uint8Array | object | null, sqlParams: OINODbSqlParams): Promise<OINODbApiResult>;
     /**
-     * Method for handlind a HTTP REST request with GET, POST, PUT, DELETE corresponding to
+     * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
-     * @param method HTTP verb (uppercase)
-     * @param data HTTP body data as either serialized string or unserialized JS object / OINODataRow-array
-     * @param params HTTP URL parameters as key-value-pairs
+     * @param request OINO DB API request
      *
      */
-    doBatchUpdate(method: string, data: string | OINODataRow[] | Buffer | any, params?: OINODbApiRequestParams): Promise<OINODbApiResult>;
+    runRequest(request: OINODbApiRequest): Promise<OINODbApiResult>;
+    /**
+     * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
+     *
+     * @param method HTTP method of the REST request
+     * @param rowId URL id of the REST request
+     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     *
+     */
+    doBatchUpdate(method: string, rowId: string, data: string | OINODataRow[] | Buffer | Uint8Array | object | null, sqlParams?: OINODbSqlParams): Promise<OINODbApiResult>;
+    /**
+     * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
+     *
+     * @param request HTTP URL parameters as key-value-pairs
+     *
+     */
+    runBatchUpdate(request: OINODbApiRequest): Promise<OINODbApiResult>;
     /**
      * Method to check if a field is included in the API params.
      *

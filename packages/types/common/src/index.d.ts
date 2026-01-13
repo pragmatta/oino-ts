@@ -1,6 +1,7 @@
 export { OINOBenchmark, OINOMemoryBenchmark } from "./OINOBenchmark.js";
 export { OINOLog, OINOLogLevel, OINOConsoleLog } from "./OINOLog.js";
-export { OINOResult, OINOHttpResult } from "./OINOResult.js";
+export { OINOResult, OINOHttpResult, type OINOResultInit, type OINOHttpResultInit } from "./OINOResult.js";
+export { OINORequest, OINOHttpRequest, type OINORequestInit, type OINOHttpRequestInit } from "./OINORequest.js";
 export { OINOStr } from "./OINOStr.js";
 export { OINOHtmlTemplate } from "./OINOHtmlTemplate.js";
 export { OINOFormatter, OINO_EMPTY_FORMATTER } from "./OINOFormatter.js";
@@ -12,6 +13,10 @@ export declare const OINO_WARNING_PREFIX = "OINO WARNING";
 export declare const OINO_INFO_PREFIX = "OINO INFO";
 /** OINO debug message prefix */
 export declare const OINO_DEBUG_PREFIX = "OINO DEBUG";
+/** Name of the OINOContentType-parameter request */
+export declare const OINO_REQUEST_TYPE_PARAM = "oinorequesttype";
+/** Name of the OINOContentType-parameter request */
+export declare const OINO_RESPONSE_TYPE_PARAM = "oinoresponsetype";
 /**
  * Supported content format mime-types
  */

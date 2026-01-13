@@ -8,8 +8,8 @@ export declare abstract class OINODb {
     protected _params: OINODbParams;
     /** Name of the database */
     readonly name: string;
-    protected isConnected: boolean;
-    protected isValidated: boolean;
+    isConnected: boolean;
+    isValidated: boolean;
     /**
      * Constructor for `OINODb`.
      * @param params database parameters
