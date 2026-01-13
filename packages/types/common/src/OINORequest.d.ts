@@ -28,7 +28,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
     url?: URL;
     method?: string;
     headers?: Record<string, string>;
-    body?: string;
+    data?: string | Buffer | Uint8Array | object | null;
     requestType?: OINOContentType;
     responseType?: OINOContentType;
     multipartBoundary?: string;
@@ -41,7 +41,7 @@ export declare class OINOHttpRequest extends OINORequest {
     readonly url?: URL;
     readonly method: string;
     readonly headers: Record<string, string>;
-    readonly body: string;
+    readonly data: string | Buffer | Uint8Array | object | null;
     readonly requestType: OINOContentType;
     readonly responseType: OINOContentType;
     readonly multipartBoundary?: string;
@@ -54,4 +54,5 @@ export declare class OINOHttpRequest extends OINORequest {
      *
      */
     constructor(init: OINOHttpRequestInit);
+    static fromRequest(request: Request): Promise<OINOHttpRequest>;
 }

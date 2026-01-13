@@ -42,7 +42,7 @@ class OINOHttpRequest extends OINORequest {
     url;
     method;
     headers;
-    body;
+    data;
     requestType;
     responseType;
     multipartBoundary;
@@ -59,7 +59,7 @@ class OINOHttpRequest extends OINORequest {
         this.url = init.url;
         this.method = init.method ?? "GET";
         this.headers = init.headers ?? {};
-        this.body = init.body ?? "";
+        this.data = init.data ?? "";
         this.multipartBoundary = "";
         this.lastModified = init.lastModified;
         if (init.multipartBoundary) {
@@ -109,6 +109,15 @@ class OINOHttpRequest extends OINORequest {
         if (etags) {
             this.etags = etags;
         }
+    }
+    static async fromRequest(request) {
+        const body = await request.arrayBuffer();
+        return new OINOHttpRequest({
+            url: new URL(request.url),
+            method: request.method,
+            headers: Object.fromEntries(request.headers),
+            data: Buffer.from(body),
+        });
     }
 }
 exports.OINOHttpRequest = OINOHttpRequest;
