@@ -1,3 +1,9 @@
+export interface OINOResultInit {
+    success?: boolean;
+    status?: number;
+    statusText?: string;
+    messages?: string[];
+}
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.
@@ -7,16 +13,18 @@ export declare class OINOResult {
     /** Wheter request was successfully executed */
     success: boolean;
     /** HTTP status code */
-    statusCode: number;
+    status: number;
     /** HTTP status message */
-    statusMessage: string;
+    statusText: string;
     /** Error / warning messages */
     messages: string[];
     /**
      * Constructor of OINOResult.
      *
+     * @param init initialization values
+     *
      */
-    constructor();
+    constructor(init?: OINOResultInit);
     /**
      * Copy values from different result.
      *
@@ -31,12 +39,12 @@ export declare class OINOResult {
     /**
      * Set HTTP error status using given code and message. Returns self reference for chaining.
      *
-     * @param statusCode HTTP status code
-     * @param statusMessage HTTP status message
+     * @param status HTTP status code
+     * @param statusText HTTP status message
      * @param operation operation where error occured
      *
      */
-    setError(statusCode: number, statusMessage: string, operation: string): OINOResult;
+    setError(status: number, statusText: string, operation: string): OINOResult;
     /**
      * Add warning message. Returns self reference for chaining.
      *
@@ -77,12 +85,11 @@ export declare class OINOResult {
      *
      */
     printLog(): string;
-    /**
-     * Get a Response object from the result values.
-     *
-     * @param headers HTTP headers (overrides existing values)
-     */
-    getStatusResponse(headers?: Record<string, string>): Response;
+}
+export interface OINOHttpResultInit extends OINOResultInit {
+    body?: string;
+    expires?: number;
+    lastModified?: number;
 }
 /**
  * Specialized result for HTTP responses.
@@ -91,17 +98,19 @@ export declare class OINOHttpResult extends OINOResult {
     private _etag;
     /** HTTP body data */
     readonly body: string;
-    /** HTTP cache expiration value */
+    /** HTTP cache expiration value
+     * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
+    */
     expires: number;
     /** HTTP cache last-modified value */
     lastModified: number;
     /**
      * Constructor for a `OINOHttpResult`
      *
-     * @param body HTTP body
+     * @param init initialization values
      *
      */
-    constructor(body: string);
+    constructor(init?: OINOHttpResultInit);
     /**
      * Get the ETag value for the body opportunistically, i.e. don't calculate until requested and reuse value.
      *

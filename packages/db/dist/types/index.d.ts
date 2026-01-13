@@ -4,7 +4,7 @@ export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PR
 import { OINODb } from "./OINODb.js";
 import { OINODbDataField } from "./OINODbDataField.js";
 import { OINODbSqlAggregate, OINODbSqlFilter, OINODbSqlLimit, OINODbSqlOrder, OINODbSqlSelect } from "./OINODbSqlParams.js";
-export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi } from "./OINODbApi.js";
+export { OINODbApiResult, OINODbHtmlTemplate, OINODbApi, OINODbApiRequest, type OINODbApiRequestInit } from "./OINODbApi.js";
 export { OINODbDataModel } from "./OINODbDataModel.js";
 export { OINODbModelSet } from "./OINODbModelSet.js";
 export { OINODbDataField, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOBlobDataField, OINODatetimeDataField } from "./OINODbDataField.js";
@@ -93,21 +93,6 @@ export type OINODbSqlParams = {
     aggregate?: OINODbSqlAggregate;
     /** SQL select condition */
     select?: OINODbSqlSelect;
-};
-/** Request options */
-export type OINODbApiRequestParams = {
-    /** Content type of the request body */
-    requestType?: OINOContentType;
-    /** Content type of the response body */
-    responseType?: OINOContentType;
-    /** Multipart boundary token */
-    multipartBoundary?: string;
-    /** Request last-modified value */
-    lastModified?: number;
-    /** Request etag values */
-    etags?: string[];
-    /** SQL parameters */
-    sqlParams?: OINODbSqlParams;
 };
 /** A single column value of a data row */
 export type OINODataCell = string | bigint | number | boolean | Date | Uint8Array | Buffer | null | undefined;

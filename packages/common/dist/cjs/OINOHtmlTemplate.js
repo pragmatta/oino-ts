@@ -66,7 +66,7 @@ class OINOHtmlTemplate {
         }
     }
     _createHttpResult(html) {
-        const result = new _1.OINOHttpResult(html);
+        const result = new _1.OINOHttpResult({ body: html });
         if (this.expires >= 1) {
             result.expires = Math.round(this.expires);
         }
@@ -183,8 +183,8 @@ class OINOHtmlTemplate {
      */
     renderFromResult(result, messageSeparator = "", includeErrorMessages = false, includeWarningMessages = false, includeInfoMessages = false, includeDebugMessages = false) {
         _1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromResult");
-        this.setVariableFromValue("statusCode", result.statusCode.toString());
-        this.setVariableFromValue("statusMessage", result.statusMessage.toString());
+        this.setVariableFromValue("status", result.status.toString());
+        this.setVariableFromValue("statusText", result.statusText.toString());
         let messages = [];
         for (let i = 0; i < result.messages.length; i++) {
             if (includeErrorMessages && result.messages[i].startsWith(_1.OINO_ERROR_PREFIX)) {

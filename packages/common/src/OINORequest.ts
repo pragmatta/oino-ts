@@ -41,8 +41,8 @@ export class OINORequest {
 }
 
 export interface OINOHttpRequestInit extends OINORequestInit {
-    url: URL
-    method: string
+    url?: URL
+    method?: string
     headers?: Record<string, string>
     body?: string
     requestType?:OINOContentType
@@ -55,7 +55,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
  * Specialized result for HTTP responses.
  */
 export class OINOHttpRequest extends OINORequest {
-    readonly url: URL
+    readonly url?: URL
     readonly method: string
     readonly headers: Record<string, string>
     readonly body: string
@@ -73,8 +73,8 @@ export class OINOHttpRequest extends OINORequest {
      */
     constructor(init: OINOHttpRequestInit) {
         super(init)
-        this.url = init.url
-        this.method = init.method
+        this.url = init.url 
+        this.method = init.method ?? "GET"
         this.headers = init.headers ?? {}
         this.body = init.body ?? ""
         this.multipartBoundary = ""
@@ -86,7 +86,7 @@ export class OINOHttpRequest extends OINORequest {
         if (init.requestType) {
             this.requestType = init.requestType
         } else {
-            const request_type_param = this.url.searchParams.get(OINO_REQUEST_TYPE_PARAM) || this.headers["content-type"] // content-type header can be overridden by query parameter
+            const request_type_param = this.url?.searchParams.get(OINO_REQUEST_TYPE_PARAM) || this.headers["content-type"] // content-type header can be overridden by query parameter
             if (request_type_param == OINOContentType.csv) {
                 this.requestType = OINOContentType.csv
 
@@ -105,7 +105,7 @@ export class OINOHttpRequest extends OINORequest {
         if (init.responseType) {
             this.responseType = init.responseType
         } else {
-            const response_type_param = this.url.searchParams.get(OINO_RESPONSE_TYPE_PARAM) || this.headers["accept"] // accept header can be overridden by query parameter
+            const response_type_param = this.url?.searchParams.get(OINO_RESPONSE_TYPE_PARAM) || this.headers["accept"] // accept header can be overridden by query parameter
             const accept_types = response_type_param?.split(', ') || []
             let response_type:OINOContentType|undefined = undefined
             for (let i=0; i<accept_types.length; i++) {

@@ -17,20 +17,22 @@ class OINOResult {
     /** Wheter request was successfully executed */
     success;
     /** HTTP status code */
-    statusCode;
+    status;
     /** HTTP status message */
-    statusMessage;
+    statusText;
     /** Error / warning messages */
     messages;
     /**
      * Constructor of OINOResult.
      *
+     * @param init initialization values
+     *
      */
-    constructor() {
-        this.success = true;
-        this.statusCode = 200;
-        this.statusMessage = "OK";
-        this.messages = [];
+    constructor(init) {
+        this.success = init?.success ?? true;
+        this.status = init?.status ?? 200;
+        this.statusText = init?.statusText ?? "OK";
+        this.messages = init?.messages ?? [];
     }
     /**
      * Copy values from different result.
@@ -39,8 +41,8 @@ class OINOResult {
      */
     copy(result) {
         this.success = result.success;
-        this.statusCode = result.statusCode;
-        this.statusMessage = result.statusMessage;
+        this.status = result.status;
+        this.statusText = result.statusText;
         this.messages = result.messages.slice();
     }
     /**
@@ -49,28 +51,28 @@ class OINOResult {
      */
     setOk() {
         this.success = true;
-        this.statusCode = 200;
-        this.statusMessage = "OK";
+        this.status = 200;
+        this.statusText = "OK";
     }
     /**
      * Set HTTP error status using given code and message. Returns self reference for chaining.
      *
-     * @param statusCode HTTP status code
-     * @param statusMessage HTTP status message
+     * @param status HTTP status code
+     * @param statusText HTTP status message
      * @param operation operation where error occured
      *
      */
-    setError(statusCode, statusMessage, operation) {
+    setError(status, statusText, operation) {
         this.success = false;
-        this.statusCode = statusCode;
-        if (this.statusMessage != "OK") {
-            this.messages.push(this.statusMessage); // latest error becomes status, but if there was something non-trivial, add it to the messages
+        this.status = status;
+        if (this.statusText != "OK") {
+            this.messages.push(this.statusText); // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
-        if (statusMessage.startsWith(_1.OINO_ERROR_PREFIX)) {
-            this.statusMessage = statusMessage;
+        if (statusText.startsWith(_1.OINO_ERROR_PREFIX)) {
+            this.statusText = statusText;
         }
         else {
-            this.statusMessage = _1.OINO_ERROR_PREFIX + " (" + operation + "): " + statusMessage;
+            this.statusText = _1.OINO_ERROR_PREFIX + " (" + operation + "): " + statusText;
         }
         return this;
     }
@@ -153,17 +155,7 @@ class OINOResult {
      *
      */
     printLog() {
-        return "OINOResult: statusCode=" + this.statusCode + ", statusMessage=" + this.statusMessage + ", messages=[" + this.messages.join(", ") + "]";
-    }
-    /**
-     * Get a Response object from the result values.
-     *
-     * @param headers HTTP headers (overrides existing values)
-     */
-    getStatusResponse(headers) {
-        const result = new Response(this.statusMessage, { status: this.statusCode, headers: headers });
-        result.headers.set('Content-Length', this.statusMessage.length.toString());
-        return result;
+        return "OINOResult: status=" + this.status + ", statusText=" + this.statusText + ", messages=[" + this.messages.join(", ") + "]";
     }
 }
 exports.OINOResult = OINOResult;
@@ -174,21 +166,23 @@ class OINOHttpResult extends OINOResult {
     _etag;
     /** HTTP body data */
     body;
-    /** HTTP cache expiration value */
+    /** HTTP cache expiration value
+     * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
+    */
     expires;
     /** HTTP cache last-modified value */
     lastModified;
     /**
      * Constructor for a `OINOHttpResult`
      *
-     * @param body HTTP body
+     * @param init initialization values
      *
      */
-    constructor(body) {
-        super();
-        this.body = body;
-        this.expires = 0;
-        this.lastModified = 0;
+    constructor(init) {
+        super(init);
+        this.body = init?.body ?? "";
+        this.expires = init?.expires ?? 0;
+        this.lastModified = init?.lastModified ?? 0;
         this._etag = "";
     }
     /**
@@ -208,7 +202,7 @@ class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getHttpResponse(headers) {
-        const result = new Response(this.body, { status: this.statusCode, statusText: this.statusMessage, headers: headers });
+        const result = new Response(this.body, { status: this.status, statusText: this.statusText, headers: headers });
         result.headers.set('Content-Length', this.body.length.toString());
         if (this.lastModified > 0) {
             result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString());

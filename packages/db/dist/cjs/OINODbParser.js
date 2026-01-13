@@ -16,20 +16,20 @@ class OINODbParser {
      * Create data rows from request body based on the datamodel.
      *
      * @param datamodel datamodel of the api
-     * @param data data as a string or Buffer or object
-     * @param requestParams parameters
+     * @param data data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param request parameters
      *
      */
-    static createRows(datamodel, data, requestParams) {
+    static createRows(datamodel, data, request) {
         let result = [];
         if (typeof data == "string") {
-            result = this.createRowsFromText(datamodel, data, requestParams);
+            result = this._createRowsFromText(datamodel, data, request);
         }
-        else if (data instanceof Buffer) {
-            result = this.createRowsFromBlob(datamodel, data, requestParams);
+        else if ((data instanceof Buffer) || (data instanceof Uint8Array)) {
+            result = this._createRowsFromBlob(datamodel, data, request);
         }
         else if (typeof data == "object") {
-            result = [this.createRowFromObject(datamodel, data)];
+            result = [this._createRowFromObject(datamodel, data)];
         }
         return result;
     }
@@ -38,28 +38,28 @@ class OINODbParser {
       *
       * @param datamodel datamodel of the api
       * @param data data as a string
-      * @param requestParams parameters
+      * @param request request parameters
       *
       */
-    static createRowsFromText(datamodel, data, requestParams) {
-        if ((requestParams.requestType == index_js_1.OINOContentType.json) || (requestParams.requestType == undefined)) {
+    static _createRowsFromText(datamodel, data, request) {
+        if ((request.requestType == index_js_1.OINOContentType.json) || (request.requestType == undefined)) {
             return this._createRowFromJson(datamodel, data);
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.csv) {
+        else if (request.requestType == index_js_1.OINOContentType.csv) {
             return this._createRowFromCsv(datamodel, data);
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.formdata) {
-            return this._createRowFromFormdata(datamodel, Buffer.from(data, "utf8"), requestParams.multipartBoundary || "");
+        else if (request.requestType == index_js_1.OINOContentType.formdata) {
+            return this._createRowFromFormdata(datamodel, Buffer.from(data, "utf8"), request.multipartBoundary || "");
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.urlencode) {
+        else if (request.requestType == index_js_1.OINOContentType.urlencode) {
             return this._createRowFromUrlencoded(datamodel, data);
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.html) {
+        else if (request.requestType == index_js_1.OINOContentType.html) {
             index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "HTML can't be used as an input content type!", { contentType: index_js_1.OINOContentType.html });
             return [];
         }
         else {
-            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", { contentType: requestParams.requestType });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", { contentType: request.requestType });
             return [];
         }
     }
@@ -67,29 +67,32 @@ class OINODbParser {
       * Create data rows from request body based on the datamodel.
       *
       * @param datamodel datamodel of the api
-      * @param data data as an Buffer
-      * @param requestParams parameters
+      * @param data data as an Buffer or Uint8Array
+      * @param request parameters
       *
       */
-    static createRowsFromBlob(datamodel, data, requestParams) {
-        if ((requestParams.requestType == index_js_1.OINOContentType.json) || (requestParams.requestType == undefined)) {
+    static _createRowsFromBlob(datamodel, data, request) {
+        if (data instanceof Uint8Array && !(data instanceof Buffer)) {
+            data = Buffer.from(data);
+        }
+        if ((request.requestType == index_js_1.OINOContentType.json) || (request.requestType == undefined)) {
             return this._createRowFromJson(datamodel, data.toString()); // JSON is always a string
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.csv) {
+        else if (request.requestType == index_js_1.OINOContentType.csv) {
             return this._createRowFromCsv(datamodel, data.toString()); // binary data has to be base64 encoded so it's a string
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.formdata) {
-            return this._createRowFromFormdata(datamodel, data, requestParams.multipartBoundary || "");
+        else if (request.requestType == index_js_1.OINOContentType.formdata) {
+            return this._createRowFromFormdata(datamodel, data, request.multipartBoundary || "");
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.urlencode) {
+        else if (request.requestType == index_js_1.OINOContentType.urlencode) {
             return this._createRowFromUrlencoded(datamodel, data.toString()); // data is urlencoded so it's a string
         }
-        else if (requestParams.requestType == index_js_1.OINOContentType.html) {
+        else if (request.requestType == index_js_1.OINOContentType.html) {
             index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "HTML can't be used as an input content type!", { contentType: index_js_1.OINOContentType.html });
             return [];
         }
         else {
-            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", { contentType: requestParams.requestType });
+            index_js_1.OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", { contentType: request.requestType });
             return [];
         }
     }
@@ -101,7 +104,7 @@ class OINODbParser {
      * @param data data as javascript object
      *
      */
-    static createRowFromObject(datamodel, data) {
+    static _createRowFromObject(datamodel, data) {
         const fields = datamodel.fields;
         let result = new Array(fields.length);
         for (let i = 0; i < fields.length; i++) {

@@ -56,10 +56,10 @@ class OINODbSwagger {
                 "success": {
                     "type": "boolean"
                 },
-                "statusCode": {
+                "status": {
                     "type": "number"
                 },
-                "statusMessage": {
+                "statusText": {
                     "type": "string"
                 },
                 "messages": {
@@ -71,8 +71,8 @@ class OINODbSwagger {
             },
             "required": [
                 "success",
-                "statusCode",
-                "statusMessage",
+                "status",
+                "statusText",
                 "messages"
             ]
         };
