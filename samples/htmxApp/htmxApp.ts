@@ -1,4 +1,4 @@
-import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINODbSwagger, OINODbApiResult, OINOLog, OINOLogLevel, OINODbHtmlTemplate, OINODbApiRequestParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOConsoleLog, OINOBenchmark, OINODbSwagger, OINODbApiResult, OINOLog, OINOLogLevel, OINODbHtmlTemplate, OINODbApiRequestParams, OINODbApiRequest } from "@oino-ts/db";
 
 import { OINODbConfig } from "@oino-ts/db"
 import { OINOHttpResult, OINOHtmlTemplate, OINOMemoryBenchmark } from "@oino-ts/common"
@@ -100,10 +100,10 @@ try {
 				const operation:string = path_matches[3]?.toLowerCase() || ""
 				OINOLog.info("@oino-ts/db", "htmxApp", "fetch", "Api request", {api_name:api_name, id:id, operation:operation}) 
 
-				const params:OINODbApiRequestParams = OINODbFactory.createParamsFromRequest(request)
-				const api:OINODbApi|null = apis[api_name]
 				const body:Buffer = Buffer.from(await request.arrayBuffer())
-				OINOLog.debug("@oino-ts/db", "htmxApp", "fetch", "Api request input", {params:params, body:body}) 
+				const oino_req = new OINODbApiRequest({ method: request.method, url: url, rowId: id, data: body, headers: Object.fromEntries(request.headers), params: Object.fromEntries(url.searchParams) })
+				const api:OINODbApi|null = apis[api_name]
+				OINOLog.debug("@oino-ts/db", "htmxApp", "fetch", "Api request input", {oino_req:oino_req}) 
 				let api_result:OINODbApiResult
 				if (api_name == "") {
 					const template:OINODbHtmlTemplate = await getTemplate(id, "", operation, "")
@@ -114,7 +114,7 @@ try {
 						response = new Response("Template not found!", {status:404, statusText: "Template not found!", headers: response_headers })	
 					}
 				} else if (api) {
-					api_result = await api.doRequest(request.method, id, body, params)
+					api_result = await api.runRequest(oino_req)
 					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.status.toString())
 					if (api_result.data?.dataset) {
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
