@@ -131,7 +131,7 @@ export class OINOHttpRequest extends OINORequest {
         return new OINOHttpRequest({
             url: new URL(request.url),
             method: request.method,
-            headers: Object.fromEntries(request.headers),
+            headers: Object.fromEntries(request.headers as any),
             data: Buffer.from(body),
         })
     }

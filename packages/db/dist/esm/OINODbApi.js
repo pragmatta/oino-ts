@@ -61,6 +61,15 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
     }
+    static async fromRequest(request) {
+        const body = await request.arrayBuffer();
+        return new OINODbApiRequest({
+            url: new URL(request.url),
+            method: request.method,
+            headers: Object.fromEntries(request.headers),
+            data: Buffer.from(body),
+        });
+    }
 }
 /**
  * OINO API request result object with returned data and/or http status code/message and

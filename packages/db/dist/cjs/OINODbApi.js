@@ -64,6 +64,15 @@ class OINODbApiRequest extends common_1.OINOHttpRequest {
             }
         }
     }
+    static async fromRequest(request) {
+        const body = await request.arrayBuffer();
+        return new OINODbApiRequest({
+            url: new URL(request.url),
+            method: request.method,
+            headers: Object.fromEntries(request.headers),
+            data: Buffer.from(body),
+        });
+    }
 }
 exports.OINODbApiRequest = OINODbApiRequest;
 /**

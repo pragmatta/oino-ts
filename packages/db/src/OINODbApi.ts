@@ -81,7 +81,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
         return new OINODbApiRequest({
             url: new URL(request.url),
             method: request.method,
-            headers: Object.fromEntries(request.headers),
+            headers: Object.fromEntries(request.headers as any),
             data: Buffer.from(body),
         })
     }

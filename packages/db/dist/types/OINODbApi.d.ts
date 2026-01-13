@@ -16,6 +16,7 @@ export declare class OINODbApiRequest extends OINOHttpRequest {
     readonly data: string | OINODataRow[] | Buffer | Uint8Array | object | null;
     readonly sqlParams: OINODbSqlParams;
     constructor(init: OINODbApiRequestInit);
+    static fromRequest(request: Request): Promise<OINODbApiRequest>;
 }
 /**
  * OINO API request result object with returned data and/or http status code/message and
