@@ -25,14 +25,6 @@ class OINORequest {
     constructor(init) {
         this.params = init?.params ?? {};
     }
-    /**
-     * Copy values from different result.
-     *
-     * @param request source value
-     */
-    copy(request) {
-        this.params = { ...request.params };
-    }
 }
 exports.OINORequest = OINORequest;
 /**
@@ -58,7 +50,18 @@ class OINOHttpRequest extends OINORequest {
         super(init);
         this.url = init.url;
         this.method = init.method ?? "GET";
-        this.headers = init.headers ?? {};
+        if (init.headers && init.headers) {
+            this.headers = init.headers;
+        }
+        else if (init.headers && init.headers) {
+            this.headers = {};
+            for (const key in init.headers) {
+                this.headers[key.toLowerCase()] = init.headers[key];
+            }
+        }
+        else {
+            this.headers = {};
+        }
         this.data = init.data ?? "";
         this.multipartBoundary = "";
         this.lastModified = init.lastModified;
@@ -110,7 +113,7 @@ class OINOHttpRequest extends OINORequest {
             this.etags = etags;
         }
     }
-    static async fromRequest(request) {
+    static async fromFetchRequest(request) {
         const body = await request.arrayBuffer();
         return new OINOHttpRequest({
             url: new URL(request.url),
@@ -118,6 +121,40 @@ class OINOHttpRequest extends OINORequest {
             headers: Object.fromEntries(request.headers),
             data: Buffer.from(body),
         });
+    }
+    dataAsText() {
+        if (this.data instanceof Uint8Array) {
+            return new TextDecoder().decode(this.data);
+        }
+        else if (this.data instanceof Object) {
+            return JSON.stringify(this.data);
+        }
+        else {
+            return this.data?.toString() || "";
+        }
+    }
+    dataAsParsedJson() {
+        return this.data ? JSON.parse(this.dataAsText()) : {};
+    }
+    dataAsFormData() {
+        return new URLSearchParams(this.dataAsText() || "");
+    }
+    dataAsBuffer() {
+        if (this.data === null) {
+            return Buffer.alloc(0);
+        }
+        else if (this.data instanceof Buffer) {
+            return this.data;
+        }
+        else if (this.data instanceof Uint8Array) {
+            return Buffer.from(this.data);
+        }
+        else if (this.data instanceof Object) {
+            return Buffer.from(JSON.stringify(this.data), "utf-8");
+        }
+        else {
+            return Buffer.from(this.data, "utf-8");
+        }
     }
 }
 exports.OINOHttpRequest = OINOHttpRequest;
