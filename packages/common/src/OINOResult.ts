@@ -235,7 +235,7 @@ export class OINOHttpResult extends OINOResult {
      * 
      * @param headers HTTP headers (overrides existing values)
      */
-    getHttpResponse(headers?:Record<string, string>):Response {
+    getFetchResponse(headers?:Record<string, string>):Response {
         const merged_headers = { ...this.headers, ...headers }
         const result: Response = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers })
         result.headers.set('Content-Length', this.body.length.toString())

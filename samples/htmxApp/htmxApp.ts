@@ -50,7 +50,7 @@ function hostFile(path: string, contentType: string, data?:any): Response {
 		let file_content: string = readFileSync("." + path, { encoding: "utf8" });
 		const template:OINOHtmlTemplate = new OINOHtmlTemplate(file_content)
 		const http_result = template.renderFromObject(data)
-		return http_result.getHttpResponse( { "Content-Type": contentType })
+		return http_result.getFetchResponse( { "Content-Type": contentType })
 	} else {
 		return new Response("", { status: 404, statusText: "File not found" });
 	}
@@ -109,7 +109,7 @@ try {
 					const template:OINODbHtmlTemplate = await getTemplate(id, "", operation, "")
 					if (template) {
 						const http_result:OINOHttpResult = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id)
-						response = http_result.getHttpResponse(response_headers)
+						response = http_result.getFetchResponse(response_headers)
 					} else {
 						response = new Response("Template not found!", {status:404, statusText: "Template not found!", headers: response_headers })	
 					}
@@ -118,9 +118,9 @@ try {
 					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.status.toString())
 					if (api_result.data?.dataset) {
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
-						response = await http_result.getHttpResponse(response_headers)
+						response = await http_result.getFetchResponse(response_headers)
 					} else {
-						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getHttpResponse(response_headers)
+						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getFetchResponse(response_headers)
 					}
 					if (request.method == "POST") {
 						response.headers.set('HX-Trigger', 'OINODbApiTrigger-' + api.params.tableName)

@@ -126,7 +126,7 @@ export class OINOHttpRequest extends OINORequest {
         }
     }
 
-    static async fromRequest(request: Request): Promise<OINOHttpRequest> {
+    static async fromFetchRequest(request: Request): Promise<OINOHttpRequest> {
         const body = await request.arrayBuffer()
         return new OINOHttpRequest({
             url: new URL(request.url),
