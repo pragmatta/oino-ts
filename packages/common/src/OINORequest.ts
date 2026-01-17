@@ -29,21 +29,18 @@ export class OINORequest {
     constructor (init?: OINORequestInit) {
         this.params = init?.params ?? {}
     }
-
-    /**
-     * Copy values from different result.
-     * 
-     * @param request source value
-     */
-    copy(request: OINORequest) {
-        this.params = {...request.params}
-    }
 }
+
+/**
+ * Type for HTTP headers that just guarantees keys are normalized to lowercase.
+ * 
+ */
+export type OINOHttpHeaders = Record<string, string>
 
 export interface OINOHttpRequestInit extends OINORequestInit {
     url?: URL
     method?: string
-    headers?: Record<string, string>
+    headers?: OINOHttpHeaders|Record<string, string>
     data?: string|Buffer|Uint8Array|object|null
     requestType?:OINOContentType
     responseType?:OINOContentType
@@ -57,7 +54,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
 export class OINOHttpRequest extends OINORequest {
     readonly url?: URL
     readonly method: string
-    readonly headers: Record<string, string>
+    readonly headers: OINOHttpHeaders
     readonly data: string|Buffer|Uint8Array|object|null
     readonly requestType:OINOContentType
     readonly responseType:OINOContentType
@@ -75,7 +72,18 @@ export class OINOHttpRequest extends OINORequest {
         super(init)
         this.url = init.url 
         this.method = init.method ?? "GET"
-        this.headers = init.headers ?? {}
+        if (init.headers && init.headers satisfies OINOHttpHeaders) {
+            this.headers = init.headers as OINOHttpHeaders
+
+        } else if (init.headers && init.headers satisfies Record<string, string>) {
+            this.headers = {}
+            for (const key in init.headers) {
+                this.headers[key.toLowerCase()] = init.headers[key]
+            }
+        } else {
+            this.headers = {}
+        }
+
         this.data = init.data ?? ""
         this.multipartBoundary = ""
         this.lastModified = init.lastModified
@@ -165,6 +173,9 @@ export class OINOHttpRequest extends OINORequest {
 
         } else if (this.data instanceof Uint8Array) {
             return Buffer.from(this.data)
+
+        } else if (this.data instanceof Object) {
+            return Buffer.from(JSON.stringify(this.data), "utf-8")
 
         } else {
             return Buffer.from(this.data, "utf-8")
