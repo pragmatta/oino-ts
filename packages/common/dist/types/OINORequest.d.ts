@@ -17,17 +17,16 @@ export declare class OINORequest {
      *
      */
     constructor(init?: OINORequestInit);
-    /**
-     * Copy values from different result.
-     *
-     * @param request source value
-     */
-    copy(request: OINORequest): void;
 }
+/**
+ * Type for HTTP headers that just guarantees keys are normalized to lowercase.
+ *
+ */
+export type OINOHttpHeaders = Record<string, string>;
 export interface OINOHttpRequestInit extends OINORequestInit {
     url?: URL;
     method?: string;
-    headers?: Record<string, string>;
+    headers?: OINOHttpHeaders | Record<string, string>;
     data?: string | Buffer | Uint8Array | object | null;
     requestType?: OINOContentType;
     responseType?: OINOContentType;
@@ -40,7 +39,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
 export declare class OINOHttpRequest extends OINORequest {
     readonly url?: URL;
     readonly method: string;
-    readonly headers: Record<string, string>;
+    readonly headers: OINOHttpHeaders;
     readonly data: string | Buffer | Uint8Array | object | null;
     readonly requestType: OINOContentType;
     readonly responseType: OINOContentType;
@@ -54,5 +53,9 @@ export declare class OINOHttpRequest extends OINORequest {
      *
      */
     constructor(init: OINOHttpRequestInit);
-    static fromRequest(request: Request): Promise<OINOHttpRequest>;
+    static fromFetchRequest(request: Request): Promise<OINOHttpRequest>;
+    dataAsText(): string;
+    dataAsParsedJson(): any;
+    dataAsFormData(): URLSearchParams;
+    dataAsBuffer(): Buffer;
 }

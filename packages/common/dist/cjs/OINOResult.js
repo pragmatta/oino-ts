@@ -166,6 +166,8 @@ class OINOHttpResult extends OINOResult {
     _etag;
     /** HTTP body data */
     body;
+    /** HTTP headers */
+    headers;
     /** HTTP cache expiration value
      * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
     */
@@ -181,6 +183,7 @@ class OINOHttpResult extends OINOResult {
     constructor(init) {
         super(init);
         this.body = init?.body ?? "";
+        this.headers = init?.headers ?? {};
         this.expires = init?.expires ?? 0;
         this.lastModified = init?.lastModified ?? 0;
         this._etag = "";
@@ -201,14 +204,15 @@ class OINOHttpResult extends OINOResult {
      *
      * @param headers HTTP headers (overrides existing values)
      */
-    getHttpResponse(headers) {
-        const result = new Response(this.body, { status: this.status, statusText: this.statusText, headers: headers });
+    getFetchResponse(headers) {
+        const merged_headers = { ...this.headers, ...headers };
+        const result = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers });
         result.headers.set('Content-Length', this.body.length.toString());
-        if (this.lastModified > 0) {
+        if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {
             result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString());
         }
-        if (this.expires >= 0) {
-            result.headers.set('Expires', Math.round(this.expires).toString());
+        if (merged_headers['Expires'] === undefined && this.expires >= 0) {
+            result.headers.set('Expires', new Date(Date.now() + Math.round(this.expires)).toUTCString());
             if (this.expires == 0) {
                 result.headers.set('Pragma', 'no-cache');
             }

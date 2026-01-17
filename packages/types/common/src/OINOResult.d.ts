@@ -88,6 +88,7 @@ export declare class OINOResult {
 }
 export interface OINOHttpResultInit extends OINOResultInit {
     body?: string;
+    headers?: Record<string, string>;
     expires?: number;
     lastModified?: number;
 }
@@ -98,6 +99,8 @@ export declare class OINOHttpResult extends OINOResult {
     private _etag;
     /** HTTP body data */
     readonly body: string;
+    /** HTTP headers */
+    readonly headers?: Record<string, string>;
     /** HTTP cache expiration value
      * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
     */
@@ -121,5 +124,5 @@ export declare class OINOHttpResult extends OINOResult {
      *
      * @param headers HTTP headers (overrides existing values)
      */
-    getHttpResponse(headers?: Record<string, string>): Response;
+    getFetchResponse(headers?: Record<string, string>): Response;
 }
