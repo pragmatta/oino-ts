@@ -136,4 +136,39 @@ export class OINOHttpRequest extends OINORequest {
         })
     }
 
+    dataAsText(): string {
+        if (this.data instanceof Uint8Array) {
+            return new TextDecoder().decode(this.data)
+
+        } else if (this.data instanceof Object) {
+            return JSON.stringify(this.data)
+            
+        } else {
+            return this.data?.toString() || ""
+        }
+    }
+
+    dataAsParsedJson(): any {
+        return this.data ? JSON.parse(this.dataAsText()) : {}
+    }
+
+    dataAsFormData(): URLSearchParams {
+        return new URLSearchParams(this.dataAsText() || "")
+    }
+
+    dataAsBuffer(): Buffer {
+        if (this.data === null) {
+            return Buffer.alloc(0)
+
+        } else if (this.data instanceof Buffer) {
+            return this.data
+
+        } else if (this.data instanceof Uint8Array) {
+            return Buffer.from(this.data)
+
+        } else {
+            return Buffer.from(this.data, "utf-8")
+        }
+    }
+
 }
