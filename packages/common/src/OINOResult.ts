@@ -178,6 +178,7 @@ export class OINOResult {
 
 export interface OINOHttpResultInit extends OINOResultInit {
     body?: string
+    headers?: Record<string, string>
     expires?: number
     lastModified?: number
 }
@@ -190,6 +191,9 @@ export class OINOHttpResult extends OINOResult {
 
     /** HTTP body data */
     readonly body: string
+    
+    /** HTTP headers */
+    readonly headers?: Record<string, string>
 
     /** HTTP cache expiration value 
      * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
@@ -208,6 +212,7 @@ export class OINOHttpResult extends OINOResult {
     constructor(init?: OINOHttpResultInit) {
         super(init)
         this.body = init?.body ?? ""
+        this.headers = init?.headers ?? {}
         this.expires = init?.expires ?? 0
         this.lastModified = init?.lastModified ?? 0
         this._etag = ""
@@ -231,13 +236,14 @@ export class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getHttpResponse(headers?:Record<string, string>):Response {
-        const result:Response = new Response(this.body, {status:this.status, statusText: this.statusText, headers: headers})
+        const merged_headers = { ...this.headers, ...headers }
+        const result: Response = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers })
         result.headers.set('Content-Length', this.body.length.toString())
-        if (this.lastModified > 0) {
+        if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {
             result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString())
         }
-        if (this.expires >= 0) {
-            result.headers.set('Expires', Math.round(this.expires).toString())
+        if (merged_headers['Expires'] === undefined && this.expires >= 0) {
+            result.headers.set('Expires', new Date(Date.now() + Math.round(this.expires)).toUTCString())
             if (this.expires == 0) {
                 result.headers.set('Pragma', 'no-cache')
             }
