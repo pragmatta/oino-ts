@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import { createHash } from "node:crypto";
-import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX } from ".";
+import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOHeaders } from ".";
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.
@@ -130,19 +130,19 @@ export class OINOResult {
         for (let i = 0; i < this.messages.length; i++) {
             const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ");
             if (copyErrors && message.startsWith(OINO_ERROR_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
             if (copyWarnings && message.startsWith(OINO_WARNING_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
             if (copyInfos && message.startsWith(OINO_INFO_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
             if (copyDebug && message.startsWith(OINO_DEBUG_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
         }
@@ -179,7 +179,7 @@ export class OINOHttpResult extends OINOResult {
     constructor(init) {
         super(init);
         this.body = init?.body ?? "";
-        this.headers = init?.headers ?? {};
+        this.headers = new OINOHeaders(init?.headers);
         this.expires = init?.expires ?? 0;
         this.lastModified = init?.lastModified ?? 0;
         this._etag = "";
@@ -201,7 +201,10 @@ export class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getFetchResponse(headers) {
-        const merged_headers = { ...this.headers, ...headers };
+        const merged_headers = new OINOHeaders(this.headers);
+        if (headers) {
+            merged_headers.setHeaders(headers);
+        }
         const result = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers });
         result.headers.set('Content-Length', this.body.length.toString());
         if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {

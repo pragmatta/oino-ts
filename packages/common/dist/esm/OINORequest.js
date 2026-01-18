@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINOContentType } from ".";
-import { OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM } from "./index.js";
+import { Buffer } from "node:buffer";
+import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINOHeaders } from ".";
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.
@@ -46,18 +46,7 @@ export class OINOHttpRequest extends OINORequest {
         super(init);
         this.url = init.url;
         this.method = init.method ?? "GET";
-        if (init.headers && init.headers) {
-            this.headers = init.headers;
-        }
-        else if (init.headers && init.headers) {
-            this.headers = {};
-            for (const key in init.headers) {
-                this.headers[key.toLowerCase()] = init.headers[key];
-            }
-        }
-        else {
-            this.headers = {};
-        }
+        this.headers = new OINOHeaders(init.headers);
         this.data = init.data ?? "";
         this.multipartBoundary = "";
         this.lastModified = init.lastModified;
@@ -68,7 +57,7 @@ export class OINOHttpRequest extends OINORequest {
             this.requestType = init.requestType;
         }
         else {
-            const request_type_param = this.url?.searchParams.get(OINO_REQUEST_TYPE_PARAM) || this.headers["content-type"]; // content-type header can be overridden by query parameter
+            const request_type_param = this.url?.searchParams.get(OINO_REQUEST_TYPE_PARAM) || this.headers.get("content-type"); // content-type header can be overridden by query parameter
             if (request_type_param == OINOContentType.csv) {
                 this.requestType = OINOContentType.csv;
             }
@@ -89,7 +78,7 @@ export class OINOHttpRequest extends OINORequest {
             this.responseType = init.responseType;
         }
         else {
-            const response_type_param = this.url?.searchParams.get(OINO_RESPONSE_TYPE_PARAM) || this.headers["accept"]; // accept header can be overridden by query parameter
+            const response_type_param = this.url?.searchParams.get(OINO_RESPONSE_TYPE_PARAM) || this.headers.get("accept"); // accept header can be overridden by query parameter
             const accept_types = response_type_param?.split(', ') || [];
             let response_type = undefined;
             for (let i = 0; i < accept_types.length; i++) {
@@ -100,11 +89,11 @@ export class OINOHttpRequest extends OINORequest {
             }
             this.responseType = response_type ?? OINOContentType.json;
         }
-        const last_modified = this.headers["if-modified-since"];
+        const last_modified = this.headers.get("if-modified-since");
         if (last_modified) {
             this.lastModified = new Date(last_modified).getTime();
         }
-        const etags = this.headers["if-none-match"]?.split(',').map(e => e.trim());
+        const etags = this.headers.get("if-none-match")?.split(',').map(e => e.trim());
         if (etags) {
             this.etags = etags;
         }

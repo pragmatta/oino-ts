@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbApi = exports.OINODbHtmlTemplate = exports.OINODbApiResult = exports.OINODbApiRequest = void 0;
+const node_buffer_1 = require("node:buffer");
 const index_js_1 = require("./index.js");
 const common_1 = require("@oino-ts/common");
 const hashid_1 = require("@oino-ts/hashid");
@@ -70,7 +71,7 @@ class OINODbApiRequest extends common_1.OINOHttpRequest {
             url: new URL(request.url),
             method: request.method,
             headers: Object.fromEntries(request.headers),
-            data: Buffer.from(body),
+            data: node_buffer_1.Buffer.from(body),
         });
     }
 }

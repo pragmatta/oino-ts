@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import { OINODbApiParams, OINODb, OINODbDataModel, OINODataRow, OINODbModelSet, OINOHttpResult, OINOHtmlTemplate, OINODbSqlParams, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit } from "./index.js";
 import { OINOResult, OINOHttpRequest, OINOHttpRequestInit } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid";

@@ -5,6 +5,7 @@ export { OINORequest, OINOHttpRequest } from "./OINORequest.js";
 export { OINOStr } from "./OINOStr.js";
 export { OINOHtmlTemplate } from "./OINOHtmlTemplate.js";
 export { OINOFormatter, OINO_EMPTY_FORMATTER } from "./OINOFormatter.js";
+export { OINOHeaders } from "./OINOHeaders.js";
 /** OINO error message prefix */
 export const OINO_ERROR_PREFIX = "OINO ERROR";
 /** OINO warning message prefix */

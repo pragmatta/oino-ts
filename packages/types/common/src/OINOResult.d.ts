@@ -1,3 +1,4 @@
+import { OINOHeaders, OINOHeadersInit } from ".";
 export interface OINOResultInit {
     success?: boolean;
     status?: number;
@@ -79,7 +80,7 @@ export declare class OINOResult {
      * @param copyDebug wether debug messages should be copied (default false)
      *
      */
-    copyMessagesToHeaders(headers: Headers, copyErrors?: boolean, copyWarnings?: boolean, copyInfos?: boolean, copyDebug?: boolean): void;
+    copyMessagesToHeaders(headers: OINOHeaders, copyErrors?: boolean, copyWarnings?: boolean, copyInfos?: boolean, copyDebug?: boolean): void;
     /**
      * Print result for logging.
      *
@@ -88,7 +89,7 @@ export declare class OINOResult {
 }
 export interface OINOHttpResultInit extends OINOResultInit {
     body?: string;
-    headers?: Record<string, string>;
+    headers?: OINOHeadersInit;
     expires?: number;
     lastModified?: number;
 }
@@ -100,7 +101,7 @@ export declare class OINOHttpResult extends OINOResult {
     /** HTTP body data */
     readonly body: string;
     /** HTTP headers */
-    readonly headers?: Record<string, string>;
+    readonly headers: OINOHeaders;
     /** HTTP cache expiration value
      * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
     */
@@ -124,5 +125,5 @@ export declare class OINOHttpResult extends OINOResult {
      *
      * @param headers HTTP headers (overrides existing values)
      */
-    getFetchResponse(headers?: Record<string, string>): Response;
+    getFetchResponse(headers?: OINOHeadersInit): Response;
 }
