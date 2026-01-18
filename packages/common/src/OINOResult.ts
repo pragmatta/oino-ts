@@ -5,7 +5,7 @@
  */
 
 import { createHash, Hash } from "node:crypto";
-import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX } from ".";
+import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOHeaders, OINOHeadersInit } from ".";
 
 export interface OINOResultInit {
     success?: boolean
@@ -144,24 +144,24 @@ export class OINOResult {
      * @param copyDebug wether debug messages should be copied (default false)
      *
      */
-    copyMessagesToHeaders(headers:Headers, copyErrors:boolean = true, copyWarnings:boolean = false, copyInfos:boolean = false, copyDebug:boolean = false) {
+    copyMessagesToHeaders(headers:OINOHeaders, copyErrors:boolean = true, copyWarnings:boolean = false, copyInfos:boolean = false, copyDebug:boolean = false) {
         let j=1
         for(let i=0; i<this.messages.length; i++) {
             const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ")
             if (copyErrors && message.startsWith(OINO_ERROR_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
+                headers.set('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
             if (copyWarnings && message.startsWith(OINO_WARNING_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
+                headers.set('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
             if (copyInfos && message.startsWith(OINO_INFO_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
+                headers.set('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
             if (copyDebug && message.startsWith(OINO_DEBUG_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-'+j, message)
+                headers.set('X-OINO-MESSAGE-'+j, message)
                 j++
             } 
         }
@@ -178,7 +178,7 @@ export class OINOResult {
 
 export interface OINOHttpResultInit extends OINOResultInit {
     body?: string
-    headers?: Record<string, string>
+    headers?: OINOHeadersInit
     expires?: number
     lastModified?: number
 }
@@ -193,7 +193,7 @@ export class OINOHttpResult extends OINOResult {
     readonly body: string
     
     /** HTTP headers */
-    readonly headers?: Record<string, string>
+    readonly headers: OINOHeaders
 
     /** HTTP cache expiration value 
      * Note: default 0 means no expiration and 'Pragma: no-cache' is set.
@@ -212,7 +212,7 @@ export class OINOHttpResult extends OINOResult {
     constructor(init?: OINOHttpResultInit) {
         super(init)
         this.body = init?.body ?? ""
-        this.headers = init?.headers ?? {}
+        this.headers = new OINOHeaders(init?.headers)
         this.expires = init?.expires ?? 0
         this.lastModified = init?.lastModified ?? 0
         this._etag = ""
@@ -235,8 +235,11 @@ export class OINOHttpResult extends OINOResult {
      * 
      * @param headers HTTP headers (overrides existing values)
      */
-    getFetchResponse(headers?:Record<string, string>):Response {
-        const merged_headers = { ...this.headers, ...headers }
+    getFetchResponse(headers?:OINOHeadersInit):Response {
+        const merged_headers = new OINOHeaders(this.headers)
+        if (headers) {
+            merged_headers.setHeaders(headers)
+        }
         const result: Response = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers })
         result.headers.set('Content-Length', this.body.length.toString())
         if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {

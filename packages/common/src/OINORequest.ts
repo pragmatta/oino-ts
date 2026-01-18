@@ -4,8 +4,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOContentType } from "."
-import { OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM } from "./index.js"
+import { Buffer } from "node:buffer"
+
+import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINOHeaders, OINOHeadersInit } from "."
 
 export interface OINORequestInit {
     params?: Record<string, string>
@@ -31,16 +32,10 @@ export class OINORequest {
     }
 }
 
-/**
- * Type for HTTP headers that just guarantees keys are normalized to lowercase.
- * 
- */
-export type OINOHttpHeaders = Record<string, string>
-
 export interface OINOHttpRequestInit extends OINORequestInit {
     url?: URL
     method?: string
-    headers?: OINOHttpHeaders|Record<string, string>
+    headers?: OINOHeadersInit
     data?: string|Buffer|Uint8Array|object|null
     requestType?:OINOContentType
     responseType?:OINOContentType
@@ -54,7 +49,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
 export class OINOHttpRequest extends OINORequest {
     readonly url?: URL
     readonly method: string
-    readonly headers: OINOHttpHeaders
+    readonly headers: OINOHeaders
     readonly data: string|Buffer|Uint8Array|object|null
     readonly requestType:OINOContentType
     readonly responseType:OINOContentType
@@ -72,18 +67,7 @@ export class OINOHttpRequest extends OINORequest {
         super(init)
         this.url = init.url 
         this.method = init.method ?? "GET"
-        if (init.headers && init.headers satisfies OINOHttpHeaders) {
-            this.headers = init.headers as OINOHttpHeaders
-
-        } else if (init.headers && init.headers satisfies Record<string, string>) {
-            this.headers = {}
-            for (const key in init.headers) {
-                this.headers[key.toLowerCase()] = init.headers[key]
-            }
-        } else {
-            this.headers = {}
-        }
-
+        this.headers = new OINOHeaders(init.headers)
         this.data = init.data ?? ""
         this.multipartBoundary = ""
         this.lastModified = init.lastModified
@@ -94,7 +78,7 @@ export class OINOHttpRequest extends OINORequest {
         if (init.requestType) {
             this.requestType = init.requestType
         } else {
-            const request_type_param = this.url?.searchParams.get(OINO_REQUEST_TYPE_PARAM) || this.headers["content-type"] // content-type header can be overridden by query parameter
+            const request_type_param = this.url?.searchParams.get(OINO_REQUEST_TYPE_PARAM) || this.headers.get("content-type") // content-type header can be overridden by query parameter
             if (request_type_param == OINOContentType.csv) {
                 this.requestType = OINOContentType.csv
 
@@ -113,7 +97,7 @@ export class OINOHttpRequest extends OINORequest {
         if (init.responseType) {
             this.responseType = init.responseType
         } else {
-            const response_type_param = this.url?.searchParams.get(OINO_RESPONSE_TYPE_PARAM) || this.headers["accept"] // accept header can be overridden by query parameter
+            const response_type_param = this.url?.searchParams.get(OINO_RESPONSE_TYPE_PARAM) || this.headers.get("accept") // accept header can be overridden by query parameter
             const accept_types = response_type_param?.split(', ') || []
             let response_type:OINOContentType|undefined = undefined
             for (let i=0; i<accept_types.length; i++) {
@@ -124,11 +108,11 @@ export class OINOHttpRequest extends OINORequest {
             }
             this.responseType = response_type ?? OINOContentType.json
         }
-        const last_modified = this.headers["if-modified-since"]
+        const last_modified = this.headers.get("if-modified-since")
         if (last_modified) {
             this.lastModified =  new Date(last_modified).getTime()
         }
-        const etags = this.headers["if-none-match"]?.split(',').map(e => e.trim())
+        const etags = this.headers.get("if-none-match")?.split(',').map(e => e.trim())
         if (etags) {
             this.etags = etags
         }
