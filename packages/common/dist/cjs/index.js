@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OINOContentType = exports.OINO_RESPONSE_TYPE_PARAM = exports.OINO_REQUEST_TYPE_PARAM = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINO_EMPTY_FORMATTER = exports.OINOFormatter = exports.OINOHtmlTemplate = exports.OINOStr = exports.OINOHttpRequest = exports.OINORequest = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOMemoryBenchmark = exports.OINOBenchmark = void 0;
+exports.OINOContentType = exports.OINO_RESPONSE_TYPE_PARAM = exports.OINO_REQUEST_TYPE_PARAM = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOHeaders = exports.OINO_EMPTY_FORMATTER = exports.OINOFormatter = exports.OINOHtmlTemplate = exports.OINOStr = exports.OINOHttpRequest = exports.OINORequest = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOMemoryBenchmark = exports.OINOBenchmark = void 0;
 var OINOBenchmark_js_1 = require("./OINOBenchmark.js");
 Object.defineProperty(exports, "OINOBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOBenchmark; } });
 Object.defineProperty(exports, "OINOMemoryBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOMemoryBenchmark; } });
@@ -21,6 +21,8 @@ Object.defineProperty(exports, "OINOHtmlTemplate", { enumerable: true, get: func
 var OINOFormatter_js_1 = require("./OINOFormatter.js");
 Object.defineProperty(exports, "OINOFormatter", { enumerable: true, get: function () { return OINOFormatter_js_1.OINOFormatter; } });
 Object.defineProperty(exports, "OINO_EMPTY_FORMATTER", { enumerable: true, get: function () { return OINOFormatter_js_1.OINO_EMPTY_FORMATTER; } });
+var OINOHeaders_js_1 = require("./OINOHeaders.js");
+Object.defineProperty(exports, "OINOHeaders", { enumerable: true, get: function () { return OINOHeaders_js_1.OINOHeaders; } });
 /** OINO error message prefix */
 exports.OINO_ERROR_PREFIX = "OINO ERROR";
 /** OINO warning message prefix */

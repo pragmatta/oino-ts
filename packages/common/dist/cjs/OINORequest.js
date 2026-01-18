@@ -6,8 +6,8 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINOHttpRequest = exports.OINORequest = void 0;
+const node_buffer_1 = require("node:buffer");
 const _1 = require(".");
-const index_js_1 = require("./index.js");
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.
@@ -50,18 +50,7 @@ class OINOHttpRequest extends OINORequest {
         super(init);
         this.url = init.url;
         this.method = init.method ?? "GET";
-        if (init.headers && init.headers) {
-            this.headers = init.headers;
-        }
-        else if (init.headers && init.headers) {
-            this.headers = {};
-            for (const key in init.headers) {
-                this.headers[key.toLowerCase()] = init.headers[key];
-            }
-        }
-        else {
-            this.headers = {};
-        }
+        this.headers = new _1.OINOHeaders(init.headers);
         this.data = init.data ?? "";
         this.multipartBoundary = "";
         this.lastModified = init.lastModified;
@@ -72,7 +61,7 @@ class OINOHttpRequest extends OINORequest {
             this.requestType = init.requestType;
         }
         else {
-            const request_type_param = this.url?.searchParams.get(index_js_1.OINO_REQUEST_TYPE_PARAM) || this.headers["content-type"]; // content-type header can be overridden by query parameter
+            const request_type_param = this.url?.searchParams.get(_1.OINO_REQUEST_TYPE_PARAM) || this.headers.get("content-type"); // content-type header can be overridden by query parameter
             if (request_type_param == _1.OINOContentType.csv) {
                 this.requestType = _1.OINOContentType.csv;
             }
@@ -93,7 +82,7 @@ class OINOHttpRequest extends OINORequest {
             this.responseType = init.responseType;
         }
         else {
-            const response_type_param = this.url?.searchParams.get(index_js_1.OINO_RESPONSE_TYPE_PARAM) || this.headers["accept"]; // accept header can be overridden by query parameter
+            const response_type_param = this.url?.searchParams.get(_1.OINO_RESPONSE_TYPE_PARAM) || this.headers.get("accept"); // accept header can be overridden by query parameter
             const accept_types = response_type_param?.split(', ') || [];
             let response_type = undefined;
             for (let i = 0; i < accept_types.length; i++) {
@@ -104,11 +93,11 @@ class OINOHttpRequest extends OINORequest {
             }
             this.responseType = response_type ?? _1.OINOContentType.json;
         }
-        const last_modified = this.headers["if-modified-since"];
+        const last_modified = this.headers.get("if-modified-since");
         if (last_modified) {
             this.lastModified = new Date(last_modified).getTime();
         }
-        const etags = this.headers["if-none-match"]?.split(',').map(e => e.trim());
+        const etags = this.headers.get("if-none-match")?.split(',').map(e => e.trim());
         if (etags) {
             this.etags = etags;
         }
@@ -119,7 +108,7 @@ class OINOHttpRequest extends OINORequest {
             url: new URL(request.url),
             method: request.method,
             headers: Object.fromEntries(request.headers),
-            data: Buffer.from(body),
+            data: node_buffer_1.Buffer.from(body),
         });
     }
     dataAsText() {
@@ -141,19 +130,19 @@ class OINOHttpRequest extends OINORequest {
     }
     dataAsBuffer() {
         if (this.data === null) {
-            return Buffer.alloc(0);
+            return node_buffer_1.Buffer.alloc(0);
         }
-        else if (this.data instanceof Buffer) {
+        else if (this.data instanceof node_buffer_1.Buffer) {
             return this.data;
         }
         else if (this.data instanceof Uint8Array) {
-            return Buffer.from(this.data);
+            return node_buffer_1.Buffer.from(this.data);
         }
         else if (this.data instanceof Object) {
-            return Buffer.from(JSON.stringify(this.data), "utf-8");
+            return node_buffer_1.Buffer.from(JSON.stringify(this.data), "utf-8");
         }
         else {
-            return Buffer.from(this.data, "utf-8");
+            return node_buffer_1.Buffer.from(this.data, "utf-8");
         }
     }
 }

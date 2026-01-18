@@ -1,4 +1,5 @@
-import { OINOContentType } from ".";
+import { Buffer } from "node:buffer";
+import { OINOContentType, OINOHeaders, OINOHeadersInit } from ".";
 export interface OINORequestInit {
     params?: Record<string, string>;
 }
@@ -18,15 +19,10 @@ export declare class OINORequest {
      */
     constructor(init?: OINORequestInit);
 }
-/**
- * Type for HTTP headers that just guarantees keys are normalized to lowercase.
- *
- */
-export type OINOHttpHeaders = Record<string, string>;
 export interface OINOHttpRequestInit extends OINORequestInit {
     url?: URL;
     method?: string;
-    headers?: OINOHttpHeaders | Record<string, string>;
+    headers?: OINOHeadersInit;
     data?: string | Buffer | Uint8Array | object | null;
     requestType?: OINOContentType;
     responseType?: OINOContentType;
@@ -39,7 +35,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
 export declare class OINOHttpRequest extends OINORequest {
     readonly url?: URL;
     readonly method: string;
-    readonly headers: OINOHttpHeaders;
+    readonly headers: OINOHeaders;
     readonly data: string | Buffer | Uint8Array | object | null;
     readonly requestType: OINOContentType;
     readonly responseType: OINOContentType;

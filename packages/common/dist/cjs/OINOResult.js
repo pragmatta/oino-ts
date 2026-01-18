@@ -133,19 +133,19 @@ class OINOResult {
         for (let i = 0; i < this.messages.length; i++) {
             const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ");
             if (copyErrors && message.startsWith(_1.OINO_ERROR_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
             if (copyWarnings && message.startsWith(_1.OINO_WARNING_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
             if (copyInfos && message.startsWith(_1.OINO_INFO_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
             if (copyDebug && message.startsWith(_1.OINO_DEBUG_PREFIX)) {
-                headers.append('X-OINO-MESSAGE-' + j, message);
+                headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
         }
@@ -183,7 +183,7 @@ class OINOHttpResult extends OINOResult {
     constructor(init) {
         super(init);
         this.body = init?.body ?? "";
-        this.headers = init?.headers ?? {};
+        this.headers = new _1.OINOHeaders(init?.headers);
         this.expires = init?.expires ?? 0;
         this.lastModified = init?.lastModified ?? 0;
         this._etag = "";
@@ -205,7 +205,10 @@ class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getFetchResponse(headers) {
-        const merged_headers = { ...this.headers, ...headers };
+        const merged_headers = new _1.OINOHeaders(this.headers);
+        if (headers) {
+            merged_headers.setHeaders(headers);
+        }
         const result = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers });
         result.headers.set('Content-Length', this.body.length.toString());
         if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {
