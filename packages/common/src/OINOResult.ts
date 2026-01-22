@@ -5,6 +5,7 @@
  */
 
 import { createHash, Hash } from "node:crypto";
+import { Buffer } from "node:buffer";
 import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOHeaders, OINOHeadersInit } from ".";
 
 export interface OINOResultInit {
@@ -177,7 +178,7 @@ export class OINOResult {
 }
 
 export interface OINOHttpResultInit extends OINOResultInit {
-    body?: string
+    body?: string|Buffer
     headers?: OINOHeadersInit
     expires?: number
     lastModified?: number
@@ -190,7 +191,7 @@ export class OINOHttpResult extends OINOResult {
     private _etag:string
 
     /** HTTP body data */
-    readonly body: string
+    readonly body: string|Buffer
     
     /** HTTP headers */
     readonly headers: OINOHeaders
