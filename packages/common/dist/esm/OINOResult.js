@@ -4,6 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import { createHash } from "node:crypto";
+import { Buffer } from "node:buffer";
 import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOHeaders } from ".";
 /**
  * OINO API request result object with returned data and/or http status code/message and
@@ -205,7 +206,14 @@ export class OINOHttpResult extends OINOResult {
         if (headers) {
             merged_headers.setHeaders(headers);
         }
-        const result = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers });
+        let body;
+        if (this.body instanceof Buffer) {
+            body = new Uint8Array(this.body);
+        }
+        else {
+            body = this.body;
+        }
+        const result = new Response(body, { status: this.status, statusText: this.statusText, headers: merged_headers });
         result.headers.set('Content-Length', this.body.length.toString());
         if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {
             result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString());

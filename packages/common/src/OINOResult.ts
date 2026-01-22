@@ -5,6 +5,7 @@
  */
 
 import { createHash, Hash } from "node:crypto";
+import { Buffer } from "node:buffer";
 import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOHeaders, OINOHeadersInit } from ".";
 
 export interface OINOResultInit {
@@ -177,7 +178,7 @@ export class OINOResult {
 }
 
 export interface OINOHttpResultInit extends OINOResultInit {
-    body?: string
+    body?: string|Buffer
     headers?: OINOHeadersInit
     expires?: number
     lastModified?: number
@@ -190,7 +191,7 @@ export class OINOHttpResult extends OINOResult {
     private _etag:string
 
     /** HTTP body data */
-    readonly body: string
+    readonly body: string|Buffer
     
     /** HTTP headers */
     readonly headers: OINOHeaders
@@ -240,7 +241,13 @@ export class OINOHttpResult extends OINOResult {
         if (headers) {
             merged_headers.setHeaders(headers)
         }
-        const result: Response = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers })
+        let body: string|BufferSource 
+        if (this.body instanceof Buffer) {
+            body = new Uint8Array(this.body)
+        } else {
+            body = this.body as string
+        }
+        const result: Response = new Response(body, { status: this.status, statusText: this.statusText, headers: merged_headers })
         result.headers.set('Content-Length', this.body.length.toString())
         if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {
             result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString())

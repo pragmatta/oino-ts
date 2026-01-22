@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import { OINOHeaders, OINOHeadersInit } from ".";
 export interface OINOResultInit {
     success?: boolean;
@@ -88,7 +89,7 @@ export declare class OINOResult {
     printLog(): string;
 }
 export interface OINOHttpResultInit extends OINOResultInit {
-    body?: string;
+    body?: string | Buffer;
     headers?: OINOHeadersInit;
     expires?: number;
     lastModified?: number;
@@ -99,7 +100,7 @@ export interface OINOHttpResultInit extends OINOResultInit {
 export declare class OINOHttpResult extends OINOResult {
     private _etag;
     /** HTTP body data */
-    readonly body: string;
+    readonly body: string | Buffer;
     /** HTTP headers */
     readonly headers: OINOHeaders;
     /** HTTP cache expiration value

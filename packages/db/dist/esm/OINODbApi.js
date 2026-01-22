@@ -287,7 +287,7 @@ export class OINODbApi {
                 rows = request.data;
             }
             else if (request.data != null) {
-                rows = OINODbParser.createRows(this.datamodel, request.data, request);
+                rows = OINODbParser.createRows(this.datamodel, request.data, request.requestType, request);
             }
         }
         catch (e) {

@@ -315,7 +315,7 @@ export class OINODbApi {
             if (Array.isArray(request.data)) {
                 rows = request.data as OINODataRow[]
             } else if (request.data != null) {
-                rows = OINODbParser.createRows(this.datamodel, request.data, request)
+                rows = OINODbParser.createRows(this.datamodel, request.data, request.requestType, request)
             }
         
         } catch (e:any) {

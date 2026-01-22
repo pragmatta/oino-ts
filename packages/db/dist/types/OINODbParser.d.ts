@@ -1,4 +1,4 @@
-import { OINODbDataModel, OINODataRow } from "./index.js";
+import { OINOContentType, OINODbDataModel, OINODataRow } from "./index.js";
 import { OINODbApiRequest } from "./OINODbApi.js";
 /**
  * Static factory class for easily creating things based on data
@@ -10,27 +10,12 @@ export declare class OINODbParser {
      *
      * @param datamodel datamodel of the api
      * @param data data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param contentType content type of the data
      * @param request parameters
      *
      */
-    static createRows(datamodel: OINODbDataModel, data: string | object | Buffer | Uint8Array, request: OINODbApiRequest): OINODataRow[];
-    /**
-      * Create data rows from request body based on the datamodel.
-      *
-      * @param datamodel datamodel of the api
-      * @param data data as a string
-      * @param request request parameters
-      *
-      */
+    static createRows(datamodel: OINODbDataModel, data: string | object | Buffer | Uint8Array, contentType: OINOContentType, request?: OINODbApiRequest): OINODataRow[];
     private static _createRowsFromText;
-    /**
-      * Create data rows from request body based on the datamodel.
-      *
-      * @param datamodel datamodel of the api
-      * @param data data as an Buffer or Uint8Array
-      * @param request parameters
-      *
-      */
     private static _createRowsFromBlob;
     /**
      * Create one data row from javascript object based on the datamodel.

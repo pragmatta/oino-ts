@@ -7,6 +7,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINOHttpResult = exports.OINOResult = void 0;
 const node_crypto_1 = require("node:crypto");
+const node_buffer_1 = require("node:buffer");
 const _1 = require(".");
 /**
  * OINO API request result object with returned data and/or http status code/message and
@@ -209,7 +210,14 @@ class OINOHttpResult extends OINOResult {
         if (headers) {
             merged_headers.setHeaders(headers);
         }
-        const result = new Response(this.body, { status: this.status, statusText: this.statusText, headers: merged_headers });
+        let body;
+        if (this.body instanceof node_buffer_1.Buffer) {
+            body = new Uint8Array(this.body);
+        }
+        else {
+            body = this.body;
+        }
+        const result = new Response(body, { status: this.status, statusText: this.statusText, headers: merged_headers });
         result.headers.set('Content-Length', this.body.length.toString());
         if (merged_headers['Last-Modified'] === undefined && this.lastModified > 0) {
             result.headers.set('Last-Modified', new Date(this.lastModified).toUTCString());
