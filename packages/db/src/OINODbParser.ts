@@ -52,7 +52,7 @@ export class OINODbParser {
             OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "HTML can't be used as an input content type!", {contentType:OINOContentType.html})
             return []
         } else {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", {contentType:request.requestType})
+            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", {contentType:contentType})
             return []
         }
     }
@@ -76,7 +76,7 @@ export class OINODbParser {
             OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "HTML can't be used as an input content type!", {contentType:OINOContentType.html})
             return []
         } else {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", {contentType:request.requestType})
+            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", {contentType:contentType})
             return []
         }
     }
