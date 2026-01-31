@@ -13,11 +13,11 @@ export interface OINODbApiRequestInit extends OINOHttpRequestInit {
     rowId?: string
     rowData?: string|OINODataRow[]|Buffer|Uint8Array|object|null
     sqlParams?: OINODbSqlParams
-    filter?: OINODbSqlFilter
-    order?: OINODbSqlOrder
-    limit?: OINODbSqlLimit
-    aggregate?: OINODbSqlAggregate
-    select?: OINODbSqlSelect
+    filter?: OINODbSqlFilter|string
+    order?: OINODbSqlOrder|string
+    limit?: OINODbSqlLimit|string
+    aggregate?: OINODbSqlAggregate|string
+    select?: OINODbSqlSelect|string
 }
 
 export class OINODbApiRequest extends OINOHttpRequest {
@@ -32,7 +32,11 @@ export class OINODbApiRequest extends OINOHttpRequest {
         this.sqlParams = init?.sqlParams || {}
 
         if (init?.filter) {
-            this.sqlParams.filter = init.filter
+            if (init.filter instanceof OINODbSqlFilter) {
+                this.sqlParams.filter = init.filter
+            } else {
+                this.sqlParams.filter = OINODbSqlFilter.parse(init.filter)
+            }
         } 
         if (!this.sqlParams.filter) {
             const filter_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM)
@@ -41,7 +45,11 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.order) {
-            this.sqlParams.order = init.order
+            if (init.order instanceof OINODbSqlOrder) {
+                this.sqlParams.order = init.order
+            } else {
+                this.sqlParams.order = OINODbSqlOrder.parse(init.order)
+            }
         } 
         if (!this.sqlParams.order) {
             const order_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM)
@@ -50,7 +58,11 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.limit) {
-            this.sqlParams.limit = init.limit
+            if (init.limit instanceof OINODbSqlLimit) {
+                this.sqlParams.limit = init.limit
+            } else {
+                this.sqlParams.limit = OINODbSqlLimit.parse(init.limit)
+            }
         } 
         if (!this.sqlParams.limit) {
             const limit_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM)
@@ -59,7 +71,11 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.aggregate) {
-            this.sqlParams.aggregate = init.aggregate
+            if (init.aggregate instanceof OINODbSqlAggregate) {
+                this.sqlParams.aggregate = init.aggregate
+            } else {
+                this.sqlParams.aggregate = OINODbSqlAggregate.parse(init.aggregate)
+            }
         } 
         if (!this.sqlParams.aggregate) {
             const aggregate_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM)
@@ -68,7 +84,11 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.select) {
-            this.sqlParams.select = init.select
+            if (init.select instanceof OINODbSqlSelect) {
+                this.sqlParams.select = init.select
+            } else {
+                this.sqlParams.select = OINODbSqlSelect.parse(init.select)
+            }
         } 
         if (!this.sqlParams.select) {
             const select_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_SELECT_PARAM)
