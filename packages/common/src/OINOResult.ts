@@ -262,4 +262,69 @@ export class OINOHttpResult extends OINOResult {
         return result
     }
 
+    /**
+     * Create from a Response object from the result values.
+     * 
+     * @param response fetch Response object
+     * 
+     */
+    static async fromFetchResponse(response: Response): Promise<OINOHttpResult> {
+        const body = Buffer.from(await response.arrayBuffer())
+        const last_modified = response.headers.get('Last-Modified')
+        const expires = response.headers.get('Expires')
+        const result = new OINOHttpResult({
+            status: response.status,
+            statusText: response.statusText,
+            body: body,            
+            headers: response.headers as unknown as OINOHeadersInit,
+            lastModified: last_modified ? (new Date(last_modified).getTime()) : 0,
+            expires: expires ? (new Date(expires).getTime() - Date.now()) : 0
+        })
+        return result
+    }
+
+    /**
+     * Returns the request body as a text string.
+     * 
+     */
+    bodyAsText(): string {
+        if (this.body instanceof Buffer) {
+            return this.body.toString("utf-8")
+            
+        } else {
+            return this.body as string || ""
+        }
+    }
+
+    /**
+     * Returns the request body parsed as JSON object.
+     * 
+     */
+    bodyAsParsedJson(): any {
+        return this.body ? JSON.parse(this.bodyAsText()) : {}
+    }
+
+    /**
+     * Returns the request body as URLSearchParams (form body).
+     * 
+     */
+    bodyAsFormData(): URLSearchParams {
+        return new URLSearchParams(this.bodyAsText() || "")
+    }
+    
+    /**
+     * Returns the request body as Buffer.
+     * 
+     */
+    bodyAsBuffer(): Buffer {
+        if (this.body === null) {
+            return Buffer.alloc(0)
+
+        } else if (this.body instanceof Buffer) {
+            return this.body
+
+        } else {
+            return Buffer.from(this.body as string, "utf-8")
+        }
+    }
 }

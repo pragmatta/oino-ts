@@ -30,7 +30,7 @@ export class OINOHttpRequest extends OINORequest {
     url;
     method;
     headers;
-    data;
+    body;
     requestType;
     responseType;
     multipartBoundary;
@@ -47,7 +47,7 @@ export class OINOHttpRequest extends OINORequest {
         this.url = init.url;
         this.method = init.method ?? "GET";
         this.headers = new OINOHeaders(init.headers);
-        this.data = init.data ?? "";
+        this.body = init.body;
         this.multipartBoundary = "";
         this.lastModified = init.lastModified;
         if (init.multipartBoundary) {
@@ -98,47 +98,69 @@ export class OINOHttpRequest extends OINORequest {
             this.etags = etags;
         }
     }
+    /**
+     * Creates a `OINOHttpRequest` from a Fetch API `Request` object.
+     *
+     * @param request Fetch request
+     *
+     */
     static async fromFetchRequest(request) {
         const body = await request.arrayBuffer();
         return new OINOHttpRequest({
             url: new URL(request.url),
             method: request.method,
             headers: Object.fromEntries(request.headers),
-            data: Buffer.from(body),
+            body: Buffer.from(body),
         });
     }
-    dataAsText() {
-        if (this.data instanceof Uint8Array) {
-            return new TextDecoder().decode(this.data);
+    /**
+     * Returns the request data as a text string.
+     *
+     */
+    bodyAsText() {
+        if (this.body instanceof Uint8Array) {
+            return new TextDecoder().decode(this.body);
         }
-        else if (this.data instanceof Object) {
-            return JSON.stringify(this.data);
+        else if (this.body instanceof Object) {
+            return JSON.stringify(this.body);
         }
         else {
-            return this.data?.toString() || "";
+            return this.body?.toString() || "";
         }
     }
-    dataAsParsedJson() {
-        return this.data ? JSON.parse(this.dataAsText()) : {};
+    /**
+     * Returns the request data parsed as JSON object.
+     *
+     */
+    bodyAsParsedJson() {
+        return this.body ? JSON.parse(this.bodyAsText()) : {};
     }
-    dataAsFormData() {
-        return new URLSearchParams(this.dataAsText() || "");
+    /**
+     * Returns the request data as URLSearchParams (form data).
+     *
+     */
+    bodyAsFormData() {
+        return new URLSearchParams(this.bodyAsText() || "");
     }
-    dataAsBuffer() {
-        if (this.data === null) {
+    /**
+     * Returns the request data as Buffer.
+     *
+     */
+    bodyAsBuffer() {
+        if ((this.body === null) || (this.body === undefined)) {
             return Buffer.alloc(0);
         }
-        else if (this.data instanceof Buffer) {
-            return this.data;
+        else if (this.body instanceof Buffer) {
+            return this.body;
         }
-        else if (this.data instanceof Uint8Array) {
-            return Buffer.from(this.data);
+        else if (this.body instanceof Uint8Array) {
+            return Buffer.from(this.body);
         }
-        else if (this.data instanceof Object) {
-            return Buffer.from(JSON.stringify(this.data), "utf-8");
+        else if (this.body instanceof Object) {
+            return Buffer.from(JSON.stringify(this.body), "utf-8");
         }
         else {
-            return Buffer.from(this.data, "utf-8");
+            return Buffer.from(this.body, "utf-8");
         }
     }
 }

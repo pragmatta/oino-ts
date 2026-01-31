@@ -4,17 +4,17 @@ import { OINOResult, OINOHttpRequest, OINOHttpRequestInit } from "@oino-ts/commo
 import { OINOHashid } from "@oino-ts/hashid";
 export interface OINODbApiRequestInit extends OINOHttpRequestInit {
     rowId?: string;
-    data?: string | OINODataRow[] | Buffer | Uint8Array | object | null;
+    rowData?: string | OINODataRow[] | Buffer | Uint8Array | object | null;
     sqlParams?: OINODbSqlParams;
-    filter?: OINODbSqlFilter;
-    order?: OINODbSqlOrder;
-    limit?: OINODbSqlLimit;
-    aggregate?: OINODbSqlAggregate;
-    select?: OINODbSqlSelect;
+    filter?: OINODbSqlFilter | string;
+    order?: OINODbSqlOrder | string;
+    limit?: OINODbSqlLimit | string;
+    aggregate?: OINODbSqlAggregate | string;
+    select?: OINODbSqlSelect | string;
 }
 export declare class OINODbApiRequest extends OINOHttpRequest {
     readonly rowId: string;
-    readonly data: string | OINODataRow[] | Buffer | Uint8Array | object | null;
+    readonly rowData: string | OINODataRow[] | Buffer | Uint8Array | object | null;
     readonly sqlParams: OINODbSqlParams;
     constructor(init: OINODbApiRequestInit);
     static fromFetchRequest(request: Request): Promise<OINODbApiRequest>;
@@ -116,11 +116,11 @@ export declare class OINODbApi {
      *
      * @param method HTTP method of the REST request
      * @param rowId URL id of the REST request
-     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param sqlParams SQL parameters for the REST request
      *
      */
-    doRequest(method: string, rowId: string, data: string | OINODataRow[] | Buffer | Uint8Array | object | null, sqlParams: OINODbSqlParams): Promise<OINODbApiResult>;
+    doRequest(method: string, rowId: string, rowData: string | OINODataRow[] | Buffer | Uint8Array | object | null, sqlParams: OINODbSqlParams): Promise<OINODbApiResult>;
     /**
      * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
@@ -134,10 +134,10 @@ export declare class OINODbApi {
      *
      * @param method HTTP method of the REST request
      * @param rowId URL id of the REST request
-     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      *
      */
-    doBatchUpdate(method: string, rowId: string, data: string | OINODataRow[] | Buffer | Uint8Array | object | null, sqlParams?: OINODbSqlParams): Promise<OINODbApiResult>;
+    doBatchUpdate(method: string, rowId: string, rowData: string | OINODataRow[] | Buffer | Uint8Array | object | null, sqlParams?: OINODbSqlParams): Promise<OINODbApiResult>;
     /**
      * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
      *

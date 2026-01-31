@@ -9,15 +9,20 @@ import { OINOLog, OINOResult, OINOHttpRequest } from "@oino-ts/common";
 import { OINOHashid } from "@oino-ts/hashid";
 export class OINODbApiRequest extends OINOHttpRequest {
     rowId;
-    data;
+    rowData;
     sqlParams;
     constructor(init) {
         super(init);
         this.rowId = init?.rowId || "";
-        this.data = init?.data || null;
+        this.rowData = init?.rowData || null;
         this.sqlParams = init?.sqlParams || {};
         if (init?.filter) {
-            this.sqlParams.filter = init.filter;
+            if (init.filter instanceof OINODbSqlFilter) {
+                this.sqlParams.filter = init.filter;
+            }
+            else {
+                this.sqlParams.filter = OINODbSqlFilter.parse(init.filter);
+            }
         }
         if (!this.sqlParams.filter) {
             const filter_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM);
@@ -26,7 +31,12 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.order) {
-            this.sqlParams.order = init.order;
+            if (init.order instanceof OINODbSqlOrder) {
+                this.sqlParams.order = init.order;
+            }
+            else {
+                this.sqlParams.order = OINODbSqlOrder.parse(init.order);
+            }
         }
         if (!this.sqlParams.order) {
             const order_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM);
@@ -35,7 +45,12 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.limit) {
-            this.sqlParams.limit = init.limit;
+            if (init.limit instanceof OINODbSqlLimit) {
+                this.sqlParams.limit = init.limit;
+            }
+            else {
+                this.sqlParams.limit = OINODbSqlLimit.parse(init.limit);
+            }
         }
         if (!this.sqlParams.limit) {
             const limit_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM);
@@ -44,7 +59,12 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.aggregate) {
-            this.sqlParams.aggregate = init.aggregate;
+            if (init.aggregate instanceof OINODbSqlAggregate) {
+                this.sqlParams.aggregate = init.aggregate;
+            }
+            else {
+                this.sqlParams.aggregate = OINODbSqlAggregate.parse(init.aggregate);
+            }
         }
         if (!this.sqlParams.aggregate) {
             const aggregate_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM);
@@ -53,7 +73,12 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (init?.select) {
-            this.sqlParams.select = init.select;
+            if (init.select instanceof OINODbSqlSelect) {
+                this.sqlParams.select = init.select;
+            }
+            else {
+                this.sqlParams.select = OINODbSqlSelect.parse(init.select);
+            }
         }
         if (!this.sqlParams.select) {
             const select_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_SELECT_PARAM);
@@ -68,7 +93,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
             url: new URL(request.url),
             method: request.method,
             headers: Object.fromEntries(request.headers),
-            data: Buffer.from(body),
+            rowData: Buffer.from(body),
         });
     }
 }
@@ -283,11 +308,11 @@ export class OINODbApi {
     _parseData(httpResult, request) {
         let rows = [];
         try {
-            if (Array.isArray(request.data)) {
-                rows = request.data;
+            if (Array.isArray(request.rowData)) {
+                rows = request.rowData;
             }
-            else if (request.data != null) {
-                rows = OINODbParser.createRows(this.datamodel, request.data, request.requestType, request);
+            else if (request.rowData != null) {
+                rows = OINODbParser.createRows(this.datamodel, request.rowData, request.requestType, request);
             }
         }
         catch (e) {
@@ -445,12 +470,12 @@ export class OINODbApi {
      *
      * @param method HTTP method of the REST request
      * @param rowId URL id of the REST request
-     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param sqlParams SQL parameters for the REST request
      *
      */
-    async doRequest(method, rowId, data, sqlParams) {
-        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, data: data, sqlParams: sqlParams }));
+    async doRequest(method, rowId, rowData, sqlParams) {
+        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
     }
     /**
      * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
@@ -461,7 +486,7 @@ export class OINODbApi {
      */
     async runRequest(request) {
         OINOBenchmark.startMetric("OINODbApi", "doRequest." + request.method);
-        OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", { method: request.method, id: request.rowId, data: request.data });
+        OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", { method: request.method, id: request.rowId, data: request.rowData });
         let result = new OINODbApiResult(request);
         let rows = [];
         if ((request.method == "POST") || (request.method == "PUT")) {
@@ -526,11 +551,11 @@ export class OINODbApi {
      *
      * @param method HTTP method of the REST request
      * @param rowId URL id of the REST request
-     * @param data HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      *
      */
-    async doBatchUpdate(method, rowId, data, sqlParams) {
-        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, data: data, sqlParams: sqlParams }));
+    async doBatchUpdate(method, rowId, rowData, sqlParams) {
+        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
     }
     /**
      * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
@@ -539,7 +564,7 @@ export class OINODbApi {
      *
      */
     async runBatchUpdate(request) {
-        OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", { request: request, data: request.data });
+        OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", { request: request, data: request.rowData });
         let result = new OINODbApiResult(request);
         if ((request.method != "PUT") && (request.method != "DELETE")) {
             result.setError(500, "Batch update only supports PUT and DELETE methods!", "DoBatchUpdate");

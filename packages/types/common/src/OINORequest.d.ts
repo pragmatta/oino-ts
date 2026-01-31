@@ -23,7 +23,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
     url?: URL;
     method?: string;
     headers?: OINOHeadersInit;
-    data?: string | Buffer | Uint8Array | object | null;
+    body?: string | Buffer | Uint8Array | object | null | undefined;
     requestType?: OINOContentType;
     responseType?: OINOContentType;
     multipartBoundary?: string;
@@ -36,7 +36,7 @@ export declare class OINOHttpRequest extends OINORequest {
     readonly url?: URL;
     readonly method: string;
     readonly headers: OINOHeaders;
-    readonly data: string | Buffer | Uint8Array | object | null;
+    readonly body: string | Buffer | Uint8Array | object | null | undefined;
     readonly requestType: OINOContentType;
     readonly responseType: OINOContentType;
     readonly multipartBoundary?: string;
@@ -49,9 +49,31 @@ export declare class OINOHttpRequest extends OINORequest {
      *
      */
     constructor(init: OINOHttpRequestInit);
+    /**
+     * Creates a `OINOHttpRequest` from a Fetch API `Request` object.
+     *
+     * @param request Fetch request
+     *
+     */
     static fromFetchRequest(request: Request): Promise<OINOHttpRequest>;
-    dataAsText(): string;
-    dataAsParsedJson(): any;
-    dataAsFormData(): URLSearchParams;
-    dataAsBuffer(): Buffer;
+    /**
+     * Returns the request data as a text string.
+     *
+     */
+    bodyAsText(): string;
+    /**
+     * Returns the request data parsed as JSON object.
+     *
+     */
+    bodyAsParsedJson(): any;
+    /**
+     * Returns the request data as URLSearchParams (form data).
+     *
+     */
+    bodyAsFormData(): URLSearchParams;
+    /**
+     * Returns the request data as Buffer.
+     *
+     */
+    bodyAsBuffer(): Buffer;
 }
