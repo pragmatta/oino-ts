@@ -265,7 +265,8 @@ export class OINOHttpResult extends OINOResult {
     /**
      * Create from a Response object from the result values.
      * 
-     * @param headers HTTP headers (overrides existing values)
+     * @param response fetch Response object
+     * 
      */
     static async fromFetchResponse(response: Response): Promise<OINOHttpResult> {
         const body = Buffer.from(await response.arrayBuffer())

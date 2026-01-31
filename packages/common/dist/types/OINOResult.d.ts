@@ -127,4 +127,31 @@ export declare class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getFetchResponse(headers?: OINOHeadersInit): Response;
+    /**
+     * Create from a Response object from the result values.
+     *
+     * @param response fetch Response object
+     *
+     */
+    static fromFetchResponse(response: Response): Promise<OINOHttpResult>;
+    /**
+     * Returns the request body as a text string.
+     *
+     */
+    bodyAsText(): string;
+    /**
+     * Returns the request body parsed as JSON object.
+     *
+     */
+    bodyAsParsedJson(): any;
+    /**
+     * Returns the request body as URLSearchParams (form body).
+     *
+     */
+    bodyAsFormData(): URLSearchParams;
+    /**
+     * Returns the request body as Buffer.
+     *
+     */
+    bodyAsBuffer(): Buffer;
 }

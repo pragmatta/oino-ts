@@ -230,7 +230,7 @@ export class OINODbPostgresql extends OINODb {
         }
         catch (e) {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbPostgresql.connect");
-            OINOLog.exception("@oino-ts/db-postgresql", "OINODbMsSql", "connect", "exception in connect", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "connect", "exception in connect", { message: e.message, stack: e.stack });
         }
         return result;
     }
@@ -259,7 +259,7 @@ export class OINODbPostgresql extends OINODb {
         }
         catch (e) {
             result.setError(500, "Exception validating connection: " + e.message, "OINODbPostgresql.validate");
-            OINOLog.exception("@oino-ts/db-postgresql", "OINODbMsSql", "validate", "exception in validate", { message: e.message, stack: e.stack });
+            OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "validate", "exception in validate", { message: e.message, stack: e.stack });
         }
         OINOBenchmark.endMetric("OINODb", "validate");
         return result;
