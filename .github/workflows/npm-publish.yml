@@ -20,6 +20,11 @@ jobs:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
-      - run: npm publish
+      - run: npm publish ./packages/common --access public
+      - run: npm publish ./packages/db --access public
+      - run: npm publish ./packages/db-bunsqlite --access public
+      - run: npm publish ./packages/db-postgresql --access public
+      - run: npm publish ./packages/db-mariadb --access public
+      - run: npm publish ./packages/db-mssql --access public
+      - run: npm publish ./packages/hashid --access public
+      - run: npm publish ./packages/types --access public
