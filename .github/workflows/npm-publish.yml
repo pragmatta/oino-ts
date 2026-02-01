@@ -19,7 +19,6 @@ jobs:
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
       - run: npm publish ./packages/common --access public
       - run: npm publish ./packages/db --access public
       - run: npm publish ./packages/db-bunsqlite --access public
