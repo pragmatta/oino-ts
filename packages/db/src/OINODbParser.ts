@@ -4,8 +4,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOContentType, OINODbDataModel, OINODbDataField, OINODataRow, OINOStr, OINONumberDataField, OINOLog, OINO_ERROR_PREFIX } from "./index.js"
-import { OINODbApiRequest } from "./OINODbApi.js"
+import { Buffer } from "node:buffer"
+import { OINOContentType, OINOStr, OINOLog, OINO_ERROR_PREFIX } from "@oino-ts/common"
+import { OINODbDataModel, OINODbDataField, OINODataRow, OINONumberDataField } from "./index.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -18,16 +19,16 @@ export class OINODbParser {
      * @param datamodel datamodel of the api
      * @param data data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param contentType content type of the data
-     * @param request parameters
+     * @param multipartBoundary multipart boundary for formdata parsing, if applicable
      * 
      */
-    static createRows(datamodel:OINODbDataModel, data:string|object|Buffer|Uint8Array, contentType:OINOContentType, request?:OINODbApiRequest ):OINODataRow[] {
+    static createRows(datamodel:OINODbDataModel, data:string|object|Buffer|Uint8Array, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
         let result:OINODataRow[] = []
         if (typeof data == "string") {
-            result = this._createRowsFromText(datamodel, data, contentType, request)
+            result = this._createRowsFromText(datamodel, data, contentType, multipartBoundary)
 
         } else if ((data instanceof Buffer) || (data instanceof Uint8Array)) {
-            result = this._createRowsFromBlob(datamodel, data, contentType, request)
+            result = this._createRowsFromBlob(datamodel, data, contentType, multipartBoundary)
 
         } else if (typeof data == "object") {
             result = [this._createRowFromObject(datamodel, data)]
@@ -35,7 +36,7 @@ export class OINODbParser {
         return result
     }
 
-    private static _createRowsFromText(datamodel:OINODbDataModel, data:string, contentType:OINOContentType, request?:OINODbApiRequest ):OINODataRow[] {
+    private static _createRowsFromText(datamodel:OINODbDataModel, data:string, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
         if ((contentType == OINOContentType.json) || (contentType == undefined)) {
             return this._createRowFromJson(datamodel, data)
             
@@ -43,7 +44,7 @@ export class OINODbParser {
             return this._createRowFromCsv(datamodel, data)
 
         } else if (contentType == OINOContentType.formdata) {
-            return this._createRowFromFormdata(datamodel, Buffer.from(data, "utf8"), request?.multipartBoundary || "")
+            return this._createRowFromFormdata(datamodel, Buffer.from(data, "utf8"), multipartBoundary || "")
 
         } else if (contentType == OINOContentType.urlencode) {
             return this._createRowFromUrlencoded(datamodel, data)
@@ -56,7 +57,7 @@ export class OINODbParser {
             return []
         }
     }
-    private static _createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer|Uint8Array, contentType:OINOContentType, request?:OINODbApiRequest ):OINODataRow[] {
+    private static _createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer|Uint8Array, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
         if (data instanceof Uint8Array && !(data instanceof Buffer)) {
             data = Buffer.from(data) as Buffer
         }
@@ -67,7 +68,7 @@ export class OINODbParser {
             return this._createRowFromCsv(datamodel, data.toString()) // binary data has to be base64 encoded so it's a string
 
         } else if (contentType == OINOContentType.formdata) {
-            return this._createRowFromFormdata(datamodel, data as Buffer, request?.multipartBoundary || "")
+            return this._createRowFromFormdata(datamodel, data as Buffer, multipartBoundary || "")
 
         } else if (contentType == OINOContentType.urlencode) {
             return this._createRowFromUrlencoded(datamodel, data.toString()) // data is urlencoded so it's a string

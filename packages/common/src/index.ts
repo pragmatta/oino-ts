@@ -1,7 +1,7 @@
 export { OINOBenchmark, OINOMemoryBenchmark } from "./OINOBenchmark.js"
 export { OINOLog, OINOLogLevel, OINOConsoleLog } from "./OINOLog.js"
 export { OINOResult, OINOHttpResult, type OINOResultInit, type OINOHttpResultInit } from "./OINOResult.js"
-export { OINORequest, OINOHttpRequest, type OINORequestInit, type OINOHttpRequestInit } from "./OINORequest.js"
+export { OINORequest, OINOHttpRequest, type OINOHttpData, type OINORequestInit, type OINOHttpRequestInit } from "./OINORequest.js"
 export { OINOStr } from "./OINOStr.js"
 export { OINOHtmlTemplate } from "./OINOHtmlTemplate.js"
 export { OINOFormatter, OINO_EMPTY_FORMATTER } from "./OINOFormatter.js"

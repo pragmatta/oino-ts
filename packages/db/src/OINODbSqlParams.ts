@@ -4,7 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOStr, OINODbDataField, OINODbDataModel, OINO_ERROR_PREFIX, OINOLog, OINODB_UNDEFINED } from "./index.js"
+import { OINOStr, OINO_ERROR_PREFIX, OINOLog } from "@oino-ts/common"
+import { OINODbDataField, OINODbDataModel, OINODB_UNDEFINED } from "./index.js"
 
 const OINO_FIELD_NAME_CHARS:string = "\\w\\s\\-\\_\\#\\¤"
 
