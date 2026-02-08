@@ -1,3 +1,5 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { Buffer } from "node:buffer";
 import { OINOContentType, OINOHeaders, OINOHeadersInit } from ".";
 export interface OINORequestInit {
@@ -19,11 +21,12 @@ export declare class OINORequest {
      */
     constructor(init?: OINORequestInit);
 }
+export type OINOHttpData = string | Buffer | Uint8Array | null;
 export interface OINOHttpRequestInit extends OINORequestInit {
-    url?: URL;
+    url?: URL | string;
     method?: string;
     headers?: OINOHeadersInit;
-    body?: string | Buffer | Uint8Array | object | null | undefined;
+    body?: OINOHttpData;
     requestType?: OINOContentType;
     responseType?: OINOContentType;
     multipartBoundary?: string;
@@ -33,15 +36,15 @@ export interface OINOHttpRequestInit extends OINORequestInit {
  * Specialized result for HTTP responses.
  */
 export declare class OINOHttpRequest extends OINORequest {
-    readonly url?: URL;
-    readonly method: string;
-    readonly headers: OINOHeaders;
-    readonly body: string | Buffer | Uint8Array | object | null | undefined;
-    readonly requestType: OINOContentType;
-    readonly responseType: OINOContentType;
-    readonly multipartBoundary?: string;
-    readonly lastModified?: number;
-    readonly etags?: string[];
+    url?: URL;
+    method: string;
+    headers: OINOHeaders;
+    body: OINOHttpData;
+    requestType: OINOContentType;
+    responseType: OINOContentType;
+    multipartBoundary?: string;
+    lastModified?: number;
+    etags?: string[];
     /**
      * Constructor for a `OINOHttpRequest`
      *

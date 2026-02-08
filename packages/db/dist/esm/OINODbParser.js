@@ -3,7 +3,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINOContentType, OINOStr, OINONumberDataField, OINOLog, OINO_ERROR_PREFIX } from "./index.js";
+import { Buffer } from "node:buffer";
+import { OINOContentType, OINOStr, OINOLog, OINO_ERROR_PREFIX } from "@oino-ts/common";
+import { OINONumberDataField } from "./index.js";
 /**
  * Static factory class for easily creating things based on data
  *
@@ -15,23 +17,23 @@ export class OINODbParser {
      * @param datamodel datamodel of the api
      * @param data data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param contentType content type of the data
-     * @param request parameters
+     * @param multipartBoundary multipart boundary for formdata parsing, if applicable
      *
      */
-    static createRows(datamodel, data, contentType, request) {
+    static createRows(datamodel, data, contentType, multipartBoundary) {
         let result = [];
         if (typeof data == "string") {
-            result = this._createRowsFromText(datamodel, data, contentType, request);
+            result = this._createRowsFromText(datamodel, data, contentType, multipartBoundary);
         }
         else if ((data instanceof Buffer) || (data instanceof Uint8Array)) {
-            result = this._createRowsFromBlob(datamodel, data, contentType, request);
+            result = this._createRowsFromBlob(datamodel, data, contentType, multipartBoundary);
         }
         else if (typeof data == "object") {
             result = [this._createRowFromObject(datamodel, data)];
         }
         return result;
     }
-    static _createRowsFromText(datamodel, data, contentType, request) {
+    static _createRowsFromText(datamodel, data, contentType, multipartBoundary) {
         if ((contentType == OINOContentType.json) || (contentType == undefined)) {
             return this._createRowFromJson(datamodel, data);
         }
@@ -39,7 +41,7 @@ export class OINODbParser {
             return this._createRowFromCsv(datamodel, data);
         }
         else if (contentType == OINOContentType.formdata) {
-            return this._createRowFromFormdata(datamodel, Buffer.from(data, "utf8"), request?.multipartBoundary || "");
+            return this._createRowFromFormdata(datamodel, Buffer.from(data, "utf8"), multipartBoundary || "");
         }
         else if (contentType == OINOContentType.urlencode) {
             return this._createRowFromUrlencoded(datamodel, data);
@@ -53,7 +55,7 @@ export class OINODbParser {
             return [];
         }
     }
-    static _createRowsFromBlob(datamodel, data, contentType, request) {
+    static _createRowsFromBlob(datamodel, data, contentType, multipartBoundary) {
         if (data instanceof Uint8Array && !(data instanceof Buffer)) {
             data = Buffer.from(data);
         }
@@ -64,7 +66,7 @@ export class OINODbParser {
             return this._createRowFromCsv(datamodel, data.toString()); // binary data has to be base64 encoded so it's a string
         }
         else if (contentType == OINOContentType.formdata) {
-            return this._createRowFromFormdata(datamodel, data, request?.multipartBoundary || "");
+            return this._createRowFromFormdata(datamodel, data, multipartBoundary || "");
         }
         else if (contentType == OINOContentType.urlencode) {
             return this._createRowFromUrlencoded(datamodel, data.toString()); // data is urlencoded so it's a string

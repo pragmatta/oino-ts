@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbDataModel = void 0;
+const common_1 = require("@oino-ts/common");
 const index_js_1 = require("./index.js");
 /**
  * OINO Datamodel object for representing one database table and it's columns.
@@ -97,14 +98,14 @@ class OINODbDataModel {
                 }
                 value = f.printCellAsSqlValue(value);
                 if (value == "") { // ids are user input and could be specially crafted to be empty
-                    throw new Error(index_js_1.OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName);
+                    throw new Error(common_1.OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName);
                 }
                 result += f.printSqlColumnName() + "=" + value;
                 i = i + 1;
             }
         }
         if (i != id_parts.length) {
-            throw new Error(index_js_1.OINO_ERROR_PREFIX + ": id '" + id_value + "' is not a valid key for table " + this.api.params.tableName);
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": id '" + id_value + "' is not a valid key for table " + this.api.params.tableName);
         }
         return "(" + result + ")";
     }

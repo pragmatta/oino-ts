@@ -1,5 +1,8 @@
-import { OINOContentType, OINODbDataModel, OINODataRow } from "./index.js";
-import { OINODbApiRequest } from "./OINODbApi.js";
+/// <reference types="node" />
+/// <reference types="node" />
+import { Buffer } from "node:buffer";
+import { OINOContentType } from "@oino-ts/common";
+import { OINODbDataModel, OINODataRow } from "./index.js";
 /**
  * Static factory class for easily creating things based on data
  *
@@ -11,10 +14,10 @@ export declare class OINODbParser {
      * @param datamodel datamodel of the api
      * @param data data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param contentType content type of the data
-     * @param request parameters
+     * @param multipartBoundary multipart boundary for formdata parsing, if applicable
      *
      */
-    static createRows(datamodel: OINODbDataModel, data: string | object | Buffer | Uint8Array, contentType: OINOContentType, request?: OINODbApiRequest): OINODataRow[];
+    static createRows(datamodel: OINODbDataModel, data: string | object | Buffer | Uint8Array, contentType: OINOContentType, multipartBoundary?: string): OINODataRow[];
     private static _createRowsFromText;
     private static _createRowsFromBlob;
     /**

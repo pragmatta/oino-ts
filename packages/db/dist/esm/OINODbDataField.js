@@ -3,7 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINOLog, OINO_ERROR_PREFIX } from "./index.js";
+import { Buffer } from "buffer";
+import { OINO_ERROR_PREFIX, OINOLog } from "@oino-ts/common";
 /**
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
  *

@@ -3,7 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODb, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINODbMemoryDataSet, OINOBenchmark, OINOBlobDataField, OINODatetimeDataField, OINOStr, OINOLog, OINOResult, OINODB_EMPTY_ROWS } from "@oino-ts/db";
+import { OINO_ERROR_PREFIX, OINOBenchmark, OINOStr, OINOLog, OINOResult } from "@oino-ts/common";
+import { OINODb, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbMemoryDataSet, OINOBlobDataField, OINODatetimeDataField, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 import { Database as BunSqliteDb } from "bun:sqlite";
 /**
  * Implmentation of OINODbDataSet for BunSqlite.

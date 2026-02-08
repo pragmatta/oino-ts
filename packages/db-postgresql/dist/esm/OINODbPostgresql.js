@@ -3,7 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODb, OINODbDataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINOLog, OINOResult, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
+import { OINO_ERROR_PREFIX, OINOBenchmark, OINOLog, OINOResult } from "@oino-ts/common";
+import { OINODb, OINODbDataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 import { Pool } from "pg";
 /**
  * Implmentation of OINODbDataSet for Postgresql.

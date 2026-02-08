@@ -1,4 +1,5 @@
-import { OINODbDataSet, OINODbDataModel, OINOContentType, OINODataCell, OINODbSqlParams } from "./index.js";
+import { OINOContentType } from "@oino-ts/common";
+import { OINODbDataSet, OINODbDataModel, OINODataCell, OINODbSqlParams } from "./index.js";
 /**
  * Class for dataset based on a data model that can be serialized to
  * a supported format:

@@ -32,11 +32,13 @@ export class OINORequest {
     }
 }
 
+export type OINOHttpData = string|Buffer|Uint8Array|null
+
 export interface OINOHttpRequestInit extends OINORequestInit {
-    url?: URL
+    url?: URL|string
     method?: string
     headers?: OINOHeadersInit
-    body?: string|Buffer|Uint8Array|object|null|undefined
+    body?: OINOHttpData
     requestType?:OINOContentType
     responseType?:OINOContentType
     multipartBoundary?:string
@@ -47,15 +49,15 @@ export interface OINOHttpRequestInit extends OINORequestInit {
  * Specialized result for HTTP responses.
  */
 export class OINOHttpRequest extends OINORequest {
-    readonly url?: URL
-    readonly method: string
-    readonly headers: OINOHeaders
-    readonly body: string|Buffer|Uint8Array|object|null|undefined
-    readonly requestType:OINOContentType
-    readonly responseType:OINOContentType
-    readonly multipartBoundary?:string
-    readonly lastModified?:number
-    readonly etags?:string[]
+    url?: URL
+    method: string
+    headers: OINOHeaders
+    body: OINOHttpData
+    requestType:OINOContentType
+    responseType:OINOContentType
+    multipartBoundary?:string
+    lastModified?:number
+    etags?:string[]
 
     /**
      * Constructor for a `OINOHttpRequest` 
@@ -65,10 +67,10 @@ export class OINOHttpRequest extends OINORequest {
      */
     constructor(init: OINOHttpRequestInit) {
         super(init)
-        this.url = init.url 
-        this.method = init.method ?? "GET"
+        this.url = typeof init.url === "string" ? new URL(init.url) : init.url
+        this.method = init.method?.toUpperCase() ?? "GET"
         this.headers = new OINOHeaders(init.headers)
-        this.body = init.body 
+        this.body = init.body ?? null
         this.multipartBoundary = ""
         this.lastModified = init.lastModified
 
@@ -139,10 +141,13 @@ export class OINOHttpRequest extends OINORequest {
      * 
      */
     bodyAsText(): string {
-        if (this.body instanceof Uint8Array) {
+        if (this.body == null) {
+            return ""
+
+        } else if (this.body instanceof Uint8Array) {
             return new TextDecoder().decode(this.body)
 
-        } else if (this.body instanceof Object) {
+        } else if (typeof this.body === "object") {
             return JSON.stringify(this.body)
             
         } else {
@@ -180,7 +185,7 @@ export class OINOHttpRequest extends OINORequest {
         } else if (this.body instanceof Uint8Array) {
             return Buffer.from(this.body)
 
-        } else if (this.body instanceof Object) {
+        } else if (typeof this.body === "object") {
             return Buffer.from(JSON.stringify(this.body), "utf-8")
 
         } else {

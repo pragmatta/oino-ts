@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbModelSet = void 0;
+const common_1 = require("@oino-ts/common");
 const index_js_1 = require("./index.js");
 /**
  * Class for dataset based on a data model that can be serialized to
@@ -46,7 +47,7 @@ class OINODbModelSet {
                 primaryKeyValues.push(value || "");
             }
         }
-        result = index_js_1.OINOStr.encode(value, contentType);
+        result = common_1.OINOStr.encode(value, contentType);
         return result;
     }
     _writeRowJson(row) {
@@ -66,19 +67,19 @@ class OINODbModelSet {
                 // skip undefined values
             }
             else if (value === null) {
-                json_row += "," + index_js_1.OINOStr.encode(f.name, index_js_1.OINOContentType.json) + ":null";
+                json_row += "," + common_1.OINOStr.encode(f.name, common_1.OINOContentType.json) + ":null";
             }
             else {
                 let is_hashed = (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) && (f instanceof index_js_1.OINONumberDataField) && (this.datamodel.api.hashid != null);
                 let is_value = (f instanceof index_js_1.OINOBooleanDataField) || ((f instanceof index_js_1.OINONumberDataField) && !is_hashed);
-                value = this._encodeAndHashFieldValue(f, value, index_js_1.OINOContentType.json, primary_key_values, f.name + " " + row_id_seed);
+                value = this._encodeAndHashFieldValue(f, value, common_1.OINOContentType.json, primary_key_values, f.name + " " + row_id_seed);
                 if (is_value) {
                     value = value.substring(1, value.length - 1);
                 }
-                json_row += "," + index_js_1.OINOStr.encode(f.name, index_js_1.OINOContentType.json) + ":" + value;
+                json_row += "," + common_1.OINOStr.encode(f.name, common_1.OINOContentType.json) + ":" + value;
             }
         }
-        json_row = index_js_1.OINOStr.encode(index_js_1.OINODbConfig.OINODB_ID_FIELD, index_js_1.OINOContentType.json) + ":" + index_js_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), index_js_1.OINOContentType.json) + json_row;
+        json_row = common_1.OINOStr.encode(index_js_1.OINODbConfig.OINODB_ID_FIELD, common_1.OINOContentType.json) + ":" + common_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), common_1.OINOContentType.json) + json_row;
         return "{" + json_row + "}";
     }
     async _writeStringJson() {
@@ -119,14 +120,14 @@ class OINODbModelSet {
             }
             let value = f.serializeCell(row[i]);
             if (value == null) {
-                csv_row += "," + index_js_1.OINOStr.encode(value, index_js_1.OINOContentType.csv); // either null or undefined
+                csv_row += "," + common_1.OINOStr.encode(value, common_1.OINOContentType.csv); // either null or undefined
             }
             else {
-                value = this._encodeAndHashFieldValue(f, value, index_js_1.OINOContentType.csv, primary_key_values, f.name + " " + row_id_seed);
+                value = this._encodeAndHashFieldValue(f, value, common_1.OINOContentType.csv, primary_key_values, f.name + " " + row_id_seed);
                 csv_row += "," + value;
             }
         }
-        csv_row = index_js_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), index_js_1.OINOContentType.csv) + csv_row;
+        csv_row = common_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), common_1.OINOContentType.csv) + csv_row;
         return csv_row;
     }
     async _writeStringCsv() {
@@ -168,13 +169,13 @@ class OINODbModelSet {
             let formdata_block = "";
             let is_file = (f instanceof index_js_1.OINOBlobDataField);
             if (value === undefined) {
-                index_js_1.OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", { field_name: f.name });
+                common_1.OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", { field_name: f.name });
             }
             else if (value === null) {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary);
             }
             else {
-                value = this._encodeAndHashFieldValue(f, value, index_js_1.OINOContentType.formdata, primary_key_values, f.name + " " + row_id_seed);
+                value = this._encodeAndHashFieldValue(f, value, common_1.OINOContentType.formdata, primary_key_values, f.name + " " + row_id_seed);
                 if (is_file) {
                     formdata_block = this._writeRowFormdataFileBlock(f.name, value, multipart_boundary);
                 }
@@ -208,14 +209,14 @@ class OINODbModelSet {
                 // console.log("OINODbModelSet._writeRowUrlencode undefined field value:" + fields[i].name)
             }
             else {
-                value = this._encodeAndHashFieldValue(f, value, index_js_1.OINOContentType.urlencode, primary_key_values, f.name + " " + row_id_seed);
+                value = this._encodeAndHashFieldValue(f, value, common_1.OINOContentType.urlencode, primary_key_values, f.name + " " + row_id_seed);
                 if (urlencode_row != "") {
                     urlencode_row += "&";
                 }
-                urlencode_row += index_js_1.OINOStr.encode(f.name, index_js_1.OINOContentType.urlencode) + "=" + value;
+                urlencode_row += common_1.OINOStr.encode(f.name, common_1.OINOContentType.urlencode) + "=" + value;
             }
         }
-        urlencode_row = index_js_1.OINOStr.encode(index_js_1.OINODbConfig.OINODB_ID_FIELD, index_js_1.OINOContentType.urlencode) + "=" + index_js_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), index_js_1.OINOContentType.urlencode) + "&" + urlencode_row;
+        urlencode_row = common_1.OINOStr.encode(index_js_1.OINODbConfig.OINODB_ID_FIELD, common_1.OINOContentType.urlencode) + "=" + common_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), common_1.OINOContentType.urlencode) + "&" + urlencode_row;
         return urlencode_row;
     }
     async _writeStringUrlencode() {
@@ -228,7 +229,7 @@ class OINODbModelSet {
             line_count += 1;
         }
         if (line_count > 1) {
-            index_js_1.OINOLog.warning("@oino-ts/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + index_js_1.OINOContentType.urlencode + " does not officially support multiline content!", {});
+            common_1.OINOLog.warning("@oino-ts/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + common_1.OINOContentType.urlencode + " does not officially support multiline content!", {});
         }
         return result;
     }
@@ -267,22 +268,22 @@ class OINODbModelSet {
      * @param [contentType=OINOContentType.json] serialization content type
      *
      */
-    async writeString(contentType = index_js_1.OINOContentType.json) {
+    async writeString(contentType = common_1.OINOContentType.json) {
         let result = "";
-        if (contentType == index_js_1.OINOContentType.csv) {
+        if (contentType == common_1.OINOContentType.csv) {
             result += await this._writeStringCsv();
         }
-        else if (contentType == index_js_1.OINOContentType.json) {
+        else if (contentType == common_1.OINOContentType.json) {
             result += await this._writeStringJson();
         }
-        else if (contentType == index_js_1.OINOContentType.formdata) {
+        else if (contentType == common_1.OINOContentType.formdata) {
             result += await this._writeStringFormdata();
         }
-        else if (contentType == index_js_1.OINOContentType.urlencode) {
+        else if (contentType == common_1.OINOContentType.urlencode) {
             result += await this._writeStringUrlencode();
         }
         else {
-            index_js_1.OINOLog.error("@oino-ts/db", "OINODbModelSet", "writeString", "Content type is only for input!", { contentType: contentType });
+            common_1.OINOLog.error("@oino-ts/db", "OINODbModelSet", "writeString", "Content type is only for input!", { contentType: contentType });
         }
         return result;
     }

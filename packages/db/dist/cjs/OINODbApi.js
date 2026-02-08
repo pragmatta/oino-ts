@@ -7,8 +7,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbApi = exports.OINODbHtmlTemplate = exports.OINODbApiResult = exports.OINODbApiRequest = void 0;
 const node_buffer_1 = require("node:buffer");
-const index_js_1 = require("./index.js");
 const common_1 = require("@oino-ts/common");
+const index_js_1 = require("./index.js");
 const hashid_1 = require("@oino-ts/hashid");
 class OINODbApiRequest extends common_1.OINOHttpRequest {
     rowId;
@@ -90,13 +90,28 @@ class OINODbApiRequest extends common_1.OINOHttpRequest {
             }
         }
     }
-    static async fromFetchRequest(request) {
-        const body = await request.arrayBuffer();
+    static async fromFetchRequest(request, rowId, rowData, sqlParams) {
         return new OINODbApiRequest({
             url: new URL(request.url),
             method: request.method,
             headers: Object.fromEntries(request.headers),
-            rowData: node_buffer_1.Buffer.from(body),
+            rowId: rowId,
+            rowData: rowData ?? node_buffer_1.Buffer.from(await request.arrayBuffer()),
+            sqlParams: sqlParams
+        });
+    }
+    static fromHttpRequest(request, rowId, rowData, sqlParams) {
+        return new OINODbApiRequest({
+            url: typeof request.url === "string" ? new URL(request.url) : request.url,
+            method: request.method,
+            headers: Object.fromEntries(request.headers),
+            rowId: rowId,
+            rowData: rowData ?? request.bodyAsBuffer(),
+            requestType: request.requestType,
+            responseType: request.responseType,
+            multipartBoundary: request.multipartBoundary,
+            lastModified: request.lastModified,
+            sqlParams: sqlParams
         });
     }
 }
@@ -149,7 +164,7 @@ exports.OINODbApiResult = OINODbApiResult;
  * Specialized HTML template that can render ´OINODbApiResult´.
  *
  */
-class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
+class OINODbHtmlTemplate extends common_1.OINOHtmlTemplate {
     /** Locale validation regex */
     static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/;
     /** Locale formatter */
@@ -193,7 +208,7 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
      *
      */
     async renderFromDbData(modelset, overrideValues) {
-        index_js_1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromDbData");
+        common_1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromDbData");
         let html = "";
         const dataset = modelset.dataset;
         const datamodel = modelset.datamodel;
@@ -239,7 +254,7 @@ class OINODbHtmlTemplate extends index_js_1.OINOHtmlTemplate {
         }
         this.modified = last_modified;
         const result = this._createHttpResult(html);
-        index_js_1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromDbData");
+        common_1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromDbData");
         return result;
     }
 }
@@ -269,7 +284,7 @@ class OINODbApi {
      */
     constructor(db, params) {
         if (!params.tableName) {
-            throw new Error(index_js_1.OINO_ERROR_PREFIX + ": OINODbApiParams needs to define a table name!");
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": OINODbApiParams needs to define a table name!");
         }
         this.db = db;
         this.params = params;
@@ -313,12 +328,13 @@ class OINODbApi {
     }
     _parseData(httpResult, request) {
         let rows = [];
+        const data = request.rowData ?? request.body;
         try {
-            if (Array.isArray(request.rowData)) {
-                rows = request.rowData;
+            if (Array.isArray(data)) {
+                rows = data;
             }
-            else if (request.rowData != null) {
-                rows = index_js_1.OINODbParser.createRows(this.datamodel, request.rowData, request.requestType, request);
+            else if (data != null) {
+                rows = index_js_1.OINODbParser.createRows(this.datamodel, data, request.requestType, request.multipartBoundary);
             }
         }
         catch (e) {
@@ -474,24 +490,32 @@ class OINODbApi {
      * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
-     * @param method HTTP method of the REST request
+     * @param request OINO HTTP request object containing all parameters of the REST request
      * @param rowId URL id of the REST request
      * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param sqlParams SQL parameters for the REST request
      *
      */
-    async doRequest(method, rowId, rowData, sqlParams) {
-        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
+    async doHttpRequest(request, rowId, rowData, sqlParams) {
+        const api_request = OINODbApiRequest.fromHttpRequest(request, rowId, rowData, sqlParams);
+        return this.doApiRequest(api_request);
     }
     /**
      * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
-     * @param request OINO DB API request
+     * @param method HTTP method of the REST request
+     * @param rowId URL id of the REST request
+     * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param sqlParams SQL parameters for the REST request
+     * @param contentType content type of the HTTP body data, default is JSON
      *
      */
-    async runRequest(request) {
-        index_js_1.OINOBenchmark.startMetric("OINODbApi", "doRequest." + request.method);
+    async doRequest(method, rowId, rowData, sqlParams, contentType = common_1.OINOContentType.json) {
+        return this.doApiRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams, requestType: contentType }));
+    }
+    async doApiRequest(request) {
+        common_1.OINOBenchmark.startMetric("OINODbApi", "doRequest." + request.method);
         common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", { method: request.method, id: request.rowId, data: request.rowData });
         let result = new OINODbApiResult(request);
         let rows = [];
@@ -549,7 +573,7 @@ class OINODbApi {
         else {
             result.setError(405, "Unsupported HTTP method '" + request.method + "' for REST request", "DoRequest");
         }
-        index_js_1.OINOBenchmark.endMetric("OINODbApi", "doRequest." + request.method);
+        common_1.OINOBenchmark.endMetric("OINODbApi", "doRequest." + request.method);
         return Promise.resolve(result);
     }
     /**
@@ -561,7 +585,7 @@ class OINODbApi {
      *
      */
     async doBatchUpdate(method, rowId, rowData, sqlParams) {
-        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
+        return this.doApiRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
     }
     /**
      * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
@@ -576,7 +600,7 @@ class OINODbApi {
             result.setError(500, "Batch update only supports PUT and DELETE methods!", "DoBatchUpdate");
             return Promise.resolve(result);
         }
-        index_js_1.OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate." + request.method);
+        common_1.OINOBenchmark.startMetric("OINODbApi", "doBatchUpdate." + request.method);
         const rows = [] = this._parseData(result, request);
         if (request.method == "PUT") {
             try {
@@ -594,7 +618,7 @@ class OINODbApi {
                 result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message, "DoBatchUpdate");
             }
         }
-        index_js_1.OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate." + request.method);
+        common_1.OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate." + request.method);
         return Promise.resolve(result);
     }
     /**

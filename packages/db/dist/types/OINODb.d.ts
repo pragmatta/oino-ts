@@ -1,4 +1,5 @@
-import { OINODbParams, OINODbApi, OINODataCell, OINODataRow, OINOResult } from "./index.js";
+import { OINOResult } from "@oino-ts/common";
+import { OINODbParams, OINODbApi, OINODataCell, OINODataRow } from "./index.js";
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data
  * between SQL and serialization formats.

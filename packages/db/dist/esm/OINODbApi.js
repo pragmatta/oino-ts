@@ -4,8 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import { Buffer } from "node:buffer";
-import { OINODbDataModel, OINOStringDataField, OINO_ERROR_PREFIX, OINODbModelSet, OINOBenchmark, OINODbConfig, OINOHtmlTemplate, OINONumberDataField, OINODbParser, OINODatetimeDataField, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit } from "./index.js";
-import { OINOLog, OINOResult, OINOHttpRequest } from "@oino-ts/common";
+import { OINOLog, OINOResult, OINOHttpRequest, OINOBenchmark, OINOHtmlTemplate, OINOContentType, OINO_ERROR_PREFIX } from "@oino-ts/common";
+import { OINODbDataModel, OINOStringDataField, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODbParser, OINODatetimeDataField, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit } from "./index.js";
 import { OINOHashid } from "@oino-ts/hashid";
 export class OINODbApiRequest extends OINOHttpRequest {
     rowId;
@@ -87,13 +87,28 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
     }
-    static async fromFetchRequest(request) {
-        const body = await request.arrayBuffer();
+    static async fromFetchRequest(request, rowId, rowData, sqlParams) {
         return new OINODbApiRequest({
             url: new URL(request.url),
             method: request.method,
             headers: Object.fromEntries(request.headers),
-            rowData: Buffer.from(body),
+            rowId: rowId,
+            rowData: rowData ?? Buffer.from(await request.arrayBuffer()),
+            sqlParams: sqlParams
+        });
+    }
+    static fromHttpRequest(request, rowId, rowData, sqlParams) {
+        return new OINODbApiRequest({
+            url: typeof request.url === "string" ? new URL(request.url) : request.url,
+            method: request.method,
+            headers: Object.fromEntries(request.headers),
+            rowId: rowId,
+            rowData: rowData ?? request.bodyAsBuffer(),
+            requestType: request.requestType,
+            responseType: request.responseType,
+            multipartBoundary: request.multipartBoundary,
+            lastModified: request.lastModified,
+            sqlParams: sqlParams
         });
     }
 }
@@ -307,12 +322,13 @@ export class OINODbApi {
     }
     _parseData(httpResult, request) {
         let rows = [];
+        const data = request.rowData ?? request.body;
         try {
-            if (Array.isArray(request.rowData)) {
-                rows = request.rowData;
+            if (Array.isArray(data)) {
+                rows = data;
             }
-            else if (request.rowData != null) {
-                rows = OINODbParser.createRows(this.datamodel, request.rowData, request.requestType, request);
+            else if (data != null) {
+                rows = OINODbParser.createRows(this.datamodel, data, request.requestType, request.multipartBoundary);
             }
         }
         catch (e) {
@@ -468,23 +484,31 @@ export class OINODbApi {
      * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
-     * @param method HTTP method of the REST request
+     * @param request OINO HTTP request object containing all parameters of the REST request
      * @param rowId URL id of the REST request
      * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      * @param sqlParams SQL parameters for the REST request
      *
      */
-    async doRequest(method, rowId, rowData, sqlParams) {
-        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
+    async doHttpRequest(request, rowId, rowData, sqlParams) {
+        const api_request = OINODbApiRequest.fromHttpRequest(request, rowId, rowData, sqlParams);
+        return this.doApiRequest(api_request);
     }
     /**
      * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
-     * @param request OINO DB API request
+     * @param method HTTP method of the REST request
+     * @param rowId URL id of the REST request
+     * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
+     * @param sqlParams SQL parameters for the REST request
+     * @param contentType content type of the HTTP body data, default is JSON
      *
      */
-    async runRequest(request) {
+    async doRequest(method, rowId, rowData, sqlParams, contentType = OINOContentType.json) {
+        return this.doApiRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams, requestType: contentType }));
+    }
+    async doApiRequest(request) {
         OINOBenchmark.startMetric("OINODbApi", "doRequest." + request.method);
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", { method: request.method, id: request.rowId, data: request.rowData });
         let result = new OINODbApiResult(request);
@@ -555,7 +579,7 @@ export class OINODbApi {
      *
      */
     async doBatchUpdate(method, rowId, rowData, sqlParams) {
-        return this.runRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
+        return this.doApiRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
     }
     /**
      * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
