@@ -141,10 +141,13 @@ export class OINOHttpRequest extends OINORequest {
      * 
      */
     bodyAsText(): string {
-        if (this.body instanceof Uint8Array) {
+        if (this.body == null) {
+            return ""
+
+        } else if (this.body instanceof Uint8Array) {
             return new TextDecoder().decode(this.body)
 
-        } else if (this.body instanceof Object) {
+        } else if (typeof this.body === "object") {
             return JSON.stringify(this.body)
             
         } else {
@@ -182,7 +185,7 @@ export class OINOHttpRequest extends OINORequest {
         } else if (this.body instanceof Uint8Array) {
             return Buffer.from(this.body)
 
-        } else if (this.body instanceof Object) {
+        } else if (typeof this.body === "object") {
             return Buffer.from(JSON.stringify(this.body), "utf-8")
 
         } else {
