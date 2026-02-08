@@ -3,7 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINOContentType, OINOBlobDataField, OINOStr, OINODbConfig, OINONumberDataField, OINOBooleanDataField, OINOLog } from "./index.js";
+import { OINOContentType, OINOStr, OINOLog } from "@oino-ts/common";
+import { OINOBlobDataField, OINODbConfig, OINONumberDataField, OINOBooleanDataField } from "./index.js";
 /**
  * Class for dataset based on a data model that can be serialized to
  * a supported format:

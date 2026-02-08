@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbMemoryDataSet = exports.OINODbDataSet = exports.OINODb = void 0;
+const common_1 = require("@oino-ts/common");
 const index_js_1 = require("./index.js");
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data
@@ -85,7 +86,7 @@ class OINODbDataSet {
      */
     hasErrors() {
         for (let i = 0; i < this.messages.length; i++) {
-            if (this.messages[i].startsWith(index_js_1.OINO_ERROR_PREFIX)) {
+            if (this.messages[i].startsWith(common_1.OINO_ERROR_PREFIX)) {
                 return true;
             }
         }
@@ -97,7 +98,7 @@ class OINODbDataSet {
      */
     getFirstError() {
         for (let i = 0; i < this.messages.length; i++) {
-            if (this.messages[i].startsWith(index_js_1.OINO_ERROR_PREFIX)) {
+            if (this.messages[i].startsWith(common_1.OINO_ERROR_PREFIX)) {
                 return this.messages[i];
             }
         }
@@ -124,7 +125,7 @@ class OINODbMemoryDataSet extends OINODbDataSet {
     constructor(data, errors = []) {
         super(data, errors);
         if ((data == null) || !(Array.isArray(data))) {
-            throw new Error(index_js_1.OINO_ERROR_PREFIX + ": Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": Data needs to be compatible with OINORow[]!"); // TODO: maybe check all rows
         }
         this._rows = data;
         if (this.isEmpty()) {

@@ -3,10 +3,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODb, OINODbDataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINO_ERROR_PREFIX, OINOBenchmark, OINODatetimeDataField, OINOBlobDataField, OINO_INFO_PREFIX, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS, OINOLog, OINOResult } from "@oino-ts/db";
+import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult } from "@oino-ts/common";
+import { OINODb, OINODbDataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 import { ConnectionPool } from "mssql";
 /**
- * Implmentation of OINODbDataSet for MariaDb.
+ * Implmentation of OINODbDataSet for MsSql.
  *
  */
 class OINOMsSqlData extends OINODbDataSet {
@@ -95,7 +96,7 @@ class OINOMsSqlData extends OINODbDataSet {
     }
 }
 /**
- * Implementation of MariaDb/MySql-database.
+ * Implementation of MsSql-database.
  *
  */
 export class OINODbMsSql extends OINODb {

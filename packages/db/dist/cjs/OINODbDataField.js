@@ -6,7 +6,8 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODatetimeDataField = exports.OINOBlobDataField = exports.OINONumberDataField = exports.OINOBooleanDataField = exports.OINOStringDataField = exports.OINODbDataField = void 0;
-const index_js_1 = require("./index.js");
+const buffer_1 = require("buffer");
+const common_1 = require("@oino-ts/common");
 /**
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
  *
@@ -247,8 +248,8 @@ class OINONumberDataField extends OINODbDataField {
         else {
             const result = parseFloat(value);
             if (isNaN(result)) {
-                index_js_1.OINOLog.error("@oino-ts/db", "OINONumberDataField", "toSql", "Invalid value!", { value: value });
-                throw new Error(index_js_1.OINO_ERROR_PREFIX + ": OINONumberDataField.deserializeCell - Invalid value '" + value + "'"); // incorrectly formatted data could be a security risk, abort processing
+                common_1.OINOLog.error("@oino-ts/db", "OINONumberDataField", "toSql", "Invalid value!", { value: value });
+                throw new Error(common_1.OINO_ERROR_PREFIX + ": OINONumberDataField.deserializeCell - Invalid value '" + value + "'"); // incorrectly formatted data could be a security risk, abort processing
             }
             return result;
         }
@@ -284,11 +285,11 @@ class OINOBlobDataField extends OINODbDataField {
         if ((cellVal === null) || (cellVal === undefined)) {
             return cellVal;
         }
-        else if (cellVal instanceof Buffer) {
+        else if (cellVal instanceof buffer_1.Buffer) {
             return cellVal.toString('base64');
         }
         else if (cellVal instanceof Uint8Array) {
-            return Buffer.from(cellVal).toString('base64');
+            return buffer_1.Buffer.from(cellVal).toString('base64');
         }
         else {
             return this.db.parseSqlValueAsCell(cellVal, this.sqlType)?.toString();
@@ -302,10 +303,10 @@ class OINOBlobDataField extends OINODbDataField {
      */
     deserializeCell(value) {
         if (value == null) {
-            return Buffer.alloc(0);
+            return buffer_1.Buffer.alloc(0);
         }
         else {
-            return Buffer.from(value, 'base64'); // Blob-field data is base64 encoded and converted internally to UInt8Array / Buffer
+            return buffer_1.Buffer.from(value, 'base64'); // Blob-field data is base64 encoded and converted internally to UInt8Array / Buffer
         }
     }
 }

@@ -1,4 +1,5 @@
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell, OINOResult } from "@oino-ts/db";
+import { OINOResult } from "@oino-ts/common";
+import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell } from "@oino-ts/db";
 /**
  * Implementation of BunSqlite-database.
  *

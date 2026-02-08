@@ -44,10 +44,10 @@ export class OINOHttpRequest extends OINORequest {
      */
     constructor(init) {
         super(init);
-        this.url = init.url;
-        this.method = init.method ?? "GET";
+        this.url = typeof init.url === "string" ? new URL(init.url) : init.url;
+        this.method = init.method?.toUpperCase() ?? "GET";
         this.headers = new OINOHeaders(init.headers);
-        this.body = init.body;
+        this.body = init.body ?? null;
         this.multipartBoundary = "";
         this.lastModified = init.lastModified;
         if (init.multipartBoundary) {
@@ -118,10 +118,13 @@ export class OINOHttpRequest extends OINORequest {
      *
      */
     bodyAsText() {
-        if (this.body instanceof Uint8Array) {
+        if (this.body == null) {
+            return "";
+        }
+        else if (this.body instanceof Uint8Array) {
             return new TextDecoder().decode(this.body);
         }
-        else if (this.body instanceof Object) {
+        else if (typeof this.body === "object") {
             return JSON.stringify(this.body);
         }
         else {
@@ -156,7 +159,7 @@ export class OINOHttpRequest extends OINORequest {
         else if (this.body instanceof Uint8Array) {
             return Buffer.from(this.body);
         }
-        else if (this.body instanceof Object) {
+        else if (typeof this.body === "object") {
             return Buffer.from(JSON.stringify(this.body), "utf-8");
         }
         else {

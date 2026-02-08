@@ -1,3 +1,5 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { Buffer } from "node:buffer";
 import { OINOHeaders, OINOHeadersInit } from ".";
 export interface OINOResultInit {
