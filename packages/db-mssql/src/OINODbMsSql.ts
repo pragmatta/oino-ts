@@ -14,7 +14,7 @@ import {ConnectionPool, config} from "mssql";
  * 
  */
 class OINOMsSqlData extends OINODbDataSet {
-    private _recordsets:OINODataRow[][] = [OINODB_EMPTY_ROWS]
+    private _recordsets:any
     private _rows:OINODataRow[] = OINODB_EMPTY_ROWS
 
     private _currentRecordset: number
@@ -30,11 +30,11 @@ class OINOMsSqlData extends OINODbDataSet {
         if (data == null) {
             this.messages.push(OINO_INFO_PREFIX + "SQL result is empty")
 
-        } else if (!(Array.isArray(data) && (data.length>0) && Array.isArray(data[0]))) {
+        } else if (!(Array.isArray(data)) && (data.length > 0)) {
             throw new Error(OINO_ERROR_PREFIX + ": OINOMsSqlData constructor: invalid data!")
 
         } else {
-            this._recordsets = data as OINODataRow[][]
+            this._recordsets = data
             this._rows = this._recordsets[0]
         }
         if (this.isEmpty()) {
@@ -53,7 +53,7 @@ class OINOMsSqlData extends OINODbDataSet {
      *
      */
     isEmpty():boolean {
-        return (this._rows.length == 0)
+        return (this._recordsets.length == 0) || (this._rows == undefined) || (this._rows.length == 0)
     }
 
     /**
@@ -147,13 +147,15 @@ export class OINODbMsSql extends OINODb {
     private async _query(sql:string):Promise<OINOMsSqlData> {
         const request = this._pool.request() // this does not need to be released but the pool will handle it
         const sql_res = await request.query(sql)
-        const result:OINOMsSqlData = new OINOMsSqlData(sql_res.recordsets)
-        return result
+        // console.log("_query: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
+        return new OINOMsSqlData(sql_res.recordsets, [])
     }
 
     private async _exec(sql:string):Promise<OINOMsSqlData> {
-        const sql_res = await this._pool.request().query(sql);
-        return new OINOMsSqlData(OINODB_EMPTY_ROWS)
+        const request = this._pool.request() // this does not need to be released but the pool will handle it
+        const sql_res = await request.query(sql)
+        // console.log("_exec: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
+        return new OINOMsSqlData(sql_res.recordsets, [])
     }
 
     /**
@@ -290,6 +292,25 @@ export class OINODbMsSql extends OINODb {
     }
 
     /**
+     * Print SQL select statement with DB specific formatting.
+     * 
+     * @param tableName - The name of the table to select from.
+     * @param columns - The columns to be selected.
+     * @param values - The values to be inserted.
+     * @param returnIdFields - the id fields to return if returnIds is true (if supported by the database)
+     * 
+     */
+    printSqlInsert(tableName:string, columns:string, values:string, returnIdFields?:string[]): string {
+        let result = "INSERT INTO " + tableName + " (" + columns + ")"
+        if (returnIdFields) {
+            result += " OUTPUT " + returnIdFields.map(f => "INSERTED."+f ).join(", ") 
+        }
+        result += " VALUES (" + values + ");"
+        return result;
+    }
+
+
+    /**
      * Connect to database.
      *
      */
@@ -353,8 +374,8 @@ export class OINODbMsSql extends OINODb {
         OINOBenchmark.startMetric("OINODb", "sqlSelect")
         let result:OINODbDataSet
         try {
-            result = await this._query(sql)
-
+            return await this._query(sql)
+                
         } catch (e:any) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlSelect", "exception in SQL select", {message:e.message, stack:e.stack})
             result = new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMsSql.sqlSelect exception in _db.query: " + e.message])
@@ -373,7 +394,9 @@ export class OINODbMsSql extends OINODb {
         OINOBenchmark.startMetric("OINODb", "sqlExec")
         let result:OINODbDataSet
         try {
-            result = await this._exec(sql)
+            const sql_res:OINODbDataSet = await this._exec(sql)
+            // if (!sql_res.isEmpty()) { console.log("sqlExec: data for sql=", sql) }
+            return sql_res
 
         } catch (e:any) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlExec", "exception in SQL exec", {message:e.message, stack:e.stack})

@@ -30,7 +30,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
     constructor (init: OINODbApiRequestInit) {
         super(init)
         this.rowId = init?.rowId || ""
-        this.rowData = init?.rowData || null
+        this.rowData = init?.rowData || null // rowData is not compatible with OINOHttpRequest body so it's not automatically set, caller can set both if needed
         this.sqlParams = init?.sqlParams || {}
 
         if (init?.filter) {
@@ -386,7 +386,7 @@ export class OINODbApi {
         }
     }
     
-    private async _doPost(result:OINODbApiResult, rows:OINODataRow[]):Promise<void> {
+    private async _doPost(result:OINODbApiResult, rows:OINODataRow[], request:OINODbApiRequest):Promise<void> {
         let sql:string = "" 
         try {
             for (let i=0; i<rows.length; i++) {
@@ -410,6 +410,8 @@ export class OINODbApi {
                         result.addDebug("OINO POST MESSAGES [" + sql_res.messages.join('|') + "]", "DoPost")
                         result.addDebug("OINO POST SQL [" + sql + "]", "DoPost")                
                     }
+                } else if (this.params.returnInsertedIds) {
+                    result.data = new OINODbModelSet(this.datamodel, sql_res, request.sqlParams) // return the inserted ids as data
                 }
             }
         } catch (e:any) {
@@ -570,7 +572,7 @@ export class OINODbApi {
 
             } else {
                 try {
-                    await this._doPost(result, rows)
+                    await this._doPost(result, rows, request)
 
                 } catch (e:any) {
                     result.setError(500, "Unhandled exception in HTTP POST doRequest: " + e.message, "DoRequest")

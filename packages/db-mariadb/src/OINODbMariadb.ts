@@ -126,30 +126,39 @@ export class OINODbMariadb extends OINODb {
     }
 
     private async _query(sql:string):Promise<OINODataRow[]> {
-        let connection:mariadb.Connection|null = null
+        let connection:mariadb.PoolConnection|null = null
         try {
-            connection = await this._pool.getConnection();
-            const result = await connection.query(sql);
-            return Promise.resolve(result)
+            connection = await this._pool.getConnection()
+            const result = await connection.query(sql)
+            // console.log("_query: sql=", sql, " result=", result)
+            if (Array.isArray(result)) {
+                return result.filter((r) => Array.isArray(r)) as OINODataRow[] // filter out OkPacket results from multiple statements
+            } else {
+                return OINODB_EMPTY_ROWS
+            }
         
         } finally {
             if (connection) {
-                await connection.end()
+                connection.release()
             }
         }
     }
 
-    private async _exec(sql:string):Promise<any> {
-        let connection:mariadb.Connection|null = null
+    private async _exec(sql:string):Promise<OINODataRow[]> {
+        let connection:mariadb.PoolConnection|null = null
         try {
-            connection = await this._pool.getConnection();
-            const result = await connection.query(sql);
-            // console.log(result); 
-            return Promise.resolve(result)
+            connection = await this._pool.getConnection()
+            const result = await connection.query(sql)
+            // console.log("OINODbMariadb._exec: result=", result)
+            if (Array.isArray(result)) {
+                return result.filter((r) => Array.isArray(r)) as OINODataRow[] // filter out OkPacket results from multiple statements
+            } else {
+                return OINODB_EMPTY_ROWS
+            }
         
         } finally {
             if (connection) {
-                await connection.end()
+                connection.release()
             }
         }
     }
@@ -352,8 +361,9 @@ export class OINODbMariadb extends OINODb {
         OINOBenchmark.startMetric("OINODb", "sqlExec")
         let result:OINODbDataSet
         try {
-            const sql_res:OINODataRow[] = await this._exec(sql)
-            result = new OINOMariadbData(sql_res, [])
+            const rows:OINODataRow[] = await this._exec(sql)
+            // if (rows.length > 0) {console.log("_exec: result=", rows)}
+            result = new OINOMariadbData(rows, [])
 
         } catch (e:any) {
             const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || []

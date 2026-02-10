@@ -126,18 +126,21 @@ export class OINODbPostgresql extends OINODb {
 
     private async _query(sql:string):Promise<OINODataRow[]> {
         const query_result:QueryResult = await this._pool.query({rowMode: "array", text: sql})
-        return Promise.resolve(query_result.rows)
+        return query_result.rows
     }
 
     private async _exec(sql:string):Promise<OINODataRow[]> {
         const query_result:QueryResult = await this._pool.query({rowMode: "array", text: sql})
+        let rows:OINODataRow[]
         if (Array.isArray(query_result) == true) {
-            return Promise.resolve(query_result.flatMap((q) => q.rows))
+            rows = query_result.flatMap((q) => q.rows)
         } else if (query_result.rows) {
-            return Promise.resolve(query_result.rows)
+            rows = query_result.rows
         } else {
-            return Promise.resolve(OINODB_EMPTY_ROWS) // return empty row if no rows returned
+            rows = OINODB_EMPTY_ROWS // return empty row if no rows returned
         }
+        // if (rows.length > 0) { console.log("OINODbPostgresql._exec: rows", rows) }
+        return rows
     }
 
     /**
