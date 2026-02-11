@@ -44,6 +44,8 @@ export type OINODbApiParams = {
     hashidStaticIds?: boolean;
     /** Name of field that has the modified field */
     cacheModifiedField?: string;
+    /** Return inserted id values */
+    returnInsertedIds?: boolean;
 };
 /**
  * Database class (constructor) type

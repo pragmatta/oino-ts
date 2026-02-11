@@ -66,6 +66,13 @@ export declare class OINODbBunSqlite extends OINODb {
      */
     validate(): Promise<OINOResult>;
     /**
+     * Connect to database.
+     *
+     */
+    disconnect(): Promise<void>;
+    private _query;
+    private _exec;
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.

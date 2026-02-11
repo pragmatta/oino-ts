@@ -113,19 +113,56 @@ class OINODbPostgresql extends db_1.OINODb {
         return result;
     }
     async _query(sql) {
-        const query_result = await this._pool.query({ rowMode: "array", text: sql });
-        return Promise.resolve(query_result.rows);
+        let connection = null;
+        try {
+            connection = await this._pool.connect();
+            const query_result = await connection.query({ rowMode: "array", text: sql });
+            let rows;
+            if (Array.isArray(query_result) == true) {
+                rows = query_result.flatMap((q) => q.rows);
+            }
+            else if (query_result.rows) {
+                rows = query_result.rows;
+            }
+            else {
+                rows = db_1.OINODB_EMPTY_ROWS; // return empty row if no rows returned
+            }
+            return new OINOPostgresqlData(rows, []);
+        }
+        catch (e) {
+            return new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbPostgresql._query");
+        }
+        finally {
+            if (connection) {
+                connection.release();
+            }
+        }
     }
     async _exec(sql) {
-        const query_result = await this._pool.query({ rowMode: "array", text: sql });
-        if (Array.isArray(query_result) == true) {
-            return Promise.resolve(query_result.flatMap((q) => q.rows));
+        let connection = null;
+        try {
+            connection = await this._pool.connect();
+            const query_result = await connection.query({ rowMode: "array", text: sql });
+            let rows;
+            if (Array.isArray(query_result) == true) {
+                rows = query_result.flatMap((q) => q.rows);
+            }
+            else if (query_result.rows) {
+                rows = query_result.rows;
+            }
+            else {
+                rows = db_1.OINODB_EMPTY_ROWS; // return empty row if no rows returned
+            }
+            // if (rows.length > 0) { console.log("OINODbPostgresql._exec: rows", rows) }
+            return new OINOPostgresqlData(rows, []);
         }
-        else if (query_result.rows) {
-            return Promise.resolve(query_result.rows);
+        catch (e) {
+            return new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbPostgresql._exec");
         }
-        else {
-            return Promise.resolve(db_1.OINODB_EMPTY_ROWS); // return empty row if no rows returned
+        finally {
+            if (connection) {
+                connection.release();
+            }
         }
     }
     /**
@@ -227,14 +264,23 @@ class OINODbPostgresql extends db_1.OINODb {
      */
     async connect() {
         let result = new common_1.OINOResult();
+        if (this.isConnected) {
+            return result;
+        }
+        let connection = null;
         try {
             // make sure that any items are correctly URL encoded in the connection string
-            await this._pool.connect();
+            connection = await this._pool.connect();
             this.isConnected = true;
         }
         catch (e) {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbPostgresql.connect");
             common_1.OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "connect", "exception in connect", { message: e.message, stack: e.stack });
+        }
+        finally {
+            if (connection) {
+                connection.release();
+            }
         }
         return result;
     }
@@ -247,7 +293,7 @@ class OINODbPostgresql extends db_1.OINODb {
         let result = new common_1.OINOResult();
         try {
             const sql = this._getValidateSql(this._params.database);
-            const sql_res = await this.sqlSelect(sql);
+            const sql_res = await this._query(sql);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate");
             }
@@ -269,21 +315,30 @@ class OINODbPostgresql extends db_1.OINODb {
         return result;
     }
     /**
+     * Disconnect from database.
+     *
+     */
+    async disconnect() {
+        if (this.isConnected) {
+            this._pool.end().catch((e) => {
+                common_1.OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "disconnect", "exception in pool end", { message: e.message, stack: e.stack });
+            });
+        }
+        this.isConnected = false;
+        this.isValidated = false;
+    }
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
      *
      */
     async sqlSelect(sql) {
+        if (!this.isValidated) {
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlSelect");
-        let result;
-        try {
-            const rows = await this._query(sql);
-            result = new OINOPostgresqlData(rows, []);
-        }
-        catch (e) {
-            result = new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, [common_1.OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"]);
-        }
+        let result = await this._query(sql);
         common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect");
         return result;
     }
@@ -294,15 +349,11 @@ class OINODbPostgresql extends db_1.OINODb {
      *
      */
     async sqlExec(sql) {
+        if (!this.isValidated) {
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlExec");
-        let result;
-        try {
-            const rows = await this._exec(sql);
-            result = new OINOPostgresqlData(rows, []);
-        }
-        catch (e) {
-            result = new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, [common_1.OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"]);
-        }
+        let result = await this._exec(sql);
         common_1.OINOBenchmark.endMetric("OINODb", "sqlExec");
         return result;
     }
@@ -359,7 +410,7 @@ WHERE col.table_catalog = '${dbName}'`;
      *
      */
     async initializeApiDatamodel(api) {
-        const schema_res = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()));
+        const schema_res = await this._query(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";

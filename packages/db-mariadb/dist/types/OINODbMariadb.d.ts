@@ -67,6 +67,11 @@ export declare class OINODbMariadb extends OINODb {
      */
     validate(): Promise<OINOResult>;
     /**
+     * Disconnect from database.
+     *
+     */
+    disconnect(): Promise<void>;
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.

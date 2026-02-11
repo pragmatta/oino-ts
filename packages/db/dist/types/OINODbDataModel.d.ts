@@ -26,6 +26,7 @@ export declare class OINODbDataModel {
     private _printSqlInsertColumnsAndValues;
     private _printSqlUpdateValues;
     private _printSqlPrimaryKeyCondition;
+    private _printSqlPrimaryKeyColumns;
     /**
      * Add a field to the datamodel.
      *

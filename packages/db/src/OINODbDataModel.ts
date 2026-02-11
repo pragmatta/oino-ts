@@ -53,7 +53,7 @@ export class OINODbDataModel {
         return result.substring(0, result.length-1)
     }
 
-    private _printSqlInsertColumnsAndValues(row: OINODataRow): string {
+    private _printSqlInsertColumnsAndValues(row: OINODataRow): [string, string] {
         let columns: string = "";
         let values: string = "";
         for (let i=0; i< this.fields.length; i++) {
@@ -70,7 +70,7 @@ export class OINODbDataModel {
             }
         }
         // console.log("_printSqlInsertColumnsAndValues: columns=" + columns + ", values=" + values)
-        return "(" + columns + ") VALUES (" + values + ")";
+        return [ columns, values ]
     }
 
     private _printSqlUpdateValues(row: OINODataRow): string {
@@ -115,6 +115,16 @@ export class OINODbDataModel {
         return "(" + result + ")";
     }
     
+    private _printSqlPrimaryKeyColumns(): string[] {
+        let result: string[] = []
+        for (let f of this.fields) {
+            if (f.fieldParams.isPrimaryKey) {
+                result.push(this.api.db.printSqlColumnname(f.name))
+            }
+        }
+        return result
+    }
+
     /**
      * Add a field to the datamodel.
      * 
@@ -263,8 +273,10 @@ export class OINODbDataModel {
      *
      */
     printSqlInsert(row: OINODataRow): string {
-        let result: string = "INSERT INTO " + this.api.db.printSqlTablename(this.api.params.tableName) + " " + this._printSqlInsertColumnsAndValues(row) + ";";
-        return result;
+        const table_name = this.api.db.printSqlTablename(this.api.params.tableName)
+        const [columns, values] =  this._printSqlInsertColumnsAndValues(row)
+        const return_fields = this.api.params.returnInsertedIds ? this._printSqlPrimaryKeyColumns() : undefined
+        return this.api.db.printSqlInsert(table_name, columns, values, return_fields);
     }
 
     /**

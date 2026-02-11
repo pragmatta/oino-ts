@@ -43,7 +43,9 @@ export type OINODbApiParams = {
     /** Make hashids static per row/table */
     hashidStaticIds?: boolean,
     /** Name of field that has the modified field */
-    cacheModifiedField?:string
+    cacheModifiedField?:string,
+    /** Return inserted id values */
+    returnInsertedIds?: boolean
 }
 
 /** 
@@ -107,7 +109,7 @@ export type OINODataRow = Array<OINODataCell>
 /** Empty row instance */
 export const OINODB_EMPTY_ROW:OINODataRow = []
 /** Empty row array instance */
-export const OINODB_EMPTY_ROWS:OINODataRow[] = [OINODB_EMPTY_ROW]
+export const OINODB_EMPTY_ROWS:OINODataRow[] = []
 /** Constant for undefined values */
 export const OINODB_UNDEFINED = "" // original idea was to have a defined literal that get's swapped back to undefined, but current implementation just leaves it out at serialization (so value does not matter)
 

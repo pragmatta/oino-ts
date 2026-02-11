@@ -44,6 +44,12 @@ export abstract class OINODb {
     abstract validate(): Promise<OINOResult>
     
     /**
+     * Disconnect from database.
+     *
+     */
+    abstract disconnect(): Promise<void>
+    
+    /**
      * Print a table name using database specific SQL escaping.
      * 
      * @param sqlTable name of the table
@@ -140,6 +146,25 @@ export abstract class OINODb {
         result += ";"
         return result;
     }
+
+    /**
+     * Print SQL select statement with DB specific formatting.
+     * 
+     * @param tableName - The name of the table to select from.
+     * @param columns - The columns to be selected.
+     * @param values - The values to be inserted.
+     * @param returnIdFields - the id fields to return if returnIds is true (if supported by the database)
+     * 
+     */
+    printSqlInsert(tableName:string, columns:string, values:string, returnIdFields?:string[]): string {
+        let result = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")"
+        if (returnIdFields) {
+            result += " RETURNING " + returnIdFields.join(",")
+        }
+        result += ";"
+        return result;
+    }
+
 }
 
 /**
@@ -151,7 +176,7 @@ export abstract class OINODb {
  *
  */
 
-export abstract class OINODbDataSet {
+export abstract class OINODbDataSet extends OINOResult {
     private _data: unknown;
 
     /** Error messages */
@@ -165,6 +190,7 @@ export abstract class OINODbDataSet {
      *
      */
     constructor(data: unknown, messages: string[] = []) {
+        super();
         this._data = data;
         this.messages = messages;
     }

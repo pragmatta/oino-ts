@@ -17,7 +17,7 @@ class OINODbApiRequest extends common_1.OINOHttpRequest {
     constructor(init) {
         super(init);
         this.rowId = init?.rowId || "";
-        this.rowData = init?.rowData || null;
+        this.rowData = init?.rowData || null; // rowData is not compatible with OINOHttpRequest body so it's not automatically set, caller can set both if needed
         this.sqlParams = init?.sqlParams || {};
         if (init?.filter) {
             if (init.filter instanceof index_js_1.OINODbSqlFilter) {
@@ -348,8 +348,8 @@ class OINODbApi {
             sql = this.datamodel.printSqlSelect(rowId, request.sqlParams || {});
             common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "_doGet", "Print SQL", { sql: sql });
             const sql_res = await this.db.sqlSelect(sql);
-            if (sql_res.hasErrors()) {
-                result.setError(500, sql_res.getFirstError(), "DoGet");
+            if (sql_res.success == false) {
+                result.setError(500, sql_res.statusText, "DoGet");
                 if (this._debugOnError) {
                     result.addDebug("OINO GET SQL [" + sql + "]", "DoPut");
                 }
@@ -366,7 +366,7 @@ class OINODbApi {
             }
         }
     }
-    async _doPost(result, rows) {
+    async _doPost(result, rows, request) {
         let sql = "";
         try {
             for (let i = 0; i < rows.length; i++) {
@@ -384,12 +384,15 @@ class OINODbApi {
             else if (result.success) {
                 common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPost", "Print SQL", { sql: sql });
                 const sql_res = await this.db.sqlExec(sql);
-                if (sql_res.hasErrors()) {
-                    result.setError(500, sql_res.getFirstError(), "DoPost");
+                if (sql_res.success == false) {
+                    result.setError(500, sql_res.statusText, "DoPost");
                     if (this._debugOnError) {
-                        result.addDebug("OINO POST MESSAGES [" + sql_res.messages.join('|') + "]", "DoPost");
+                        result.addDebug("OINO POST MESSAGES [" + sql_res.statusText + "]", "DoPost");
                         result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
                     }
+                }
+                else if (this.params.returnInsertedIds) {
+                    result.data = new index_js_1.OINODbModelSet(this.datamodel, sql_res, request.sqlParams); // return the inserted ids as data
                 }
             }
         }
@@ -421,10 +424,10 @@ class OINODbApi {
             else if (result.success) {
                 common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPut", "Print SQL", { sql: sql });
                 const sql_res = await this.db.sqlExec(sql);
-                if (sql_res.hasErrors()) {
-                    result.setError(500, sql_res.getFirstError(), "DoPut");
+                if (sql_res.success == false) {
+                    result.setError(500, sql_res.statusText, "DoPut");
                     if (this._debugOnError) {
-                        result.addDebug("OINO PUT MESSAGES [" + sql_res.messages.join('|') + "]", "DoPut");
+                        result.addDebug("OINO PUT MESSAGES [" + sql_res.statusText + "]", "DoPut");
                         result.addDebug("OINO PUT SQL [" + sql + "]", "DoPut");
                     }
                 }
@@ -434,7 +437,7 @@ class OINODbApi {
             result.setError(500, "Unhandled exception: " + e.message, "DoPut");
             common_1.OINOLog.exception("@oino-ts/db", "OINODbApi", "_doPut", "exception in put request", { message: e.message, stack: e.stack });
             if (this._debugOnError) {
-                result.addDebug("OINO POST SQL [" + sql + "]", "DoPut");
+                result.addDebug("OINO PUT SQL [" + sql + "]", "DoPut");
             }
         }
     }
@@ -461,10 +464,10 @@ class OINODbApi {
             else if (result.success) {
                 common_1.OINOLog.debug("@oino-ts/db", "OINODbApi", "_doDelete", "Print SQL", { sql: sql });
                 const sql_res = await this.db.sqlExec(sql);
-                if (sql_res.hasErrors()) {
-                    result.setError(500, sql_res.getFirstError(), "DoDelete");
+                if (sql_res.success == false) {
+                    result.setError(500, sql_res.statusText, "DoDelete");
                     if (this._debugOnError) {
-                        result.addDebug("OINO DELETE MESSAGES [" + sql_res.messages.join('|') + "]", "DoDelete");
+                        result.addDebug("OINO DELETE MESSAGES [" + sql_res.statusText + "]", "DoDelete");
                         result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete");
                     }
                 }
@@ -550,7 +553,7 @@ class OINODbApi {
             }
             else {
                 try {
-                    await this._doPost(result, rows);
+                    await this._doPost(result, rows, request);
                 }
                 catch (e) {
                     result.setError(500, "Unhandled exception in HTTP POST doRequest: " + e.message, "DoRequest");

@@ -67,7 +67,7 @@ class OINODbDataModel {
             }
         }
         // console.log("_printSqlInsertColumnsAndValues: columns=" + columns + ", values=" + values)
-        return "(" + columns + ") VALUES (" + values + ")";
+        return [columns, values];
     }
     _printSqlUpdateValues(row) {
         let result = "";
@@ -108,6 +108,15 @@ class OINODbDataModel {
             throw new Error(common_1.OINO_ERROR_PREFIX + ": id '" + id_value + "' is not a valid key for table " + this.api.params.tableName);
         }
         return "(" + result + ")";
+    }
+    _printSqlPrimaryKeyColumns() {
+        let result = [];
+        for (let f of this.fields) {
+            if (f.fieldParams.isPrimaryKey) {
+                result.push(this.api.db.printSqlColumnname(f.name));
+            }
+        }
+        return result;
     }
     /**
      * Add a field to the datamodel.
@@ -255,8 +264,10 @@ class OINODbDataModel {
      *
      */
     printSqlInsert(row) {
-        let result = "INSERT INTO " + this.api.db.printSqlTablename(this.api.params.tableName) + " " + this._printSqlInsertColumnsAndValues(row) + ";";
-        return result;
+        const table_name = this.api.db.printSqlTablename(this.api.params.tableName);
+        const [columns, values] = this._printSqlInsertColumnsAndValues(row);
+        const return_fields = this.api.params.returnInsertedIds ? this._printSqlPrimaryKeyColumns() : undefined;
+        return this.api.db.printSqlInsert(table_name, columns, values, return_fields);
     }
     /**
      * Print SQL insert statement from one data row.
