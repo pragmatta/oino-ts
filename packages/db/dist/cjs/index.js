@@ -42,6 +42,6 @@ Object.defineProperty(exports, "OINODbParser", { enumerable: true, get: function
 /** Empty row instance */
 exports.OINODB_EMPTY_ROW = [];
 /** Empty row array instance */
-exports.OINODB_EMPTY_ROWS = [exports.OINODB_EMPTY_ROW];
+exports.OINODB_EMPTY_ROWS = [];
 /** Constant for undefined values */
 exports.OINODB_UNDEFINED = ""; // original idea was to have a defined literal that get's swapped back to undefined, but current implementation just leaves it out at serialization (so value does not matter)

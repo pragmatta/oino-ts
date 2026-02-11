@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX } from "@oino-ts/common";
+import { OINO_ERROR_PREFIX, OINOResult } from "@oino-ts/common";
 import { OINODB_EMPTY_ROW } from "./index.js";
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data
@@ -52,6 +52,23 @@ export class OINODb {
         result += ";";
         return result;
     }
+    /**
+     * Print SQL select statement with DB specific formatting.
+     *
+     * @param tableName - The name of the table to select from.
+     * @param columns - The columns to be selected.
+     * @param values - The values to be inserted.
+     * @param returnIdFields - the id fields to return if returnIds is true (if supported by the database)
+     *
+     */
+    printSqlInsert(tableName, columns, values, returnIdFields) {
+        let result = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
+        if (returnIdFields) {
+            result += " RETURNING " + returnIdFields.join(",");
+        }
+        result += ";";
+        return result;
+    }
 }
 /**
  * Base class for SQL results that can be asynchronously iterated (but
@@ -61,7 +78,7 @@ export class OINODb {
  * `OINODbDataSet` will serve it out consistently.
  *
  */
-export class OINODbDataSet {
+export class OINODbDataSet extends OINOResult {
     _data;
     /** Error messages */
     messages;
@@ -73,6 +90,7 @@ export class OINODbDataSet {
      *
      */
     constructor(data, messages = []) {
+        super();
         this._data = data;
         this.messages = messages;
     }

@@ -65,6 +65,16 @@ export declare class OINODbMsSql extends OINODb {
      */
     printSqlSelect(tableName: string, columnNames: string, whereCondition: string, orderCondition: string, limitCondition: string, groupByCondition: string): string;
     /**
+     * Print SQL select statement with DB specific formatting.
+     *
+     * @param tableName - The name of the table to select from.
+     * @param columns - The columns to be selected.
+     * @param values - The values to be inserted.
+     * @param returnIdFields - the id fields to return if returnIds is true (if supported by the database)
+     *
+     */
+    printSqlInsert(tableName: string, columns: string, values: string, returnIdFields?: string[]): string;
+    /**
      * Connect to database.
      *
      */
@@ -74,6 +84,11 @@ export declare class OINODbMsSql extends OINODb {
      *
      */
     validate(): Promise<OINOResult>;
+    /**
+     * Disconnect from database.
+     *
+     */
+    disconnect(): Promise<void>;
     /**
      * Execute a select operation.
      *

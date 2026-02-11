@@ -154,6 +154,9 @@ class OINODbBunSqlite extends db_1.OINODb {
     async connect() {
         common_1.OINOBenchmark.startMetric("OINODb", "connect");
         let result = new common_1.OINOResult();
+        if (this.isConnected) {
+            return result;
+        }
         const filepath = this._params.url.substring(7);
         try {
             this._db = bun_sqlite_1.Database.open(filepath, { create: true, readonly: false, readwrite: true });
@@ -171,11 +174,15 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async validate() {
+        if (!this.isConnected) {
+            return new common_1.OINOResult().setError(400, "Database not connected!", "OINODbBunSqlite.validate");
+        }
         common_1.OINOBenchmark.startMetric("OINODb", "validate");
         let result = new common_1.OINOResult();
         try {
+            this.isValidated = false;
             const sql = this._getValidateSql(this._params.database);
-            const sql_res = await this.sqlSelect(sql);
+            const sql_res = await this._query(sql);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate");
             }
@@ -190,9 +197,51 @@ class OINODbBunSqlite extends db_1.OINODb {
             }
         }
         catch (e) {
-            result.setError(500, common_1.OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate");
+            result.setError(500, common_1.OINO_ERROR_PREFIX + " (OINODbBunSqlite.validate): Exception in db query: " + e.message, "OINODbBunSqlite.validate");
         }
         common_1.OINOBenchmark.endMetric("OINODb", "validate");
+        return result;
+    }
+    /**
+     * Connect to database.
+     *
+     */
+    async disconnect() {
+        this.isConnected = false;
+        this.isValidated = false;
+    }
+    async _query(sql) {
+        let result;
+        try {
+            const sql_res = this._db?.query(sql).values();
+            if (sql_res) {
+                // console.log("OINODbBunSqlite._query: res", sql_res)
+                result = new OINOBunSqliteDataset(sql_res, []);
+            }
+            else {
+                result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, []);
+            }
+        }
+        catch (e) {
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + " (OINODbBunSqlite._query): Exception in db query: " + e.message, "OINODbBunSqlite._query");
+        }
+        return result;
+    }
+    async _exec(sql) {
+        let result;
+        try {
+            const sql_res = this._db?.query(sql).values();
+            if (sql_res) {
+                // console.log("OINODbBunSqlite._exec: res", sql_res)
+                result = new OINOBunSqliteDataset(sql_res, []);
+            }
+            else {
+                result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, []);
+            }
+        }
+        catch (e) {
+            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbBunSqlite._exec");
+        }
         return result;
     }
     /**
@@ -202,16 +251,13 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async sqlSelect(sql) {
+        if (!this.isValidated) {
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlSelect");
-        let result;
-        try {
-            result = new OINOBunSqliteDataset(this._db?.query(sql).values(), []);
-        }
-        catch (e) {
-            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, ["OINODbBunSqlite.sqlSelect exception in _db.query: " + e.message]);
-        }
+        let result = await this._query(sql);
         common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect");
-        return Promise.resolve(result);
+        return result;
     }
     /**
      * Execute other sql operations.
@@ -220,17 +266,13 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async sqlExec(sql) {
+        if (!this.isValidated) {
+            return new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, [common_1.OINO_ERROR_PREFIX + " (OINODbBunSqlite.sqlExec): Database connection not validated!"]);
+        }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlExec");
-        let result;
-        try {
-            this._db?.exec(sql);
-            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, []);
-        }
-        catch (e) {
-            result = new OINOBunSqliteDataset(db_1.OINODB_EMPTY_ROWS, [common_1.OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"]);
-        }
+        let result = await this._exec(sql);
         common_1.OINOBenchmark.endMetric("OINODb", "sqlExec");
-        return Promise.resolve(result);
+        return result;
     }
     _getSchemaSql(dbName, tableName) {
         const sql = "SELECT sql from sqlite_schema WHERE name='" + tableName + "'";
@@ -249,7 +291,7 @@ class OINODbBunSqlite extends db_1.OINODb {
      */
     async initializeApiDatamodel(api) {
         const schema_sql = this._getSchemaSql(this._params.database, api.params.tableName);
-        const res = await this.sqlSelect(schema_sql);
+        const res = await this._query(schema_sql);
         const sql_desc = (res?.getRow()[0]);
         const excluded_fields = [];
         let table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc);

@@ -55,6 +55,23 @@ class OINODb {
         result += ";";
         return result;
     }
+    /**
+     * Print SQL select statement with DB specific formatting.
+     *
+     * @param tableName - The name of the table to select from.
+     * @param columns - The columns to be selected.
+     * @param values - The values to be inserted.
+     * @param returnIdFields - the id fields to return if returnIds is true (if supported by the database)
+     *
+     */
+    printSqlInsert(tableName, columns, values, returnIdFields) {
+        let result = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
+        if (returnIdFields) {
+            result += " RETURNING " + returnIdFields.join(",");
+        }
+        result += ";";
+        return result;
+    }
 }
 exports.OINODb = OINODb;
 /**
@@ -65,7 +82,7 @@ exports.OINODb = OINODb;
  * `OINODbDataSet` will serve it out consistently.
  *
  */
-class OINODbDataSet {
+class OINODbDataSet extends common_1.OINOResult {
     _data;
     /** Error messages */
     messages;
@@ -77,6 +94,7 @@ class OINODbDataSet {
      *
      */
     constructor(data, messages = []) {
+        super();
         this._data = data;
         this.messages = messages;
     }

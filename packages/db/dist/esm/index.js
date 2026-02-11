@@ -11,6 +11,6 @@ export { OINODbParser } from "./OINODbParser.js";
 /** Empty row instance */
 export const OINODB_EMPTY_ROW = [];
 /** Empty row array instance */
-export const OINODB_EMPTY_ROWS = [OINODB_EMPTY_ROW];
+export const OINODB_EMPTY_ROWS = [];
 /** Constant for undefined values */
 export const OINODB_UNDEFINED = ""; // original idea was to have a defined literal that get's swapped back to undefined, but current implementation just leaves it out at serialization (so value does not matter)

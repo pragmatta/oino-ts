@@ -112,30 +112,48 @@ export class OINODbMariadb extends OINODb {
     }
     async _query(sql) {
         let connection = null;
+        let rows = OINODB_EMPTY_ROWS;
         try {
             connection = await this._pool.getConnection();
-            const result = await connection.query(sql);
-            return Promise.resolve(result);
+            const sql_res = await connection.query(sql);
+            // console.log("_query: sql=", sql, " result=", result)
+            if (Array.isArray(sql_res)) {
+                rows = sql_res.filter((r) => Array.isArray(r)); // filter out OkPacket results from multiple statements
+            }
+        }
+        catch (e) {
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_query", "exception in SQL select", { message: e.message, stack: e.stack });
+            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMariadb._query");
         }
         finally {
             if (connection) {
-                await connection.end();
+                connection.release();
             }
         }
+        return new OINOMariadbData(rows, []);
     }
     async _exec(sql) {
         let connection = null;
+        let rows = OINODB_EMPTY_ROWS;
         try {
             connection = await this._pool.getConnection();
-            const result = await connection.query(sql);
-            // console.log(result); 
-            return Promise.resolve(result);
+            const sql_res = await connection.query(sql);
+            // console.log("OINODbMariadb._exec: result=", result)
+            if (Array.isArray(sql_res)) {
+                rows = sql_res.filter((r) => Array.isArray(r)); // filter out OkPacket results from multiple statements
+            }
+        }
+        catch (e) {
+            const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || [];
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_exec", "exception in SQL exec", { message: msg_parts[2], stack: e.stack });
+            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec [" + msg_parts[2] + "]", "OINODbMariadb._exec");
         }
         finally {
             if (connection) {
-                await connection.end();
+                connection.release();
             }
         }
+        return new OINOMariadbData(rows, []);
     }
     /**
      * Print a table name using database specific SQL escaping.
@@ -251,7 +269,10 @@ export class OINODbMariadb extends OINODb {
      *
      */
     async connect() {
-        const result = new OINOResult();
+        let result = new OINOResult();
+        if (this.isConnected) {
+            return result;
+        }
         let connection = null;
         try {
             // make sure that any items are correctly URL encoded in the connection string
@@ -265,7 +286,7 @@ export class OINODbMariadb extends OINODb {
         }
         finally {
             if (connection) {
-                await connection.end();
+                await connection.release();
             }
         }
         return Promise.resolve(result);
@@ -279,7 +300,7 @@ export class OINODbMariadb extends OINODb {
         let result = new OINOResult();
         try {
             const sql = this._getValidateSql(this._params.database);
-            const sql_res = await this.sqlSelect(sql);
+            const sql_res = await this._query(sql);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate");
             }
@@ -301,22 +322,28 @@ export class OINODbMariadb extends OINODb {
         return result;
     }
     /**
+     * Disconnect from database.
+     *
+     */
+    async disconnect() {
+        if (this.isConnected) {
+            await this._pool.end();
+        }
+        this.isConnected = false;
+        this.isValidated = false;
+    }
+    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
      *
      */
     async sqlSelect(sql) {
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
         OINOBenchmark.startMetric("OINODb", "sqlSelect");
-        let result;
-        try {
-            const rows = await this._query(sql);
-            result = new OINOMariadbData(rows, []);
-        }
-        catch (e) {
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlSelect", "exception in SQL select", { message: e.message, stack: e.stack });
-            result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message]);
-        }
+        let result = await this._query(sql);
         OINOBenchmark.endMetric("OINODb", "sqlSelect");
         return result;
     }
@@ -327,17 +354,11 @@ export class OINODbMariadb extends OINODb {
      *
      */
     async sqlExec(sql) {
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
         OINOBenchmark.startMetric("OINODb", "sqlExec");
-        let result;
-        try {
-            const sql_res = await this._exec(sql);
-            result = new OINOMariadbData(sql_res, []);
-        }
-        catch (e) {
-            const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || [];
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlExec", "exception in SQL exec", { message: msg_parts[2], stack: e.stack });
-            result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + msg_parts[2] + "]"]);
-        }
+        let result = await this._exec(sql);
         OINOBenchmark.endMetric("OINODb", "sqlExec");
         return result;
     }
@@ -372,7 +393,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
      *
      */
     async initializeApiDatamodel(api) {
-        const schema_res = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName));
+        const schema_res = await this._query(this._getSchemaSql(this._params.database, api.params.tableName));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             // console.log("OINODbMariadb.initializeApiDatamodel row", row)
