@@ -139,7 +139,7 @@ export class OINODbPostgresql extends OINODb {
             }
             return new OINOPostgresqlData(rows, [])
         } catch (e:any) {
-            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbPostgresql._query): Exception in db query: " + e.message])
+            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbPostgresql._query): Exception in db query: " + e.message)
         } finally {
             if (connection) {
                 connection.release()
@@ -163,7 +163,7 @@ export class OINODbPostgresql extends OINODb {
             // if (rows.length > 0) { console.log("OINODbPostgresql._exec: rows", rows) }
             return new OINOPostgresqlData(rows, [])
         } catch (e:any) {
-            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbPostgresql._exec): Exception in db exec: " + e.message])
+            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbPostgresql._exec): Exception in db exec: " + e.message)
         } finally {
             if (connection) {
                 connection.release()

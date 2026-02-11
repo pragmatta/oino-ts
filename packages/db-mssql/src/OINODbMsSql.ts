@@ -152,7 +152,7 @@ export class OINODbMsSql extends OINODb {
             return new OINOMsSqlData(sql_res.recordsets, [])
         } catch (e:any) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_query", "exception in SQL query", {message:e.message, stack:e.stack, sql:sql})
-            return new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbMsSql.sqlQuery): Exception in db query: " + e.message])
+            return new OINOMsSqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbMsSql.sqlQuery): Exception in db query: " + e.message)
         }
     }
 
@@ -164,7 +164,7 @@ export class OINODbMsSql extends OINODb {
             return new OINOMsSqlData(sql_res.recordsets, [])
         } catch (e:any) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_exec", "exception in SQL exec", {message:e.message, stack:e.stack, sql:sql})
-            return new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbMsSql.sqlExec): Exception in db exec: " + e.message])
+            return new OINOMsSqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbMsSql.sqlExec): Exception in db exec: " + e.message)
         }
     }
 

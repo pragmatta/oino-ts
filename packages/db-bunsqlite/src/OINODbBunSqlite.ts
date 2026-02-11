@@ -249,7 +249,7 @@ export class OINODbBunSqlite extends OINODb {
             }            
 
         } catch (e:any) {
-            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbBunSqlite._exec): Exception in db exec: " + e.message])
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbBunSqlite._exec): Exception in db exec: " + e.message, "OINODbBunSqlite._exec")
         }
         return result
     }
@@ -262,7 +262,7 @@ export class OINODbBunSqlite extends OINODb {
      */
     async sqlSelect(sql:string): Promise<OINODbDataSet> {
         if (!this.isValidated) {
-            return new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbBunSqlite.sqlSelect): Database connection not validated!"])
+            return new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbBunSqlite.sqlSelect): Database connection not validated!", "OINODbBunSqlite.sqlSelect")
         }
         OINOBenchmark.startMetric("OINODb", "sqlSelect")
         let result:OINODbDataSet = await this._query(sql)

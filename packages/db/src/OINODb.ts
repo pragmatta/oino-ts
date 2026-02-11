@@ -176,7 +176,7 @@ export abstract class OINODb {
  *
  */
 
-export abstract class OINODbDataSet {
+export abstract class OINODbDataSet extends OINOResult {
     private _data: unknown;
 
     /** Error messages */
@@ -190,6 +190,7 @@ export abstract class OINODbDataSet {
      *
      */
     constructor(data: unknown, messages: string[] = []) {
+        super();
         this._data = data;
         this.messages = messages;
     }
