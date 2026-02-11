@@ -163,6 +163,9 @@ export class OINODbBunSqlite extends OINODb {
     async connect(): Promise<OINOResult> {
         OINOBenchmark.startMetric("OINODb", "connect")
         let result:OINOResult = new OINOResult()
+        if (this.isConnected) {
+            return result
+        }
         const filepath:string = this._params.url.substring(7)
         try {
             this._db = BunSqliteDb.open(filepath, { create: true, readonly: false, readwrite: true })        
@@ -180,11 +183,15 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async validate(): Promise<OINOResult> {
+        if (!this.isConnected) {
+            return new OINOResult().setError(400, "Database not connected!", "OINODbBunSqlite.validate")
+        }
         OINOBenchmark.startMetric("OINODb", "validate")
         let result:OINOResult = new OINOResult()
         try {
+            this.isValidated = false
             const sql = this._getValidateSql(this._params.database)
-            const sql_res:OINODbDataSet = await this.sqlSelect(sql)
+            const sql_res:OINODbDataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate")
 
@@ -198,9 +205,52 @@ export class OINODbBunSqlite extends OINODb {
                 this.isValidated = true
             }
         } catch (e:any) {
-            result.setError(500, OINO_ERROR_PREFIX + " (validate): OINODbBunSqlite.validate exception in _db.query: " + e.message, "OINODbBunSqlite.validate")
+            result.setError(500, OINO_ERROR_PREFIX + " (OINODbBunSqlite.validate): Exception in db query: " + e.message, "OINODbBunSqlite.validate")
         }
         OINOBenchmark.endMetric("OINODb", "validate")
+        return result
+    }
+
+    /**
+     * Connect to database.
+     *
+     */
+    async disconnect(): Promise<void> {
+        this.isConnected = false
+        this.isValidated = false
+    }
+
+
+    private async _query(sql:string): Promise<OINODbDataSet> {
+        let result:OINODbDataSet
+        try {
+            const sql_res = this._db?.query(sql).values()
+            if (sql_res) {
+                // console.log("OINODbBunSqlite._query: res", sql_res)
+                result = new OINOBunSqliteDataset(sql_res, [])
+            } else {
+                result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [])
+            }            
+
+        } catch (e:any) {
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbBunSqlite._query): Exception in db query: " + e.message])
+        }
+        return result
+    }
+    private async _exec(sql:string): Promise<OINODbDataSet> {
+        let result:OINODbDataSet
+        try {
+            const sql_res = this._db?.query(sql).values()
+            if (sql_res) {
+                // console.log("OINODbBunSqlite._exec: res", sql_res)
+                result = new OINOBunSqliteDataset(sql_res, [])
+            } else {
+                result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [])
+            }            
+
+        } catch (e:any) {
+            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbBunSqlite._exec): Exception in db exec: " + e.message])
+        }
         return result
     }
 
@@ -211,16 +261,13 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async sqlSelect(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlSelect")
-        let result:OINODbDataSet
-        try {
-            result = new OINOBunSqliteDataset(this._db?.query(sql).values(), [])
-
-        } catch (e:any) {
-            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + "(sqlSelect): exception in _db.query: " + e.message])
+        if (!this.isValidated) {
+            return new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbBunSqlite.sqlSelect): Database connection not validated!"])
         }
+        OINOBenchmark.startMetric("OINODb", "sqlSelect")
+        let result:OINODbDataSet = await this._query(sql)
         OINOBenchmark.endMetric("OINODb", "sqlSelect")
-        return Promise.resolve(result)
+        return result
     }
 
     /**
@@ -230,22 +277,13 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async sqlExec(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlExec")
-        let result:OINODbDataSet
-        try {
-            const res = this._db?.query(sql).values()
-            if (res) {
-                // console.log("OINODbBunSqlite.sqlExec: res", res)
-                result = new OINOBunSqliteDataset(res, [])
-            } else {
-                result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [])
-            }
-
-        } catch (e:any) {
-            result = new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + "(sqlExec): exception in _db.exec [" + e.message + "]"])
+        if (!this.isValidated) {
+            return new OINOBunSqliteDataset(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbBunSqlite.sqlExec): Database connection not validated!"])
         }
+        OINOBenchmark.startMetric("OINODb", "sqlExec")
+        let result:OINODbDataSet = await this._exec(sql)
         OINOBenchmark.endMetric("OINODb", "sqlExec")
-        return Promise.resolve(result)
+        return result
     }
     
     private _getSchemaSql(dbName:string, tableName:string):string {
@@ -267,7 +305,7 @@ export class OINODbBunSqlite extends OINODb {
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         const schema_sql:string = this._getSchemaSql(this._params.database, api.params.tableName)
-        const res:OINODbDataSet|null = await this.sqlSelect(schema_sql)
+        const res:OINODbDataSet|null = await this._query(schema_sql)
         const sql_desc:string = (res?.getRow()[0]) as string
         const excluded_fields:string[] = []
         let table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc)

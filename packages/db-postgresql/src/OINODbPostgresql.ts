@@ -7,7 +7,7 @@
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINOLog, OINOResult } from "@oino-ts/common";
 import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINODataRow, OINODataCell, OINODatetimeDataField, OINOBlobDataField, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
 
-import { Pool, QueryResult } from "pg";
+import { Pool, PoolClient, QueryResult } from "pg";
 
 
 /**
@@ -124,23 +124,51 @@ export class OINODbPostgresql extends OINODb {
         return result
     }
 
-    private async _query(sql:string):Promise<OINODataRow[]> {
-        const query_result:QueryResult = await this._pool.query({rowMode: "array", text: sql})
-        return query_result.rows
+    private async _query(sql:string):Promise<OINODbDataSet> {
+        let connection:PoolClient|null = null
+        try {
+            connection = await this._pool.connect()
+            const query_result = await connection.query({rowMode: "array", text: sql})
+            let rows:OINODataRow[]
+            if (Array.isArray(query_result) == true) {
+                rows = query_result.flatMap((q) => q.rows)
+            } else if (query_result.rows) {
+                rows = query_result.rows
+            } else {
+                rows = OINODB_EMPTY_ROWS // return empty row if no rows returned
+            }
+            return new OINOPostgresqlData(rows, [])
+        } catch (e:any) {
+            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbPostgresql._query): Exception in db query: " + e.message])
+        } finally {
+            if (connection) {
+                connection.release()
+            }
+        }
     }
 
-    private async _exec(sql:string):Promise<OINODataRow[]> {
-        const query_result:QueryResult = await this._pool.query({rowMode: "array", text: sql})
-        let rows:OINODataRow[]
-        if (Array.isArray(query_result) == true) {
-            rows = query_result.flatMap((q) => q.rows)
-        } else if (query_result.rows) {
-            rows = query_result.rows
-        } else {
-            rows = OINODB_EMPTY_ROWS // return empty row if no rows returned
+    private async _exec(sql:string):Promise<OINODbDataSet> {
+        let connection:PoolClient|null = null
+        try {
+            connection = await this._pool.connect()
+            const query_result:QueryResult = await connection.query({rowMode: "array", text: sql})
+            let rows:OINODataRow[]
+            if (Array.isArray(query_result) == true) {
+                rows = query_result.flatMap((q) => q.rows)
+            } else if (query_result.rows) {
+                rows = query_result.rows
+            } else {
+                rows = OINODB_EMPTY_ROWS // return empty row if no rows returned
+            }
+            // if (rows.length > 0) { console.log("OINODbPostgresql._exec: rows", rows) }
+            return new OINOPostgresqlData(rows, [])
+        } catch (e:any) {
+            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbPostgresql._exec): Exception in db exec: " + e.message])
+        } finally {
+            if (connection) {
+                connection.release()
+            }
         }
-        // if (rows.length > 0) { console.log("OINODbPostgresql._exec: rows", rows) }
-        return rows
     }
 
     /**
@@ -246,9 +274,12 @@ export class OINODbPostgresql extends OINODb {
      */
     async connect(): Promise<OINOResult> {
         let result:OINOResult = new OINOResult()
+        if (this.isConnected) {
+            return result
+        }
         try {
             // make sure that any items are correctly URL encoded in the connection string
-            await this._pool.connect()
+            this._connection = await this._pool.connect()
             this.isConnected = true
 
         } catch (e:any) {
@@ -267,7 +298,7 @@ export class OINODbPostgresql extends OINODb {
         let result:OINOResult = new OINOResult()
         try {
             const sql = this._getValidateSql(this._params.database)
-            const sql_res:OINODbDataSet = await this.sqlSelect(sql)
+            const sql_res:OINODbDataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate")
 
@@ -289,21 +320,34 @@ export class OINODbPostgresql extends OINODb {
     }
 
     /**
+     * Disconnect from database.
+     *
+     */
+    async disconnect(): Promise<void> {
+        if (this.isConnected && this._connection) {
+            this._connection.release()
+            this._connection = null
+            this._pool.end().catch((e:any) => {
+                OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "disconnect", "exception in pool end", {message:e.message, stack:e.stack}) 
+            })
+        }
+        this.isConnected = false
+        this.isValidated = false
+    }
+
+
+    /**
      * Execute a select operation.
      * 
      * @param sql SQL statement.
      *
      */
     async sqlSelect(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlSelect")
-        let result:OINODbDataSet
-        try {
-            const rows:OINODataRow[] = await this._query(sql)
-            result = new OINOPostgresqlData(rows, [])
-
-        } catch (e:any) {
-            result = new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): exception in _db.query [" + e.message + "]"])
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
+        OINOBenchmark.startMetric("OINODb", "sqlSelect")
+        let result:OINODbDataSet = await this._query(sql)
         OINOBenchmark.endMetric("OINODb", "sqlSelect")
         return result
     }
@@ -315,15 +359,11 @@ export class OINODbPostgresql extends OINODb {
      *
      */
     async sqlExec(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlExec")
-        let result:OINODbDataSet
-        try {
-            const rows:OINODataRow[] = await this._exec(sql)
-            result = new OINOPostgresqlData(rows, [])
-
-        } catch (e:any) {
-            result = new OINOPostgresqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
+        OINOBenchmark.startMetric("OINODb", "sqlExec")
+        let result:OINODbDataSet = await this._exec(sql)
         OINOBenchmark.endMetric("OINODb", "sqlExec")
         return result
     }
@@ -386,7 +426,7 @@ WHERE col.table_catalog = '${dbName}'`
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const schema_res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()))
+        const schema_res:OINODbDataSet = await this._query(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()))
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""

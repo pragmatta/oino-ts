@@ -125,42 +125,50 @@ export class OINODbMariadb extends OINODb {
         return result
     }
 
-    private async _query(sql:string):Promise<OINODataRow[]> {
+    private async _query(sql:string):Promise<OINODbDataSet> {
         let connection:mariadb.PoolConnection|null = null
+        let rows:OINODataRow[] = OINODB_EMPTY_ROWS
         try {
             connection = await this._pool.getConnection()
-            const result = await connection.query(sql)
+            const sql_res = await connection.query(sql)
             // console.log("_query: sql=", sql, " result=", result)
-            if (Array.isArray(result)) {
-                return result.filter((r) => Array.isArray(r)) as OINODataRow[] // filter out OkPacket results from multiple statements
-            } else {
-                return OINODB_EMPTY_ROWS
+            if (Array.isArray(sql_res)) {
+                rows = sql_res.filter((r) => Array.isArray(r)) as OINODataRow[] // filter out OkPacket results from multiple statements
             }
-        
+        } catch (e:any) {
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_query", "exception in SQL select", {message:e.message, stack:e.stack})
+            return new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbMariadb._query): Exception in db query: " + e.message])
+
         } finally {
             if (connection) {
                 connection.release()
             }
         }
+        return new OINOMariadbData(rows, [])
     }
 
-    private async _exec(sql:string):Promise<OINODataRow[]> {
+    private async _exec(sql:string):Promise<OINODbDataSet> {
         let connection:mariadb.PoolConnection|null = null
+        let rows:OINODataRow[] = OINODB_EMPTY_ROWS
         try {
             connection = await this._pool.getConnection()
-            const result = await connection.query(sql)
+            const sql_res = await connection.query(sql)
             // console.log("OINODbMariadb._exec: result=", result)
-            if (Array.isArray(result)) {
-                return result.filter((r) => Array.isArray(r)) as OINODataRow[] // filter out OkPacket results from multiple statements
-            } else {
-                return OINODB_EMPTY_ROWS
+            if (Array.isArray(sql_res)) {
+                rows = sql_res.filter((r) => Array.isArray(r)) // filter out OkPacket results from multiple statements
             }
         
+        } catch (e:any) {
+            const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || []
+            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_exec", "exception in SQL exec", {message:msg_parts[2], stack:e.stack})
+            return new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbMariadb._exec): Exception in db exec [" + msg_parts[2] + "]"])
+
         } finally {
             if (connection) {
                 connection.release()
             }
         }
+        return new OINOMariadbData(rows, [])
     }
 
     /**
@@ -280,8 +288,11 @@ export class OINODbMariadb extends OINODb {
      *
      */
     async connect(): Promise<OINOResult> {
-        const result:OINOResult = new OINOResult()
-        let connection:mariadb.Connection|null = null
+        let result:OINOResult = new OINOResult()
+        if (this.isConnected) {
+            return result
+        }
+        let connection:mariadb.PoolConnection|null = null
         try {
             // make sure that any items are correctly URL encoded in the connection string
             connection = await this._pool.getConnection()
@@ -293,7 +304,7 @@ export class OINODbMariadb extends OINODb {
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "connect", "exception in connect", {message:e.message, stack:e.stack})
         } finally {
             if (connection) {
-                await connection.end()
+                await connection.release()
             }
         }   
 
@@ -309,7 +320,7 @@ export class OINODbMariadb extends OINODb {
         let result:OINOResult = new OINOResult()
         try {
             const sql = this._getValidateSql(this._params.database)
-            const sql_res:OINODbDataSet = await this.sqlSelect(sql)
+            const sql_res:OINODbDataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate")
 
@@ -331,22 +342,29 @@ export class OINODbMariadb extends OINODb {
     }
 
     /**
+     * Disconnect from database.
+     *
+     */
+    async disconnect(): Promise<void> {
+        if (this.isConnected) {
+            await this._pool.end()
+        }
+        this.isConnected = false
+        this.isValidated = false
+    }
+
+    /**
      * Execute a select operation.
      * 
      * @param sql SQL statement.
      *
      */
     async sqlSelect(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlSelect")
-        let result:OINODbDataSet
-        try {
-            const rows:OINODataRow[] = await this._query(sql)
-            result = new OINOMariadbData(rows, [])
-
-        } catch (e:any) {
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlSelect", "exception in SQL select", {message:e.message, stack:e.stack})
-            result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMariadb.sqlSelect exception in _db.query: " + e.message])
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
+        OINOBenchmark.startMetric("OINODb", "sqlSelect")
+        let result:OINODbDataSet = await this._query(sql)
         OINOBenchmark.endMetric("OINODb", "sqlSelect")
         return result
     }
@@ -358,18 +376,11 @@ export class OINODbMariadb extends OINODb {
      *
      */
     async sqlExec(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlExec")
-        let result:OINODbDataSet
-        try {
-            const rows:OINODataRow[] = await this._exec(sql)
-            // if (rows.length > 0) {console.log("_exec: result=", rows)}
-            result = new OINOMariadbData(rows, [])
-
-        } catch (e:any) {
-            const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || []
-            OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "sqlExec", "exception in SQL exec", {message:msg_parts[2], stack:e.stack})
-            result = new OINOMariadbData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + msg_parts[2] + "]"])
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
+        OINOBenchmark.startMetric("OINODb", "sqlExec")
+        let result:OINODbDataSet = await this._exec(sql)
         OINOBenchmark.endMetric("OINODb", "sqlExec")
         return result
     }
@@ -411,7 +422,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         
-        const schema_res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName))
+        const schema_res:OINODbDataSet = await this._query(this._getSchemaSql(this._params.database, api.params.tableName))
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             // console.log("OINODbMariadb.initializeApiDatamodel row", row)

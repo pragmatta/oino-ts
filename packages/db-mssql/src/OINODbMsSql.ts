@@ -145,17 +145,27 @@ export class OINODbMsSql extends OINODb {
     }
 
     private async _query(sql:string):Promise<OINOMsSqlData> {
-        const request = this._pool.request() // this does not need to be released but the pool will handle it
-        const sql_res = await request.query(sql)
-        // console.log("_query: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
-        return new OINOMsSqlData(sql_res.recordsets, [])
+        try {
+            const request = this._pool.request() // this does not need to be released but the pool will handle it
+            const sql_res = await request.query(sql)
+            // console.log("_query: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
+            return new OINOMsSqlData(sql_res.recordsets, [])
+        } catch (e:any) {
+            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_query", "exception in SQL query", {message:e.message, stack:e.stack, sql:sql})
+            return new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbMsSql.sqlQuery): Exception in db query: " + e.message])
+        }
     }
 
     private async _exec(sql:string):Promise<OINOMsSqlData> {
-        const request = this._pool.request() // this does not need to be released but the pool will handle it
-        const sql_res = await request.query(sql)
-        // console.log("_exec: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
-        return new OINOMsSqlData(sql_res.recordsets, [])
+        try {
+            const request = this._pool.request() // this does not need to be released but the pool will handle it
+            const sql_res = await request.query(sql)
+            // console.log("_exec: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
+            return new OINOMsSqlData(sql_res.recordsets, [])
+        } catch (e:any) {
+            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_exec", "exception in SQL exec", {message:e.message, stack:e.stack, sql:sql})
+            return new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbMsSql.sqlExec): Exception in db exec: " + e.message])
+        }
     }
 
     /**
@@ -316,6 +326,9 @@ export class OINODbMsSql extends OINODb {
      */
     async connect(): Promise<OINOResult> {
         let result:OINOResult = new OINOResult()
+        if (this.isConnected) {
+            return result
+        }
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await this._pool.connect()
@@ -342,7 +355,7 @@ export class OINODbMsSql extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate")
         try {
             const sql = this._getValidateSql(this._params.database)
-            const sql_res:OINODbDataSet = await this.sqlSelect(sql)
+            const sql_res:OINODbDataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMsSql.validate")
 
@@ -365,21 +378,34 @@ export class OINODbMsSql extends OINODb {
     }
 
     /**
+     * Disconnect from database.
+     *
+     */
+    async disconnect(): Promise<void> {
+        if (this._pool) {
+            try {
+                await this._pool.close()
+
+            } catch (e:any) {
+                OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "disconnect", "exception in disconnect", {message:e.message, stack:e.stack}) 
+            }
+        }
+        this.isConnected = false
+        this.isValidated = false
+    }
+
+    /**
      * Execute a select operation.
      * 
      * @param sql SQL statement.
      *
      */
     async sqlSelect(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlSelect")
-        let result:OINODbDataSet
-        try {
-            return await this._query(sql)
-                
-        } catch (e:any) {
-            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlSelect", "exception in SQL select", {message:e.message, stack:e.stack})
-            result = new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlSelect): OINODbMsSql.sqlSelect exception in _db.query: " + e.message])
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
+        OINOBenchmark.startMetric("OINODb", "sqlSelect")
+        let result:OINODbDataSet = await this._query(sql)
         OINOBenchmark.endMetric("OINODb", "sqlSelect")
         return result
     }
@@ -391,17 +417,11 @@ export class OINODbMsSql extends OINODb {
      *
      */
     async sqlExec(sql:string): Promise<OINODbDataSet> {
-        OINOBenchmark.startMetric("OINODb", "sqlExec")
-        let result:OINODbDataSet
-        try {
-            const sql_res:OINODbDataSet = await this._exec(sql)
-            // if (!sql_res.isEmpty()) { console.log("sqlExec: data for sql=", sql) }
-            return sql_res
-
-        } catch (e:any) {
-            OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "sqlExec", "exception in SQL exec", {message:e.message, stack:e.stack})
-            result = new OINOMsSqlData(OINODB_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (sqlExec): exception in _db.exec [" + e.message + "]"])
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
+        OINOBenchmark.startMetric("OINODb", "sqlExec")
+        let result:OINODbDataSet = await this._exec(sql)
         OINOBenchmark.endMetric("OINODb", "sqlExec")
         return result
     }

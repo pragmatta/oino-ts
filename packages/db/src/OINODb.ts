@@ -44,6 +44,12 @@ export abstract class OINODb {
     abstract validate(): Promise<OINOResult>
     
     /**
+     * Disconnect from database.
+     *
+     */
+    abstract disconnect(): Promise<void>
+    
+    /**
      * Print a table name using database specific SQL escaping.
      * 
      * @param sqlTable name of the table
