@@ -139,7 +139,7 @@ export class OINODbPostgresql extends OINODb {
             }
             return new OINOPostgresqlData(rows, [])
         } catch (e:any) {
-            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbPostgresql._query): Exception in db query: " + e.message)
+            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbPostgresql._query") as OINOPostgresqlData
         } finally {
             if (connection) {
                 connection.release()
@@ -163,7 +163,7 @@ export class OINODbPostgresql extends OINODb {
             // if (rows.length > 0) { console.log("OINODbPostgresql._exec: rows", rows) }
             return new OINOPostgresqlData(rows, [])
         } catch (e:any) {
-            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbPostgresql._exec): Exception in db exec: " + e.message)
+            return new OINOPostgresqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbPostgresql._exec") as OINOPostgresqlData
         } finally {
             if (connection) {
                 connection.release()
@@ -277,15 +277,21 @@ export class OINODbPostgresql extends OINODb {
         if (this.isConnected) {
             return result
         }
+        let connection:PoolClient|null = null
         try {
             // make sure that any items are correctly URL encoded in the connection string
-            this._connection = await this._pool.connect()
+            connection = await this._pool.connect()
             this.isConnected = true
 
         } catch (e:any) {
             result.setError(500, "Exception connecting to database: " + e.message, "OINODbPostgresql.connect")
             OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "connect", "exception in connect", {message:e.message, stack:e.stack}) 
-        }        
+        } finally {
+            if (connection) {
+                connection.release()
+            }
+        }
+
         return result
     }
 
@@ -324,9 +330,7 @@ export class OINODbPostgresql extends OINODb {
      *
      */
     async disconnect(): Promise<void> {
-        if (this.isConnected && this._connection) {
-            this._connection.release()
-            this._connection = null
+        if (this.isConnected) {
             this._pool.end().catch((e:any) => {
                 OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "disconnect", "exception in pool end", {message:e.message, stack:e.stack}) 
             })

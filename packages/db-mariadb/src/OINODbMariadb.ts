@@ -137,7 +137,7 @@ export class OINODbMariadb extends OINODb {
             }
         } catch (e:any) {
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_query", "exception in SQL select", {message:e.message, stack:e.stack})
-            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbMariadb._query): Exception in db query: " + e.message)
+            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMariadb._query") as OINOMariadbData 
 
         } finally {
             if (connection) {
@@ -161,7 +161,7 @@ export class OINODbMariadb extends OINODb {
         } catch (e:any) {
             const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || []
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_exec", "exception in SQL exec", {message:msg_parts[2], stack:e.stack})
-            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbMariadb._exec): Exception in db exec [" + msg_parts[2] + "]")
+            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec [" + msg_parts[2] + "]", "OINODbMariadb._exec") as OINOMariadbData
 
         } finally {
             if (connection) {
