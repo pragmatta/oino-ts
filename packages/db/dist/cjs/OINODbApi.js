@@ -28,9 +28,15 @@ class OINODbApiRequest extends common_1.OINOHttpRequest {
             }
         }
         if (!this.sqlParams.filter) {
-            const filter_param = this.url?.searchParams.get(index_js_1.OINODbConfig.OINODB_SQL_FILTER_PARAM);
-            if (filter_param) {
-                this.sqlParams.filter = index_js_1.OINODbSqlFilter.parse(filter_param);
+            const filter_params = this.url?.searchParams.getAll(index_js_1.OINODbConfig.OINODB_SQL_FILTER_PARAM) || [];
+            for (let i = 0; i < filter_params.length; i++) {
+                const f = index_js_1.OINODbSqlFilter.parse(filter_params[i]);
+                if (i > 0) {
+                    this.sqlParams.filter = index_js_1.OINODbSqlFilter.combine(this.sqlParams.filter, index_js_1.OINODbSqlBooleanOperation.and, f);
+                }
+                else {
+                    this.sqlParams.filter = f;
+                }
             }
         }
         if (init?.order) {

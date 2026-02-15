@@ -41,7 +41,7 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         } 
         if (!this.sqlParams.filter) {
-            const filter_params = this.url?.searchParams.getAll(OINODbConfig.OINODB_SQL_FILTER_PARAM)
+            const filter_params = this.url?.searchParams.getAll(OINODbConfig.OINODB_SQL_FILTER_PARAM) || []
             for (let i=0; i<filter_params.length; i++) {
                 const f = OINODbSqlFilter.parse(filter_params[i])
                 if (i > 0) {

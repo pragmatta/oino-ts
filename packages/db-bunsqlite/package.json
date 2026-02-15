@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/db-bunsqlite",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "OINO TS package for using Bun Sqlite databases.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -20,8 +20,8 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/common": "^0.20.0",
-    "@oino-ts/db": "^0.20.0"
+    "@oino-ts/common": "^0.20.1",
+    "@oino-ts/db": "^0.20.1"
   },
   "devDependencies": {
     "@types/bun": "latest",
