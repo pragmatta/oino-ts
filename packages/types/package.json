@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/types",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "OINO TS package for types.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",

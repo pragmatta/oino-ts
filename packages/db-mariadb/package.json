@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/db-mariadb",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "OINO TS package for using Mariadb databases.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -21,8 +21,8 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/common": "^0.20.0",
-    "@oino-ts/db": "^0.20.0",
+    "@oino-ts/common": "^0.20.1",
+    "@oino-ts/db": "^0.20.1",
     "mariadb": "^3.2.3"
   },
   "devDependencies": {

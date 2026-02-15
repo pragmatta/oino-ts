@@ -5,7 +5,7 @@
  */
 import { Buffer } from "node:buffer";
 import { OINOLog, OINOResult, OINOHttpRequest, OINOBenchmark, OINOHtmlTemplate, OINOContentType, OINO_ERROR_PREFIX } from "@oino-ts/common";
-import { OINODbDataModel, OINOStringDataField, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODbParser, OINODatetimeDataField, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit } from "./index.js";
+import { OINODbDataModel, OINOStringDataField, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODbParser, OINODatetimeDataField, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlBooleanOperation } from "./index.js";
 import { OINOHashid } from "@oino-ts/hashid";
 export class OINODbApiRequest extends OINOHttpRequest {
     rowId;
@@ -25,9 +25,15 @@ export class OINODbApiRequest extends OINOHttpRequest {
             }
         }
         if (!this.sqlParams.filter) {
-            const filter_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_FILTER_PARAM);
-            if (filter_param) {
-                this.sqlParams.filter = OINODbSqlFilter.parse(filter_param);
+            const filter_params = this.url?.searchParams.getAll(OINODbConfig.OINODB_SQL_FILTER_PARAM) || [];
+            for (let i = 0; i < filter_params.length; i++) {
+                const f = OINODbSqlFilter.parse(filter_params[i]);
+                if (i > 0) {
+                    this.sqlParams.filter = OINODbSqlFilter.combine(this.sqlParams.filter, OINODbSqlBooleanOperation.and, f);
+                }
+                else {
+                    this.sqlParams.filter = f;
+                }
             }
         }
         if (init?.order) {
