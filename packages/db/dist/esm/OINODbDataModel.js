@@ -78,6 +78,9 @@ export class OINODbDataModel {
                 result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(val);
             }
         }
+        if (result == "") {
+            throw new Error(OINO_ERROR_PREFIX + ": no valid updatable fields provided for row!");
+        }
         return result;
     }
     _printSqlPrimaryKeyCondition(id_value) {
