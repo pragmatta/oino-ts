@@ -576,7 +576,7 @@ export class OINODbApi {
         else {
             result.setError(405, "Unsupported HTTP method '" + request.method + "' for REST request", "DoRequest");
         }
-        OINOBenchmark.endMetric("OINODbApi", "doRequest." + request.method);
+        OINOBenchmark.endMetric("OINODbApi", "doRequest." + request.method, result.status != 500);
         return Promise.resolve(result);
     }
     /**
@@ -621,7 +621,7 @@ export class OINODbApi {
                 result.setError(500, "Unhandled exception in HTTP DELETE doRequest: " + e.message, "DoBatchUpdate");
             }
         }
-        OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate." + request.method);
+        OINOBenchmark.endMetric("OINODbApi", "doBatchUpdate." + request.method, result.status != 500);
         return Promise.resolve(result);
     }
     /**

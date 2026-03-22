@@ -12,6 +12,8 @@ export abstract class OINOBenchmark {
 
     protected static _instance:OINOBenchmark
     protected static _enabled:Record<string, boolean> = {}
+    protected static _healthBenchmarks: string[] = []
+    protected static _healthLateRatio: number = 0
 
     /**
      * Create a new OINOBenchmark instance.
@@ -41,6 +43,50 @@ export abstract class OINOBenchmark {
     static getInstance(): OINOBenchmark {
         return OINOBenchmark._instance
     }
+
+    /**
+     * Add benchmark to be used for service health monitoring.
+     * @param module of the benchmark
+     * @param method of the benchmark
+     */
+    static addHealthBenchmark(module: string, method: string): void {
+        const name = module + "." + method
+        if (!OINOBenchmark._healthBenchmarks.includes(name)) {
+            OINOBenchmark._healthBenchmarks.push(name)
+        }
+    }
+
+    /**
+     * Remove benchmark from being used for service health monitoring.
+     * @param module of the benchmark
+     * @param method of the benchmark
+     */
+    static removeHealthBenchmark(module: string, method: string): void {
+        const name = module + "." + method
+        const index = OINOBenchmark._healthBenchmarks.indexOf(name)
+        if (index !== -1) {
+            OINOBenchmark._healthBenchmarks.splice(index, 1)
+        }
+    }
+
+    /**
+     * Set late ratio threshold for health monitoring. If a request takes this many times longer than the average duration, it is considered late and a health failure.
+     * @param lateRatio of health benchmarks, e.g. 2.0 means requests that take 2 times longer than the average 
+     */
+    static setHealthLateRatio(lateRatio: number): void {
+        OINOBenchmark._healthLateRatio = lateRatio
+    }
+
+    /**
+     * Get service health based on the configured health benchmark.
+     * 
+     * @returns service health as 0-1
+     */
+    static getHealth(): number {
+        return OINOBenchmark._instance? OINOBenchmark._instance._getHealth() : 1
+    }
+
+    protected abstract _getHealth(): number
 
     protected abstract _reset():void
     /**
@@ -74,15 +120,16 @@ export abstract class OINOBenchmark {
         OINOBenchmark._instance?._startMetric(module, method)
     }
 
-    protected abstract _endMetric(module:string, method:string):void
+    protected abstract _endMetric(module:string, method:string, success:boolean):void
     /**
      * Complete benchmark timing
      * 
      * @param module of the benchmark
      * @param method of the benchmark
+     * @param success indicates if the benchmark was successful
      */
-    static endMetric(module:string, method:string):void {
-        OINOBenchmark._instance?._endMetric(module, method)
+    static endMetric(module:string, method:string, success:boolean = true):void {
+        OINOBenchmark._instance?._endMetric(module, method, success)
     }
 
     protected abstract _getMetric(module:string, method:string):number
@@ -106,18 +153,18 @@ export abstract class OINOBenchmark {
         return OINOBenchmark._instance?._getMetrics()
     }
 
-    protected abstract _trackMetric(module:string, method:string, value:number):void
+    protected abstract _trackMetric(module:string, method:string, value:number, success:boolean):void
     /**
      * Track a metric value
      * 
      * @param module of the metric
      * @param method of the metric
      * @param value of the metric
-     * 
+     * @param success indicates if the metric was successful
      */
-    static trackMetric(module:string, method:string, value:number):void {
+    static trackMetric(module:string, method:string, value:number, success:boolean = true):void {
         if (OINOBenchmark._enabled[module]) {
-            OINOBenchmark._instance?._trackMetric(module, method, value)
+            OINOBenchmark._instance?._trackMetric(module, method, value, success)
         }
     }
 
@@ -157,6 +204,8 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
     protected _benchmarkCount:Record<string, number> = {}
     protected _benchmarkData:Record<string, number> = {}
     protected _benchmarkStart:Record<string, number> = {}
+    protected _healthBenchmarks: number = 0
+    protected _healthFailures: number = 0
 
     protected _exceptions:any[] = []
 
@@ -167,6 +216,8 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
     protected _reset():void {
         this._benchmarkData = {}
         this._benchmarkCount = {}
+        this._healthBenchmarks = 0
+        this._healthFailures = 0
     }
 
     /**
@@ -187,14 +238,15 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      * 
      * @param module of the benchmark
      * @param method of the benchmark
+     * @param success indicates if the benchmark was successful
      */
-    protected _endMetric(module:string, method:string):void {
+    protected _endMetric(module:string, method:string, success:boolean = true):void {
         const name:string = module + "." + method
         let result:number = 0
         if (OINOBenchmark._enabled[module] && (this._benchmarkStart[name] > 0)) { // if benchmark is started, end it
             const duration = performance.now() - this._benchmarkStart[name]
             this._benchmarkStart[name] = 0 
-            this._trackMetric(module, method, duration)
+            this._trackMetric(module, method, duration, success)
         }
         return
     }
@@ -228,7 +280,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         return result
     }
 
-    protected _trackMetric(module:string, method:string, value:number):void {
+    protected _trackMetric(module:string, method:string, value:number, success:boolean = true):void {
         const name:string = module + "." + method
         if (this._benchmarkCount[name] == undefined) {
             this._benchmarkCount[name] = 1
@@ -236,6 +288,19 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         } else {
             this._benchmarkCount[name] += 1
             this._benchmarkData[name] += value
+        }
+        if (OINOBenchmark._healthBenchmarks.includes(name)) {
+            // console.log(`Health benchmark ${name}: value=${value.toFixed(2)}ms, average=${(this._benchmarkData[name] / this._benchmarkCount[name]).toFixed(2)}ms, late=${late_ratio>=OINOBenchmark._healthLateRatio}, success=${success}`)
+            this._healthBenchmarks += 1
+            if (!success) {
+                this._healthFailures += 1
+
+            } else if (OINOBenchmark._healthLateRatio > 0) {
+                const late_ratio = value / (this._benchmarkData[name] / this._benchmarkCount[name])
+                if ((late_ratio > OINOBenchmark._healthLateRatio)) {
+                    this._healthFailures += 1
+                }
+            }
         }
     }
 
@@ -246,5 +311,14 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
 
     protected _getExceptions():any[] {
         return this._exceptions
+    }
+
+    protected _getHealth(): number {
+        if ((OINOBenchmark._healthBenchmarks.length == 0) || (this._healthBenchmarks == 0))     {
+            return 1.0
+
+        } else {
+            return (this._healthBenchmarks - this._healthFailures) / this._healthBenchmarks
+        }
     }
 }

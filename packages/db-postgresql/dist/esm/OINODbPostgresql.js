@@ -308,7 +308,7 @@ export class OINODbPostgresql extends OINODb {
             result.setError(500, "Exception validating connection: " + e.message, "OINODbPostgresql.validate");
             OINOLog.exception("@oino-ts/db-postgresql", "OINODbPostgresql", "validate", "exception in validate", { message: e.message, stack: e.stack });
         }
-        OINOBenchmark.endMetric("OINODb", "validate");
+        OINOBenchmark.endMetric("OINODb", "validate", result.status != 500);
         return result;
     }
     /**
@@ -336,7 +336,7 @@ export class OINODbPostgresql extends OINODb {
         }
         OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result = await this._query(sql);
-        OINOBenchmark.endMetric("OINODb", "sqlSelect");
+        OINOBenchmark.endMetric("OINODb", "sqlSelect", result.status != 500);
         return result;
     }
     /**
@@ -351,7 +351,7 @@ export class OINODbPostgresql extends OINODb {
         }
         OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result = await this._exec(sql);
-        OINOBenchmark.endMetric("OINODb", "sqlExec");
+        OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
     _getSchemaSql(dbName, tableName) {

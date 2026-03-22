@@ -292,7 +292,8 @@ class OINODbMariadb extends db_1.OINODb {
                 await connection.release();
             }
         }
-        return Promise.resolve(result);
+        common_1.OINOBenchmark.endMetric("OINODb", "connect", result.status != 500);
+        return result;
     }
     /**
      * Validate connection to database is working.
@@ -321,7 +322,7 @@ class OINODbMariadb extends db_1.OINODb {
             result.setError(500, "Exception validating connection: " + e.message, "OINODbMariadb.validate");
             common_1.OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "validate", "exception in validate", { message: e.message, stack: e.stack });
         }
-        common_1.OINOBenchmark.endMetric("OINODb", "validate");
+        common_1.OINOBenchmark.endMetric("OINODb", "validate", result.status != 500);
         return result;
     }
     /**
@@ -347,7 +348,7 @@ class OINODbMariadb extends db_1.OINODb {
         }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result = await this._query(sql);
-        common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect");
+        common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect", result.status != 500);
         return result;
     }
     /**

@@ -5,6 +5,8 @@
 export declare abstract class OINOBenchmark {
     protected static _instance: OINOBenchmark;
     protected static _enabled: Record<string, boolean>;
+    protected static _healthBenchmarks: string[];
+    protected static _healthLateRatio: number;
     /**
      * Create a new OINOBenchmark instance.
      *
@@ -23,6 +25,30 @@ export declare abstract class OINOBenchmark {
      *
      */
     static getInstance(): OINOBenchmark;
+    /**
+     * Add benchmark to be used for service health monitoring.
+     * @param module of the benchmark
+     * @param method of the benchmark
+     */
+    static addHealthBenchmark(module: string, method: string): void;
+    /**
+     * Remove benchmark from being used for service health monitoring.
+     * @param module of the benchmark
+     * @param method of the benchmark
+     */
+    static removeHealthBenchmark(module: string, method: string): void;
+    /**
+     * Set late ratio threshold for health monitoring. If a request takes this many times longer than the average duration, it is considered late and a health failure.
+     * @param lateRatio of health benchmarks, e.g. 2.0 means requests that take 2 times longer than the average
+     */
+    static setHealthLateRatio(lateRatio: number): void;
+    /**
+     * Get service health based on the configured health benchmark.
+     *
+     * @returns service health as 0-1
+     */
+    static getHealth(): number;
+    protected abstract _getHealth(): number;
     protected abstract _reset(): void;
     /**
      * Reset benchmark data (but not what is enabled).
@@ -43,14 +69,15 @@ export declare abstract class OINOBenchmark {
      * @param method of the benchmark
      */
     static startMetric(module: string, method: string): void;
-    protected abstract _endMetric(module: string, method: string): void;
+    protected abstract _endMetric(module: string, method: string, success: boolean): void;
     /**
      * Complete benchmark timing
      *
      * @param module of the benchmark
      * @param method of the benchmark
+     * @param success indicates if the benchmark was successful
      */
-    static endMetric(module: string, method: string): void;
+    static endMetric(module: string, method: string, success?: boolean): void;
     protected abstract _getMetric(module: string, method: string): number;
     /**
      * Get given benchmark data.
@@ -66,16 +93,16 @@ export declare abstract class OINOBenchmark {
      *
      */
     static getMetrics(): Record<string, number>;
-    protected abstract _trackMetric(module: string, method: string, value: number): void;
+    protected abstract _trackMetric(module: string, method: string, value: number, success: boolean): void;
     /**
      * Track a metric value
      *
      * @param module of the metric
      * @param method of the metric
      * @param value of the metric
-     *
+     * @param success indicates if the metric was successful
      */
-    static trackMetric(module: string, method: string, value: number): void;
+    static trackMetric(module: string, method: string, value: number, success?: boolean): void;
     protected abstract _trackException(module: string, method: string, name: string, message: string, stack: string): void;
     /**
      * Track an exception
@@ -103,6 +130,8 @@ export declare class OINOMemoryBenchmark extends OINOBenchmark {
     protected _benchmarkCount: Record<string, number>;
     protected _benchmarkData: Record<string, number>;
     protected _benchmarkStart: Record<string, number>;
+    protected _healthBenchmarks: number;
+    protected _healthFailures: number;
     protected _exceptions: any[];
     /**
      * Reset benchmark data (but not what is enabled).
@@ -121,8 +150,9 @@ export declare class OINOMemoryBenchmark extends OINOBenchmark {
      *
      * @param module of the benchmark
      * @param method of the benchmark
+     * @param success indicates if the benchmark was successful
      */
-    protected _endMetric(module: string, method: string): void;
+    protected _endMetric(module: string, method: string, success?: boolean): void;
     /**
      * Get given benchmark data.
      *
@@ -136,7 +166,8 @@ export declare class OINOMemoryBenchmark extends OINOBenchmark {
      *
      */
     protected _getMetrics(): Record<string, number>;
-    protected _trackMetric(module: string, method: string, value: number): void;
+    protected _trackMetric(module: string, method: string, value: number, success?: boolean): void;
     protected _trackException(module: string, method: string, name: string, message: string, stack: string): void;
     protected _getExceptions(): any[];
+    protected _getHealth(): number;
 }
