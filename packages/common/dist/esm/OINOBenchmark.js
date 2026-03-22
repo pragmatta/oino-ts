@@ -174,7 +174,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
     _benchmarkCount = {};
     _benchmarkData = {};
     _benchmarkStart = {};
-    _healthBenchmarks = 0;
+    _healthRequests = 0;
     _healthFailures = 0;
     _exceptions = [];
     /**
@@ -184,7 +184,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
     _reset() {
         this._benchmarkData = {};
         this._benchmarkCount = {};
-        this._healthBenchmarks = 0;
+        this._healthRequests = 0;
         this._healthFailures = 0;
     }
     /**
@@ -255,7 +255,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         }
         if (OINOBenchmark._healthBenchmarks.includes(name)) {
             // console.log(`Health benchmark ${name}: value=${value.toFixed(2)}ms, average=${(this._benchmarkData[name] / this._benchmarkCount[name]).toFixed(2)}ms, late=${late_ratio>=OINOBenchmark._healthLateRatio}, success=${success}`)
-            this._healthBenchmarks += 1;
+            this._healthRequests += 1;
             if (!success) {
                 this._healthFailures += 1;
             }
@@ -275,11 +275,11 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
         return this._exceptions;
     }
     _getHealth() {
-        if ((OINOBenchmark._healthBenchmarks.length == 0) || (this._healthBenchmarks == 0)) {
+        if ((OINOBenchmark._healthBenchmarks.length == 0) || (this._healthRequests == 0)) {
             return 1.0;
         }
         else {
-            return (this._healthBenchmarks - this._healthFailures) / this._healthBenchmarks;
+            return (this._healthRequests - this._healthFailures) / this._healthRequests;
         }
     }
 }

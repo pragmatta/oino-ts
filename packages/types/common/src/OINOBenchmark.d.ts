@@ -130,7 +130,7 @@ export declare class OINOMemoryBenchmark extends OINOBenchmark {
     protected _benchmarkCount: Record<string, number>;
     protected _benchmarkData: Record<string, number>;
     protected _benchmarkStart: Record<string, number>;
-    protected _healthBenchmarks: number;
+    protected _healthRequests: number;
     protected _healthFailures: number;
     protected _exceptions: any[];
     /**
