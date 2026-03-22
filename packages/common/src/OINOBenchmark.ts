@@ -289,7 +289,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
             this._benchmarkCount[name] += 1
             this._benchmarkData[name] += value
         }
-        if (OINOBenchmark._healthRequests.includes(name)) {
+        if (OINOBenchmark._healthBenchmarks.includes(name)) {
             // console.log(`Health benchmark ${name}: value=${value.toFixed(2)}ms, average=${(this._benchmarkData[name] / this._benchmarkCount[name]).toFixed(2)}ms, late=${late_ratio>=OINOBenchmark._healthLateRatio}, success=${success}`)
             this._healthRequests += 1
             if (!success) {
