@@ -363,7 +363,7 @@ class OINODbMariadb extends db_1.OINODb {
         }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result = await this._exec(sql);
-        common_1.OINOBenchmark.endMetric("OINODb", "sqlExec");
+        common_1.OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
     _getSchemaSql(dbName, tableName) {

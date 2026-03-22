@@ -199,7 +199,7 @@ class OINODbBunSqlite extends db_1.OINODb {
         catch (e) {
             result.setError(500, common_1.OINO_ERROR_PREFIX + " (OINODbBunSqlite.validate): Exception in db query: " + e.message, "OINODbBunSqlite.validate");
         }
-        common_1.OINOBenchmark.endMetric("OINODb", "validate");
+        common_1.OINOBenchmark.endMetric("OINODb", "validate", result.status != 500);
         return result;
     }
     /**
@@ -256,7 +256,7 @@ class OINODbBunSqlite extends db_1.OINODb {
         }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result = await this._query(sql);
-        common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect");
+        common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect", result.status != 500);
         return result;
     }
     /**
@@ -271,7 +271,7 @@ class OINODbBunSqlite extends db_1.OINODb {
         }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result = await this._exec(sql);
-        common_1.OINOBenchmark.endMetric("OINODb", "sqlExec");
+        common_1.OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
     _getSchemaSql(dbName, tableName) {

@@ -382,7 +382,7 @@ export class OINODbMariadb extends OINODb {
         }
         OINOBenchmark.startMetric("OINODb", "sqlExec")
         let result:OINODbDataSet = await this._exec(sql)
-        OINOBenchmark.endMetric("OINODb", "sqlExec")
+        OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500)
         return result
     }
 
