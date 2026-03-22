@@ -354,7 +354,7 @@ class OINODbMsSql extends db_1.OINODb {
             result.setError(500, "Exception in validating connection: " + e.message, "OINODbMsSql.validate");
             common_1.OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "validate", "exception in validate", { message: e.message, stack: e.stack });
         }
-        common_1.OINOBenchmark.endMetric("OINODb", "validate");
+        common_1.OINOBenchmark.endMetric("OINODb", "validate", result.status != 500);
         return result;
     }
     /**
@@ -385,7 +385,7 @@ class OINODbMsSql extends db_1.OINODb {
         }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlSelect");
         let result = await this._query(sql);
-        common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect");
+        common_1.OINOBenchmark.endMetric("OINODb", "sqlSelect", result.status != 500);
         return result;
     }
     /**
@@ -400,7 +400,7 @@ class OINODbMsSql extends db_1.OINODb {
         }
         common_1.OINOBenchmark.startMetric("OINODb", "sqlExec");
         let result = await this._exec(sql);
-        common_1.OINOBenchmark.endMetric("OINODb", "sqlExec");
+        common_1.OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
     _getSchemaSql(dbName, tableName) {
