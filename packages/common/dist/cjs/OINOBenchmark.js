@@ -147,7 +147,7 @@ class OINOBenchmark {
         }
     }
     /**
-     * Track an exception
+     * Track an exception. Does not consider enabled modules.
      *
      * @param module of the benchmark
      * @param method of the benchmark
@@ -156,9 +156,7 @@ class OINOBenchmark {
      * @param stack trace of the exception
      */
     static trackException(module, method, name, message, stack) {
-        if (OINOBenchmark._enabled[module]) {
-            OINOBenchmark._instance?._trackException(module, method, name, message, stack);
-        }
+        OINOBenchmark._instance?._trackException(module, method, name, message, stack);
     }
     /**
      * Get all tracked exceptions.
@@ -186,6 +184,7 @@ class OINOMemoryBenchmark extends OINOBenchmark {
      *
      */
     _reset() {
+        this._exceptions = [];
         this._benchmarkData = {};
         this._benchmarkCount = {};
         this._healthRequests = 0;
