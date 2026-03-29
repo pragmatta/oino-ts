@@ -170,7 +170,7 @@ export abstract class OINOBenchmark {
 
     protected abstract _trackException(module:string, method:string, name:string, message:string, stack: string):void
     /**
-     * Track an exception
+     * Track an exception. Does not consider enabled modules.
      * 
      * @param module of the benchmark
      * @param method of the benchmark
@@ -179,9 +179,7 @@ export abstract class OINOBenchmark {
      * @param stack trace of the exception
      */
     static trackException(module:string, method:string, name:string, message:string, stack:string):void {
-        if (OINOBenchmark._enabled[module]) {
-            OINOBenchmark._instance?._trackException(module, method, name, message, stack)
-        }
+        OINOBenchmark._instance?._trackException(module, method, name, message, stack)
     }
 
     protected abstract _getExceptions():any[]
@@ -214,6 +212,7 @@ export class OINOMemoryBenchmark extends OINOBenchmark {
      *
      */
     protected _reset():void {
+        this._exceptions = []
         this._benchmarkData = {}
         this._benchmarkCount = {}
         this._healthRequests = 0
