@@ -105,7 +105,7 @@ export declare abstract class OINOBenchmark {
     static trackMetric(module: string, method: string, value: number, success?: boolean): void;
     protected abstract _trackException(module: string, method: string, name: string, message: string, stack: string): void;
     /**
-     * Track an exception
+     * Track an exception. Does not consider enabled modules.
      *
      * @param module of the benchmark
      * @param method of the benchmark
