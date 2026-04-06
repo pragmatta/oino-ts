@@ -1,4 +1,4 @@
-import { OINODb, OINODbApi, OINODbFactory, OINOConsoleLog, OINODbApiResult, OINORequestParams } from "@oino-ts/db";
+import { OINODb, OINODbApi, OINODbFactory, OINOConsoleLog, OINOApiResult, OINORequestParams } from "@oino-ts/db";
 import { OINOLog, OINOLogLevel } from "@oino-ts/common"
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
@@ -46,7 +46,7 @@ const server = Bun.serve({
         } else {
             const body:string = await request.text()
             const params:OINORequestParams = OINODbFactory.createParamsFromRequest(request)
-            const api_result:OINODbApiResult = await api.doRequest(request.method, id, body, params)
+            const api_result:OINOApiResult = await api.doRequest(request.method, id, body, params)
             response = await api_result.createResponseFromResult(response_headers)
         }
         return response

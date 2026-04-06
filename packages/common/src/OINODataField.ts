@@ -4,8 +4,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Buffer } from "buffer"
-import { OINO_ERROR_PREFIX, OINOLog, OINODataFieldParams, OINODataCell, OINODataSource } from "@oino-ts/common"
+import { Buffer } from "node:buffer"
+import { OINO_ERROR_PREFIX, OINODataFieldParams, OINODataCell } from "./OINOConstants.js"
+import { OINOLog } from "./OINOLog.js"
+import { OINODataSource } from "./OINODataSource.js"
 
 /**
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
@@ -361,3 +363,9 @@ export class OINODatetimeDataField extends OINODataField {
     }
     
 }
+
+/** 
+ * Callback to filter data fields 
+ * @param field fields to filter
+ */
+export type OINODataFieldFilter = (field:OINODataField) => Boolean

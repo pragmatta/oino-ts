@@ -4,7 +4,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbApiParams, OINODbParams, OINODb, OINODbConstructor } from "./index.js"
+import { OINOApiParams } from "@oino-ts/common"
+
+import { OINODbParams, OINODbConstructor } from "./OINODbConstants.js"
+import { OINODbApi } from "./OINODbApi.js"
+import { OINODb } from "./OINODb.js"
+import { OINODbDataModel } from "./OINODbDataModel.js"
 
 /**
  * Static factory class for easily creating things based on data
@@ -61,7 +66,7 @@ export class OINODbFactory {
      * @param db databased used in API
      * @param params parameters of the API
      */
-    static async createApi(db: OINODb, params: OINODbApiParams):Promise<OINODbApi> {
+    static async createApi(db: OINODb, params: OINOApiParams):Promise<OINODbApi> {
         let result:OINODbApi = new OINODbApi(db, params)
         await db.initializeApiDatamodel(result)
         return result

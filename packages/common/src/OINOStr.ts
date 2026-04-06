@@ -1,4 +1,4 @@
-import { OINOContentType } from "."
+import { OINOContentType } from "./OINOConstants.js"
 
 /** Callback to filter data fields */
 export type OINOStrEncoder = (str:string) => string

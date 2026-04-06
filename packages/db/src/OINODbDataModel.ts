@@ -4,21 +4,22 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINO_ERROR_PREFIX } from "@oino-ts/common"
-import { OINODbDataField, OINODbApi, OINODataRow, OINODbDataFieldFilter, OINODbConfig, OINODbSqlParams, OINONumberDataField, OINODbSqlSelect, OINODB_UNDEFINED } from "./index.js";
+import { OINO_ERROR_PREFIX, OINODataModel, OINOApi, OINODataField, OINODataRow, OINOConfig, OINOQuerySelect, OINOQueryParams, OINONumberDataField } from "@oino-ts/common"
+import { OINODB_UNDEFINED } from "./OINODbConstants.js"
+import { OINODbApi } from "./OINODbApi.js"
+import { OINODbQueryOrder, OINODbQueryFilter, OINODbQueryLimit, OINODbQueryAggregate } from "./OINODbQueryParams.js"
 
 /**
  * OINO Datamodel object for representing one database table and it's columns.
  *
  */
-export class OINODbDataModel {
-    private _fieldIndexLookup:Record<string, number>;
+export class OINODbDataModel extends OINODataModel {
 
     /** Database refererence of the table */
-    readonly api:OINODbApi 
+    readonly dbApi:OINODbApi 
 
     /** Field refererences of the API */
-    readonly fields: OINODbDataField[]
+    readonly fields: OINODataField[]
 
     /**
      * Constructor of the data model.
@@ -28,26 +29,19 @@ export class OINODbDataModel {
      *
      */
     constructor(api:OINODbApi) {
-        this._fieldIndexLookup = {}
-        this.api = api
+        super(api)
+        this.dbApi = api
         this.fields = []
     }
-    /**
-     * Initialize datamodel from SQL schema.
-     * 
-     */
-    async initialize() {
-        await this.api.db.initializeApiDatamodel(this.api)
-    }
 
-    private _printSqlColumnNames(select?:OINODbSqlSelect): string {
+    private _printColumnNames(select?:OINOQuerySelect): string {
         let result: string = "";
         for (let i=0; i < this.fields.length; i++) {
-            const f:OINODbDataField = this.fields[i]
-            if (select?.isSelected(f) === false) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
-                result += f.db.printSqlString(OINODB_UNDEFINED) + " as " + f.printSqlColumnName()+","
+            const f:OINODataField = this.fields[i]
+            if ((select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
+                result += f.datasource.printStringValue(OINODB_UNDEFINED) + " as " + f.printColumnName()+","
             } else {
-                result += f.printSqlColumnName()+","
+                result += f.printColumnName()+","
             }
         }
         return result.substring(0, result.length-1)
@@ -65,8 +59,8 @@ export class OINODbDataModel {
                     columns += ",";
                     values += ",";
                 }
-                columns += f.printSqlColumnName();
-                values += f.printCellAsSqlValue(val);
+                columns += f.printColumnName();
+                values += f.printCellAsValue(val);
             }
         }
         // console.log("_printSqlInsertColumnsAndValues: columns=" + columns + ", values=" + values)
@@ -82,7 +76,7 @@ export class OINODbDataModel {
                 if (result != "") {
                     result += ",";
                 }
-                result += f.printSqlColumnName() + "=" + f.printCellAsSqlValue(val);
+                result += f.printColumnName() + "=" + f.printCellAsValue(val);
             }
         }
         if (result == "") {
@@ -94,7 +88,7 @@ export class OINODbDataModel {
     private _printSqlPrimaryKeyCondition(id_value: string): string {
         let result: string = ""
         let i:number = 0
-        const id_parts = id_value.split(OINODbConfig.OINODB_ID_SEPARATOR)
+        const id_parts = id_value.split(OINOConfig.OINO_ID_SEPARATOR)
         for (let f of this.fields) {
             if (f.fieldParams.isPrimaryKey) {
                 if (result != "") {
@@ -104,11 +98,11 @@ export class OINODbDataModel {
                 if ((f instanceof OINONumberDataField) && (this.api.hashid)) {
                     value = this.api.hashid.decode(value)
                 }
-                value = f.printCellAsSqlValue(value)
+                value = f.printCellAsValue(value)
                 if (value == "") { // ids are user input and could be specially crafted to be empty
                     throw new Error(OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName)
                 }
-                result += f.printSqlColumnName() + "=" + value; 
+                result += f.printColumnName() + "=" + value; 
                 i = i + 1
             }
         }
@@ -122,119 +116,9 @@ export class OINODbDataModel {
         let result: string[] = []
         for (let f of this.fields) {
             if (f.fieldParams.isPrimaryKey) {
-                result.push(this.api.db.printSqlColumnname(f.name))
+                result.push(this.dbApi.db.printColumnName(f.name))
             }
         }
-        return result
-    }
-
-    /**
-     * Add a field to the datamodel.
-     * 
-     * @param field dataset field
-     *
-     */
-    addField(field:OINODbDataField) {
-        this.fields.push(field)
-        this._fieldIndexLookup[field.name] = this.fields.length-1
-    }
-
-    /**
-     * Find a field of a given name if any.
-     * 
-     * @param name name of the field to find
-     *
-     */
-    findFieldByName(name:string):OINODbDataField|null {
-        const i:number = this._fieldIndexLookup[name]
-        if (i >= 0) {
-            return this.fields[i]
-        } else {
-            return null
-        }
-    }
-
-    /**
-     * Find index of a field of a given name if any.
-     * 
-     * @param name name of the field to find
-     *
-     */
-    findFieldIndexByName(name:string):number {
-        const i:number = this._fieldIndexLookup[name]
-        if (i >= 0) {
-            return i
-        } else {
-            return -1
-        }
-    }
-
-    /**
-     * Find all fields based of given filter callback criteria (e.g. fields of certain data type, primary keys etc.)
-     * 
-     * @param filter callback called for each field to include or not
-     *
-     */
-    filterFields(filter:OINODbDataFieldFilter):OINODbDataField[] {
-        let result:OINODbDataField[] = []
-        for (let f of this.fields) {
-            if (filter(f)) {
-                result.push(f)
-            }
-        }
-        return result
-    }
-
-    /**
-     * Return the primary key values of one row in order of the data model
-     * 
-     * @param row data row
-     * @param hashidValues apply hashid when applicable
-     *
-     */
-    getRowPrimarykeyValues(row: OINODataRow, hashidValues:boolean = false): string[] {
-        let values: string[] = [];
-        for (let i=0; i< this.fields.length; i++) {
-            const f = this.fields[i]
-            if (f.fieldParams.isPrimaryKey) {
-                const value:string = row[i]?.toString() || ""
-                if (hashidValues && value && (f instanceof OINONumberDataField) && this.api.hashid) {
-                    values.push(this.api.hashid.encode(value))
-                } else {
-                    values.push(value)
-                }
-            }
-        }
-        return values
-    }
-
-    /**
-     * Print debug information about the fields.
-     * 
-     * @param separator string to separate field prints
-     *
-     */
-    printDebug(separator:string = ""): string {
-        let result: string = this.api.params.tableName + ":" + separator;
-        for (let f of this.fields) {
-            result += f.printColumnDebug() + separator;
-        }
-        return result;
-    }
-
-    /**
-     * Print all public properties (db, table name, fields) of the datamodel. Used
-     * in automated testing validate schema has stayed the same.
-     *
-     */
-    printFieldPublicPropertiesJson():string {
-        const result:string = JSON.stringify(this.fields, (key:any, value:any) => { 
-            if (key.startsWith("_")) {
-                return undefined
-            } else {
-                return value
-            }
-        })
         return result
     }
 
@@ -245,17 +129,17 @@ export class OINODbDataModel {
      * @param params OINO reqest params
      *
      */
-    printSqlSelect(id: string, params:OINODbSqlParams): string {
+    printSqlSelect(id: string, params:OINOQueryParams): string {
         let column_names = ""
         if (params.aggregate) {
-            column_names = params.aggregate.printSqlColumnNames(this, params.select)
+            column_names = OINODbQueryAggregate.printColumnNames(params.aggregate, this, params.select)
         } else { 
-            column_names = this._printSqlColumnNames(params.select)
+            column_names = this._printColumnNames(params.select)
         } 
-        const order_sql = params.order?.toSql(this) || ""
-        const limit_sql = params.limit?.toSql(this) || ""
-        const filter_sql = params.filter?.toSql(this) || ""
-        const groupby_sql = params.aggregate?.toSql(this, params.select) || ""
+        const order_sql = params.order ? OINODbQueryOrder.printSql(params.order, this) : ""
+        const limit_sql = params.limit ? OINODbQueryLimit.printSql(params.limit, this) : ""
+        const filter_sql = params.filter ? OINODbQueryFilter.printSql(params.filter, this) : ""
+        const groupby_sql = params.aggregate ? OINODbQueryAggregate.printSql(params.aggregate, this, params.select) : ""
         
         let where_sql = ""
         if ((id != null) && (id != "") && (filter_sql != ""))  {
@@ -265,7 +149,7 @@ export class OINODbDataModel {
         } else if (filter_sql != "") {
             where_sql = filter_sql
         }
-        const result = this.api.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql)
+        const result = this.dbApi.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql)
         return result;
     }
 
@@ -276,10 +160,10 @@ export class OINODbDataModel {
      *
      */
     printSqlInsert(row: OINODataRow): string {
-        const table_name = this.api.db.printSqlTablename(this.api.params.tableName)
+        const table_name = this.dbApi.db.printTableName(this.api.params.tableName)
         const [columns, values] =  this._printSqlInsertColumnsAndValues(row)
         const return_fields = this.api.params.returnInsertedIds ? this._printSqlPrimaryKeyColumns() : undefined
-        return this.api.db.printSqlInsert(table_name, columns, values, return_fields);
+        return this.dbApi.db.printSqlInsert(table_name, columns, values, return_fields);
     }
 
     /**
@@ -290,7 +174,7 @@ export class OINODbDataModel {
      *
      */
     printSqlUpdate(id: string, row: OINODataRow): string {
-        let result: string = "UPDATE " + this.api.db.printSqlTablename(this.api.params.tableName) + " SET " + this._printSqlUpdateValues(row) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
+        let result: string = "UPDATE " + this.dbApi.db.printTableName(this.api.params.tableName) + " SET " + this._printSqlUpdateValues(row) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
         return result;
     }
 
@@ -301,7 +185,7 @@ export class OINODbDataModel {
      *
      */
     printSqlDelete(id: string): string {
-        let result: string = "DELETE FROM " + this.api.db.printSqlTablename(this.api.params.tableName) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
+        let result: string = "DELETE FROM " + this.dbApi.db.printTableName(this.api.params.tableName) + " WHERE " + this._printSqlPrimaryKeyCondition(id) + ";";
         return result;
     }
 }

@@ -4,18 +4,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult } from "@oino-ts/common";
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODbDataFieldParams, OINODataRow, OINODataCell, OINODatetimeDataField, OINOBlobDataField, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
+import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataFieldParams, OINODataRow, OINODataCell, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
 
-import {ConnectionPool, config} from "mssql";
+import { OINODb, OINODbApi, OINODbParams, OINODbDataModel } from "@oino-ts/db";
+
+import { ConnectionPool } from "mssql";
 
 /**
- * Implmentation of OINODbDataSet for MsSql.
+ * Implmentation of OINODataSet for MsSql.
  * 
  */
-class OINOMsSqlData extends OINODbDataSet {
+class OINOMsSqlData extends OINODataSet {
     private _recordsets:any
-    private _rows:OINODataRow[] = OINODB_EMPTY_ROWS
+    private _rows:OINODataRow[] = OINO_EMPTY_ROWS
 
     private _currentRecordset: number
     private _currentRow: number
@@ -91,7 +92,7 @@ class OINOMsSqlData extends OINODbDataSet {
         if ((this._currentRow >=0) && (this._currentRow < this._rows.length)) {
             return this._rows[this._currentRow]
         } else {
-            return OINODB_EMPTY_ROW
+            return OINO_EMPTY_ROW
         }
     }
 
@@ -152,7 +153,7 @@ export class OINODbMsSql extends OINODb {
             return new OINOMsSqlData(sql_res.recordsets, [])
         } catch (e:any) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_query", "exception in SQL query", {message:e.message, stack:e.stack, sql:sql})
-            return new OINOMsSqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMsSql._query") as OINOMsSqlData
+            return new OINOMsSqlData(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMsSql._query") as OINOMsSqlData
         }
     }
 
@@ -164,7 +165,7 @@ export class OINODbMsSql extends OINODb {
             return new OINOMsSqlData(sql_res.recordsets, [])
         } catch (e:any) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_exec", "exception in SQL exec", {message:e.message, stack:e.stack, sql:sql})
-            return new OINOMsSqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbMsSql._exec") as OINOMsSqlData
+            return new OINOMsSqlData(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbMsSql._exec") as OINOMsSqlData
         }
     }
 
@@ -174,7 +175,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlTable name of the table
      *
      */
-    printSqlTablename(sqlTable:string): string {
+    printTableName(sqlTable:string): string {
         return "["+sqlTable+"]"
     }
 
@@ -184,7 +185,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlColumn name of the column
      *
      */
-    printSqlColumnname(sqlColumn:string): string {
+    printColumnName(sqlColumn:string): string {
         return "["+sqlColumn+"]"
     }
 
@@ -197,7 +198,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlType native type name for table column
      *
      */
-    printCellAsSqlValue(cellValue:OINODataCell, sqlType: string): string {
+    printCellAsValue(cellValue:OINODataCell, sqlType: string): string {
         if (cellValue === null) {
             return "NULL"
 
@@ -220,7 +221,7 @@ export class OINODbMsSql extends OINODb {
             return "'" + cellValue.toISOString().substring(0, 23) + "'"
 
         } else {
-            return this.printSqlString(cellValue.toString())
+            return this.printStringValue(cellValue.toString())
         }
     }
 
@@ -230,7 +231,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlString string value
      *
      */
-    printSqlString(sqlString:string): string {
+    printStringValue(sqlString:string): string {
         return "'" + sqlString.replaceAll("'", "''") + "'"
     }
 
@@ -242,7 +243,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlType native type name for table column
      * 
      */
-    parseSqlValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
+    parseValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
 
@@ -355,7 +356,7 @@ export class OINODbMsSql extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate")
         try {
             const sql = this._getValidateSql(this._params.database)
-            const sql_res:OINODbDataSet = await this._query(sql)
+            const sql_res:OINODataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMsSql.validate")
 
@@ -400,12 +401,12 @@ export class OINODbMsSql extends OINODb {
      * @param sql SQL statement.
      *
      */
-    async sqlSelect(sql:string): Promise<OINODbDataSet> {
+    async sqlSelect(sql:string): Promise<OINODataSet> {
         if (!this.isValidated) {
             throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
         OINOBenchmark.startMetric("OINODb", "sqlSelect")
-        let result:OINODbDataSet = await this._query(sql)
+        let result:OINODataSet = await this._query(sql)
         OINOBenchmark.endMetric("OINODb", "sqlSelect", result.status != 500)
         return result
     }
@@ -416,12 +417,12 @@ export class OINODbMsSql extends OINODb {
      * @param sql SQL statement.
      *
      */
-    async sqlExec(sql:string): Promise<OINODbDataSet> {
+    async sqlExec(sql:string): Promise<OINODataSet> {
         if (!this.isValidated) {
             throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
         }
         OINOBenchmark.startMetric("OINODb", "sqlExec")
-        let result:OINODbDataSet = await this._exec(sql)
+        let result:OINODataSet = await this._exec(sql)
         OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500)
         return result
     }
@@ -470,16 +471,16 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
     }
 
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of 
+     * Initialize a data model by getting the SQL schema and populating OINODataFields of 
      * the model.
      * 
      * @param api api which data model to initialize.
      *
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
-        
+        api.initializeDatamodel(new OINODbDataModel(api))
         //"SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX 
-        const schema_res:OINODbDataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName))
+        const schema_res:OINODataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName))
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""
@@ -488,7 +489,7 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
             const numeric_field_length1:number = row[4] as number || 0
             const numeric_field_length2:number = row[5] as number || 0
             const constraint_types:string = row[6] as string || ""
-            const field_params:OINODbDataFieldParams = {
+            const field_params:OINODataFieldParams = {
                 isPrimaryKey: constraint_types.indexOf("PRIMARY KEY") >= 0,
                 isForeignKey: constraint_types.indexOf("FOREIGN KEY") >= 0,
                 isAutoInc: row[7] == 1,
@@ -502,35 +503,35 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
 
             } else {
                 if ((sql_type == "tinyint") || (sql_type == "smallint") || (sql_type == "int") || (sql_type == "bigint") || (sql_type == "float") || (sql_type == "real")) {
-                    api.datamodel.addField(new OINONumberDataField(this, field_name, sql_type, field_params ))
+                    api.datamodel!.addField(new OINONumberDataField(this, field_name, sql_type, field_params ))
 
                 } else if ((sql_type == "date") || (sql_type == "datetime") || (sql_type == "datetime2")) {
                     if (api.params.useDatesAsString) {
-                        api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
+                        api.datamodel!.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                     } else {
-                        api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
+                        api.datamodel!.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params))
                     }
 
                 } else if ((sql_type == "ntext") || (sql_type == "nchar") || (sql_type == "nvarchar") || (sql_type == "text") || (sql_type == "char") || (sql_type == "varchar")) {
-                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, char_field_length))
+                    api.datamodel!.addField(new OINOStringDataField(this, field_name, sql_type, field_params, char_field_length))
 
                 } else if ((sql_type == "binary") || (sql_type == "varbinary") || (sql_type == "image")) {
-                    api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, char_field_length))
+                    api.datamodel!.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, char_field_length))
 
                 } else if ((sql_type == "numeric") || (sql_type == "decimal") || (sql_type == "money")) {
-                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, numeric_field_length1 + numeric_field_length2 + 1))
+                    api.datamodel!.addField(new OINOStringDataField(this, field_name, sql_type, field_params, numeric_field_length1 + numeric_field_length2 + 1))
 
                 } else if ((sql_type == "bit")) {
-                    api.datamodel.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params))
+                    api.datamodel!.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params))
 
                 } else {
                     OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "Unrecognized field type treated as string", {field_name: field_name, sql_type:sql_type, char_length: char_field_length, numeric_field_length1:numeric_field_length1, numeric_field_length2:numeric_field_length2, field_params:field_params })
-                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
+                    api.datamodel!.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0))
                 }   
             }
             await schema_res.next()
         }
-        OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"))
+        OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "\n" + api.datamodel!.printDebug("\n"))
         return Promise.resolve()
     }
 

@@ -6,7 +6,8 @@
 
 import { Buffer } from "node:buffer"
 
-import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINOHeaders, OINOHeadersInit } from "."
+import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM } from "./OINOConstants.js"
+import { OINOHeaders, type OINOHeadersInit } from "./OINOHeaders.js"
 
 export interface OINORequestInit {
     params?: Record<string, string>

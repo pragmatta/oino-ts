@@ -4,8 +4,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOContentType, OINOStr, OINOLog } from "@oino-ts/common"
-import { OINODbDataSet, OINODbDataModel, OINODbDataField, OINODataRow, OINOBlobDataField, OINODbConfig, OINONumberDataField, OINOBooleanDataField, OINODataCell, OINODbSqlParams } from "./index.js";
+import { OINODataRow, OINOContentType, OINODataCell } from "./OINOConstants.js"
+import { OINOConfig } from "./OINOConfig.js"
+import { OINOStr } from "./OINOStr.js"
+import { OINOLog } from "./OINOLog.js"
+import { OINODataSet } from "./OINODataSource.js"
+import { OINODataModel } from "./OINODataModel.js"
+import { OINODataField, OINOBlobDataField, OINONumberDataField, OINOBooleanDataField } from "./OINODataField.js"
+import { OINOQueryParams } from "./OINOQueryParams.js"
 
 /**
  * Class for dataset based on a data model that can be serialized to 
@@ -14,38 +20,38 @@ import { OINODbDataSet, OINODbDataModel, OINODbDataField, OINODataRow, OINOBlobD
  * - CSV (text/csv)
  *
  */
-export class OINODbModelSet {
+export class OINOModelSet {
 
     /** Reference to datamodel */
-    readonly datamodel: OINODbDataModel
+    readonly datamodel: OINODataModel
 
     /** Reference to data set */
-    readonly dataset: OINODbDataSet
+    readonly dataset: OINODataSet
 
     /** SQL parameters */
-    readonly sqlParams?: OINODbSqlParams
+    readonly queryParams?: OINOQueryParams
 
     /** Collection of errors */
     errors: string[]
 
     /**
-     * Constructor for `OINODbModelSet`.
+     * Constructor for `OINOModelSet`.
      *
      * @param datamodel data model
      * @param dataset data set
-     * @param sqlParams SQL parameters 
+     * @param queryParams SQL parameters 
      */
-    constructor(datamodel: OINODbDataModel, dataset: OINODbDataSet, sqlParams?: OINODbSqlParams) {
+    constructor(datamodel: OINODataModel, dataset: OINODataSet, queryParams?: OINOQueryParams) {
         this.datamodel = datamodel
         this.dataset = dataset
-        this.sqlParams = sqlParams
+        this.queryParams = queryParams
         this.errors = this.dataset.messages
     }
 
-    private _encodeAndHashFieldValue(field:OINODbDataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string):string {
+    private _encodeAndHashFieldValue(field:OINODataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string):string {
         let result:string
         if (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) {
-            if (value && (field instanceof OINONumberDataField) && (this.datamodel.api.hashid) && ((this.sqlParams?.aggregate === undefined) || (this.sqlParams.aggregate.isAggregated(field) == false))) {
+            if (value && (field instanceof OINONumberDataField) && (this.datamodel.api.hashid) && ((this.queryParams?.aggregate === undefined) || (this.queryParams.aggregate.isAggregated(field.name) == false))) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed)
             }
             if (field.fieldParams.isPrimaryKey) {
@@ -57,15 +63,15 @@ export class OINODbModelSet {
     }
 
     private _writeRowJson(row:OINODataRow):string {
-        // console.log("OINODbModelSet._writeRowJson: row=" + row)
-        const model:OINODbDataModel = this.datamodel
-        const fields:OINODbDataField[] = model.fields
+        // console.log("OINOModelSet._writeRowJson: row=" + row)
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) {
                 continue
             }
             let value:string|null|undefined = f.serializeCell(row[i])
@@ -86,7 +92,7 @@ export class OINODbModelSet {
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":" + value
             }
         }
-        json_row = OINOStr.encode(OINODbConfig.OINODB_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.json) + json_row
+        json_row = OINOStr.encode(OINOConfig.OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINOConfig.printOINOId(primary_key_values), OINOContentType.json) + json_row
         return "{" + json_row + "}"
     }
 
@@ -105,11 +111,11 @@ export class OINODbModelSet {
     }
 
     private _writeHeaderCsv():string {
-        const model:OINODbDataModel = this.datamodel
-        const fields:OINODbDataField[] = model.fields
-        let csv_header:string = "\"" + OINODbConfig.OINODB_ID_FIELD + "\""
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
+        let csv_header:string = "\"" + OINOConfig.OINO_ID_FIELD + "\""
         for (let i=0; i<fields.length; i++) {
-            if (this.sqlParams?.select?.isSelected(fields[i]) === false) {
+            if ((this.queryParams?.select?.isSelected(fields[i].name) === false) && (fields[i].fieldParams.isPrimaryKey == false)) {
                 continue
             }
             csv_header += ",\"" + fields[i].name + "\""
@@ -118,14 +124,14 @@ export class OINODbModelSet {
     }
 
     private _writeRowCsv(row:OINODataRow):string {
-        const model:OINODbDataModel = this.datamodel
-        const fields:OINODbDataField[] = model.fields
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let csv_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) {
                 continue
             }
             let value:string|null|undefined = f.serializeCell(row[i])
@@ -137,7 +143,7 @@ export class OINODbModelSet {
                 csv_row += "," + value        
             }
         }
-        csv_row = OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.csv) + csv_row
+        csv_row = OINOStr.encode(OINOConfig.printOINOId(primary_key_values), OINOContentType.csv) + csv_row
         return csv_row
     }
 
@@ -168,14 +174,14 @@ export class OINODbModelSet {
 
     private _writeRowFormdata(row:OINODataRow):string {
         const multipart_boundary:string = "---------OINOMultipartBoundary35424568" // this method is just used for test data generation and we want it to be static
-        const model:OINODbDataModel = this.datamodel
-        const fields:OINODbDataField[] = model.fields
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let result:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) {
                 continue
             }
             let value:string|null|undefined = f.serializeCell(row[i])
@@ -183,7 +189,7 @@ export class OINODbModelSet {
             let is_file = (f instanceof OINOBlobDataField)
 
             if (value === undefined) {
-                OINOLog.info("@oino-ts/db", "OINODbModelSet", "_writeRowFormdata", "Undefined value skipped", {field_name:f.name})
+                OINOLog.info("@oino-ts/db", "OINOModelSet", "_writeRowFormdata", "Undefined value skipped", {field_name:f.name})
 
             } else if (value === null) {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary)
@@ -199,7 +205,7 @@ export class OINODbModelSet {
 
             result += formdata_block
         }
-        result = this._writeRowFormdataParameterBlock(OINODbConfig.OINODB_ID_FIELD, OINODbConfig.printOINOId(primary_key_values), multipart_boundary) + result
+        result = this._writeRowFormdataParameterBlock(OINOConfig.OINO_ID_FIELD, OINOConfig.printOINOId(primary_key_values), multipart_boundary) + result
         return result
     }
 
@@ -211,19 +217,19 @@ export class OINODbModelSet {
 
 
     private _writeRowUrlencode(row:OINODataRow):string {
-        const model:OINODbDataModel = this.datamodel
-        const fields:OINODbDataField[] = model.fields
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let urlencode_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) {
                 continue
             }
             let value:string|null|undefined = f.serializeCell(row[i])
             if ((value === undefined)) { // || (value === null)) {
-                // console.log("OINODbModelSet._writeRowUrlencode undefined field value:" + fields[i].name)
+                // console.log("OINOModelSet._writeRowUrlencode undefined field value:" + fields[i].name)
             } else {
                 value = this._encodeAndHashFieldValue(f, value, OINOContentType.urlencode, primary_key_values, f.name + " " + row_id_seed)
                 if (urlencode_row != "") {
@@ -232,7 +238,7 @@ export class OINODbModelSet {
                 urlencode_row += OINOStr.encode(f.name, OINOContentType.urlencode) + "=" + value
             }
         }
-        urlencode_row = OINOStr.encode(OINODbConfig.OINODB_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINODbConfig.printOINOId(primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row
+        urlencode_row = OINOStr.encode(OINOConfig.OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINOConfig.printOINOId(primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row
         return urlencode_row
     }
 
@@ -246,15 +252,15 @@ export class OINODbModelSet {
             line_count += 1
         }
         if (line_count > 1) {
-            OINOLog.warning("@oino-ts/db", "OINODbModelSet", "_writeStringUrlencode", "Content type " + OINOContentType.urlencode + " does not officially support multiline content!", {}) 
+            OINOLog.warning("@oino-ts/db", "OINOModelSet", "_writeStringUrlencode", "Content type " + OINOContentType.urlencode + " does not officially support multiline content!", {}) 
         }
         return result
     }
 
     private _exportRow(row:OINODataRow):any {
-        // console.log("OINODbModelSet._exportRow: row=" + row)
-        const model:OINODbDataModel = this.datamodel
-        const fields:OINODbDataField[] = model.fields
+        // console.log("OINOModelSet._exportRow: row=" + row)
+        const model:OINODataModel = this.datamodel
+        const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
         let primary_key_values:string[] = []
         let result:any = {}
@@ -263,10 +269,10 @@ export class OINODbModelSet {
             if (f.fieldParams.isPrimaryKey) {
                 primary_key_values.push(f.serializeCell(row[i]) || "")
             }
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) {
                 continue
             }
-            let value:OINODataCell = f.db.parseSqlValueAsCell(row[i], f.sqlType) // retain original value without serialization
+            let value:OINODataCell = f.datasource.parseValueAsCell(row[i], f.sqlType) // retain original value without serialization
             if (value === undefined) {
                 // skip undefined values
                 
@@ -277,7 +283,7 @@ export class OINODbModelSet {
                 result[f.name] = value
             }
         }
-        result[OINODbConfig.OINODB_ID_FIELD] = OINODbConfig.printOINOId(primary_key_values)
+        result[OINOConfig.OINO_ID_FIELD] = OINOConfig.printOINOId(primary_key_values)
         return result
     }
 
@@ -303,7 +309,7 @@ export class OINODbModelSet {
             result += await this._writeStringUrlencode()
             
         } else {
-            OINOLog.error("@oino-ts/db", "OINODbModelSet", "writeString", "Content type is only for input!", {contentType:contentType})
+            OINOLog.error("@oino-ts/db", "OINOModelSet", "writeString", "Content type is only for input!", {contentType:contentType})
         }
         return result
     }
@@ -339,7 +345,7 @@ export class OINODbModelSet {
 
     async exportAsRecord(idFieldName?:string):Promise<Record<string, any>> {
         const result:Record<string, any> = {}
-        const row_id_field = idFieldName || OINODbConfig.OINODB_ID_FIELD
+        const row_id_field = idFieldName || OINOConfig.OINO_ID_FIELD
         while (!this.dataset.isEof()) {
             const row_data:OINODataRow = this.dataset.getRow()
             const row_export = this._exportRow(row_data)

@@ -4,7 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINO_ERROR_PREFIX, OINOLog } from "./index.js"
+import { OINO_ERROR_PREFIX } from "./OINOConstants.js"
+import { OINOLog } from "./OINOLog.js"
 
 
 
