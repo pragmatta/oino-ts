@@ -13,9 +13,9 @@ import { OINODbMariadb } from "@oino-ts/db-mariadb"
 import { OINODbMsSql } from "@oino-ts/db-mssql"
 import { OINOQueryAggregate, OINOQuerySelect, OINOApiRequest } from "@oino-ts/common";
 
-import { OINOContentType, OINOBenchmark, OINOConsoleLog, OINOLogLevel, OINOLog, OINODataRow, OINODataField, OINOStringDataField, OINOMemoryDataset, OINOApiParams, OINOQueryFilter, OINOConfig, OINOQueryOrder, OINOQueryLimit, OINOApiResult, OINONumberDataField, OINODatetimeDataField, OINOModelSet, OINOQueryParams } from "@oino-ts/common";
+import { OINOContentType, OINOBenchmark, OINOConsoleLog, OINOLogLevel, OINOLog, OINODataRow, OINODataField, OINOStringDataField, OINOMemoryDataset, OINOApiParams, OINOQueryFilter, OINOConfig, OINOQueryOrder, OINOQueryLimit, OINOApiResult, OINONumberDataField, OINODatetimeDataField, OINOModelSet, OINOQueryParams, OINOApiHtmlTemplate } from "@oino-ts/common";
 
-import { OINODbApi, OINODb, OINODbFactory, OINODbParams, OINODbHtmlTemplate } from "./index.js";
+import { OINODbApi, OINODb, OINODbFactory, OINODbParams } from "./index.js";
 
 const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set") || ""
 const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set") || ""
@@ -151,12 +151,12 @@ function encodeResult(o:any|undefined):string {
     })
 }
 
-function createApiTemplate(api:OINODbApi):OINODbHtmlTemplate {
+function createApiTemplate(api:OINODbApi):OINOApiHtmlTemplate {
 	let template_str = ""
 	for (let i=0; i<api.datamodel.fields.length; i++) {
 		template_str += "<input type='text' name='" + api.datamodel.fields[i].name + "' value='{{{" + api.datamodel.fields[i].name + "}}}'></input>"
 	}
-	return new OINODbHtmlTemplate(template_str, -1, "fi", "medium")
+	return new OINOApiHtmlTemplate(template_str, -1, "fi", "medium")
 }
 
 export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestParams) {

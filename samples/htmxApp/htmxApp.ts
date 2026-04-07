@@ -1,5 +1,5 @@
 import { OINOConsoleLog, OINOBenchmark, OINOLog, OINOLogLevel } from "@oino-ts/common";
-import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOSwagger, OINOApiResult, OINODbHtmlTemplate, OINOApiRequest } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOSwagger, OINOApiResult, OINOApiHtmlTemplate, OINOApiRequest } from "@oino-ts/db";
 
 import { OINOConfig } from "@oino-ts/db"
 import { OINOHttpResult, OINOHtmlTemplate, OINOMemoryBenchmark } from "@oino-ts/common"
@@ -32,7 +32,7 @@ async function findBestTemplateId(apiName:string, operation:string, status:strin
 	}
 	return null
 }
-async function getTemplate(apiName:string, method:string, command:string, status:string):Promise<OINODbHtmlTemplate> {
+async function getTemplate(apiName:string, method:string, command:string, status:string):Promise<OINOApiHtmlTemplate> {
 	OINOLog.debug("@oino-ts/db", "htmxApp", "getTemplate", "Enter", { apiName:apiName, method:method, command:command, status:status})
 	const template_file = await findBestTemplateId(apiName, command, status) ||
 						await findBestTemplateId(apiName, method, status) ||
@@ -41,9 +41,9 @@ async function getTemplate(apiName:string, method:string, command:string, status
 						await findBestTemplateId(apiName, "", "") || ""
 	if (template_file) {
 		const html:string = await template_file.text()
-		return new OINODbHtmlTemplate(html)
+		return new OINOApiHtmlTemplate(html)
 	}	
-	return new OINODbHtmlTemplate("")
+	return new OINOApiHtmlTemplate("")
 }
 
 function hostFile(path: string, contentType: string, data?:any): Response {
@@ -107,7 +107,7 @@ try {
 				OINOLog.debug("@oino-ts/db", "htmxApp", "fetch", "Api request input", {oino_req:oino_req}) 
 				let api_result:OINOApiResult
 				if (api_name == "") {
-					const template:OINODbHtmlTemplate = await getTemplate(id, "", operation, "")
+					const template:OINOApiHtmlTemplate = await getTemplate(id, "", operation, "")
 					if (template) {
 						const http_result:OINOHttpResult = template.renderFromKeyValue(OINOConfig.OINO_ID_FIELD, id)
 						response = http_result.getFetchResponse(response_headers)
@@ -116,7 +116,7 @@ try {
 					}
 				} else if (api) {
 					api_result = await api.runRequest(oino_req)
-					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.status.toString())
+					const template:OINOApiHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.status.toString())
 					if (api_result.data?.dataset) {
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
 						response = await http_result.getFetchResponse(response_headers)

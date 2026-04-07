@@ -1,4 +1,4 @@
-export { OINOApi, OINOApiRequest, OINOApiResult, type OINOApiParams, type OINOApiData, type OINOApiRequestInit } from "./OINOApi.js"
+export { OINOApi, OINOApiRequest, OINOApiResult, OINOApiHtmlTemplate, type OINOApiParams, type OINOApiData, type OINOApiRequestInit } from "./OINOApi.js"
 export { OINOBenchmark, OINOMemoryBenchmark } from "./OINOBenchmark.js"
 export { OINOConfig } from "./OINOConfig.js"
 export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINOContentType, type OINODataFieldParams, type OINODataCell, type OINODataRow, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "./OINOConstants.js"
