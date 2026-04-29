@@ -208,6 +208,11 @@ export class OINOApiResult extends OINOResult {
         } else {
             response = new Response(JSON.stringify(this, null, 3), {status:this.status, statusText: this.statusText, headers: headers })
         }
+        if (this.request.responseDownload) {
+            response.headers.set('Content-Disposition', 'attachment; filename="' + this.request.responseDownload + '"')
+        } else {
+            response.headers.set('Content-Disposition', 'inline')
+        }
         for (let i=0; i<this.messages.length; i++) {
             response.headers.set('X-OINO-MESSAGE-' + i, this.messages[i])
         }         

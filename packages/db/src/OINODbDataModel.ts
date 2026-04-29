@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINO_ERROR_PREFIX, OINODataModel, OINOApi, OINODataField, OINODataRow, OINOConfig, OINOQuerySelect, OINOQueryParams, OINONumberDataField } from "@oino-ts/common"
+import { OINO_ERROR_PREFIX, OINODataModel, OINODataField, OINODataRow, OINOConfig, OINOQuerySelect, OINOQueryParams, OINONumberDataField } from "@oino-ts/common"
 import { OINODB_UNDEFINED } from "./OINODbConstants.js"
 import { OINODbApi } from "./OINODbApi.js"
 import { OINODbQueryOrder, OINODbQueryFilter, OINODbQueryLimit, OINODbQueryAggregate } from "./OINODbQueryParams.js"

@@ -108,6 +108,8 @@ const OWASP_TESTS:OINOTestParams[] = [
 
 const API_CROSSCHECKS:string[] = [
     "[HTTP GET] select *: GET JSON 1",
+    "[HTTP GET] select *: DOWNLOAD RESPONSE HEADERS 1",
+    "[HTTP GET] select *: DOWNLOAD RESPONSE BODY 1",
     "[HTTP GET] select * with template: GET HTML 1",
     "[HTTP GET] select *: GET RECORD 1",
     "[HTTP POST] insert: GET JSON 1",
@@ -211,6 +213,7 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     const request_url = new URL("http://localhost/" + api.params.apiName)
 
     const get_request:OINOApiRequest = new OINOApiRequest({ url: request_url, method: "GET" })
+    const get_request_with_download:OINOApiRequest = new OINOApiRequest({ url: request_url, method: "GET", responseDownload: "download.csv" })
     const get_request_with_rowid:OINOApiRequest = new OINOApiRequest({ url: request_url, method: "GET", rowId: new_row_id })
     const get_request_with_sql_params:OINOApiRequest = new OINOApiRequest({ url: request_url, method: "GET", queryParams: sql_params })
 
@@ -237,7 +240,11 @@ export async function OINOTestApi(dbParams:OINODbParams, testParams: OINOTestPar
     })
     
     await test(target_name + target_db + target_table + target_group + " select *", async () => {
-        expect(encodeData(await (await api.doApiRequest(get_request)).data?.writeString(OINOContentType.csv))).toMatchSnapshot("GET CSV")
+        const download_result = await api.doApiRequest(get_request_with_download)
+        const download_response = await download_result.writeApiResponse()
+        expect(download_response.status).toBe(200)
+        expect(JSON.stringify(download_response.headers)).toMatchSnapshot("DOWNLOAD RESPONSE HEADERS")
+        expect(await download_response.text()).toMatchSnapshot("DOWNLOAD RESPONSE BODY")
     })
 
     await test(target_name + target_db + target_table + target_group + " select *", async () => {

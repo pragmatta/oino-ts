@@ -318,7 +318,9 @@ export class OINODbApi extends OINOApi {
         } else {
             result.setError(405, "Unsupported HTTP method '" + request.method + "' for REST request", "DoRequest")
         }
+
         OINOBenchmark.endMetric("OINODbApi", "doRequest." + request.method, result.status != 500)
+
         return Promise.resolve(result)
     }
 

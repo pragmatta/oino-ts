@@ -6,7 +6,7 @@
 
 import { Buffer } from "node:buffer"
 
-import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM } from "./OINOConstants.js"
+import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINO_RESPONSE_DOWNLOAD_PARAM } from "./OINOConstants.js"
 import { OINOHeaders, type OINOHeadersInit } from "./OINOHeaders.js"
 
 export interface OINORequestInit {
@@ -42,6 +42,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
     body?: OINOHttpData
     requestType?:OINOContentType
     responseType?:OINOContentType
+    responseDownload?:string
     multipartBoundary?:string
     lastModified?:number
 }
@@ -56,6 +57,7 @@ export class OINOHttpRequest extends OINORequest {
     body: OINOHttpData
     requestType:OINOContentType
     responseType:OINOContentType
+    responseDownload?:string
     multipartBoundary?:string
     lastModified?:number
     etags?:string[]
@@ -110,6 +112,11 @@ export class OINOHttpRequest extends OINORequest {
                 }
             }
             this.responseType = response_type ?? OINOContentType.json
+        }
+        if (init.responseDownload) {
+            this.responseDownload = init.responseDownload
+        } else {
+            this.responseDownload = this.url?.searchParams.get(OINO_RESPONSE_DOWNLOAD_PARAM) ?? ""
         }
         const last_modified = this.headers.get("if-modified-since")
         if (last_modified) {

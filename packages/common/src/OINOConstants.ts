@@ -18,6 +18,8 @@ export const OINO_DEBUG_PREFIX = "OINO DEBUG"
 export const OINO_REQUEST_TYPE_PARAM = "oinorequesttype"
 /** Name of the OINOContentType-parameter request */
 export const OINO_RESPONSE_TYPE_PARAM = "oinoresponsetype"
+/** Name of the query parameter that triggers a file download response */
+export const OINO_RESPONSE_DOWNLOAD_PARAM = "oinoresponsedownload"
 
 /** 
  * Supported content format mime-types 
