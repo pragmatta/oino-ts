@@ -197,20 +197,20 @@ export class OINODbPostgresql extends OINODb {
      * type with the correct SQL escaping.
      * 
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    printCellAsValue(cellValue:OINODataCell, sqlType: string): string {
+    printCellAsValue(cellValue:OINODataCell, nativeType: string): string {
         if (cellValue === null) {
             return "NULL"
 
         } else if (cellValue === undefined) {
             return "UNDEFINED"
 
-        } else if ((sqlType == "integer") || (sqlType == "smallint") || (sqlType == "real")) {
+        } else if ((nativeType == "integer") || (nativeType == "smallint") || (nativeType == "real")) {
             return cellValue.toString()
 
-        } else if (sqlType == "bytea") {
+        } else if (nativeType == "bytea") {
             if (cellValue instanceof Buffer) {
                 return "'\\x" + (cellValue as Buffer).toString("hex") + "'"
             } else if (cellValue instanceof Uint8Array) {
@@ -219,14 +219,14 @@ export class OINODbPostgresql extends OINODb {
                 return "\'" + cellValue?.toString() + "\'"
             }
 
-        } else if (sqlType == "boolean") {
+        } else if (nativeType == "boolean") {
             if (cellValue == null || cellValue == "" || cellValue.toString().toLowerCase() == "false" || cellValue == "0") { 
                 return "false"
             } else {
                 return "true"
             }
 
-        } else if ((sqlType == "date") && (cellValue instanceof Date)) {
+        } else if ((nativeType == "date") && (cellValue instanceof Date)) {
             return "\'" + cellValue.toISOString() + "\'"
 
         } else {
@@ -250,17 +250,17 @@ export class OINODbPostgresql extends OINODb {
      * type.
      * 
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      * 
      */
-    parseValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
+    parseValueAsCell(sqlValue:OINODataCell, nativeType: string): OINODataCell {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
 
         } else if (sqlValue === undefined) {
             return undefined
 
-        } else if (((sqlType == "date")) && (typeof(sqlValue) == "string") && (sqlValue != "")) {
+        } else if (((nativeType == "date")) && (typeof(sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue)
 
         } else {

@@ -200,20 +200,20 @@ export class OINODbMariadb extends OINODb {
      * type with the correct SQL escaping.
      * 
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    printCellAsValue(cellValue:OINODataCell, sqlType: string): string {
+    printCellAsValue(cellValue:OINODataCell, nativeType: string): string {
         if (cellValue === null) {
             return "NULL"
 
         } else if (cellValue === undefined) {
             return "UNDEFINED"
 
-        } else if ((sqlType == "int") || (sqlType == "smallint") || (sqlType == "float") || (sqlType == "double")) {
+        } else if ((nativeType == "int") || (nativeType == "smallint") || (nativeType == "float") || (nativeType == "double")) {
             return cellValue.toString()
 
-        } else if ((sqlType == "longblob") || (sqlType == "binary") || (sqlType == "varbinary")) {
+        } else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary")) {
             if (cellValue instanceof Buffer) {
                 return "x'" + (cellValue as Buffer).toString("hex") + "'"
             } else if (cellValue instanceof Uint8Array) {
@@ -222,10 +222,10 @@ export class OINODbMariadb extends OINODb {
                 return "\"" + cellValue?.toString() + "\""
             }
 
-        } else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
+        } else if (((nativeType == "date") || (nativeType == "datetime") || (nativeType == "timestamp")) && (cellValue instanceof Date)) {
             return "\"" + cellValue.toISOString().replace('T', ' ').substring(0, 23) + "\""
 
-        } else if ((sqlType == "bit")) {
+        } else if ((nativeType == "bit")) {
             if ((cellValue === false) || (cellValue == null) || (cellValue == "") || (cellValue.toString().toLowerCase() == "false") || (cellValue == "0")) {
                 return "b'0'"
             } else if ((cellValue === true) || (cellValue.toString().toLowerCase() == "true")) {
@@ -255,20 +255,20 @@ export class OINODbMariadb extends OINODb {
      * type.
      * 
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      * 
      */
-    parseValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
+    parseValueAsCell(sqlValue:OINODataCell, nativeType: string): OINODataCell {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
 
         } else if (sqlValue === undefined) {
             return undefined
 
-        } else if (((sqlType == "date")) && (typeof(sqlValue) == "string") && (sqlValue != "")) {
+        } else if (((nativeType == "date")) && (typeof(sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue)
 
-        } else if ((sqlType == "bit") && (sqlValue instanceof Buffer)) { // mariadb returns a buffer for bit-fields
+        } else if ((nativeType == "bit") && (sqlValue instanceof Buffer)) { // mariadb returns a buffer for bit-fields
             const buf:Buffer = sqlValue as Buffer
             if (buf.length == 1) {
                 return buf.readUInt8(0) === 1

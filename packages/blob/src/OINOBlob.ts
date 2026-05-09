@@ -65,8 +65,8 @@ export abstract class OINOBlob extends OINODataSource {
         return s
     }
 
-    parseValueAsCell(v: OINODataCell, sqlType: string): OINODataCell {
-        if (sqlType === "DATETIME" && typeof v === "string" && v !== "") {
+    parseValueAsCell(v: OINODataCell, nativeType: string): OINODataCell {
+        if (nativeType === "DATETIME" && typeof v === "string" && v !== "") {
             return new Date(v)
         }
         return v

@@ -272,7 +272,7 @@ export class OINOModelSet {
             if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) {
                 continue
             }
-            let value:OINODataCell = f.datasource.parseValueAsCell(row[i], f.sqlType) // retain original value without serialization
+            let value:OINODataCell = f.datasource.parseValueAsCell(row[i], f.nativeType) // retain original value without serialization
             if (value === undefined) {
                 // skip undefined values
                 

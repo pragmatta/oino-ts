@@ -138,9 +138,9 @@ export class OINODataModel {
             params = "{" + params.trim() + "}";
         }
         if (field.maxLength > 0) {
-            params = field.sqlType + "(" + field.maxLength + ")" + params
+            params = field.nativeType + "(" + field.maxLength + ")" + params
         } else {
-            params = field.sqlType + params
+            params = field.nativeType + params
         }
         const name_length:number = length - 2 - 1 - params.length
         let result:string = field.name

@@ -25,7 +25,7 @@ export class OINODataField {
     readonly type: string;
 
     /** SQL type of the field */
-    readonly sqlType: string;
+    readonly nativeType: string;
 
     /** Maximum length of the field (or 0) */
     readonly maxLength: number;
@@ -39,17 +39,17 @@ export class OINODataField {
      * @param datasource OINO data source reference
      * @param name name of the field
      * @param type internal type of the field
-     * @param sqlType column type in database
+     * @param nativeType column type in database
      * @param fieldParams parameters of the field
      * @param maxLength maximum length of the field (or 0)
      *
      */
-    constructor(datasource:OINODataSource, name: string, type:string, sqlType: string, fieldParams: OINODataFieldParams, maxLength:number = 0) {
+    constructor(datasource:OINODataSource, name: string, type:string, nativeType: string, fieldParams: OINODataFieldParams, maxLength:number = 0) {
         this.datasource = datasource
         this.name = name
         this.type = type
         this.maxLength = maxLength
-        this.sqlType = sqlType
+        this.nativeType = nativeType
         this.fieldParams = fieldParams
     }
 
@@ -60,7 +60,7 @@ export class OINODataField {
      *
      */
     serializeCell(cellVal: OINODataCell):string|null|undefined {
-        cellVal = this.datasource.parseValueAsCell(cellVal, this.sqlType)
+        cellVal = this.datasource.parseValueAsCell(cellVal, this.nativeType)
         if ((cellVal === null) || (cellVal === undefined))  { 
             return cellVal  // let content type encoder worry what to do with the value (so not force it to string)
         } else {
@@ -85,7 +85,7 @@ export class OINODataField {
      *
      */
     printCellAsValue(cellVal: OINODataCell):string {
-        return this.datasource.printCellAsValue(cellVal, this.sqlType);
+        return this.datasource.printCellAsValue(cellVal, this.nativeType);
     }
 
     /**
@@ -108,13 +108,13 @@ export class OINOStringDataField extends OINODataField {
      * 
      * @param db OINODb reference
      * @param name name of the field
-     * @param sqlType column type in database
+     * @param nativeType column type in database
      * @param fieldParams parameters of the field
      * @param maxLength maximum length of the field (or 0)
      *
      */
-    constructor(datasource:OINODataSource, name: string, sqlType: string, fieldParams: OINODataFieldParams, maxLength: number) {
-        super(datasource, name, "string", sqlType, fieldParams, maxLength)
+    constructor(datasource:OINODataSource, name: string, nativeType: string, fieldParams: OINODataFieldParams, maxLength: number) {
+        super(datasource, name, "string", nativeType, fieldParams, maxLength)
     }
 
 }
@@ -130,12 +130,12 @@ export class OINOBooleanDataField extends OINODataField {
      * 
      * @param datasource OINODb reference
      * @param name name of the field
-     * @param sqlType column type in database
+     * @param nativeType column type in database
      * @param fieldParams parameters of the field
      *
      */
-    constructor(datasource:OINODataSource, name: string, sqlType: string, fieldParams: OINODataFieldParams) {
-        super(datasource, name, "boolean", sqlType, fieldParams)
+    constructor(datasource:OINODataSource, name: string, nativeType: string, fieldParams: OINODataFieldParams) {
+        super(datasource, name, "boolean", nativeType, fieldParams)
     }
     /**
      * Serialize cell value in the given content format.
@@ -144,7 +144,7 @@ export class OINOBooleanDataField extends OINODataField {
      *
      */
     serializeCell(cellVal: OINODataCell):string|null|undefined {
-        const parsed_value:string = (this.datasource.parseValueAsCell(cellVal, this.sqlType) || "").toString()
+        const parsed_value:string = (this.datasource.parseValueAsCell(cellVal, this.nativeType) || "").toString()
         let result:string
         // console.log("OINOBooleanDataField.serializeCell: parsed_value=" + parsed_value)
         if ((parsed_value == "") || (parsed_value.toLowerCase() == "false") || (parsed_value.match(/^0+$/))) {
@@ -181,12 +181,12 @@ export class OINONumberDataField extends OINODataField {
      * 
      * @param datasource OINODb reference
      * @param name name of the field
-     * @param sqlType column type in database
+     * @param nativeType column type in database
      * @param fieldParams parameters of the field
      *
      */
-    constructor(datasource:OINODataSource, name: string, sqlType: string, fieldParams: OINODataFieldParams) {
-        super(datasource, name, "number", sqlType, fieldParams)
+    constructor(datasource:OINODataSource, name: string, nativeType: string, fieldParams: OINODataFieldParams) {
+        super(datasource, name, "number", nativeType, fieldParams)
     }
 
     /**
@@ -238,13 +238,13 @@ export class OINOBlobDataField extends OINODataField {
      * 
      * @param datasource OINODb reference
      * @param name name of the field
-     * @param sqlType column type in database
+     * @param nativeType column type in database
      * @param fieldParams parameters of the field
      * @param maxLength maximum length of the field (or 0)
      *
      */
-    constructor(datasource:OINODataSource, name: string, sqlType: string, fieldParams: OINODataFieldParams, maxLength:number) {
-        super(datasource, name, "blob", sqlType, fieldParams, maxLength)
+    constructor(datasource:OINODataSource, name: string, nativeType: string, fieldParams: OINODataFieldParams, maxLength:number) {
+        super(datasource, name, "blob", nativeType, fieldParams, maxLength)
     }
 
     /**
@@ -265,7 +265,7 @@ export class OINOBlobDataField extends OINODataField {
             return Buffer.from(cellVal).toString('base64')
 
         } else {
-            return this.datasource.parseValueAsCell(cellVal, this.sqlType)?.toString()
+            return this.datasource.parseValueAsCell(cellVal, this.nativeType)?.toString()
         }
     }
 
@@ -297,12 +297,12 @@ export class OINODatetimeDataField extends OINODataField {
      * 
      * @param datasource OINODb reference
      * @param name name of the field
-     * @param sqlType column type in database
+     * @param nativeType column type in database
      * @param fieldParams parameters of the field
      *
      */
-    constructor(datasource:OINODataSource, name: string, sqlType: string, fieldParams: OINODataFieldParams) {
-        super(datasource, name, "datetime", sqlType, fieldParams)
+    constructor(datasource:OINODataSource, name: string, nativeType: string, fieldParams: OINODataFieldParams) {
+        super(datasource, name, "datetime", nativeType, fieldParams)
     }
 
     /**
@@ -313,7 +313,7 @@ export class OINODatetimeDataField extends OINODataField {
      */
     serializeCell(cellVal: OINODataCell): string|null|undefined {
         if (typeof(cellVal) == "string") {
-            cellVal = this.datasource.parseValueAsCell(cellVal, this.sqlType)
+            cellVal = this.datasource.parseValueAsCell(cellVal, this.nativeType)
         }
         if ((cellVal === null) || (cellVal === undefined))  {
             return cellVal
@@ -335,7 +335,7 @@ export class OINODatetimeDataField extends OINODataField {
      */
     serializeCellWithLocale(cellVal: OINODataCell, locale:Intl.DateTimeFormat): string|null|undefined {
         if (typeof(cellVal) == "string") {
-            cellVal = this.datasource.parseValueAsCell(cellVal, this.sqlType)
+            cellVal = this.datasource.parseValueAsCell(cellVal, this.nativeType)
         }
         if ((cellVal === null) || (cellVal === undefined))  {
             return cellVal

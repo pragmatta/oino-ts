@@ -85,20 +85,20 @@ export class OINODbBunSqlite extends OINODb {
      * type with the correct SQL escaping.
      * 
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    printCellAsValue(cellValue:OINODataCell, sqlType: string): string {
+    printCellAsValue(cellValue:OINODataCell, nativeType: string): string {
         if (cellValue === null) {
             return "NULL"
 
         } else if (cellValue === undefined) {
             return "UNDEFINED"
 
-        } else if ((sqlType == "INTEGER") || (sqlType == "REAL") || (sqlType == "DOUBLE" || (sqlType == "NUMERIC") || (sqlType == "DECIMAL"))) {
+        } else if ((nativeType == "INTEGER") || (nativeType == "REAL") || (nativeType == "DOUBLE" || (nativeType == "NUMERIC") || (nativeType == "DECIMAL"))) {
             return cellValue.toString()
 
-        } else if (sqlType == "BLOB") {
+        } else if (nativeType == "BLOB") {
             if (cellValue instanceof Buffer) {
                 return "X'" + (cellValue as Buffer).toString("hex") + "'"
             } else if (cellValue instanceof Uint8Array) {
@@ -107,7 +107,7 @@ export class OINODbBunSqlite extends OINODb {
                 return "'" + cellValue?.toString() + "'"
             }
 
-        } else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (cellValue instanceof Date)) {
+        } else if (((nativeType == "DATETIME") || (nativeType == "DATE")) && (cellValue instanceof Date)) {
             return "\'" + cellValue.toISOString() + "\'"
 
         } else {
@@ -130,23 +130,23 @@ export class OINODbBunSqlite extends OINODb {
      * type.
      * 
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      * 
      */
-    parseValueAsCell(sqlValue:OINODataCell, sqlType: string): OINODataCell {
+    parseValueAsCell(sqlValue:OINODataCell, nativeType: string): OINODataCell {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null
 
         } else if (sqlValue === undefined) {
             return undefined
 
-        } else if (((sqlType == "DATETIME") || (sqlType == "DATE")) && (typeof(sqlValue) == "string") && (sqlValue != "")) {
+        } else if (((nativeType == "DATETIME") || (nativeType == "DATE")) && (typeof(sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue)
 
-        } else if ((sqlType == "BOOLEAN")) {
+        } else if ((nativeType == "BOOLEAN")) {
             return sqlValue == 1
 
-        } else if ((sqlType == "BLOB")) {
+        } else if ((nativeType == "BLOB")) {
             if (sqlValue instanceof Uint8Array) {
                 return Buffer.from(sqlValue)
             } else {
