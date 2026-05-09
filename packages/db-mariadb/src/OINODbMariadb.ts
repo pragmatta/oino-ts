@@ -113,11 +113,11 @@ export class OINODbMariadb extends OINODb {
     constructor(params:OINODbParams) {
         super(params)
 
-        if (this._params.type !== "OINODbMariadb") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type)
+        if (this.dbParams.type !== "OINODbMariadb") {
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this.dbParams.type)
         } 
-        this._pool = mariadb.createPool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, acquireTimeout: 2000, debug:false, rowsAsArray: true, multipleStatements: true })
-        delete this._params.password // do not store password in db object
+        this._pool = mariadb.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug:false, rowsAsArray: true, multipleStatements: true })
+        delete this.dbParams.password // do not store password in db object
     }
 
     private _parseFieldLength(fieldLengthStr:string):number {
@@ -323,7 +323,7 @@ export class OINODbMariadb extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate")
         let result:OINOResult = new OINOResult()
         try {
-            const sql = this._getValidateSql(this._params.database)
+            const sql = this._getValidateSql(this.dbParams.database)
             const sql_res:OINODataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate")
@@ -426,7 +426,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         api.initializeDatamodel(new OINODbDataModel(api))
-        const schema_res:OINODataSet = await this._query(this._getSchemaSql(this._params.database, api.params.tableName))
+        const schema_res:OINODataSet = await this._query(this._getSchemaSql(this.dbParams.database, api.params.tableName))
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             // console.log("OINODbMariadb.initializeApiDatamodel row", row)

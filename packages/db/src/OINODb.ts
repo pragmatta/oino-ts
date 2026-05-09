@@ -14,7 +14,7 @@ import { OINODbParams } from "./OINODbConstants.js"
  */
 export abstract class OINODb extends OINODataSource {
     
-    protected _params:OINODbParams
+    protected readonly dbParams:OINODbParams
 
     /** Name of the database */
     readonly name:string
@@ -28,8 +28,8 @@ export abstract class OINODb extends OINODataSource {
      */
     constructor(params:OINODbParams) {
         super()
-        this._params = { ...params } // make a shallow copy of params so that changes to them do not affect the original object
-        this.name = this._params.database
+        this.dbParams = { ...params } // make a shallow copy of params so that changes to them do not affect the original object
+        this.name = this.dbParams.database
     }
     
     /**

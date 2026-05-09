@@ -41,12 +41,12 @@ export class OINODbBunSqlite extends OINODb {
     constructor(params:OINODbParams) {
         super(params)
         this._db = null
-        if (!this._params.url.startsWith("file://")) {
+        if (!this.dbParams.url.startsWith("file://")) {
             throw new Error(OINO_ERROR_PREFIX + ": OINODbBunSqlite url must be a file://-url!")
         }
         
-        if (this._params.type !== "OINODbBunSqlite") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbBunSqlite-type: " + this._params.type)
+        if (this.dbParams.type !== "OINODbBunSqlite") {
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbBunSqlite-type: " + this.dbParams.type)
         } 
     }
 
@@ -169,7 +169,7 @@ export class OINODbBunSqlite extends OINODb {
         if (this.isConnected) {
             return result
         }
-        const filepath:string = this._params.url.substring(7)
+        const filepath:string = this.dbParams.url.substring(7)
         try {
             this._db = BunSqliteDb.open(filepath, { create: true, readonly: false, readwrite: true })        
             this.isConnected = true
@@ -193,7 +193,7 @@ export class OINODbBunSqlite extends OINODb {
         let result:OINOResult = new OINOResult()
         try {
             this.isValidated = false
-            const sql = this._getValidateSql(this._params.database)
+            const sql = this._getValidateSql(this.dbParams.database)
             const sql_res:OINODataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbBunSqlite.validate")
@@ -308,7 +308,7 @@ export class OINODbBunSqlite extends OINODb {
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         api.initializeDatamodel(new OINODbDataModel(api))
-        const schema_sql:string = this._getSchemaSql(this._params.database, api.params.tableName)
+        const schema_sql:string = this._getSchemaSql(this.dbParams.database, api.params.tableName)
         const res:OINODataSet|null = await this._query(schema_sql)
         const sql_desc:string = (res?.getRow()[0]) as string
         const excluded_fields:string[] = []

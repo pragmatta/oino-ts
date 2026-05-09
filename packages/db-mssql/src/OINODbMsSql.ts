@@ -121,15 +121,15 @@ export class OINODbMsSql extends OINODb {
     constructor(params:OINODbParams) {
         super(params)
 
-        if (this._params.type !== "OINODbMsSql") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMsSql-type: " + this._params.type)
+        if (this.dbParams.type !== "OINODbMsSql") {
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMsSql-type: " + this.dbParams.type)
         } 
         this._pool = new ConnectionPool({
-            user: this._params.user,
-            password: this._params.password,
-            server: this._params.url,
-            port: this._params.port,
-            database: this._params.database,
+            user: this.dbParams.user,
+            password: this.dbParams.password,
+            server: this.dbParams.url,
+            port: this.dbParams.port,
+            database: this.dbParams.database,
             arrayRowMode:true,
             options: {
                 encrypt: true, // Use encryption for Azure SQL Database
@@ -138,7 +138,7 @@ export class OINODbMsSql extends OINODb {
                 trustServerCertificate: true // Change to false for production
             }
         })
-        delete this._params.password // do not store password in db object
+        delete this.dbParams.password // do not store password in db object
        
         this._pool.on("error", (conn:any) => {
             OINOLog.error("@oino-ts/db-mssql", "OINODbMsSql", "constructor", "OINODbMsSql error event", conn)
@@ -355,7 +355,7 @@ export class OINODbMsSql extends OINODb {
         }
         OINOBenchmark.startMetric("OINODb", "validate")
         try {
-            const sql = this._getValidateSql(this._params.database)
+            const sql = this._getValidateSql(this.dbParams.database)
             const sql_res:OINODataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMsSql.validate")
@@ -480,7 +480,7 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         api.initializeDatamodel(new OINODbDataModel(api))
         //"SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX 
-        const schema_res:OINODataSet = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName))
+        const schema_res:OINODataSet = await this.sqlSelect(this._getSchemaSql(this.dbParams.database, api.params.tableName))
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""

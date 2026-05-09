@@ -105,12 +105,12 @@ export class OINODbPostgresql extends OINODb {
     constructor(params:OINODbParams) {
         super(params)
 
-        if (this._params.type !== "OINODbPostgresql") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type)
+        if (this.dbParams.type !== "OINODbPostgresql") {
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this.dbParams.type)
         } 
-        const ssl_enabled:boolean = !(this._params.url == "localhost" || this._params.url == "127.0.0.1")
-        this._pool = new Pool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, ssl: ssl_enabled })
-        delete this._params.password
+        const ssl_enabled:boolean = !(this.dbParams.url == "localhost" || this.dbParams.url == "127.0.0.1")
+        this._pool = new Pool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, ssl: ssl_enabled })
+        delete this.dbParams.password
 
         this._pool.on("error", (err: any) => {
             OINOLog.error("@oino-ts/db-postgresql", "OINODbPostgresql", ".on(error)", "Error-event", {err:err}) 
@@ -304,7 +304,7 @@ export class OINODbPostgresql extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate")
         let result:OINOResult = new OINOResult()
         try {
-            const sql = this._getValidateSql(this._params.database)
+            const sql = this._getValidateSql(this.dbParams.database)
             const sql_res:OINODataSet = await this._query(sql)
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate")
@@ -431,7 +431,7 @@ WHERE col.table_catalog = '${dbName}'`
      */
     async initializeApiDatamodel(api:OINODbApi): Promise<void> {
         api.initializeDatamodel(new OINODbDataModel(api))
-        const schema_res:OINODataSet = await this._query(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()))
+        const schema_res:OINODataSet = await this._query(this._getSchemaSql(this.dbParams.database, api.params.tableName.toLowerCase()))
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""
