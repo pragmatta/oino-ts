@@ -54,8 +54,8 @@ export class OINOBlobAzureTable extends OINOBlob {
         const result = new OINOResult()
         try {
             let serviceClient: BlobServiceClient
-            if (this._params.connectionStr) {
-                serviceClient = BlobServiceClient.fromConnectionString(this._params.connectionStr)
+            if (this.blobParams.connectionStr) {
+                serviceClient = BlobServiceClient.fromConnectionString(this.blobParams.connectionStr)
             } else {
                 return new OINOResult({
                     success: false,
@@ -63,7 +63,7 @@ export class OINOBlobAzureTable extends OINOBlob {
                     statusText: "OINOBlobAzureTable: params.connectionStr is required"
                 })
             }
-            this._containerClient = serviceClient.getContainerClient(this._params.container)
+            this._containerClient = serviceClient.getContainerClient(this.blobParams.container)
             this.isConnected = true
         } catch (e: any) {
             return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzureTable connect failed: " + e.message })
@@ -84,7 +84,7 @@ export class OINOBlobAzureTable extends OINOBlob {
                 return new OINOResult({
                     success: false,
                     status: 404,
-                    statusText: "OINOBlobAzureTable: container '" + this._params.container + "' not found"
+                    statusText: "OINOBlobAzureTable: container '" + this.blobParams.container + "' not found"
                 })
             }
             this.isValidated = true

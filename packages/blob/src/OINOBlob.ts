@@ -22,7 +22,7 @@ const BLOB_LIKE_UNDERSCORE_REGEX = /_/g
  */
 export abstract class OINOBlob extends OINODataSource {
 
-    protected _params: OINOBlobParams
+    protected readonly blobParams: OINOBlobParams
 
     /** Container / bucket name */
     readonly name: string
@@ -33,8 +33,8 @@ export abstract class OINOBlob extends OINODataSource {
      */
     constructor(params: OINOBlobParams) {
         super()
-        this._params = { ...params }
-        this.name = params.container
+        this.blobParams = { ...params }
+        this.name = this.blobParams.container
     }
 
     // ── OINODataSource passthrough stubs ──────────────────────────────────

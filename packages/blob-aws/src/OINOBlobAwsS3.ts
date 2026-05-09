@@ -56,7 +56,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
      * Does not perform any network call.
      */
     async connect(): Promise<OINOResult> {
-        if (!this._params.connectionStr) {
+        if (!this.blobParams.connectionStr) {
             return new OINOResult({
                 success: false,
                 status: 400,
@@ -66,7 +66,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
 
         let creds: { region: string; accessKeyId: string; secretAccessKey: string }
         try {
-            creds = JSON.parse(this._params.connectionStr)
+            creds = JSON.parse(this.blobParams.connectionStr)
         } catch {
             return new OINOResult({
                 success: false,
@@ -91,8 +91,8 @@ export class OINOBlobAwsS3 extends OINOBlob {
                     secretAccessKey: creds.secretAccessKey
                 }
             }
-            if (this._params.url) {
-                clientConfig.endpoint = this._params.url
+            if (this.blobParams.url) {
+                clientConfig.endpoint = this.blobParams.url
                 clientConfig.forcePathStyle = true
             }
             this._s3Client = new S3Client(clientConfig)
@@ -111,7 +111,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
             return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAwsS3: not connected" })
         }
         try {
-            await this._s3Client.send(new HeadBucketCommand({ Bucket: this._params.container }))
+            await this._s3Client.send(new HeadBucketCommand({ Bucket: this.blobParams.container }))
             this.isValidated = true
         } catch (e: any) {
             console.error("OINOBlobAwsS3 validate error:", e)
@@ -120,13 +120,13 @@ export class OINOBlobAwsS3 extends OINOBlob {
                 return new OINOResult({
                     success: false,
                     status: 404,
-                    statusText: "OINOBlobAwsS3: bucket '" + this._params.container + "' not found"
+                    statusText: "OINOBlobAwsS3: bucket '" + this.blobParams.container + "' not found"
                 })
             } else if (status === 403) {
                 return new OINOResult({
                     success: false,
                     status: 403,
-                    statusText: "OINOBlobAwsS3: access to bucket '" + this._params.container + "' forbidden (check credentials and permissions)"
+                    statusText: "OINOBlobAwsS3: access to bucket '" + this.blobParams.container + "' forbidden (check credentials and permissions)"
                 })
             } else {
                 return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAwsS3 validate failed: " + e.message })
@@ -174,7 +174,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
 
         do {
             const response = await this._s3Client.send(new ListObjectsV2Command({
-                Bucket:            this._params.container,
+                Bucket:            this.blobParams.container,
                 Prefix:            queryPrefix,
                 ContinuationToken: continuationToken
             }))
@@ -208,7 +208,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
             throw new Error("OINOBlobAwsS3: not connected")
         }
         const response = await this._s3Client.send(new GetObjectCommand({
-            Bucket: this._params.container,
+            Bucket: this.blobParams.container,
             Key:    name
         }))
         const contentType = response.ContentType ?? "application/octet-stream"
@@ -231,7 +231,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
             throw new Error("OINOBlobAwsS3: not connected")
         }
         await this._s3Client.send(new PutObjectCommand({
-            Bucket:      this._params.container,
+            Bucket:      this.blobParams.container,
             Key:         name,
             Body:        content,
             ContentType: contentType
@@ -248,7 +248,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
             throw new Error("OINOBlobAwsS3: not connected")
         }
         await this._s3Client.send(new DeleteObjectCommand({
-            Bucket: this._params.container,
+            Bucket: this.blobParams.container,
             Key:    name
         }))
     }
