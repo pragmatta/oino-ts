@@ -252,7 +252,7 @@ export class OINOParser {
                 result[i] = value
             
             } else if (Array.isArray(value) || typeof value === "object") {
-                result[i] = JSON.stringify(value).replaceAll("\"","\\\"") // only single level deep objects, rest is handled as JSON-strings
+                result[i] = JSON.stringify(value) // store as proper JSON string so JSON.parse can recover it
 
             } else if (typeof value === "string") {
                 value = OINOStr.decode(value, OINOContentType.json)

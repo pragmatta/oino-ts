@@ -5,7 +5,7 @@ export class OINOConfig {
     static OINO_ID_FIELD:string = "_OINOID_"
     /** Private key separator of the synthetic OINO ID field */
     static OINO_ID_SEPARATOR:string = "_"
-    private static OINO_ID_SEPARATOR_ESCAPED:string = "%"
+    private static OINO_ID_SEPARATOR_ESCAPED:string = "%5F" // url-encoded "_"
 
     /** Name of the OINODbQueryFilter-parameter in request */
     static OINO_QUERY_FILTER_PARAM:string = "oinoqueryfilter"
@@ -39,7 +39,7 @@ export class OINOConfig {
     static setOinoIdSeparator(idSeparator: string) {
         if (idSeparator && (idSeparator.length == 1)) {
             OINOConfig.OINO_ID_SEPARATOR = idSeparator;
-            OINOConfig.OINO_ID_SEPARATOR_ESCAPED = '%' + idSeparator.charCodeAt(0).toString(16);
+            OINOConfig.OINO_ID_SEPARATOR_ESCAPED = '%' + idSeparator.charCodeAt(0).toString(16).toUpperCase();
         }
     }
 
@@ -55,7 +55,22 @@ export class OINOConfig {
             if (i > 0) {
                 result += OINOConfig.OINO_ID_SEPARATOR
             } 
-            result += encodeURIComponent(primaryKeys[i] as string).replaceAll(OINOConfig.OINO_ID_SEPARATOR, OINOConfig.OINO_ID_SEPARATOR_ESCAPED)
+            result += encodeURIComponent(primaryKeys[i] as string).replaceAll(OINOConfig.OINO_ID_SEPARATOR, OINOConfig.OINO_ID_SEPARATOR_ESCAPED) // force encoding of _ and other non-encoded separators
+        }
+        return result
+    }
+
+    /**
+     * Print OINO ID for primary key values.
+     *
+     * @param primaryKeys an array of primary key values.
+     * 
+     */
+    static parseOINOId(oinoid:string):string[] {
+        let result:string[] = []
+        const parts = oinoid.split(OINOConfig.OINO_ID_SEPARATOR)
+        for (const part of parts) {
+            result.push(decodeURIComponent(part))
         }
         return result
     }
