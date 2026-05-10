@@ -164,7 +164,7 @@ export class OINOBlobAzureTable extends OINOBlob {
         }
         const chunks: Buffer[] = []
         for await (const chunk of stream) {
-            chunks.push(chunk instanceof Buffer ? chunk : Buffer.from(chunk as Uint8Array))
+            chunks.push(chunk instanceof Buffer ? chunk : Buffer.from(chunk as Uint8Array|string))
         }
         return {
             content: new Uint8Array(Buffer.concat(chunks)),
@@ -184,9 +184,8 @@ export class OINOBlobAzureTable extends OINOBlob {
             throw new Error("OINOBlobAzureTable: not connected")
         }
         const blockBlobClient = this._containerClient.getBlockBlobClient(name)
-        await blockBlobClient.upload(content, content.length, {
-            blobHTTPHeaders: { blobDataType: contentType }
-        })
+        const headers:any = { blobDataType: contentType }
+        await blockBlobClient.upload(content, content.length, { blobHTTPHeaders: headers })
     }
 
     /**

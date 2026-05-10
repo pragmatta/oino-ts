@@ -346,7 +346,7 @@ export class OINONoSqlAzureTable extends OINONoSql {
         datamodel.addField(new OINOStringDataField(ds,   "rowKey",       "TEXT",     PK,    1024))
         datamodel.addField(new OINODatetimeDataField(ds, "timestamp",    "DATETIME", FIELD))
         datamodel.addField(new OINOStringDataField(ds,   "etag",         "TEXT",     FIELD,  256))
-        datamodel.addField(new OINOStringDataField(ds,   "properties",   "TEXT",     FIELD))
+        datamodel.addField(new OINOStringDataField(ds,   "properties",   "TEXT",     FIELD, 65536))
         no_sql_api.initializeDatamodel(datamodel)
     }
 

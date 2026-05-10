@@ -106,7 +106,7 @@ export class OINOStringDataField extends OINODataField {
     /**
      * Constructor for a string data field
      * 
-     * @param db OINODb reference
+     * @param datasource OINO data source reference
      * @param name name of the field
      * @param nativeType column type in database
      * @param fieldParams parameters of the field
@@ -128,7 +128,7 @@ export class OINOBooleanDataField extends OINODataField {
     /**
      * Constructor for a boolean data field
      * 
-     * @param datasource OINODb reference
+     * @param datasource OINO data source reference
      * @param name name of the field
      * @param nativeType column type in database
      * @param fieldParams parameters of the field
@@ -179,7 +179,7 @@ export class OINONumberDataField extends OINODataField {
     /**
      * Constructor for a string data field
      * 
-     * @param datasource OINODb reference
+     * @param datasource OINO data source reference
      * @param name name of the field
      * @param nativeType column type in database
      * @param fieldParams parameters of the field
@@ -236,7 +236,7 @@ export class OINOBlobDataField extends OINODataField {
     /**
      * Constructor for a blob data field
      * 
-     * @param datasource OINODb reference
+     * @param datasource OINO data source reference
      * @param name name of the field
      * @param nativeType column type in database
      * @param fieldParams parameters of the field
@@ -295,7 +295,7 @@ export class OINODatetimeDataField extends OINODataField {
     /**
      * Constructor for a string data field
      * 
-     * @param datasource OINODb reference
+     * @param datasource OINO data source reference
      * @param name name of the field
      * @param nativeType column type in database
      * @param fieldParams parameters of the field

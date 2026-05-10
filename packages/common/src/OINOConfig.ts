@@ -63,7 +63,7 @@ export class OINOConfig {
     /**
      * Print OINO ID for primary key values.
      *
-     * @param primaryKeys an array of primary key values.
+     * @param oinoid the OINO ID string to parse as primary key values.
      * 
      */
     static parseOINOId(oinoid:string):string[] {

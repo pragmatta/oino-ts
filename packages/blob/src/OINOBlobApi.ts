@@ -46,7 +46,7 @@ export class OINOBlobApiResult extends OINOApiResult {
                 response_headers.set("Content-Disposition", "inline")
             }
             return new Response(this.blobData, {
-                status: this.statusCode,
+                status: this.status,
                 statusText: this.statusText,
                 headers: response_headers
             })
