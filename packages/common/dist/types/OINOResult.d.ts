@@ -1,7 +1,7 @@
 /// <reference types="node" />
 /// <reference types="node" />
 import { Buffer } from "node:buffer";
-import { OINOHeaders, OINOHeadersInit } from ".";
+import { OINOHeaders, type OINOHeadersInit } from "./OINOHeaders.js";
 export interface OINOResultInit {
     success?: boolean;
     status?: number;

@@ -1,4 +1,7 @@
-import { OINOStr, OINOContentType, OINOHttpResult, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINOBenchmark } from ".";
+import { OINOContentType, OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX } from "./OINOConstants.js";
+import { OINOStr } from "./OINOStr.js";
+import { OINOHttpResult } from "./OINOResult.js";
+import { OINOBenchmark } from "./OINOBenchmark.js";
 import { OINO_EMPTY_FORMATTER, OINOFormatter } from "./OINOFormatter";
 /**
  * Class for rendering HTML from data.

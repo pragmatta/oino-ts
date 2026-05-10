@@ -1,4 +1,4 @@
-import { OINOResult, OINOHttpResult } from ".";
+import { OINOResult, OINOHttpResult } from "./OINOResult.js";
 /**
  * Class for rendering HTML from data.
  */

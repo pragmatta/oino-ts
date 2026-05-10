@@ -4,13 +4,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINODbApi, OINODbDataField } from "./index.js";
+import { OINOApi } from "./OINOApi.js"
+import { OINODataField } from "./OINODataField.js"
 
 /**
  * Static class for Swagger utilities
  *
  */
-export class OINODbSwagger {
+export class OINOSwagger {
 
     private static _getSchemaApiMethodParamsQueryId(): any {
         return {
@@ -81,7 +82,7 @@ export class OINODbSwagger {
         }
     }
 
-    private static _getSchemaFieldType(field:OINODbDataField): any {
+    private static _getSchemaFieldType(field:OINODataField): any {
         let type_string:string
         if (field.type == "boolean") {
             type_string = "boolean"
@@ -106,14 +107,14 @@ export class OINODbSwagger {
         }
     }
 
-    private static _getSwaggerApiType(api:OINODbApi):any {
+    private static _getSwaggerApiType(api:OINOApi):any {
         let result:any = {
             type: "object",
             properties: {},
             required: []
         }
-        let field:OINODbDataField
-        for (field of api.datamodel.fields) {
+        let field:OINODataField
+        for (field of api.datamodel!.fields) {
             result.properties[field.name] = this._getSchemaFieldType(field)
             if (field.fieldParams.isPrimaryKey) {
                 result.required.push(field.name)
@@ -181,7 +182,7 @@ export class OINODbSwagger {
      * @param apis array of API's use for Swagger definition
      *
      */
-    static getApiDefinition(apis:OINODbApi[]): any {
+    static getApiDefinition(apis:OINOApi[]): any {
         let result:any = {
             "openapi": "3.1.0",
             "info": {
@@ -199,6 +200,9 @@ export class OINODbSwagger {
             }
         }
         for (let i=0; i<apis.length; i++) {
+            if (!apis[i].initialized) {
+                throw new Error("API " + apis[i].params.tableName + " is not initialized, cannot create Swagger definition")
+            }
             const table_name = apis[i].params.tableName
             result.paths["/" + table_name] = this._getSwaggerApiPath(table_name, false)
             result.paths["/" + table_name + "/{id}"] = this._getSwaggerApiPath(table_name, true)

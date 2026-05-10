@@ -1,0 +1,40 @@
+{
+  "name": "@oino-ts/blob-aws",
+  "version": "1.0.0",
+  "description": "OINO TS package for using AWS S3 (or S3-compatible) storage as a REST API.",
+  "author": "Matias Kiviniemi (pragmatta)",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pragmatta/oino-ts.git"
+  },
+  "keywords": [
+    "blob",
+    "storage",
+    "rest-api",
+    "typescript",
+    "library",
+    "s3",
+    "aws"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
+    "@oino-ts/blob": "1.0.0",
+    "@oino-ts/common": "1.0.0"
+  },
+  "devDependencies": {
+    "@oino-ts/types": "1.0.0",
+    "@types/bun": "^1.1.14",
+    "@types/node": "^22.0.00",
+    "typescript": "~5.9.0"
+  },
+  "files": [
+    "src/*.ts",
+    "dist/cjs/*.js",
+    "dist/esm/*.js",
+    "dist/types/*.d.ts"
+  ]
+}

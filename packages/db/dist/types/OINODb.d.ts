@@ -1,12 +1,12 @@
-import { OINOResult } from "@oino-ts/common";
-import { OINODbParams, OINODbApi, OINODataCell, OINODataRow } from "./index.js";
+import { OINODataSet, OINODataSource } from "@oino-ts/common";
+import { OINODbParams } from "./OINODbConstants.js";
 /**
  * Base class for database abstraction, implementing methods for connecting, making queries and parsing/formatting data
  * between SQL and serialization formats.
  *
  */
-export declare abstract class OINODb {
-    protected _params: OINODbParams;
+export declare abstract class OINODb extends OINODataSource {
+    protected readonly dbParams: OINODbParams;
     /** Name of the database */
     readonly name: string;
     isConnected: boolean;
@@ -17,81 +17,19 @@ export declare abstract class OINODb {
      */
     constructor(params: OINODbParams);
     /**
-     * Connect to database.
-     *
-     */
-    abstract connect(): Promise<OINOResult>;
-    /**
-     * Validate connection to database is working.
-     *
-     */
-    abstract validate(): Promise<OINOResult>;
-    /**
-     * Disconnect from database.
-     *
-     */
-    abstract disconnect(): Promise<void>;
-    /**
-     * Print a table name using database specific SQL escaping.
-     *
-     * @param sqlTable name of the table
-     *
-     */
-    abstract printSqlTablename(sqlTable: string): string;
-    /**
-     * Print a column name with correct SQL escaping.
-     *
-     * @param sqlColumn name of the column
-     *
-     */
-    abstract printSqlColumnname(sqlColumn: string): string;
-    /**
-     * Print a single data value from serialization using the context of the native data
-     * type with the correct SQL escaping.
-     *
-     * @param cellValue data from sql results
-     * @param sqlType native type name for table column
-     *
-     */
-    abstract printCellAsSqlValue(cellValue: OINODataCell, sqlType: string): string;
-    /**
-     * Print a single string value as valid sql literal
-     *
-     * @param sqlString string value
-     *
-     */
-    abstract printSqlString(sqlString: string): string;
-    /**
-     * Parse a single SQL result value for serialization using the context of the native data
-     * type.
-     *
-     * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
-     *
-     */
-    abstract parseSqlValueAsCell(sqlValue: OINODataCell, sqlType: string): OINODataCell;
-    /**
      * Execute a select operation.
      *
      * @param sql SQL statement.
      *
      */
-    abstract sqlSelect(sql: string): Promise<OINODbDataSet>;
+    abstract sqlSelect(sql: string): Promise<OINODataSet>;
     /**
      * Execute other sql operations.
      *
      * @param sql SQL statement.
      *
      */
-    abstract sqlExec(sql: string): Promise<OINODbDataSet>;
-    /**
-     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
-     * the model.
-     *
-     * @param api api which data model to initialize.
-     *
-     */
-    abstract initializeApiDatamodel(api: OINODbApi): Promise<void>;
+    abstract sqlExec(sql: string): Promise<OINODataSet>;
     /**
      * Print SQL select statement with DB specific formatting.
      *
@@ -114,109 +52,4 @@ export declare abstract class OINODb {
      *
      */
     printSqlInsert(tableName: string, columns: string, values: string, returnIdFields?: string[]): string;
-}
-/**
- * Base class for SQL results that can be asynchronously iterated (but
- * not necessarity rewinded). Idea is to handle database specific mechanisms
- * for returning and formatting conventions in the database specific
- * implementation. Data might be in memory or streamed in chunks and
- * `OINODbDataSet` will serve it out consistently.
- *
- */
-export declare abstract class OINODbDataSet extends OINOResult {
-    private _data;
-    /** Error messages */
-    readonly messages: string[];
-    /**
-     * Constructor for `OINODbDataSet`.
-     *
-     * @param data internal database specific data type (constructor will throw if invalid)
-     * @param messages error messages from SQL-query
-     *
-     */
-    constructor(data: unknown, messages?: string[]);
-    /**
-     * Is data set empty.
-     *
-     */
-    abstract isEmpty(): boolean;
-    /**
-     * Is there no more content, i.e. either dataset is empty or we have moved beyond last line
-     *
-     */
-    abstract isEof(): boolean;
-    /**
-     * Attempts to moves dataset to the next row, possibly waiting for more data to become available. Returns !isEof().
-     *
-     */
-    abstract next(): Promise<boolean>;
-    /**
-     * Gets current row of data.
-     *
-     */
-    abstract getRow(): OINODataRow;
-    /**
-     * Gets all rows of data.
-     *
-     * NOTE: This is left abstract instead of just using `getRow()` so that DB implementations can hopefully optimize not duplicating data     *
-     */
-    abstract getAllRows(): Promise<OINODataRow[]>;
-    /**
-     * Checks if the messages contain errors.
-     *
-     */
-    hasErrors(): boolean;
-    /**
-     * Checks if the messages contain errors.
-     *
-     */
-    getFirstError(): string;
-}
-/**
- * Generic in memory implementation of a data set where data is an array of rows. Used
- * by BunSqlite and automated testing. Can be rewinded.
- *
- */
-export declare class OINODbMemoryDataSet extends OINODbDataSet {
-    private _rows;
-    private _currentRow;
-    private _eof;
-    /**
-     * Constructor of `OINODbMemoryDataSet`.
-     *
-     * @param data data as OINODataRow[] (constructor will throw if invalid)
-     * @param errors error messages from SQL-query
-     *
-     */
-    constructor(data: unknown, errors?: string[]);
-    /**
-     * Is data set empty.
-     *
-     */
-    isEmpty(): boolean;
-    /**
-     * Is there no more content, i.e. either dataset is empty or we have moved beyond last line
-     *
-     */
-    isEof(): boolean;
-    /**
-     * Attempts to moves dataset to the next row, possibly waiting for more data to become available. Returns !isEof().
-     *
-     */
-    next(): Promise<boolean>;
-    /**
-     * Gets current row of data.
-     *
-     */
-    getRow(): OINODataRow;
-    /**
-     * Gets all rows of data.
-     *
-     */
-    getAllRows(): Promise<OINODataRow[]>;
-    /**
-     * Rewinds data set to the first row, returns !isEof().
-     *
-     */
-    first(): boolean;
 }

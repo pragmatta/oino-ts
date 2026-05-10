@@ -1,7 +1,7 @@
 import { OINOConsoleLog, OINOBenchmark, OINOLog, OINOLogLevel } from "@oino-ts/common";
-import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINODbSwagger, OINODbApiResult, OINODbHtmlTemplate, OINODbApiRequest } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbApi, OINODbFactory, OINOSwagger, OINOApiResult, OINOApiHtmlTemplate, OINOApiRequest } from "@oino-ts/db";
 
-import { OINODbConfig } from "@oino-ts/db"
+import { OINOConfig } from "@oino-ts/db"
 import { OINOHttpResult, OINOHtmlTemplate, OINOMemoryBenchmark } from "@oino-ts/common"
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { BunFile } from "bun";
@@ -32,7 +32,7 @@ async function findBestTemplateId(apiName:string, operation:string, status:strin
 	}
 	return null
 }
-async function getTemplate(apiName:string, method:string, command:string, status:string):Promise<OINODbHtmlTemplate> {
+async function getTemplate(apiName:string, method:string, command:string, status:string):Promise<OINOApiHtmlTemplate> {
 	OINOLog.debug("@oino-ts/db", "htmxApp", "getTemplate", "Enter", { apiName:apiName, method:method, command:command, status:status})
 	const template_file = await findBestTemplateId(apiName, command, status) ||
 						await findBestTemplateId(apiName, method, status) ||
@@ -41,9 +41,9 @@ async function getTemplate(apiName:string, method:string, command:string, status
 						await findBestTemplateId(apiName, "", "") || ""
 	if (template_file) {
 		const html:string = await template_file.text()
-		return new OINODbHtmlTemplate(html)
+		return new OINOApiHtmlTemplate(html)
 	}	
-	return new OINODbHtmlTemplate("")
+	return new OINOApiHtmlTemplate("")
 }
 
 function hostFile(path: string, contentType: string, data?:any): Response {
@@ -86,7 +86,7 @@ try {
 				return new Response("", {status:302, statusText:"OK", headers:{"Location": "/index.html"}})
 
 			} else if (url.pathname == "/swagger.json") {
-				response = new Response(JSON.stringify(OINODbSwagger.getApiDefinition(api_array), null, 5));
+				response = new Response(JSON.stringify(OINOSwagger.getApiDefinition(api_array), null, 5));
 				response.headers.set('Access-Control-Allow-Origin', '*');
 				response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 				return response
@@ -102,26 +102,26 @@ try {
 				OINOLog.info("@oino-ts/db", "htmxApp", "fetch", "Api request", {api_name:api_name, id:id, operation:operation}) 
 
 				const body:Buffer = Buffer.from(await request.arrayBuffer())
-				const oino_req = new OINODbApiRequest({ method: request.method, url: url, rowId: id, data: body, headers: Object.fromEntries(request.headers), params: Object.fromEntries(url.searchParams) })
+				const oino_req = new OINOApiRequest({ method: request.method, url: url, rowId: id, data: body, headers: Object.fromEntries(request.headers), params: Object.fromEntries(url.searchParams) })
 				const api:OINODbApi|null = apis[api_name]
 				OINOLog.debug("@oino-ts/db", "htmxApp", "fetch", "Api request input", {oino_req:oino_req}) 
-				let api_result:OINODbApiResult
+				let api_result:OINOApiResult
 				if (api_name == "") {
-					const template:OINODbHtmlTemplate = await getTemplate(id, "", operation, "")
+					const template:OINOApiHtmlTemplate = await getTemplate(id, "", operation, "")
 					if (template) {
-						const http_result:OINOHttpResult = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id)
+						const http_result:OINOHttpResult = template.renderFromKeyValue(OINOConfig.OINO_ID_FIELD, id)
 						response = http_result.getFetchResponse(response_headers)
 					} else {
 						response = new Response("Template not found!", {status:404, statusText: "Template not found!", headers: response_headers })	
 					}
 				} else if (api) {
 					api_result = await api.runRequest(oino_req)
-					const template:OINODbHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.status.toString())
+					const template:OINOApiHtmlTemplate = await getTemplate(api.params.tableName, request.method, operation, api_result.status.toString())
 					if (api_result.data?.dataset) {
 						const http_result:OINOHttpResult = await template.renderFromDbData(api_result.data)
 						response = await http_result.getFetchResponse(response_headers)
 					} else {
-						response = template.renderFromKeyValue(OINODbConfig.OINODB_ID_FIELD, id).getFetchResponse(response_headers)
+						response = template.renderFromKeyValue(OINOConfig.OINO_ID_FIELD, id).getFetchResponse(response_headers)
 					}
 					if (request.method == "POST") {
 						response.headers.set('HX-Trigger', 'OINODbApiTrigger-' + api.params.tableName)

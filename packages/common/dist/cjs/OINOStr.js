@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINOStr = void 0;
-const _1 = require(".");
+const OINOConstants_js_1 = require("./OINOConstants.js");
 /**
  * Static class string utilities.
  *
@@ -215,19 +215,19 @@ class OINOStr {
      *
      */
     static decode(str, contentType) {
-        if (contentType == _1.OINOContentType.csv) {
+        if (contentType == OINOConstants_js_1.OINOContentType.csv) {
             return this.decodeCSV(str);
         }
-        else if (contentType == _1.OINOContentType.json) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.json) {
             return this.decodeJSON(str);
         }
-        else if (contentType == _1.OINOContentType.formdata) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.formdata) {
             return this.decodeFormdata(str);
         }
-        else if (contentType == _1.OINOContentType.urlencode) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.urlencode) {
             return this.decodeUrlencode(str);
         }
-        else if (contentType == _1.OINOContentType.html) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.html) {
             return str;
         }
         else {
@@ -242,19 +242,19 @@ class OINOStr {
      *
      */
     static encode(str, contentType) {
-        if (contentType == _1.OINOContentType.csv) {
+        if (contentType == OINOConstants_js_1.OINOContentType.csv) {
             return this.encodeCSV(str);
         }
-        else if (contentType == _1.OINOContentType.json) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.json) {
             return this.encodeJSON(str);
         }
-        else if (contentType == _1.OINOContentType.formdata) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.formdata) {
             return this.encodeFormdata(str);
         }
-        else if (contentType == _1.OINOContentType.urlencode) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.urlencode) {
             return this.encodeUrlencode(str);
         }
-        else if (contentType == _1.OINOContentType.html) {
+        else if (contentType == OINOConstants_js_1.OINOContentType.html) {
             return this.encodeHtml(str);
         }
         else {

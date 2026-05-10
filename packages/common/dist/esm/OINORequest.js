@@ -4,7 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import { Buffer } from "node:buffer";
-import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINOHeaders } from ".";
+import { OINOContentType, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINO_RESPONSE_DOWNLOAD_PARAM } from "./OINOConstants.js";
+import { OINOHeaders } from "./OINOHeaders.js";
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.
@@ -33,6 +34,7 @@ export class OINOHttpRequest extends OINORequest {
     body;
     requestType;
     responseType;
+    responseDownload;
     multipartBoundary;
     lastModified;
     etags;
@@ -88,6 +90,12 @@ export class OINOHttpRequest extends OINORequest {
                 }
             }
             this.responseType = response_type ?? OINOContentType.json;
+        }
+        if (init.responseDownload) {
+            this.responseDownload = init.responseDownload;
+        }
+        else {
+            this.responseDownload = this.url?.searchParams.get(OINO_RESPONSE_DOWNLOAD_PARAM) ?? "";
         }
         const last_modified = this.headers.get("if-modified-since");
         if (last_modified) {

@@ -4,14 +4,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult } from "@oino-ts/common";
-import { OINODb, OINODbDataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
+import { OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
+import { OINODb, OINODbDataModel } from "@oino-ts/db";
 import mariadb from "mariadb";
 /**
- * Implmentation of OINODbDataSet for MariaDb.
+ * Implmentation of OINODataSet for MariaDb.
  *
  */
-class OINOMariadbData extends OINODbDataSet {
-    _rows = OINODB_EMPTY_ROWS;
+class OINOMariadbData extends OINODataSet {
+    _rows = OINO_EMPTY_ROWS;
     /**
      * OINOMariadbData constructor
      * @param params database parameters
@@ -71,7 +72,7 @@ class OINOMariadbData extends OINODbDataSet {
             return this._rows[this._currentRow];
         }
         else {
-            return OINODB_EMPTY_ROW;
+            return OINO_EMPTY_ROW;
         }
     }
     /**
@@ -97,11 +98,11 @@ export class OINODbMariadb extends OINODb {
      */
     constructor(params) {
         super(params);
-        if (this._params.type !== "OINODbMariadb") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this._params.type);
+        if (this.dbParams.type !== "OINODbMariadb") {
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this.dbParams.type);
         }
-        this._pool = mariadb.createPool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, acquireTimeout: 2000, debug: false, rowsAsArray: true, multipleStatements: true });
-        delete this._params.password; // do not store password in db object
+        this._pool = mariadb.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug: false, rowsAsArray: true, multipleStatements: true });
+        delete this.dbParams.password; // do not store password in db object
     }
     _parseFieldLength(fieldLengthStr) {
         let result = parseInt(fieldLengthStr);
@@ -112,7 +113,7 @@ export class OINODbMariadb extends OINODb {
     }
     async _query(sql) {
         let connection = null;
-        let rows = OINODB_EMPTY_ROWS;
+        let rows = OINO_EMPTY_ROWS;
         try {
             connection = await this._pool.getConnection();
             const sql_res = await connection.query(sql);
@@ -123,7 +124,7 @@ export class OINODbMariadb extends OINODb {
         }
         catch (e) {
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_query", "exception in SQL select", { message: e.message, stack: e.stack });
-            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMariadb._query");
+            return new OINOMariadbData(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMariadb._query");
         }
         finally {
             if (connection) {
@@ -134,7 +135,7 @@ export class OINODbMariadb extends OINODb {
     }
     async _exec(sql) {
         let connection = null;
-        let rows = OINODB_EMPTY_ROWS;
+        let rows = OINO_EMPTY_ROWS;
         try {
             connection = await this._pool.getConnection();
             const sql_res = await connection.query(sql);
@@ -146,7 +147,7 @@ export class OINODbMariadb extends OINODb {
         catch (e) {
             const msg_parts = e.message.match(OINODbMariadb._sqlExceptionMessageRegex) || [];
             OINOLog.exception("@oino-ts/db-mariadb", "OINODbMariadb", "_exec", "exception in SQL exec", { message: msg_parts[2], stack: e.stack });
-            return new OINOMariadbData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec [" + msg_parts[2] + "]", "OINODbMariadb._exec");
+            return new OINOMariadbData(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec [" + msg_parts[2] + "]", "OINODbMariadb._exec");
         }
         finally {
             if (connection) {
@@ -161,7 +162,7 @@ export class OINODbMariadb extends OINODb {
      * @param sqlTable name of the table
      *
      */
-    printSqlTablename(sqlTable) {
+    printTableName(sqlTable) {
         return "`" + sqlTable + "`";
     }
     /**
@@ -170,7 +171,7 @@ export class OINODbMariadb extends OINODb {
      * @param sqlColumn name of the column
      *
      */
-    printSqlColumnname(sqlColumn) {
+    printColumnName(sqlColumn) {
         return "`" + sqlColumn + "`";
     }
     /**
@@ -178,20 +179,20 @@ export class OINODbMariadb extends OINODb {
      * type with the correct SQL escaping.
      *
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    printCellAsSqlValue(cellValue, sqlType) {
+    printCellAsValue(cellValue, nativeType) {
         if (cellValue === null) {
             return "NULL";
         }
         else if (cellValue === undefined) {
             return "UNDEFINED";
         }
-        else if ((sqlType == "int") || (sqlType == "smallint") || (sqlType == "float") || (sqlType == "double")) {
+        else if ((nativeType == "int") || (nativeType == "smallint") || (nativeType == "float") || (nativeType == "double")) {
             return cellValue.toString();
         }
-        else if ((sqlType == "longblob") || (sqlType == "binary") || (sqlType == "varbinary")) {
+        else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary")) {
             if (cellValue instanceof Buffer) {
                 return "x'" + cellValue.toString("hex") + "'";
             }
@@ -202,10 +203,10 @@ export class OINODbMariadb extends OINODb {
                 return "\"" + cellValue?.toString() + "\"";
             }
         }
-        else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
+        else if (((nativeType == "date") || (nativeType == "datetime") || (nativeType == "timestamp")) && (cellValue instanceof Date)) {
             return "\"" + cellValue.toISOString().replace('T', ' ').substring(0, 23) + "\"";
         }
-        else if ((sqlType == "bit")) {
+        else if ((nativeType == "bit")) {
             if ((cellValue === false) || (cellValue == null) || (cellValue == "") || (cellValue.toString().toLowerCase() == "false") || (cellValue == "0")) {
                 return "b'0'";
             }
@@ -217,7 +218,7 @@ export class OINODbMariadb extends OINODb {
             }
         }
         else {
-            return this.printSqlString(cellValue?.toString());
+            return this.printStringValue(cellValue?.toString());
         }
     }
     /**
@@ -226,7 +227,7 @@ export class OINODbMariadb extends OINODb {
      * @param sqlString string value
      *
      */
-    printSqlString(sqlString) {
+    printStringValue(sqlString) {
         return "\"" + sqlString.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"").replaceAll("\r", "\\r").replaceAll("\n", "\\n").replaceAll("\t", "\\t") + "\"";
     }
     /**
@@ -234,20 +235,20 @@ export class OINODbMariadb extends OINODb {
      * type.
      *
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    parseSqlValueAsCell(sqlValue, sqlType) {
+    parseValueAsCell(sqlValue, nativeType) {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null;
         }
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((sqlType == "date")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
+        else if (((nativeType == "date")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
-        else if ((sqlType == "bit") && (sqlValue instanceof Buffer)) { // mariadb returns a buffer for bit-fields
+        else if ((nativeType == "bit") && (sqlValue instanceof Buffer)) { // mariadb returns a buffer for bit-fields
             const buf = sqlValue;
             if (buf.length == 1) {
                 return buf.readUInt8(0) === 1;
@@ -300,7 +301,7 @@ export class OINODbMariadb extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate");
         let result = new OINOResult();
         try {
-            const sql = this._getValidateSql(this._params.database);
+            const sql = this._getValidateSql(this.dbParams.database);
             const sql_res = await this._query(sql);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate");
@@ -387,14 +388,15 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
         return sql;
     }
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
+     * Initialize a data model by getting the SQL schema and populating OINODataFields of
      * the model.
      *
      * @param api api which data model to initialize.
      *
      */
     async initializeApiDatamodel(api) {
-        const schema_res = await this._query(this._getSchemaSql(this._params.database, api.params.tableName));
+        api.initializeDatamodel(new OINODbDataModel(api));
+        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, api.params.tableName));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             // console.log("OINODbMariadb.initializeApiDatamodel row", row)

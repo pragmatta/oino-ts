@@ -5,14 +5,17 @@
  */
 
 import { Buffer } from "node:buffer"
-import { OINOContentType, OINOStr, OINOLog, OINO_ERROR_PREFIX } from "@oino-ts/common"
-import { OINODbDataModel, OINODbDataField, OINODataRow, OINONumberDataField } from "./index.js"
+import { OINOContentType, OINODataRow, OINO_ERROR_PREFIX } from "./OINOConstants.js"
+import { OINOStr } from "./OINOStr.js"
+import { OINOLog } from "./OINOLog.js"
+import { OINODataModel } from "./OINODataModel.js"
+import { OINODataField, OINONumberDataField } from "./OINODataField.js"
 
 /**
  * Static factory class for easily creating things based on data
  *
  */
-export class OINODbParser {
+export class OINOParser {
     /**
      * Create data rows from request body based on the datamodel. 
      * 
@@ -22,7 +25,7 @@ export class OINODbParser {
      * @param multipartBoundary multipart boundary for formdata parsing, if applicable
      * 
      */
-    static createRows(datamodel:OINODbDataModel, data:string|object|Buffer|Uint8Array, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
+    static createRows(datamodel:OINODataModel, data:string|object|Buffer|Uint8Array, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
         let result:OINODataRow[] = []
         if (typeof data == "string") {
             result = this._createRowsFromText(datamodel, data, contentType, multipartBoundary)
@@ -36,7 +39,7 @@ export class OINODbParser {
         return result
     }
 
-    private static _createRowsFromText(datamodel:OINODbDataModel, data:string, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
+    private static _createRowsFromText(datamodel:OINODataModel, data:string, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
         if ((contentType == OINOContentType.json) || (contentType == undefined)) {
             return this._createRowFromJson(datamodel, data)
             
@@ -50,14 +53,14 @@ export class OINODbParser {
             return this._createRowFromUrlencoded(datamodel, data)
 
         } else if (contentType == OINOContentType.html) {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "HTML can't be used as an input content type!", {contentType:OINOContentType.html})
+            OINOLog.error("@oino-ts/db", "OINOParser", "createRowsFromText", "HTML can't be used as an input content type!", {contentType:OINOContentType.html})
             return []
         } else {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromText", "Unrecognized input content type!", {contentType:contentType})
+            OINOLog.error("@oino-ts/db", "OINOParser", "createRowsFromText", "Unrecognized input content type!", {contentType:contentType})
             return []
         }
     }
-    private static _createRowsFromBlob(datamodel:OINODbDataModel, data:Buffer|Uint8Array, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
+    private static _createRowsFromBlob(datamodel:OINODataModel, data:Buffer|Uint8Array, contentType:OINOContentType, multipartBoundary?:string ):OINODataRow[] {
         if (data instanceof Uint8Array && !(data instanceof Buffer)) {
             data = Buffer.from(data) as Buffer
         }
@@ -74,10 +77,10 @@ export class OINODbParser {
             return this._createRowFromUrlencoded(datamodel, data.toString()) // data is urlencoded so it's a string
 
         } else if (contentType == OINOContentType.html) {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "HTML can't be used as an input content type!", {contentType:OINOContentType.html})
+            OINOLog.error("@oino-ts/db", "OINOParser", "createRowsFromBlob", "HTML can't be used as an input content type!", {contentType:OINOContentType.html})
             return []
         } else {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "createRowsFromBlob", "Unrecognized input content type!", {contentType:contentType})
+            OINOLog.error("@oino-ts/db", "OINOParser", "createRowsFromBlob", "Unrecognized input content type!", {contentType:contentType})
             return []
         }
     }
@@ -90,8 +93,8 @@ export class OINODbParser {
      * @param data data as javascript object
      * 
      */
-    private static _createRowFromObject(datamodel:OINODbDataModel, data:any):OINODataRow {
-        const fields:OINODbDataField[] = datamodel.fields
+    private static _createRowFromObject(datamodel:OINODataModel, data:any):OINODataRow {
+        const fields:OINODataField[] = datamodel.fields
         let result:OINODataRow = new Array(fields.length)
         for (let i=0; i < fields.length; i++) {
             result[i] = data[fields[i].name]
@@ -174,7 +177,7 @@ export class OINODbParser {
         return result
     }
 
-    private static _createRowFromCsv(datamodel:OINODbDataModel, data:string):OINODataRow[] {
+    private static _createRowFromCsv(datamodel:OINODataModel, data:string):OINODataRow[] {
         let result:OINODataRow[] = []
         const n = data.length
         let start:number = 0
@@ -204,7 +207,7 @@ export class OINODbParser {
             const row:OINODataRow = new Array(field_to_header_mapping.length)
             let has_data:boolean = false
             for (let i=0; i<datamodel.fields.length; i++) {
-                const field:OINODbDataField = datamodel.fields[i]
+                const field:OINODataField = datamodel.fields[i]
                 let j:number = field_to_header_mapping[i]
                 let value:string|null|undefined = row_data[j] 
                 if ((value === undefined) || (value === null)) { // null/undefined-decoding built into the parser
@@ -226,7 +229,7 @@ export class OINODbParser {
             if (has_data) {
                 result.push(row)
             } else {
-                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromCsv", "Empty row skipped", {}) 
+                OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromCsv", "Empty row skipped", {}) 
             }
             start = end
             end = start
@@ -235,9 +238,9 @@ export class OINODbParser {
         return result
     }
 
-    private static _createRowFromJsonObj(obj:any, datamodel:OINODbDataModel):OINODataRow|undefined {
+    private static _createRowFromJsonObj(obj:any, datamodel:OINODataModel):OINODataRow|undefined {
         // console.log("createRowFromJsonObj: obj=" + JSON.stringify(obj))
-        const fields:OINODbDataField[] = datamodel.fields
+        const fields:OINODataField[] = datamodel.fields
         let result:OINODataRow = new Array(fields.length)
         let has_data:boolean = false
         //  console.log("createRowFromJsonObj: " + result)
@@ -249,7 +252,7 @@ export class OINODbParser {
                 result[i] = value
             
             } else if (Array.isArray(value) || typeof value === "object") {
-                result[i] = JSON.stringify(value).replaceAll("\"","\\\"") // only single level deep objects, rest is handled as JSON-strings
+                result[i] = JSON.stringify(value) // store as proper JSON string so JSON.parse can recover it
 
             } else if (typeof value === "string") {
                 value = OINOStr.decode(value, OINOContentType.json)
@@ -268,12 +271,12 @@ export class OINODbParser {
         if (has_data) {
             return result
         } else {
-            OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromJsonObj", "Empty row skipped", {}) 
+            OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromJsonObj", "Empty row skipped", {}) 
             return undefined
         }
     }
 
-    private static _createRowFromJson(datamodel:OINODbDataModel, data:string):OINODataRow[] {
+    private static _createRowFromJson(datamodel:OINODataModel, data:string):OINODataRow[] {
         let result:OINODataRow[] = []
         // console.log("OINORowFactoryJson: data=" + data)
         const obj:object = JSON.parse(data)
@@ -315,9 +318,9 @@ export class OINODbParser {
 
     private static _multipartHeaderRegex:RegExp = /Content-Disposition\: (form-data|file); name=\"([^\"]+)\"(; filename=.*)?/i
 
-    private static _createRowFromFormdata(datamodel:OINODbDataModel, data:Buffer, multipartBoundary:string):OINODataRow[] {
+    private static _createRowFromFormdata(datamodel:OINODataModel, data:Buffer, multipartBoundary:string):OINODataRow[] {
         if (!multipartBoundary || (multipartBoundary.length == 0)) {
-            OINOLog.error("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Multipart boundary missing for formdata parsing!", {})
+            OINOLog.error("@oino-ts/db", "OINOParser", "_createRowFromFormdata", "Multipart boundary missing for formdata parsing!", {})
             throw new Error(OINO_ERROR_PREFIX + "Multipart boundary missing for formdata parsing!")
         }
         let result:OINODataRow[] = []
@@ -331,9 +334,9 @@ export class OINODbParser {
                 let block_ok:boolean = true
                 let l:string = this._parseMultipartLine(data, start)
                 start += l.length+2
-                const header_matches = OINODbParser._multipartHeaderRegex.exec(l)
+                const header_matches = OINOParser._multipartHeaderRegex.exec(l)
                 if (!header_matches) {
-                    OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Unsupported block skipped", {header_line:l}) 
+                    OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromFormdata", "Unsupported block skipped", {header_line:l}) 
                     block_ok = false
 
                 } else {
@@ -342,15 +345,15 @@ export class OINODbParser {
                     let is_base64:boolean = false
                     const field_index:number = datamodel.findFieldIndexByName(field_name)
                     if (field_index < 0) {
-                        OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Form field not found and skipped!", {field_name:field_name}) 
+                        OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromFormdata", "Form field not found and skipped!", {field_name:field_name}) 
                         block_ok = false
         
                     } else {
-                        const field:OINODbDataField = datamodel.fields[field_index]
+                        const field:OINODataField = datamodel.fields[field_index]
                         l = this._parseMultipartLine(data, start)
                         while (block_ok && (l != '')) {
                             if (l.startsWith('Content-Type:') && (l.indexOf('multipart/mixed')>=0)) {
-                                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Mixed multipart files not supported and skipped!", {header_line:l}) 
+                                OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromFormdata", "Mixed multipart files not supported and skipped!", {header_line:l}) 
                                 block_ok = false
                             } else if (l.startsWith('Content-Transfer-Encoding:') && (l.indexOf('BASE64')>=0)) {
                                 is_base64 = true
@@ -360,7 +363,7 @@ export class OINODbParser {
                         }
                         start += 2
                         if (!block_ok) {
-                            OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Invalid block skipped", {field_name:field_name}) 
+                            OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromFormdata", "Invalid block skipped", {field_name:field_name}) 
                         } else if (start + multipartBoundary.length + 2 >= end) {
                             row[field_index] = null
                             
@@ -389,14 +392,14 @@ export class OINODbParser {
             if (has_data) {
                 result.push(row)
             } else {
-                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Empty row skipped", {}) 
+                OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromFormdata", "Empty row skipped", {}) 
             }
         } catch (e:any) {
-            OINOLog.exception("@oino-ts/db", "OINODbParser", "_createRowFromFormdata", "Exception parsing formdata", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINOParser", "_createRowFromFormdata", "Exception parsing formdata", {message:e.message, stack:e.stack})
         }
         return result
     }
-    private static _createRowFromUrlencoded(datamodel:OINODbDataModel, data:string):OINODataRow[] {
+    private static _createRowFromUrlencoded(datamodel:OINODataModel, data:string):OINODataRow[] {
         let result:OINODataRow[] = []
         const row:OINODataRow = new Array(datamodel.fields.length)
         let has_data:boolean = false
@@ -408,10 +411,10 @@ export class OINODbParser {
                     const key=OINOStr.decodeUrlencode(param_parts[0]) || ""
                     const field_index:number = datamodel.findFieldIndexByName(key)
                     if (field_index < 0) {
-                        OINOLog.info("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Param field not found", {field:key})
+                        OINOLog.info("@oino-ts/db", "OINOParser", "_createRowFromUrlencoded", "Param field not found", {field:key})
 
                     } else {
-                        const field:OINODbDataField = datamodel.fields[field_index]
+                        const field:OINODataField = datamodel.fields[field_index]
                         let value:string=OINOStr.decode(param_parts[1], OINOContentType.urlencode)
                         if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                             value = datamodel.api.hashid.decode(value)
@@ -427,10 +430,10 @@ export class OINODbParser {
             if (has_data) {
                 result.push(row)
             } else {
-                OINOLog.warning("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Empty row skipped", {}) 
+                OINOLog.warning("@oino-ts/db", "OINOParser", "_createRowFromUrlencoded", "Empty row skipped", {}) 
             }
         } catch (e:any) {
-            OINOLog.exception("@oino-ts/db", "OINODbParser", "_createRowFromUrlencoded", "Exception parsing urlencoded data", {message:e.message, stack:e.stack})
+            OINOLog.exception("@oino-ts/db", "OINOParser", "_createRowFromUrlencoded", "Exception parsing urlencoded data", {message:e.message, stack:e.stack})
         }
         return result
     }

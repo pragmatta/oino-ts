@@ -6,7 +6,8 @@
 
 import { createHash, Hash } from "node:crypto";
 import { Buffer } from "node:buffer";
-import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOHeaders, OINOHeadersInit } from ".";
+import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOContentType } from "./OINOConstants.js"
+import { OINOHeaders, type OINOHeadersInit } from "./OINOHeaders.js"
 
 export interface OINOResultInit {
     success?: boolean

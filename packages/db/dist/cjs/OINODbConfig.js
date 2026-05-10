@@ -8,13 +8,13 @@ class OINODbConfig {
     /** Private key separator of the synthetic OINO ID field */
     static OINODB_ID_SEPARATOR = "_";
     static OINODB_ID_SEPARATOR_ESCAPED = "%";
-    /** Name of the OINODbSqlFilter-parameter in request */
+    /** Name of the OINODbQueryFilter-parameter in request */
     static OINODB_SQL_FILTER_PARAM = "oinosqlfilter";
-    /** Name of the OINODbSqlOrder-parameter in request */
+    /** Name of the OINODbQueryOrder-parameter in request */
     static OINODB_SQL_ORDER_PARAM = "oinosqlorder";
-    /** Name of the OINODbSqlLimit-parameter in request */
+    /** Name of the OINODbQueryLimit-parameter in request */
     static OINODB_SQL_LIMIT_PARAM = "oinosqllimit";
-    /** Name of the OINODbSqlAggregate-parameter in request */
+    /** Name of the OINODbQueryAggregate-parameter in request */
     static OINODB_SQL_AGGREGATE_PARAM = "oinosqlaggregate";
     /** Name of the OINODbSqlSelect-parameter in request */
     static OINODB_SQL_SELECT_PARAM = "oinosqlselect";
@@ -54,9 +54,9 @@ class OINODbConfig {
         return result;
     }
     /**
-     * Set the name of the OINODbSqlFilter-param field
+     * Set the name of the OINODbQueryFilter-param field
      *
-     * @param sqlFilterParam name of the http parameter with `OINODbSqlFilter` definition
+     * @param sqlFilterParam name of the http parameter with `OINODbQueryFilter` definition
      *
      */
     static setOinoSqlFilterParam(sqlFilterParam) {
@@ -65,9 +65,9 @@ class OINODbConfig {
         }
     }
     /**
-     * Set the name of the OINODbSqlOrder-param field
+     * Set the name of the OINODbQueryOrder-param field
      *
-     * @param sqlOrderParam name of the http parameter with `OINODbSqlOrder` definition
+     * @param sqlOrderParam name of the http parameter with `OINODbQueryOrder` definition
      *
      */
     static setOinoSqlOrderParam(sqlOrderParam) {
@@ -76,9 +76,9 @@ class OINODbConfig {
         }
     }
     /**
-     * Set the name of the OINODbSqlLimit-param field
+     * Set the name of the OINODbQueryLimit-param field
      *
-     * @param sqlLimitParam name of the http parameter with `OINODbSqlLimit` definition
+     * @param sqlLimitParam name of the http parameter with `OINODbQueryLimit` definition
      *
      */
     static setOinoSqlLimitParam(sqlLimitParam) {

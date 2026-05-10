@@ -10,10 +10,10 @@ const common_1 = require("@oino-ts/common");
 const db_1 = require("@oino-ts/db");
 const pg_1 = require("pg");
 /**
- * Implmentation of OINODbDataSet for Postgresql.
+ * Implmentation of OINODataSet for Postgresql.
  *
  */
-class OINOPostgresqlData extends db_1.OINODbDataSet {
+class OINOPostgresqlData extends common_1.OINODataSet {
     _rows;
     /**
      * OINOPostgresqlData constructor
@@ -72,7 +72,7 @@ class OINOPostgresqlData extends db_1.OINODbDataSet {
             return this._rows[this._currentRow];
         }
         else {
-            return db_1.OINODB_EMPTY_ROW;
+            return common_1.OINO_EMPTY_ROW;
         }
     }
     /**
@@ -95,12 +95,12 @@ class OINODbPostgresql extends db_1.OINODb {
      */
     constructor(params) {
         super(params);
-        if (this._params.type !== "OINODbPostgresql") {
-            throw new Error(common_1.OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this._params.type);
+        if (this.dbParams.type !== "OINODbPostgresql") {
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": Not OINODbPostgresql-type: " + this.dbParams.type);
         }
-        const ssl_enabled = !(this._params.url == "localhost" || this._params.url == "127.0.0.1");
-        this._pool = new pg_1.Pool({ host: this._params.url, database: this._params.database, port: this._params.port, user: this._params.user, password: this._params.password, ssl: ssl_enabled });
-        delete this._params.password;
+        const ssl_enabled = !(this.dbParams.url == "localhost" || this.dbParams.url == "127.0.0.1");
+        this._pool = new pg_1.Pool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, ssl: ssl_enabled });
+        delete this.dbParams.password;
         this._pool.on("error", (err) => {
             common_1.OINOLog.error("@oino-ts/db-postgresql", "OINODbPostgresql", ".on(error)", "Error-event", { err: err });
         });
@@ -125,12 +125,12 @@ class OINODbPostgresql extends db_1.OINODb {
                 rows = query_result.rows;
             }
             else {
-                rows = db_1.OINODB_EMPTY_ROWS; // return empty row if no rows returned
+                rows = common_1.OINO_EMPTY_ROWS; // return empty row if no rows returned
             }
             return new OINOPostgresqlData(rows, []);
         }
         catch (e) {
-            return new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbPostgresql._query");
+            return new OINOPostgresqlData(common_1.OINO_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbPostgresql._query");
         }
         finally {
             if (connection) {
@@ -151,13 +151,13 @@ class OINODbPostgresql extends db_1.OINODb {
                 rows = query_result.rows;
             }
             else {
-                rows = db_1.OINODB_EMPTY_ROWS; // return empty row if no rows returned
+                rows = common_1.OINO_EMPTY_ROWS; // return empty row if no rows returned
             }
             // if (rows.length > 0) { console.log("OINODbPostgresql._exec: rows", rows) }
             return new OINOPostgresqlData(rows, []);
         }
         catch (e) {
-            return new OINOPostgresqlData(db_1.OINODB_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbPostgresql._exec");
+            return new OINOPostgresqlData(common_1.OINO_EMPTY_ROWS, []).setError(500, common_1.OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbPostgresql._exec");
         }
         finally {
             if (connection) {
@@ -171,7 +171,7 @@ class OINODbPostgresql extends db_1.OINODb {
      * @param sqlTable name of the table
      *
      */
-    printSqlTablename(sqlTable) {
+    printTableName(sqlTable) {
         return "\"" + sqlTable.toLowerCase() + "\"";
     }
     /**
@@ -180,7 +180,7 @@ class OINODbPostgresql extends db_1.OINODb {
      * @param sqlColumn name of the column
      *
      */
-    printSqlColumnname(sqlColumn) {
+    printColumnName(sqlColumn) {
         return "\"" + sqlColumn + "\"";
     }
     /**
@@ -188,20 +188,20 @@ class OINODbPostgresql extends db_1.OINODb {
      * type with the correct SQL escaping.
      *
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    printCellAsSqlValue(cellValue, sqlType) {
+    printCellAsValue(cellValue, nativeType) {
         if (cellValue === null) {
             return "NULL";
         }
         else if (cellValue === undefined) {
             return "UNDEFINED";
         }
-        else if ((sqlType == "integer") || (sqlType == "smallint") || (sqlType == "real")) {
+        else if ((nativeType == "integer") || (nativeType == "smallint") || (nativeType == "real")) {
             return cellValue.toString();
         }
-        else if (sqlType == "bytea") {
+        else if (nativeType == "bytea") {
             if (cellValue instanceof Buffer) {
                 return "'\\x" + cellValue.toString("hex") + "'";
             }
@@ -212,7 +212,7 @@ class OINODbPostgresql extends db_1.OINODb {
                 return "\'" + cellValue?.toString() + "\'";
             }
         }
-        else if (sqlType == "boolean") {
+        else if (nativeType == "boolean") {
             if (cellValue == null || cellValue == "" || cellValue.toString().toLowerCase() == "false" || cellValue == "0") {
                 return "false";
             }
@@ -220,11 +220,11 @@ class OINODbPostgresql extends db_1.OINODb {
                 return "true";
             }
         }
-        else if ((sqlType == "date") && (cellValue instanceof Date)) {
+        else if ((nativeType == "date") && (cellValue instanceof Date)) {
             return "\'" + cellValue.toISOString() + "\'";
         }
         else {
-            return this.printSqlString(cellValue.toString());
+            return this.printStringValue(cellValue.toString());
         }
     }
     /**
@@ -233,7 +233,7 @@ class OINODbPostgresql extends db_1.OINODb {
      * @param sqlString string value
      *
      */
-    printSqlString(sqlString) {
+    printStringValue(sqlString) {
         return "\'" + sqlString.replaceAll("'", "''") + "\'";
     }
     /**
@@ -241,17 +241,17 @@ class OINODbPostgresql extends db_1.OINODb {
      * type.
      *
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    parseSqlValueAsCell(sqlValue, sqlType) {
+    parseValueAsCell(sqlValue, nativeType) {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null;
         }
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((sqlType == "date")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
+        else if (((nativeType == "date")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
         else {
@@ -292,7 +292,7 @@ class OINODbPostgresql extends db_1.OINODb {
         common_1.OINOBenchmark.startMetric("OINODb", "validate");
         let result = new common_1.OINOResult();
         try {
-            const sql = this._getValidateSql(this._params.database);
+            const sql = this._getValidateSql(this.dbParams.database);
             const sql_res = await this._query(sql);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate");
@@ -403,14 +403,15 @@ WHERE col.table_catalog = '${dbName}'`;
         return sql;
     }
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
+     * Initialize a data model by getting the SQL schema and populating OINODataFields of
      * the model.
      *
      * @param api api which data model to initialize.
      *
      */
     async initializeApiDatamodel(api) {
-        const schema_res = await this._query(this._getSchemaSql(this._params.database, api.params.tableName.toLowerCase()));
+        api.initializeDatamodel(new db_1.OINODbDataModel(api));
+        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, api.params.tableName.toLowerCase()));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";
@@ -434,31 +435,31 @@ WHERE col.table_catalog = '${dbName}'`;
             }
             else {
                 if ((sql_type == "integer") || (sql_type == "smallint") || (sql_type == "real")) {
-                    api.datamodel.addField(new db_1.OINONumberDataField(this, field_name, sql_type, field_params));
+                    api.datamodel.addField(new common_1.OINONumberDataField(this, field_name, sql_type, field_params));
                 }
                 else if ((sql_type == "date")) {
                     if (api.params.useDatesAsString) {
-                        api.datamodel.addField(new db_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
+                        api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
                     }
                     else {
-                        api.datamodel.addField(new db_1.OINODatetimeDataField(this, field_name, sql_type, field_params));
+                        api.datamodel.addField(new common_1.OINODatetimeDataField(this, field_name, sql_type, field_params));
                     }
                 }
                 else if ((sql_type == "character") || (sql_type == "character varying") || (sql_type == "varchar") || (sql_type == "text")) {
-                    api.datamodel.addField(new db_1.OINOStringDataField(this, field_name, sql_type, field_params, field_length));
+                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, field_length));
                 }
                 else if ((sql_type == "bytea")) {
-                    api.datamodel.addField(new db_1.OINOBlobDataField(this, field_name, sql_type, field_params, field_length));
+                    api.datamodel.addField(new common_1.OINOBlobDataField(this, field_name, sql_type, field_params, field_length));
                 }
                 else if ((sql_type == "boolean")) {
-                    api.datamodel.addField(new db_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
+                    api.datamodel.addField(new common_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
                 }
                 else if ((sql_type == "decimal") || (sql_type == "numeric")) {
-                    api.datamodel.addField(new db_1.OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1));
+                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1));
                 }
                 else {
                     common_1.OINOLog.info("@oino-ts/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length: field_length, field_params: field_params });
-                    api.datamodel.addField(new db_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
+                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
                 }
             }
             await schema_res.next();

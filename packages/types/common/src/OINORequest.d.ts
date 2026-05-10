@@ -1,7 +1,8 @@
 /// <reference types="node" />
 /// <reference types="node" />
 import { Buffer } from "node:buffer";
-import { OINOContentType, OINOHeaders, OINOHeadersInit } from ".";
+import { OINOContentType } from "./OINOConstants.js";
+import { OINOHeaders, type OINOHeadersInit } from "./OINOHeaders.js";
 export interface OINORequestInit {
     params?: Record<string, string>;
 }
@@ -29,6 +30,7 @@ export interface OINOHttpRequestInit extends OINORequestInit {
     body?: OINOHttpData;
     requestType?: OINOContentType;
     responseType?: OINOContentType;
+    responseDownload?: string;
     multipartBoundary?: string;
     lastModified?: number;
 }
@@ -42,6 +44,7 @@ export declare class OINOHttpRequest extends OINORequest {
     body: OINOHttpData;
     requestType: OINOContentType;
     responseType: OINOContentType;
+    responseDownload?: string;
     multipartBoundary?: string;
     lastModified?: number;
     etags?: string[];

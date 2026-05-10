@@ -6,7 +6,8 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINO_EMPTY_FORMATTER = exports.OINOFormatter = void 0;
-const index_js_1 = require("./index.js");
+const OINOConstants_js_1 = require("./OINOConstants.js");
+const OINOLog_js_1 = require("./OINOLog.js");
 /**
  * Class for formatting strings and values.
  *
@@ -53,8 +54,8 @@ class OINOFormatter {
             for (let i = 0; i < formatters.length; i++) {
                 let match = formatters[i]?.match(this.OINO_FORMATTER_REGEXP);
                 if (!match) {
-                    index_js_1.OINOLog.error("@oino-ts/common", "OINOFormatter", "parse", "Invalid formatter string", { formatter: formatters[i] });
-                    throw new Error(index_js_1.OINO_ERROR_PREFIX + "Invalid formatter: " + formatters[i]);
+                    OINOLog_js_1.OINOLog.error("@oino-ts/common", "OINOFormatter", "parse", "Invalid formatter string", { formatter: formatters[i] });
+                    throw new Error(OINOConstants_js_1.OINO_ERROR_PREFIX + "Invalid formatter: " + formatters[i]);
                 }
                 else {
                     const formatter_type = match[1].toLowerCase().substring(0, match[1].indexOf('('));
@@ -81,8 +82,8 @@ class OINOFormatter {
                         formatter_params.push(decodeURIComponent(match[15]), decodeURIComponent(match[16]));
                     }
                     else {
-                        index_js_1.OINOLog.error("@oino-ts/common", "OINOFormatter", "parse", "Unknown formatter type", { formatter: formatters[i] });
-                        throw new Error(index_js_1.OINO_ERROR_PREFIX + "Unsupported formatter: " + formatters[i]);
+                        OINOLog_js_1.OINOLog.error("@oino-ts/common", "OINOFormatter", "parse", "Unknown formatter type", { formatter: formatters[i] });
+                        throw new Error(OINOConstants_js_1.OINO_ERROR_PREFIX + "Unsupported formatter: " + formatters[i]);
                     }
                     types.push(formatter_type);
                     params.push(formatter_params);
