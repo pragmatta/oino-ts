@@ -21,7 +21,7 @@ class OINODbModelSet {
     /** Reference to data set */
     dataset;
     /** SQL parameters */
-    sqlParams;
+    queryParams;
     /** Collection of errors */
     errors;
     /**
@@ -29,21 +29,21 @@ class OINODbModelSet {
      *
      * @param datamodel data model
      * @param dataset data set
-     * @param sqlParams SQL parameters
+     * @param queryParams SQL parameters
      */
-    constructor(datamodel, dataset, sqlParams) {
+    constructor(datamodel, dataset, queryParams) {
         this.datamodel = datamodel;
         this.dataset = dataset;
-        this.sqlParams = sqlParams;
+        this.queryParams = queryParams;
         this.errors = this.dataset.messages;
     }
     _encodeAndHashFieldValue(field, value, contentType, primaryKeyValues, rowIdSeed) {
         let result;
-        if (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) {
-            if (value && (field instanceof index_js_1.OINONumberDataField) && (this.datamodel.api.hashid) && ((this.sqlParams?.aggregate === undefined) || (this.sqlParams.aggregate.isAggregated(field) == false))) {
+        if (field.fieldParams.isDbPrimaryKey || field.fieldParams.isDbForeignKey) {
+            if (value && (field instanceof index_js_1.OINONumberDataField) && (this.datamodel.api.hashid) && ((this.queryParams?.aggregate === undefined) || (this.queryParams.aggregate.isAggregated(field.name) == false))) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed);
             }
-            if (field.fieldParams.isPrimaryKey) {
+            if (field.fieldParams.isDbPrimaryKey) {
                 primaryKeyValues.push(value || "");
             }
         }
@@ -59,7 +59,7 @@ class OINODbModelSet {
         let json_row = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isDbPrimaryKey == false)) {
                 continue;
             }
             let value = f.serializeCell(row[i]);
@@ -70,7 +70,7 @@ class OINODbModelSet {
                 json_row += "," + common_1.OINOStr.encode(f.name, common_1.OINOContentType.json) + ":null";
             }
             else {
-                let is_hashed = (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) && (f instanceof index_js_1.OINONumberDataField) && (this.datamodel.api.hashid != null);
+                let is_hashed = (f.fieldParams.isDbPrimaryKey || f.fieldParams.isDbForeignKey) && (f instanceof index_js_1.OINONumberDataField) && (this.datamodel.api.hashid != null);
                 let is_value = (f instanceof index_js_1.OINOBooleanDataField) || ((f instanceof index_js_1.OINONumberDataField) && !is_hashed);
                 value = this._encodeAndHashFieldValue(f, value, common_1.OINOContentType.json, primary_key_values, f.name + " " + row_id_seed);
                 if (is_value) {
@@ -79,7 +79,7 @@ class OINODbModelSet {
                 json_row += "," + common_1.OINOStr.encode(f.name, common_1.OINOContentType.json) + ":" + value;
             }
         }
-        json_row = common_1.OINOStr.encode(index_js_1.OINODbConfig.OINODB_ID_FIELD, common_1.OINOContentType.json) + ":" + common_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), common_1.OINOContentType.json) + json_row;
+        json_row = common_1.OINOStr.encode(common_1.OINOConfig.OINO_ID_FIELD, common_1.OINOContentType.json) + ":" + common_1.OINOStr.encode(common_1.OINOConfig.printOINOId(primary_key_values), common_1.OINOContentType.json) + json_row;
         return "{" + json_row + "}";
     }
     async _writeStringJson() {
@@ -98,9 +98,9 @@ class OINODbModelSet {
     _writeHeaderCsv() {
         const model = this.datamodel;
         const fields = model.fields;
-        let csv_header = "\"" + index_js_1.OINODbConfig.OINODB_ID_FIELD + "\"";
+        let csv_header = "\"" + common_1.OINOConfig.OINO_ID_FIELD + "\"";
         for (let i = 0; i < fields.length; i++) {
-            if (this.sqlParams?.select?.isSelected(fields[i]) === false) {
+            if ((this.queryParams?.select?.isSelected(fields[i].name) === false) && (fields[i].fieldParams.isDbPrimaryKey == false)) {
                 continue;
             }
             csv_header += ",\"" + fields[i].name + "\"";
@@ -115,7 +115,7 @@ class OINODbModelSet {
         let csv_row = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isDbPrimaryKey == false)) {
                 continue;
             }
             let value = f.serializeCell(row[i]);
@@ -127,7 +127,7 @@ class OINODbModelSet {
                 csv_row += "," + value;
             }
         }
-        csv_row = common_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), common_1.OINOContentType.csv) + csv_row;
+        csv_row = common_1.OINOStr.encode(common_1.OINOConfig.printOINOId(primary_key_values), common_1.OINOContentType.csv) + csv_row;
         return csv_row;
     }
     async _writeStringCsv() {
@@ -162,7 +162,7 @@ class OINODbModelSet {
         let result = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isDbPrimaryKey == false)) {
                 continue;
             }
             let value = f.serializeCell(row[i]);
@@ -185,7 +185,7 @@ class OINODbModelSet {
             }
             result += formdata_block;
         }
-        result = this._writeRowFormdataParameterBlock(index_js_1.OINODbConfig.OINODB_ID_FIELD, index_js_1.OINODbConfig.printOINOId(primary_key_values), multipart_boundary) + result;
+        result = this._writeRowFormdataParameterBlock(common_1.OINOConfig.OINO_ID_FIELD, common_1.OINOConfig.printOINOId(primary_key_values), multipart_boundary) + result;
         return result;
     }
     _writeStringFormdata() {
@@ -201,7 +201,7 @@ class OINODbModelSet {
         let urlencode_row = "";
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isDbPrimaryKey == false)) {
                 continue;
             }
             let value = f.serializeCell(row[i]);
@@ -216,7 +216,7 @@ class OINODbModelSet {
                 urlencode_row += common_1.OINOStr.encode(f.name, common_1.OINOContentType.urlencode) + "=" + value;
             }
         }
-        urlencode_row = common_1.OINOStr.encode(index_js_1.OINODbConfig.OINODB_ID_FIELD, common_1.OINOContentType.urlencode) + "=" + common_1.OINOStr.encode(index_js_1.OINODbConfig.printOINOId(primary_key_values), common_1.OINOContentType.urlencode) + "&" + urlencode_row;
+        urlencode_row = common_1.OINOStr.encode(common_1.OINOConfig.OINO_ID_FIELD, common_1.OINOContentType.urlencode) + "=" + common_1.OINOStr.encode(common_1.OINOConfig.printOINOId(primary_key_values), common_1.OINOContentType.urlencode) + "&" + urlencode_row;
         return urlencode_row;
     }
     async _writeStringUrlencode() {
@@ -242,13 +242,13 @@ class OINODbModelSet {
         let result = {};
         for (let i = 0; i < fields.length; i++) {
             const f = fields[i];
-            if (f.fieldParams.isPrimaryKey) {
+            if (f.fieldParams.isDbPrimaryKey) {
                 primary_key_values.push(f.serializeCell(row[i]) || "");
             }
-            if (this.sqlParams?.select?.isSelected(f) === false) {
+            if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isDbPrimaryKey == false)) {
                 continue;
             }
-            let value = f.db.parseSqlValueAsCell(row[i], f.sqlType); // retain original value without serialization
+            let value = f.datasource.parseValueAsCell(row[i], f.sqlType); // retain original value without serialization
             if (value === undefined) {
                 // skip undefined values
             }
@@ -259,7 +259,7 @@ class OINODbModelSet {
                 result[f.name] = value;
             }
         }
-        result[index_js_1.OINODbConfig.OINODB_ID_FIELD] = index_js_1.OINODbConfig.printOINOId(primary_key_values);
+        result[common_1.OINOConfig.OINO_ID_FIELD] = common_1.OINOConfig.printOINOId(primary_key_values);
         return result;
     }
     /**
@@ -316,7 +316,7 @@ class OINODbModelSet {
      */
     async exportAsRecord(idFieldName) {
         const result = {};
-        const row_id_field = idFieldName || index_js_1.OINODbConfig.OINODB_ID_FIELD;
+        const row_id_field = idFieldName || common_1.OINOConfig.OINO_ID_FIELD;
         while (!this.dataset.isEof()) {
             const row_data = this.dataset.getRow();
             const row_export = this._exportRow(row_data);

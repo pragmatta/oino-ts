@@ -1,4 +1,4 @@
-import { OINOContentType } from ".";
+import { OINOContentType } from "./OINOConstants.js";
 /**
  * Static class string utilities.
  *

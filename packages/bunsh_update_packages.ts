@@ -7,6 +7,12 @@ const packages = [
   "db-mariadb",
   "db-mssql",
   "db-postgresql",
+  "blob-aws",
+  "blob-azure",
+  "blob",
+  "nosql-aws",
+  "nosql-azure",
+  "nosql",
   "hashid"
 ]
 

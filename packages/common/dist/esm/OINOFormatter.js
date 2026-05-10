@@ -3,7 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX, OINOLog } from "./index.js";
+import { OINO_ERROR_PREFIX } from "./OINOConstants.js";
+import { OINOLog } from "./OINOLog.js";
 /**
  * Class for formatting strings and values.
  *

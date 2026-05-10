@@ -8,7 +8,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINOHttpResult = exports.OINOResult = void 0;
 const node_crypto_1 = require("node:crypto");
 const node_buffer_1 = require("node:buffer");
-const _1 = require(".");
+const OINOConstants_js_1 = require("./OINOConstants.js");
+const OINOHeaders_js_1 = require("./OINOHeaders.js");
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.
@@ -69,11 +70,11 @@ class OINOResult {
         if (this.statusText != "OK") {
             this.messages.push(this.statusText); // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
-        if (statusText.startsWith(_1.OINO_ERROR_PREFIX)) {
+        if (statusText.startsWith(OINOConstants_js_1.OINO_ERROR_PREFIX)) {
             this.statusText = statusText;
         }
         else {
-            this.statusText = _1.OINO_ERROR_PREFIX + " (" + operation + "): " + statusText;
+            this.statusText = OINOConstants_js_1.OINO_ERROR_PREFIX + " (" + operation + "): " + statusText;
         }
         return this;
     }
@@ -87,7 +88,7 @@ class OINOResult {
     addWarning(message, operation) {
         message = message.trim();
         if (message) {
-            this.messages.push(_1.OINO_WARNING_PREFIX + " (" + operation + "): " + message);
+            this.messages.push(OINOConstants_js_1.OINO_WARNING_PREFIX + " (" + operation + "): " + message);
         }
         return this;
     }
@@ -101,7 +102,7 @@ class OINOResult {
     addInfo(message, operation) {
         message = message.trim();
         if (message) {
-            this.messages.push(_1.OINO_INFO_PREFIX + " (" + operation + "): " + message);
+            this.messages.push(OINOConstants_js_1.OINO_INFO_PREFIX + " (" + operation + "): " + message);
         }
         return this;
     }
@@ -115,7 +116,7 @@ class OINOResult {
     addDebug(message, operation) {
         message = message.trim();
         if (message) {
-            this.messages.push(_1.OINO_DEBUG_PREFIX + " (" + operation + "): " + message);
+            this.messages.push(OINOConstants_js_1.OINO_DEBUG_PREFIX + " (" + operation + "): " + message);
         }
         return this;
     }
@@ -133,19 +134,19 @@ class OINOResult {
         let j = 1;
         for (let i = 0; i < this.messages.length; i++) {
             const message = this.messages[i].replaceAll("\r", " ").replaceAll("\n", " ");
-            if (copyErrors && message.startsWith(_1.OINO_ERROR_PREFIX)) {
+            if (copyErrors && message.startsWith(OINOConstants_js_1.OINO_ERROR_PREFIX)) {
                 headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
-            if (copyWarnings && message.startsWith(_1.OINO_WARNING_PREFIX)) {
+            if (copyWarnings && message.startsWith(OINOConstants_js_1.OINO_WARNING_PREFIX)) {
                 headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
-            if (copyInfos && message.startsWith(_1.OINO_INFO_PREFIX)) {
+            if (copyInfos && message.startsWith(OINOConstants_js_1.OINO_INFO_PREFIX)) {
                 headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
-            if (copyDebug && message.startsWith(_1.OINO_DEBUG_PREFIX)) {
+            if (copyDebug && message.startsWith(OINOConstants_js_1.OINO_DEBUG_PREFIX)) {
                 headers.set('X-OINO-MESSAGE-' + j, message);
                 j++;
             }
@@ -184,7 +185,7 @@ class OINOHttpResult extends OINOResult {
     constructor(init) {
         super(init);
         this.body = init?.body ?? "";
-        this.headers = new _1.OINOHeaders(init?.headers);
+        this.headers = new OINOHeaders_js_1.OINOHeaders(init?.headers);
         this.expires = init?.expires ?? 0;
         this.lastModified = init?.lastModified ?? 0;
         this._etag = "";
@@ -206,7 +207,7 @@ class OINOHttpResult extends OINOResult {
      * @param headers HTTP headers (overrides existing values)
      */
     getFetchResponse(headers) {
-        const merged_headers = new _1.OINOHeaders(this.headers);
+        const merged_headers = new OINOHeaders_js_1.OINOHeaders(this.headers);
         if (headers) {
             merged_headers.setHeaders(headers);
         }

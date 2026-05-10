@@ -5,7 +5,8 @@
  */
 import { createHash } from "node:crypto";
 import { Buffer } from "node:buffer";
-import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX, OINOHeaders } from ".";
+import { OINO_DEBUG_PREFIX, OINO_ERROR_PREFIX, OINO_INFO_PREFIX, OINO_WARNING_PREFIX } from "./OINOConstants.js";
+import { OINOHeaders } from "./OINOHeaders.js";
 /**
  * OINO API request result object with returned data and/or http status code/message and
  * error / warning messages.

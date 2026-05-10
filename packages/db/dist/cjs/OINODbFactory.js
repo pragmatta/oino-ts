@@ -6,7 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbFactory = void 0;
-const index_js_1 = require("./index.js");
+const OINODbApi_js_1 = require("./OINODbApi.js");
 /**
  * Static factory class for easily creating things based on data
  *
@@ -60,7 +60,7 @@ class OINODbFactory {
      * @param params parameters of the API
      */
     static async createApi(db, params) {
-        let result = new index_js_1.OINODbApi(db, params);
+        let result = new OINODbApi_js_1.OINODbApi(db, params);
         await db.initializeApiDatamodel(result);
         return result;
     }

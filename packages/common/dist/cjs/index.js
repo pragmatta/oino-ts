@@ -1,53 +1,71 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OINOContentType = exports.OINO_RESPONSE_TYPE_PARAM = exports.OINO_REQUEST_TYPE_PARAM = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOHeaders = exports.OINO_EMPTY_FORMATTER = exports.OINOFormatter = exports.OINOHtmlTemplate = exports.OINOStr = exports.OINOHttpRequest = exports.OINORequest = exports.OINOHttpResult = exports.OINOResult = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOMemoryBenchmark = exports.OINOBenchmark = void 0;
+exports.OINOSwagger = exports.OINOStr = exports.OINOHttpResult = exports.OINOResult = exports.OINOHttpRequest = exports.OINORequest = exports.OINOQueryAggregate = exports.OINOQueryLimit = exports.OINOQueryOrder = exports.OINOQueryFilter = exports.OINOQuerySelect = exports.OINOQueryAggregateFunctions = exports.OINOQueryNullCheck = exports.OINOQueryComparison = exports.OINOQueryBooleanOperation = exports.OINOParser = exports.OINOModelSet = exports.OINOConsoleLog = exports.OINOLogLevel = exports.OINOLog = exports.OINOHtmlTemplate = exports.OINOHeaders = exports.OINO_EMPTY_FORMATTER = exports.OINOFormatter = exports.OINOBlobDataField = exports.OINODatetimeDataField = exports.OINOBooleanDataField = exports.OINONumberDataField = exports.OINOStringDataField = exports.OINODataField = exports.OINOMemoryDataset = exports.OINODataSet = exports.OINODataSource = exports.OINODataModel = exports.OINO_EMPTY_ROWS = exports.OINO_EMPTY_ROW = exports.OINOContentType = exports.OINO_RESPONSE_TYPE_PARAM = exports.OINO_REQUEST_TYPE_PARAM = exports.OINO_DEBUG_PREFIX = exports.OINO_INFO_PREFIX = exports.OINO_WARNING_PREFIX = exports.OINO_ERROR_PREFIX = exports.OINOConfig = exports.OINOMemoryBenchmark = exports.OINOBenchmark = exports.OINOApiHtmlTemplate = exports.OINOApiResult = exports.OINOApiRequest = exports.OINOApi = void 0;
+var OINOApi_js_1 = require("./OINOApi.js");
+Object.defineProperty(exports, "OINOApi", { enumerable: true, get: function () { return OINOApi_js_1.OINOApi; } });
+Object.defineProperty(exports, "OINOApiRequest", { enumerable: true, get: function () { return OINOApi_js_1.OINOApiRequest; } });
+Object.defineProperty(exports, "OINOApiResult", { enumerable: true, get: function () { return OINOApi_js_1.OINOApiResult; } });
+Object.defineProperty(exports, "OINOApiHtmlTemplate", { enumerable: true, get: function () { return OINOApi_js_1.OINOApiHtmlTemplate; } });
 var OINOBenchmark_js_1 = require("./OINOBenchmark.js");
 Object.defineProperty(exports, "OINOBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOBenchmark; } });
 Object.defineProperty(exports, "OINOMemoryBenchmark", { enumerable: true, get: function () { return OINOBenchmark_js_1.OINOMemoryBenchmark; } });
-var OINOLog_js_1 = require("./OINOLog.js");
-Object.defineProperty(exports, "OINOLog", { enumerable: true, get: function () { return OINOLog_js_1.OINOLog; } });
-Object.defineProperty(exports, "OINOLogLevel", { enumerable: true, get: function () { return OINOLog_js_1.OINOLogLevel; } });
-Object.defineProperty(exports, "OINOConsoleLog", { enumerable: true, get: function () { return OINOLog_js_1.OINOConsoleLog; } });
-var OINOResult_js_1 = require("./OINOResult.js");
-Object.defineProperty(exports, "OINOResult", { enumerable: true, get: function () { return OINOResult_js_1.OINOResult; } });
-Object.defineProperty(exports, "OINOHttpResult", { enumerable: true, get: function () { return OINOResult_js_1.OINOHttpResult; } });
-var OINORequest_js_1 = require("./OINORequest.js");
-Object.defineProperty(exports, "OINORequest", { enumerable: true, get: function () { return OINORequest_js_1.OINORequest; } });
-Object.defineProperty(exports, "OINOHttpRequest", { enumerable: true, get: function () { return OINORequest_js_1.OINOHttpRequest; } });
-var OINOStr_js_1 = require("./OINOStr.js");
-Object.defineProperty(exports, "OINOStr", { enumerable: true, get: function () { return OINOStr_js_1.OINOStr; } });
-var OINOHtmlTemplate_js_1 = require("./OINOHtmlTemplate.js");
-Object.defineProperty(exports, "OINOHtmlTemplate", { enumerable: true, get: function () { return OINOHtmlTemplate_js_1.OINOHtmlTemplate; } });
+var OINOConfig_js_1 = require("./OINOConfig.js");
+Object.defineProperty(exports, "OINOConfig", { enumerable: true, get: function () { return OINOConfig_js_1.OINOConfig; } });
+var OINOConstants_js_1 = require("./OINOConstants.js");
+Object.defineProperty(exports, "OINO_ERROR_PREFIX", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_ERROR_PREFIX; } });
+Object.defineProperty(exports, "OINO_WARNING_PREFIX", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_WARNING_PREFIX; } });
+Object.defineProperty(exports, "OINO_INFO_PREFIX", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_INFO_PREFIX; } });
+Object.defineProperty(exports, "OINO_DEBUG_PREFIX", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_DEBUG_PREFIX; } });
+Object.defineProperty(exports, "OINO_REQUEST_TYPE_PARAM", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_REQUEST_TYPE_PARAM; } });
+Object.defineProperty(exports, "OINO_RESPONSE_TYPE_PARAM", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_RESPONSE_TYPE_PARAM; } });
+Object.defineProperty(exports, "OINOContentType", { enumerable: true, get: function () { return OINOConstants_js_1.OINOContentType; } });
+Object.defineProperty(exports, "OINO_EMPTY_ROW", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_EMPTY_ROW; } });
+Object.defineProperty(exports, "OINO_EMPTY_ROWS", { enumerable: true, get: function () { return OINOConstants_js_1.OINO_EMPTY_ROWS; } });
+var OINODataModel_js_1 = require("./OINODataModel.js");
+Object.defineProperty(exports, "OINODataModel", { enumerable: true, get: function () { return OINODataModel_js_1.OINODataModel; } });
+var OINODataSource_js_1 = require("./OINODataSource.js");
+Object.defineProperty(exports, "OINODataSource", { enumerable: true, get: function () { return OINODataSource_js_1.OINODataSource; } });
+Object.defineProperty(exports, "OINODataSet", { enumerable: true, get: function () { return OINODataSource_js_1.OINODataSet; } });
+Object.defineProperty(exports, "OINOMemoryDataset", { enumerable: true, get: function () { return OINODataSource_js_1.OINOMemoryDataset; } });
+var OINODataField_js_1 = require("./OINODataField.js");
+Object.defineProperty(exports, "OINODataField", { enumerable: true, get: function () { return OINODataField_js_1.OINODataField; } });
+Object.defineProperty(exports, "OINOStringDataField", { enumerable: true, get: function () { return OINODataField_js_1.OINOStringDataField; } });
+Object.defineProperty(exports, "OINONumberDataField", { enumerable: true, get: function () { return OINODataField_js_1.OINONumberDataField; } });
+Object.defineProperty(exports, "OINOBooleanDataField", { enumerable: true, get: function () { return OINODataField_js_1.OINOBooleanDataField; } });
+Object.defineProperty(exports, "OINODatetimeDataField", { enumerable: true, get: function () { return OINODataField_js_1.OINODatetimeDataField; } });
+Object.defineProperty(exports, "OINOBlobDataField", { enumerable: true, get: function () { return OINODataField_js_1.OINOBlobDataField; } });
 var OINOFormatter_js_1 = require("./OINOFormatter.js");
 Object.defineProperty(exports, "OINOFormatter", { enumerable: true, get: function () { return OINOFormatter_js_1.OINOFormatter; } });
 Object.defineProperty(exports, "OINO_EMPTY_FORMATTER", { enumerable: true, get: function () { return OINOFormatter_js_1.OINO_EMPTY_FORMATTER; } });
 var OINOHeaders_js_1 = require("./OINOHeaders.js");
 Object.defineProperty(exports, "OINOHeaders", { enumerable: true, get: function () { return OINOHeaders_js_1.OINOHeaders; } });
-/** OINO error message prefix */
-exports.OINO_ERROR_PREFIX = "OINO ERROR";
-/** OINO warning message prefix */
-exports.OINO_WARNING_PREFIX = "OINO WARNING";
-/** OINO info message prefix */
-exports.OINO_INFO_PREFIX = "OINO INFO";
-/** OINO debug message prefix */
-exports.OINO_DEBUG_PREFIX = "OINO DEBUG";
-/** Name of the OINOContentType-parameter request */
-exports.OINO_REQUEST_TYPE_PARAM = "oinorequesttype";
-/** Name of the OINOContentType-parameter request */
-exports.OINO_RESPONSE_TYPE_PARAM = "oinoresponsetype";
-/**
- * Supported content format mime-types
- */
-var OINOContentType;
-(function (OINOContentType) {
-    /** JSON encoded data */
-    OINOContentType["json"] = "application/json";
-    /** CSV encoded data */
-    OINOContentType["csv"] = "text/csv";
-    /** Multipart encoded form data */
-    OINOContentType["formdata"] = "multipart/form-data";
-    /** URL encoded form data */
-    OINOContentType["urlencode"] = "application/x-www-form-urlencoded";
-    /** HTML encoded data (output only) */
-    OINOContentType["html"] = "text/html";
-})(OINOContentType || (exports.OINOContentType = OINOContentType = {}));
+var OINOHtmlTemplate_js_1 = require("./OINOHtmlTemplate.js");
+Object.defineProperty(exports, "OINOHtmlTemplate", { enumerable: true, get: function () { return OINOHtmlTemplate_js_1.OINOHtmlTemplate; } });
+var OINOLog_js_1 = require("./OINOLog.js");
+Object.defineProperty(exports, "OINOLog", { enumerable: true, get: function () { return OINOLog_js_1.OINOLog; } });
+Object.defineProperty(exports, "OINOLogLevel", { enumerable: true, get: function () { return OINOLog_js_1.OINOLogLevel; } });
+Object.defineProperty(exports, "OINOConsoleLog", { enumerable: true, get: function () { return OINOLog_js_1.OINOConsoleLog; } });
+var OINOModelSet_js_1 = require("./OINOModelSet.js");
+Object.defineProperty(exports, "OINOModelSet", { enumerable: true, get: function () { return OINOModelSet_js_1.OINOModelSet; } });
+var OINOParser_js_1 = require("./OINOParser.js");
+Object.defineProperty(exports, "OINOParser", { enumerable: true, get: function () { return OINOParser_js_1.OINOParser; } });
+var OINOQueryParams_js_1 = require("./OINOQueryParams.js");
+Object.defineProperty(exports, "OINOQueryBooleanOperation", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryBooleanOperation; } });
+Object.defineProperty(exports, "OINOQueryComparison", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryComparison; } });
+Object.defineProperty(exports, "OINOQueryNullCheck", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryNullCheck; } });
+Object.defineProperty(exports, "OINOQueryAggregateFunctions", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryAggregateFunctions; } });
+Object.defineProperty(exports, "OINOQuerySelect", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQuerySelect; } });
+Object.defineProperty(exports, "OINOQueryFilter", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryFilter; } });
+Object.defineProperty(exports, "OINOQueryOrder", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryOrder; } });
+Object.defineProperty(exports, "OINOQueryLimit", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryLimit; } });
+Object.defineProperty(exports, "OINOQueryAggregate", { enumerable: true, get: function () { return OINOQueryParams_js_1.OINOQueryAggregate; } });
+var OINORequest_js_1 = require("./OINORequest.js");
+Object.defineProperty(exports, "OINORequest", { enumerable: true, get: function () { return OINORequest_js_1.OINORequest; } });
+Object.defineProperty(exports, "OINOHttpRequest", { enumerable: true, get: function () { return OINORequest_js_1.OINOHttpRequest; } });
+var OINOResult_js_1 = require("./OINOResult.js");
+Object.defineProperty(exports, "OINOResult", { enumerable: true, get: function () { return OINOResult_js_1.OINOResult; } });
+Object.defineProperty(exports, "OINOHttpResult", { enumerable: true, get: function () { return OINOResult_js_1.OINOHttpResult; } });
+var OINOStr_js_1 = require("./OINOStr.js");
+Object.defineProperty(exports, "OINOStr", { enumerable: true, get: function () { return OINOStr_js_1.OINOStr; } });
+var OINOSwagger_js_1 = require("./OINOSwagger.js");
+Object.defineProperty(exports, "OINOSwagger", { enumerable: true, get: function () { return OINOSwagger_js_1.OINOSwagger; } });

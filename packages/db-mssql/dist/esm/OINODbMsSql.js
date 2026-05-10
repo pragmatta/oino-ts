@@ -3,16 +3,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult } from "@oino-ts/common";
-import { OINODb, OINODbDataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINODB_EMPTY_ROW, OINODB_EMPTY_ROWS } from "@oino-ts/db";
+import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
+import { OINODb, OINODbDataModel } from "@oino-ts/db";
 import { ConnectionPool } from "mssql";
 /**
- * Implmentation of OINODbDataSet for MsSql.
+ * Implmentation of OINODataSet for MsSql.
  *
  */
-class OINOMsSqlData extends OINODbDataSet {
+class OINOMsSqlData extends OINODataSet {
     _recordsets;
-    _rows = OINODB_EMPTY_ROWS;
+    _rows = OINO_EMPTY_ROWS;
     _currentRecordset;
     _currentRow;
     _eof;
@@ -84,7 +84,7 @@ class OINOMsSqlData extends OINODbDataSet {
             return this._rows[this._currentRow];
         }
         else {
-            return OINODB_EMPTY_ROW;
+            return OINO_EMPTY_ROW;
         }
     }
     /**
@@ -107,15 +107,15 @@ export class OINODbMsSql extends OINODb {
      */
     constructor(params) {
         super(params);
-        if (this._params.type !== "OINODbMsSql") {
-            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMsSql-type: " + this._params.type);
+        if (this.dbParams.type !== "OINODbMsSql") {
+            throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMsSql-type: " + this.dbParams.type);
         }
         this._pool = new ConnectionPool({
-            user: this._params.user,
-            password: this._params.password,
-            server: this._params.url,
-            port: this._params.port,
-            database: this._params.database,
+            user: this.dbParams.user,
+            password: this.dbParams.password,
+            server: this.dbParams.url,
+            port: this.dbParams.port,
+            database: this.dbParams.database,
             arrayRowMode: true,
             options: {
                 encrypt: true, // Use encryption for Azure SQL Database
@@ -124,7 +124,7 @@ export class OINODbMsSql extends OINODb {
                 trustServerCertificate: true // Change to false for production
             }
         });
-        delete this._params.password; // do not store password in db object
+        delete this.dbParams.password; // do not store password in db object
         this._pool.on("error", (conn) => {
             OINOLog.error("@oino-ts/db-mssql", "OINODbMsSql", "constructor", "OINODbMsSql error event", conn);
         });
@@ -138,7 +138,7 @@ export class OINODbMsSql extends OINODb {
         }
         catch (e) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_query", "exception in SQL query", { message: e.message, stack: e.stack, sql: sql });
-            return new OINOMsSqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMsSql._query");
+            return new OINOMsSqlData(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMsSql._query");
         }
     }
     async _exec(sql) {
@@ -150,7 +150,7 @@ export class OINODbMsSql extends OINODb {
         }
         catch (e) {
             OINOLog.exception("@oino-ts/db-mssql", "OINODbMsSql", "_exec", "exception in SQL exec", { message: e.message, stack: e.stack, sql: sql });
-            return new OINOMsSqlData(OINODB_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbMsSql._exec");
+            return new OINOMsSqlData(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbMsSql._exec");
         }
     }
     /**
@@ -159,7 +159,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlTable name of the table
      *
      */
-    printSqlTablename(sqlTable) {
+    printTableName(sqlTable) {
         return "[" + sqlTable + "]";
     }
     /**
@@ -168,7 +168,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlColumn name of the column
      *
      */
-    printSqlColumnname(sqlColumn) {
+    printColumnName(sqlColumn) {
         return "[" + sqlColumn + "]";
     }
     /**
@@ -176,20 +176,20 @@ export class OINODbMsSql extends OINODb {
      * type with the correct SQL escaping.
      *
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    printCellAsSqlValue(cellValue, sqlType) {
+    printCellAsValue(cellValue, nativeType) {
         if (cellValue === null) {
             return "NULL";
         }
         else if (cellValue === undefined) {
             return "UNDEFINED";
         }
-        else if ((sqlType == "int") || (sqlType == "smallint") || (sqlType == "float")) {
+        else if ((nativeType == "int") || (nativeType == "smallint") || (nativeType == "float")) {
             return cellValue.toString();
         }
-        else if ((sqlType == "longblob") || (sqlType == "binary") || (sqlType == "varbinary")) {
+        else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary")) {
             if (cellValue instanceof Buffer) {
                 return "0x" + cellValue.toString("hex") + "";
             }
@@ -200,11 +200,11 @@ export class OINODbMsSql extends OINODb {
                 return "'" + cellValue?.toString() + "'";
             }
         }
-        else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2") || (sqlType == "timestamp")) && (cellValue instanceof Date)) {
+        else if (((nativeType == "date") || (nativeType == "datetime") || (nativeType == "datetime2") || (nativeType == "timestamp")) && (cellValue instanceof Date)) {
             return "'" + cellValue.toISOString().substring(0, 23) + "'";
         }
         else {
-            return this.printSqlString(cellValue.toString());
+            return this.printStringValue(cellValue.toString());
         }
     }
     /**
@@ -213,7 +213,7 @@ export class OINODbMsSql extends OINODb {
      * @param sqlString string value
      *
      */
-    printSqlString(sqlString) {
+    printStringValue(sqlString) {
         return "'" + sqlString.replaceAll("'", "''") + "'";
     }
     /**
@@ -221,20 +221,20 @@ export class OINODbMsSql extends OINODb {
      * type.
      *
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    parseSqlValueAsCell(sqlValue, sqlType) {
+    parseValueAsCell(sqlValue, nativeType) {
         if ((sqlValue === null) || (sqlValue == "NULL")) {
             return null;
         }
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((sqlType == "date") || (sqlType == "datetime") || (sqlType == "datetime2")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
+        else if (((nativeType == "date") || (nativeType == "datetime") || (nativeType == "datetime2")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
-        else if (sqlType == "bit") {
+        else if (nativeType == "bit") {
             return (sqlValue === 1) || (sqlValue === true); // sometimes boolean and sometimes number
         }
         else {
@@ -331,7 +331,7 @@ export class OINODbMsSql extends OINODb {
         }
         OINOBenchmark.startMetric("OINODb", "validate");
         try {
-            const sql = this._getValidateSql(this._params.database);
+            const sql = this._getValidateSql(this.dbParams.database);
             const sql_res = await this._query(sql);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMsSql.validate");
@@ -440,15 +440,16 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
         return sql;
     }
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
+     * Initialize a data model by getting the SQL schema and populating OINODataFields of
      * the model.
      *
      * @param api api which data model to initialize.
      *
      */
     async initializeApiDatamodel(api) {
+        api.initializeDatamodel(new OINODbDataModel(api));
         //"SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX 
-        const schema_res = await this.sqlSelect(this._getSchemaSql(this._params.database, api.params.tableName));
+        const schema_res = await this.sqlSelect(this._getSchemaSql(this.dbParams.database, api.params.tableName));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";

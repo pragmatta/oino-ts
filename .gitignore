@@ -67,3 +67,7 @@ packages/types/package-lock.json
 samples/nodeApp/update_templates.ps1
 /packages/nosql/dist
 /packages/nosql-azure/dist
+/packages/blob-aws/node_modules
+/packages/blob-azure/node_modules
+/packages/nosql-aws/node_modules
+/packages/nosql-azure/node_modules

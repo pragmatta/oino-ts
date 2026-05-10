@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINOHtmlTemplate = void 0;
-const _1 = require(".");
+const OINOConstants_js_1 = require("./OINOConstants.js");
+const OINOStr_js_1 = require("./OINOStr.js");
+const OINOResult_js_1 = require("./OINOResult.js");
+const OINOBenchmark_js_1 = require("./OINOBenchmark.js");
 const OINOFormatter_1 = require("./OINOFormatter");
 /**
  * Class for rendering HTML from data.
@@ -66,7 +69,7 @@ class OINOHtmlTemplate {
         }
     }
     _createHttpResult(html) {
-        const result = new _1.OINOHttpResult({ body: html });
+        const result = new OINOResult_js_1.OINOHttpResult({ body: html });
         if (this.expires >= 1) {
             result.expires = Math.round(this.expires);
         }
@@ -111,7 +114,7 @@ class OINOHtmlTemplate {
      */
     setVariableFromValue(variable, value, escapeValue = true) {
         if (escapeValue) {
-            value = _1.OINOStr.encode(value, _1.OINOContentType.html);
+            value = OINOStr_js_1.OINOStr.encode(value, OINOConstants_js_1.OINOContentType.html);
         }
         this._variables[variable] = value;
     }
@@ -126,7 +129,7 @@ class OINOHtmlTemplate {
         if (object) {
             for (let key in object) {
                 if (escapeValue) {
-                    this._variables[key] = _1.OINOStr.encode(object[key], _1.OINOContentType.html);
+                    this._variables[key] = OINOStr_js_1.OINOStr.encode(object[key], OINOConstants_js_1.OINOContentType.html);
                 }
                 else {
                     this._variables[key] = object[key];
@@ -151,10 +154,10 @@ class OINOHtmlTemplate {
      *
      */
     renderFromKeyValue(key, value) {
-        _1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromKeyValue");
+        OINOBenchmark_js_1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromKeyValue");
         this.setVariableFromValue(key, value);
         const result = this.render();
-        _1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromKeyValue");
+        OINOBenchmark_js_1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromKeyValue");
         return result;
     }
     /**
@@ -164,10 +167,10 @@ class OINOHtmlTemplate {
      *
      */
     renderFromObject(object = true) {
-        _1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromObject");
+        OINOBenchmark_js_1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromObject");
         this.setVariableFromProperties(object);
         const result = this.render();
-        _1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromObject");
+        OINOBenchmark_js_1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromObject");
         return result;
     }
     /**
@@ -182,29 +185,29 @@ class OINOHtmlTemplate {
      *
      */
     renderFromResult(result, messageSeparator = "", includeErrorMessages = false, includeWarningMessages = false, includeInfoMessages = false, includeDebugMessages = false) {
-        _1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromResult");
+        OINOBenchmark_js_1.OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromResult");
         this.setVariableFromValue("status", result.status.toString());
         this.setVariableFromValue("statusText", result.statusText.toString());
         let messages = [];
         for (let i = 0; i < result.messages.length; i++) {
-            if (includeErrorMessages && result.messages[i].startsWith(_1.OINO_ERROR_PREFIX)) {
-                messages.push(_1.OINOStr.encode(result.messages[i], _1.OINOContentType.html));
+            if (includeErrorMessages && result.messages[i].startsWith(OINOConstants_js_1.OINO_ERROR_PREFIX)) {
+                messages.push(OINOStr_js_1.OINOStr.encode(result.messages[i], OINOConstants_js_1.OINOContentType.html));
             }
-            if (includeWarningMessages && result.messages[i].startsWith(_1.OINO_WARNING_PREFIX)) {
-                messages.push(_1.OINOStr.encode(result.messages[i], _1.OINOContentType.html));
+            if (includeWarningMessages && result.messages[i].startsWith(OINOConstants_js_1.OINO_WARNING_PREFIX)) {
+                messages.push(OINOStr_js_1.OINOStr.encode(result.messages[i], OINOConstants_js_1.OINOContentType.html));
             }
-            if (includeInfoMessages && result.messages[i].startsWith(_1.OINO_INFO_PREFIX)) {
-                messages.push(_1.OINOStr.encode(result.messages[i], _1.OINOContentType.html));
+            if (includeInfoMessages && result.messages[i].startsWith(OINOConstants_js_1.OINO_INFO_PREFIX)) {
+                messages.push(OINOStr_js_1.OINOStr.encode(result.messages[i], OINOConstants_js_1.OINOContentType.html));
             }
-            if (includeDebugMessages && result.messages[i].startsWith(_1.OINO_DEBUG_PREFIX)) {
-                messages.push(_1.OINOStr.encode(result.messages[i], _1.OINOContentType.html));
+            if (includeDebugMessages && result.messages[i].startsWith(OINOConstants_js_1.OINO_DEBUG_PREFIX)) {
+                messages.push(OINOStr_js_1.OINOStr.encode(result.messages[i], OINOConstants_js_1.OINOContentType.html));
             }
         }
         if (messageSeparator && (messages.length > 0)) {
             this.setVariableFromValue("messages", messages.join(messageSeparator), false); // messages have been escaped already
         }
         const http_result = this.render();
-        _1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromResult");
+        OINOBenchmark_js_1.OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromResult");
         return http_result;
     }
 }

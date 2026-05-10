@@ -3,277 +3,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { Buffer } from "node:buffer";
-import { OINOLog, OINOResult, OINOHttpRequest, OINOBenchmark, OINOHtmlTemplate, OINOContentType, OINO_ERROR_PREFIX } from "@oino-ts/common";
-import { OINODbDataModel, OINOStringDataField, OINODbModelSet, OINODbConfig, OINONumberDataField, OINODbParser, OINODatetimeDataField, OINODbSqlAggregate, OINODbSqlSelect, OINODbSqlFilter, OINODbSqlOrder, OINODbSqlLimit, OINODbSqlBooleanOperation } from "./index.js";
-import { OINOHashid } from "@oino-ts/hashid";
-export class OINODbApiRequest extends OINOHttpRequest {
-    rowId;
-    rowData;
-    sqlParams;
-    constructor(init) {
-        super(init);
-        this.rowId = init?.rowId || "";
-        this.rowData = init?.rowData || null; // rowData is not compatible with OINOHttpRequest body so it's not automatically set, caller can set both if needed
-        this.sqlParams = init?.sqlParams || {};
-        if (init?.filter) {
-            if (init.filter instanceof OINODbSqlFilter) {
-                this.sqlParams.filter = init.filter;
-            }
-            else {
-                this.sqlParams.filter = OINODbSqlFilter.parse(init.filter);
-            }
-        }
-        if (!this.sqlParams.filter) {
-            const filter_params = this.url?.searchParams.getAll(OINODbConfig.OINODB_SQL_FILTER_PARAM) || [];
-            for (let i = 0; i < filter_params.length; i++) {
-                const f = OINODbSqlFilter.parse(filter_params[i]);
-                if (i > 0) {
-                    this.sqlParams.filter = OINODbSqlFilter.combine(this.sqlParams.filter, OINODbSqlBooleanOperation.and, f);
-                }
-                else {
-                    this.sqlParams.filter = f;
-                }
-            }
-        }
-        if (init?.order) {
-            if (init.order instanceof OINODbSqlOrder) {
-                this.sqlParams.order = init.order;
-            }
-            else {
-                this.sqlParams.order = OINODbSqlOrder.parse(init.order);
-            }
-        }
-        if (!this.sqlParams.order) {
-            const order_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_ORDER_PARAM);
-            if (order_param) {
-                this.sqlParams.order = OINODbSqlOrder.parse(order_param);
-            }
-        }
-        if (init?.limit) {
-            if (init.limit instanceof OINODbSqlLimit) {
-                this.sqlParams.limit = init.limit;
-            }
-            else {
-                this.sqlParams.limit = OINODbSqlLimit.parse(init.limit);
-            }
-        }
-        if (!this.sqlParams.limit) {
-            const limit_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_LIMIT_PARAM);
-            if (limit_param) {
-                this.sqlParams.limit = OINODbSqlLimit.parse(limit_param);
-            }
-        }
-        if (init?.aggregate) {
-            if (init.aggregate instanceof OINODbSqlAggregate) {
-                this.sqlParams.aggregate = init.aggregate;
-            }
-            else {
-                this.sqlParams.aggregate = OINODbSqlAggregate.parse(init.aggregate);
-            }
-        }
-        if (!this.sqlParams.aggregate) {
-            const aggregate_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_AGGREGATE_PARAM);
-            if (aggregate_param) {
-                this.sqlParams.aggregate = OINODbSqlAggregate.parse(aggregate_param);
-            }
-        }
-        if (init?.select) {
-            if (init.select instanceof OINODbSqlSelect) {
-                this.sqlParams.select = init.select;
-            }
-            else {
-                this.sqlParams.select = OINODbSqlSelect.parse(init.select);
-            }
-        }
-        if (!this.sqlParams.select) {
-            const select_param = this.url?.searchParams.get(OINODbConfig.OINODB_SQL_SELECT_PARAM);
-            if (select_param) {
-                this.sqlParams.select = OINODbSqlSelect.parse(select_param);
-            }
-        }
-    }
-    static async fromFetchRequest(request, rowId, rowData, sqlParams) {
-        return new OINODbApiRequest({
-            url: new URL(request.url),
-            method: request.method,
-            headers: Object.fromEntries(request.headers),
-            rowId: rowId,
-            rowData: rowData ?? Buffer.from(await request.arrayBuffer()),
-            sqlParams: sqlParams
-        });
-    }
-    static fromHttpRequest(request, rowId, rowData, sqlParams) {
-        return new OINODbApiRequest({
-            url: typeof request.url === "string" ? new URL(request.url) : request.url,
-            method: request.method,
-            headers: Object.fromEntries(request.headers),
-            rowId: rowId,
-            rowData: rowData ?? request.bodyAsBuffer(),
-            requestType: request.requestType,
-            responseType: request.responseType,
-            multipartBoundary: request.multipartBoundary,
-            lastModified: request.lastModified,
-            sqlParams: sqlParams
-        });
-    }
-}
-/**
- * OINO API request result object with returned data and/or http status code/message and
- * error / warning messages.
- *
- */
-export class OINODbApiResult extends OINOResult {
-    /** DbApi request params */
-    request;
-    /** Returned data if any */
-    data;
-    /**
-     * Constructor of OINODbApiResult.
-     *
-     * @param request DbApi request parameters
-     * @param data result data
-     *
-     */
-    constructor(request, data) {
-        super();
-        this.request = request;
-        this.data = data;
-    }
-    /**
-     * Creates a HTTP Response from API results.
-     *
-     * @param headers Headers to include in the response
-     *
-     */
-    async writeApiResponse(headers = {}) {
-        let response = null;
-        if (this.success && this.data) {
-            const body = await this.data.writeString(this.request.responseType);
-            response = new Response(body, { status: this.status, statusText: this.statusText, headers: headers });
-        }
-        else {
-            response = new Response(JSON.stringify(this, null, 3), { status: this.status, statusText: this.statusText, headers: headers });
-        }
-        for (let i = 0; i < this.messages.length; i++) {
-            response.headers.set('X-OINO-MESSAGE-' + i, this.messages[i]);
-        }
-        return Promise.resolve(response);
-    }
-}
-/**
- * Specialized HTML template that can render ´OINODbApiResult´.
- *
- */
-export class OINODbHtmlTemplate extends OINOHtmlTemplate {
-    /** Locale validation regex */
-    static LOCALE_REGEX = /^(\w\w)(\-\w\w)?$/;
-    /** Locale formatter */
-    _locale;
-    _numberDecimals = -1;
-    /**
-     * Constructor of OINODbHtmlTemplate.
-     *
-     * @param template HTML template string
-     * @param numberDecimals Number of decimals to use for numbers, -1 for no formatting
-     * @param dateLocaleStr Datetime format string, either "iso" for ISO8601 or "default" for system default or valid locale string
-     * @param dateLocaleStyle Datetime format style, either "short/medium/long/full" or Intl.DateTimeFormat options
-     *
-     */
-    constructor(template, numberDecimals = -1, dateLocaleStr = "", dateLocaleStyle = "") {
-        super(template);
-        let locale_opts;
-        if ((dateLocaleStyle == null) || (dateLocaleStyle == "")) {
-            locale_opts = { dateStyle: "medium", timeStyle: "medium" };
-        }
-        else if (typeof dateLocaleStyle == "string") {
-            locale_opts = { dateStyle: dateLocaleStyle, timeStyle: dateLocaleStyle };
-        }
-        else {
-            locale_opts = dateLocaleStyle;
-        }
-        this._locale = null;
-        this._numberDecimals = numberDecimals;
-        if ((dateLocaleStr != null) && (dateLocaleStr != "") && OINODbHtmlTemplate.LOCALE_REGEX.test(dateLocaleStr)) {
-            try {
-                this._locale = new Intl.DateTimeFormat(dateLocaleStr, locale_opts);
-            }
-            catch (e) { }
-        }
-    }
-    /**
-     * Creates HTML Response from API modelset.
-     *
-     * @param modelset OINO API dataset
-     * @param overrideValues values to override in the data
-     *
-     */
-    async renderFromDbData(modelset, overrideValues) {
-        OINOBenchmark.startMetric("OINOHtmlTemplate", "renderFromDbData");
-        let html = "";
-        const dataset = modelset.dataset;
-        const datamodel = modelset.datamodel;
-        const api = modelset.datamodel.api;
-        const modified_index = datamodel.findFieldIndexByName(api.params.cacheModifiedField || "");
-        let last_modified = this.modified;
-        while (!dataset.isEof()) {
-            const row = dataset.getRow();
-            if (modified_index >= 0) {
-                last_modified = Math.max(last_modified, new Date(row[modified_index]).getTime());
-            }
-            let row_id_seed = datamodel.getRowPrimarykeyValues(row).join(' ');
-            let primary_key_values = [];
-            this.clearVariables();
-            this.setVariableFromValue(OINODbConfig.OINODB_ID_FIELD, "");
-            for (let i = 0; i < datamodel.fields.length; i++) {
-                const f = datamodel.fields[i];
-                let value;
-                if ((f instanceof OINODatetimeDataField) && (this._locale != null)) {
-                    value = f.serializeCellWithLocale(row[i], this._locale);
-                }
-                else if ((f instanceof OINONumberDataField) && (this._numberDecimals >= 0) && (typeof row[i] === "number")) {
-                    // console.debug("renderFromDbData number decimals", { field: f.name, value: row[i], type: typeof row[i] });
-                    value = row[i].toFixed(this._numberDecimals);
-                }
-                else {
-                    value = f.serializeCell(row[i]);
-                }
-                if (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) {
-                    if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
-                        value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed);
-                    }
-                    if (f.fieldParams.isPrimaryKey) {
-                        primary_key_values.push(value || "");
-                    }
-                }
-                this.setVariableFromValue(f.name, value || "");
-            }
-            this.setVariableFromProperties(overrideValues);
-            this.setVariableFromValue(OINODbConfig.OINODB_ID_FIELD, OINODbConfig.printOINOId(primary_key_values));
-            html += this._renderHtml() + "\r\n";
-            await dataset.next();
-        }
-        this.modified = last_modified;
-        const result = this._createHttpResult(html);
-        OINOBenchmark.endMetric("OINOHtmlTemplate", "renderFromDbData");
-        return result;
-    }
-}
+import { OINOApi, OINOLog, OINOBenchmark, OINOApiRequest, OINOApiResult, OINOContentType, OINOStringDataField, OINOConfig, OINOModelSet, OINOParser, OINO_ERROR_PREFIX } from "@oino-ts/common";
 /**
  * API class with method to process HTTP REST requests.
  *
  */
-export class OINODbApi {
-    /** Enable debug output on errors */
-    _debugOnError = false;
-    /** API database reference */
+export class OINODbApi extends OINOApi {
+    /** DB reference */
     db;
-    /** API datamodel */
-    datamodel;
-    /** API parameters */
-    params;
-    /** API hashid */
-    hashid;
+    /** DB parameters reference */
+    dbParams;
+    /** DB datamodel reference */
+    dbDatamodel = null;
     /**
      * Constructor of API object.
      * NOTE! OINODb.initDatamodel must be called if created manually instead of the factory.
@@ -283,23 +24,22 @@ export class OINODbApi {
      *
      */
     constructor(db, params) {
+        super(db, params);
         if (!params.tableName) {
-            throw new Error(OINO_ERROR_PREFIX + ": OINODbApiParams needs to define a table name!");
+            throw new Error(OINO_ERROR_PREFIX + ": OINOApiParams needs to define a table name!");
         }
         this.db = db;
-        this.params = params;
-        this.datamodel = new OINODbDataModel(this);
-        if (this.params.hashidKey) {
-            this.hashid = new OINOHashid(this.params.hashidKey, this.db.name, this.params.hashidLength, this.params.hashidStaticIds);
-        }
-        else {
-            this.hashid = null;
-        }
+        this.dbParams = params;
+    }
+    initializeDatamodel(datamodel) {
+        this.dbDatamodel = datamodel;
+        this.datamodel = datamodel;
+        this.initialized = true;
     }
     _validateRow(result, row, requirePrimaryKey) {
         let field;
-        for (let i = 0; i < this.datamodel.fields.length; i++) {
-            field = this.datamodel.fields[i];
+        for (let i = 0; i < this.dbDatamodel.fields.length; i++) {
+            field = this.dbDatamodel.fields[i];
             const val = row[i];
             if ((val === null) && ((field.fieldParams.isNotNull) || (field.fieldParams.isPrimaryKey))) { // null is a valid SQL value except if it's not allowed
                 result.setError(405, "Field '" + field.name + "' is not allowed to be NULL!", "ValidateRowValues");
@@ -307,14 +47,14 @@ export class OINODbApi {
             else if ((val === undefined) && (requirePrimaryKey) && (field.fieldParams.isPrimaryKey) && (!field.fieldParams.isAutoInc)) {
                 result.setError(405, "Primary key '" + field.name + "' is not autoinc and missing from the data!", "ValidateRowValues");
             }
-            else if ((val !== undefined) && (this.params.failOnUpdateOnAutoinc) && (field.fieldParams.isAutoInc)) {
+            else if ((val !== undefined) && (this.dbParams.failOnUpdateOnAutoinc) && (field.fieldParams.isAutoInc)) {
                 result.setError(405, "Autoinc field '" + field.name + "' can't be updated!", "ValidateRowValues");
             }
             else {
                 if ((field instanceof OINOStringDataField) && ((field.maxLength > 0))) {
                     const str_val = val?.toString() || "";
                     if (str_val.length > field.maxLength) {
-                        if (this.params.failOnOversizedValues) {
+                        if (this.dbParams.failOnOversizedValues) {
                             result.setError(405, "Field '" + field.name + "' length (" + str_val.length + ") exceeds maximum (" + field.maxLength + ") and can't be set!", "ValidateRowValues");
                         }
                         else {
@@ -334,7 +74,7 @@ export class OINODbApi {
                 rows = data;
             }
             else if (data != null) {
-                rows = OINODbParser.createRows(this.datamodel, data, request.requestType, request.multipartBoundary);
+                rows = OINOParser.createRows(this.datamodel, data, request.requestType, request.multipartBoundary);
             }
         }
         catch (e) {
@@ -345,7 +85,7 @@ export class OINODbApi {
     async _doGet(result, rowId, request) {
         let sql = "";
         try {
-            sql = this.datamodel.printSqlSelect(rowId, request.sqlParams || {});
+            sql = this.dbDatamodel.printSqlSelect(rowId, request.queryParams || {});
             OINOLog.debug("@oino-ts/db", "OINODbApi", "_doGet", "Print SQL", { sql: sql });
             const sql_res = await this.db.sqlSelect(sql);
             if (sql_res.success == false) {
@@ -355,7 +95,7 @@ export class OINODbApi {
                 }
             }
             else {
-                result.data = new OINODbModelSet(this.datamodel, sql_res, request.sqlParams);
+                result.data = new OINOModelSet(this.datamodel, sql_res, request.queryParams);
             }
         }
         catch (e) {
@@ -370,11 +110,11 @@ export class OINODbApi {
         let sql = "";
         try {
             for (let i = 0; i < rows.length; i++) {
-                this._validateRow(result, rows[i], this.params.failOnInsertWithoutKey || false);
+                this._validateRow(result, rows[i], this.dbParams.failOnInsertWithoutKey || false);
                 if (result.success) {
-                    sql += this.datamodel.printSqlInsert(rows[i]);
+                    sql += this.dbDatamodel.printSqlInsert(rows[i]);
                 }
-                else if (this.params.failOnAnyInvalidRows == false) {
+                else if (this.dbParams.failOnAnyInvalidRows == false) {
                     result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
                 }
             }
@@ -391,8 +131,8 @@ export class OINODbApi {
                         result.addDebug("OINO POST SQL [" + sql + "]", "DoPost");
                     }
                 }
-                else if (this.params.returnInsertedIds) {
-                    result.data = new OINODbModelSet(this.datamodel, sql_res, request.sqlParams); // return the inserted ids as data
+                else if (this.dbParams.returnInsertedIds) {
+                    result.data = new OINOModelSet(this.datamodel, sql_res, request.queryParams); // return the inserted ids as data
                 }
             }
         }
@@ -409,12 +149,12 @@ export class OINODbApi {
         try {
             // this._validateRowValues(result, row, false)
             for (let i = 0; i < rows.length; i++) {
-                const row_id = id || OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], this.hashid != null));
-                this._validateRow(result, rows[i], this.params.failOnInsertWithoutKey || false);
+                const row_id = id || OINOConfig.printOINOId(this.dbDatamodel.getRowPrimarykeyValues(rows[i], this.hashid != null));
+                this._validateRow(result, rows[i], this.dbParams.failOnInsertWithoutKey || false);
                 if (result.success) {
-                    sql += this.datamodel.printSqlUpdate(row_id, rows[i]);
+                    sql += this.dbDatamodel.printSqlUpdate(row_id, rows[i]);
                 }
-                else if (this.params.failOnAnyInvalidRows == false) {
+                else if (this.dbParams.failOnAnyInvalidRows == false) {
                     result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
                 }
             }
@@ -446,17 +186,17 @@ export class OINODbApi {
         try {
             if (rows != null) {
                 for (let i = 0; i < rows.length; i++) {
-                    const row_id = OINODbConfig.printOINOId(this.datamodel.getRowPrimarykeyValues(rows[i], this.hashid != null));
+                    const row_id = OINOConfig.printOINOId(this.dbDatamodel.getRowPrimarykeyValues(rows[i], this.hashid != null));
                     if (row_id) {
-                        sql += this.datamodel.printSqlDelete(row_id);
+                        sql += this.dbDatamodel.printSqlDelete(row_id);
                     }
-                    else if (this.params.failOnAnyInvalidRows == false) {
+                    else if (this.dbParams.failOnAnyInvalidRows == false) {
                         result.setOk(); // individual rows may fail and will just be messages in response similar to executing multiple sql statements
                     }
                 }
             }
             else if (id) {
-                sql = this.datamodel.printSqlDelete(id);
+                sql = this.dbDatamodel.printSqlDelete(id);
             }
             if ((sql == "") && result.success) {
                 result.setError(405, "No valid rows for DELETE!", "DoDelete"); // only set error if there are multiple rows and no valid sql was created
@@ -482,25 +222,17 @@ export class OINODbApi {
         }
     }
     /**
-     * Enable or disable debug output on errors.
-     *
-     * @param debugOnError true to enable debug output on errors, false to disable
-     */
-    setDebugOnError(debugOnError) {
-        this._debugOnError = debugOnError;
-    }
-    /**
      * Method for handling a HTTP REST request with GET, POST, PUT, DELETE corresponding to
      * SQL select, insert, update and delete.
      *
      * @param request OINO HTTP request object containing all parameters of the REST request
      * @param rowId URL id of the REST request
      * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
-     * @param sqlParams SQL parameters for the REST request
+     * @param queryParams SQL parameters for the REST request
      *
      */
-    async doHttpRequest(request, rowId, rowData, sqlParams) {
-        const api_request = OINODbApiRequest.fromHttpRequest(request, rowId, rowData, sqlParams);
+    async doHttpRequest(request, rowId, rowData, queryParams) {
+        const api_request = OINOApiRequest.fromHttpRequest(request, rowId, rowData, queryParams);
         return this.doApiRequest(api_request);
     }
     /**
@@ -510,17 +242,20 @@ export class OINODbApi {
      * @param method HTTP method of the REST request
      * @param rowId URL id of the REST request
      * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
-     * @param sqlParams SQL parameters for the REST request
+     * @param queryParams SQL parameters for the REST request
      * @param contentType content type of the HTTP body data, default is JSON
      *
      */
-    async doRequest(method, rowId, rowData, sqlParams, contentType = OINOContentType.json) {
-        return this.doApiRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams, requestType: contentType }));
+    async doRequest(method, rowId, rowData, queryParams, contentType = OINOContentType.json) {
+        return this.doApiRequest(new OINOApiRequest({ method: method, rowId: rowId, rowData: rowData, queryParams: queryParams, requestType: contentType }));
     }
     async doApiRequest(request) {
+        if (this.initialized == false) {
+            throw new Error(OINO_ERROR_PREFIX + ": API is not initialized yet!");
+        }
         OINOBenchmark.startMetric("OINODbApi", "doRequest." + request.method);
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doRequest", "Request", { method: request.method, id: request.rowId, data: request.rowData });
-        let result = new OINODbApiResult(request);
+        let result = new OINOApiResult(request);
         let rows = [];
         if ((request.method == "POST") || (request.method == "PUT")) {
             rows = this._parseData(result, request);
@@ -587,8 +322,8 @@ export class OINODbApi {
      * @param rowData HTTP body data as either serialized string or unserialized JS object or OINODataRow-array or Buffer/Uint8Array binary data
      *
      */
-    async doBatchUpdate(method, rowId, rowData, sqlParams) {
-        return this.doApiRequest(new OINODbApiRequest({ method: method, rowId: rowId, rowData: rowData, sqlParams: sqlParams }));
+    async doBatchUpdate(method, rowId, rowData, queryParams) {
+        return this.doApiRequest(new OINOApiRequest({ method: method, rowId: rowId, rowData: rowData, queryParams: queryParams }));
     }
     /**
      * Method for handling a HTTP REST request with batch update using PUT or DELETE methods.
@@ -596,9 +331,9 @@ export class OINODbApi {
      * @param request HTTP URL parameters as key-value-pairs
      *
      */
-    async runBatchUpdate(request) {
+    async doBatchApiRequest(request) {
         OINOLog.debug("@oino-ts/db", "OINODbApi", "doBatchUpdate", "Request", { request: request, data: request.rowData });
-        let result = new OINODbApiResult(request);
+        let result = new OINOApiResult(request);
         if ((request.method != "PUT") && (request.method != "DELETE")) {
             result.setError(500, "Batch update only supports PUT and DELETE methods!", "DoBatchUpdate");
             return Promise.resolve(result);

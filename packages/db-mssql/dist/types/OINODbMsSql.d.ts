@@ -1,5 +1,5 @@
-import { OINOResult } from "@oino-ts/common";
-import { OINODb, OINODbParams, OINODbDataSet, OINODbApi, OINODataCell } from "@oino-ts/db";
+import { OINOResult, OINODataSet, OINODataCell } from "@oino-ts/common";
+import { OINODb, OINODbApi, OINODbParams } from "@oino-ts/db";
 /**
  * Implementation of MsSql-database.
  *
@@ -19,39 +19,39 @@ export declare class OINODbMsSql extends OINODb {
      * @param sqlTable name of the table
      *
      */
-    printSqlTablename(sqlTable: string): string;
+    printTableName(sqlTable: string): string;
     /**
      * Print a column name with correct SQL escaping.
      *
      * @param sqlColumn name of the column
      *
      */
-    printSqlColumnname(sqlColumn: string): string;
+    printColumnName(sqlColumn: string): string;
     /**
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
      *
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    printCellAsSqlValue(cellValue: OINODataCell, sqlType: string): string;
+    printCellAsValue(cellValue: OINODataCell, nativeType: string): string;
     /**
      * Print a single string value as valid sql literal
      *
      * @param sqlString string value
      *
      */
-    printSqlString(sqlString: string): string;
+    printStringValue(sqlString: string): string;
     /**
      * Parse a single SQL result value for serialization using the context of the native data
      * type.
      *
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    parseSqlValueAsCell(sqlValue: OINODataCell, sqlType: string): OINODataCell;
+    parseValueAsCell(sqlValue: OINODataCell, nativeType: string): OINODataCell;
     /**
      * Print SQL select statement with DB specific formatting.
      *
@@ -95,18 +95,18 @@ export declare class OINODbMsSql extends OINODb {
      * @param sql SQL statement.
      *
      */
-    sqlSelect(sql: string): Promise<OINODbDataSet>;
+    sqlSelect(sql: string): Promise<OINODataSet>;
     /**
      * Execute other sql operations.
      *
      * @param sql SQL statement.
      *
      */
-    sqlExec(sql: string): Promise<OINODbDataSet>;
+    sqlExec(sql: string): Promise<OINODataSet>;
     private _getSchemaSql;
     private _getValidateSql;
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODbDataFields of
+     * Initialize a data model by getting the SQL schema and populating OINODataFields of
      * the model.
      *
      * @param api api which data model to initialize.
