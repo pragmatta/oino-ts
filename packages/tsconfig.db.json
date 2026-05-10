@@ -20,12 +20,18 @@
 
     "paths": {
       "@oino-ts/common": ["./common/src/index.ts"],
-      "@oino-ts/db": ["./db/src/index.ts"],
       "@oino-ts/hashid": ["./hashid/src/index.ts"],
+      "@oino-ts/db": ["./db/src/index.ts"],
       "@oino-ts/db-bunsqlite": ["./db-bunsqlite/src/index.ts"],
       "@oino-ts/db-mariadb": ["./db-mariadb/src/index.ts"],
       "@oino-ts/db-mssql": ["./db-mssql/src/index.ts"],
       "@oino-ts/db-postgresql": ["./db-postgresql/src/index.ts"],
+      "@oino-ts/blob": ["./blob/src/index.ts"],
+      "@oino-ts/blob-aws": ["./blob-aws/src/index.ts"],
+      "@oino-ts/blob-azure": ["./blob-azure/src/index.ts"],
+      "@oino-ts/nosql": ["./nosql/src/index.ts"],
+      "@oino-ts/nosql-aws": ["./nosql-aws/src/index.ts"],
+      "@oino-ts/nosql-azure": ["./nosql-azure/src/index.ts"],
       "@types/node": ["./db/node_modules/@types/node/index.d.ts"],
       "@types/bun": ["./db/node_modules/@types/bun/index.d.ts"],
       "pg": ["./db-postgresql/node_modules/@types/pg/index.d.ts"],
@@ -42,6 +48,12 @@
     "./db-mariadb/src/index.ts", 
     "./db-mssql/src/index.ts", 
     "./db-postgresql/src/index.ts",
+    "./blob/src/index.ts", 
+    "./blob-aws/src/index.ts", 
+    "./blob-azure/src/index.ts", 
+    "./nosql/src/index.ts", 
+    "./nosql-aws/src/index.ts", 
+    "./nosql-azure/src/index.ts", 
     "./hashid/src/index.ts"
   ],
   "exclude": [

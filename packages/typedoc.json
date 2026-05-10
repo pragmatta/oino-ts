@@ -6,7 +6,13 @@
         "./db-mariadb/src/index.ts",
         "./db-mssql/src/index.ts",
         "./db-postgresql/src/index.ts",
-        "./db/src/index.ts"
+        "./db/src/index.ts",
+        "./blob-aws/src/index.ts",
+        "./blob-azure/src/index.ts",
+        "./blob/src/index.ts",
+        "./nosql-aws/src/index.ts",
+        "./nosql-azure/src/index.ts",
+        "./nosql/src/index.ts"
     ],
     "entryPointStrategy": "resolve",
     "sortEntryPoints": true,
