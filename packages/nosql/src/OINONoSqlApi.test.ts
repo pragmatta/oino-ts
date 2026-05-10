@@ -8,7 +8,7 @@ import { expect, test } from "bun:test"
 
 import { OINONoSqlAzureTable } from "@oino-ts/nosql-azure"
 import { OINONoSqlAwsDynamo } from "@oino-ts/nosql-aws"
-import { OINOQueryFilter, OINOApiRequest, OINOApiResult, OINOConsoleLog, OINOLogLevel, OINOLog, OINOBenchmark, OINOContentType } from "@oino-ts/common"
+import { OINOQueryFilter, OINOApiRequest, OINOApiResult, OINOConsoleLog, OINOLogLevel, OINOLog, OINOBenchmark, OINOContentType, OINOConfig, type OINODataField, type OINODataRow } from "@oino-ts/common"
 
 import { OINONoSql, OINONoSqlApi, OINONoSqlFactory, type OINONoSqlParams } from "./index.js"
 
@@ -36,6 +36,8 @@ type OINONoSqlTestParams = {
     updateProperties: Record<string, unknown>
     /** A value that only appears in updateProperties (used to verify update was applied) */
     updateVerifyValue: string
+    /** A value that only appears in insertProperties (used to verify batch restore) */
+    insertVerifyValue: string
 }
 
 const NOSQL_STORAGES: OINONoSqlStorageParams[] = [
@@ -67,7 +69,8 @@ const NOSQL_TESTS: OINONoSqlTestParams[] = [
         testRowId: "OINOTest_nosql1-test",
         insertProperties: { CustomerID: "VINET", Freight: 32.38, ShipCity: "Reims" },
         updateProperties: { CustomerID: "VINET", Freight: 99.99, ShipCity: "Updated City" },
-        updateVerifyValue: "Updated City"
+        updateVerifyValue: "Updated City",
+        insertVerifyValue: "Reims"
     },
     {
         name: "NOSQL 2",
@@ -76,7 +79,8 @@ const NOSQL_TESTS: OINONoSqlTestParams[] = [
         testRowId: "OINOTest_nosql2-test",
         insertProperties: { CustomerID: "VINET", Freight: 32.38, ShipCity: "Reims" },
         updateProperties: { CustomerID: "VINET", Freight: 99.99, ShipCity: "Updated City" },
-        updateVerifyValue: "Updated City"
+        updateVerifyValue: "Updated City",
+        insertVerifyValue: "Reims"
     }
 ]
 
@@ -88,7 +92,8 @@ const NOSQL_CROSSCHECKS: string[] = [
     "[LIST FILTERED] list with filter: LIST FILTERED JSON 1",
     "[HTTP GET] fetch single entry: SINGLE JSON 1",
     "[HTTP GET] fetch missing entry: GET MISSING 1",
-
+    "[BATCH UPDATE] reversed values: GET reversed data 1",
+    "[BATCH UPDATE] reversed values: GET restored data 1"
 ]
 
 OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.warning))
@@ -291,6 +296,69 @@ export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testP
         const json = await verify_result.data!.writeString(OINOContentType.json)
         expect(json).toContain(testParams.updateVerifyValue)
     }, 30_000)
+
+    // ── BATCH UPDATE ──────────────────────────────────────────────────────
+    // NoSQL backends reject duplicate keys within a single batch, so use
+    // 3 *distinct* row IDs (derived from testRowId with -b1/-b2/-b3 suffixes)
+    // that all share the same partition key as testRowId.
+
+    target_group = "[BATCH UPDATE]"
+
+    const batch_pk_fields = api.noSqlDatamodel!.filterFields((f: OINODataField) => f.fieldParams.isPrimaryKey)
+    const batch_props_idx = api.noSqlDatamodel!.findFieldIndexByName("properties")
+
+    // Derive 3 distinct IDs that share the same partition key
+    const base_parts = OINOConfig.parseOINOId(testParams.testRowId)
+    const batch_ids = ["-b1", "-b2", "-b3"].map(suffix =>
+        OINOConfig.printOINOId([base_parts[0], base_parts.slice(1).join(OINOConfig.OINO_ID_SEPARATOR) + suffix])
+    )
+
+    const makeBatchRow = (rowId: string, props: Record<string, unknown>): OINODataRow => {
+        const pk_values = OINOConfig.parseOINOId(rowId)
+        const row: OINODataRow = new Array(api.noSqlDatamodel!.fields.length).fill(null) as OINODataRow
+        for (let i = 0; i < batch_pk_fields.length; i++) {
+            row[api.noSqlDatamodel!.fields.indexOf(batch_pk_fields[i])] = pk_values[i]
+        }
+        row[batch_props_idx] = JSON.stringify(props)
+        return row
+    }
+
+    await test(target_name + target_storage + target_group + " reversed values", async () => {
+        // Write updateProperties to all 3 distinct batch entries
+        const batch_rows_update = batch_ids.map(bid => makeBatchRow(bid, testParams.updateProperties))
+        const batch_update_result = await api.doBatchApiRequest(
+            new OINOApiRequest({ url: base_url, method: "PUT", rowData: batch_rows_update })
+        )
+        expect(batch_update_result.success).toBe(true)
+        expect(encodeResult(batch_update_result)).toMatchSnapshot("PUT reversed data")
+
+        // Verify the last entry has the update value
+        const batch_get_request = new OINOApiRequest({ url: base_url, method: "GET", rowId: batch_ids[2] })
+        const reversed_result: OINOApiResult = await api.doApiRequest(batch_get_request)
+        expect(reversed_result.success).toBe(true)
+        const reversed_json = await reversed_result.data!.writeString(OINOContentType.json)
+        expect(reversed_json).toContain(testParams.updateVerifyValue)
+        expect(stableNoSqlListing(reversed_json)).toMatchSnapshot("GET reversed data")
+
+        // Restore all 3 entries to insertProperties
+        const batch_rows_restore = batch_ids.map(bid => makeBatchRow(bid, testParams.insertProperties))
+        const batch_restore_result = await api.doBatchApiRequest(
+            new OINOApiRequest({ url: base_url, method: "PUT", rowData: batch_rows_restore })
+        )
+        expect(batch_restore_result.success).toBe(true)
+        expect(encodeResult(batch_restore_result)).toMatchSnapshot("PUT restored data")
+
+        const restored_result: OINOApiResult = await api.doApiRequest(batch_get_request)
+        expect(restored_result.success).toBe(true)
+        const restored_json = await restored_result.data!.writeString(OINOContentType.json)
+        expect(restored_json).toContain(testParams.insertVerifyValue)
+        expect(stableNoSqlListing(restored_json)).toMatchSnapshot("GET restored data")
+
+        // Clean up batch entries
+        for (const bid of batch_ids) {
+            await api.doApiRequest(new OINOApiRequest({ url: base_url, method: "DELETE", rowId: bid }))
+        }
+    }, 60_000)
 
     // ── DELETE ────────────────────────────────────────────────────────────
 

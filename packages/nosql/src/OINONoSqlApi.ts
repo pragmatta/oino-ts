@@ -19,6 +19,7 @@ import {
     OINOLog,
     OINOConfig,
     OINOParser,
+    OINOBenchmark,
     OINO_ERROR_PREFIX
 } from "@oino-ts/common"
 import { OINONoSql } from "./OINONoSql.js"
@@ -142,11 +143,12 @@ export class OINONoSqlApi extends OINOApi {
         })
         const properties_idx = this.noSqlDatamodel!.fields.findIndex(f => f.name === "properties")
         const raw = properties_idx >= 0 ? row[properties_idx] : undefined
-        const properties: Record<string, unknown> = raw == null
-            ? {}
-            : typeof raw === "string"
-                ? JSON.parse(raw) as Record<string, unknown>
-                : raw as Record<string, unknown>
+        let properties: Record<string, unknown> = {}
+        if (typeof raw === "string") {
+            properties = JSON.parse(raw) as Record<string, unknown>
+        } else if ((raw != null) && (typeof raw === "object") && !Array.isArray(raw) && !(raw instanceof Date) && !(raw instanceof Uint8Array)) {
+            properties = raw as Record<string, unknown>
+        }
         return { primaryKey: primary_key, timestamp: new Date(), etag: "", properties }
     }
 
@@ -315,6 +317,72 @@ export class OINONoSqlApi extends OINOApi {
             result.setError(405, "Unsupported HTTP method '" + request.method + "' for OINONoSqlApi", "DoRequest")
         }
 
+        return result
+    }
+
+    async doBatchUpdate(method: string, rowId: string, rowData: OINOApiData, queryParams?: OINOQueryParams): Promise<OINOApiResult> {
+        return this.doBatchApiRequest(new OINOApiRequest({ method, rowId, rowData, queryParams }))
+    }
+
+    async doBatchApiRequest(request: OINOApiRequest): Promise<OINOApiResult> {
+        if (!this.initialized) {
+            throw new Error(OINO_ERROR_PREFIX + ": OINONoSqlApi is not initialized yet!")
+        }
+        OINOLog.debug("@oino-ts/nosql", "OINONoSqlApi", "doBatchApiRequest", "Request",
+            { method: request.method })
+        const result = new OINOApiResult(request)
+        if (request.method !== "PUT" && request.method !== "DELETE") {
+            result.setError(405, "Batch API only supports PUT and DELETE methods!", "DoBatchApiRequest")
+            return result
+        }
+        OINOBenchmark.startMetric("OINONoSqlApi", "doBatchApiRequest." + request.method)
+        const rows = this._parseData(result, request)
+        if (!result.success) {
+            OINOBenchmark.endMetric("OINONoSqlApi", "doBatchApiRequest." + request.method, false)
+            return result
+        }
+        if (request.method === "PUT") {
+            const entries: OINONoSqlEntry[] = []
+            const require_pk = this.params.failOnInsertWithoutKey ?? !this.noSql.supportsAutoKey
+            for (const row of rows) {
+                this._validateRow(result, row, require_pk)
+                if (!result.success) {
+                    OINOBenchmark.endMetric("OINONoSqlApi", "doBatchApiRequest." + request.method, false)
+                    return result
+                }
+                entries.push(this._rowToEntry(row))
+            }
+            if (entries.length === 0) {
+                result.setError(405, "No valid rows for batch PUT!", "DoBatchApiRequest")
+                OINOBenchmark.endMetric("OINONoSqlApi", "doBatchApiRequest." + request.method, false)
+                return result
+            }
+            try {
+                await this.noSql.upsertEntries(entries)
+            } catch (e: any) {
+                result.setError(500, "Error batch upserting nosql entries: " + e.message, "DoBatchApiRequest")
+                OINOLog.exception("@oino-ts/nosql", "OINONoSqlApi", "doBatchApiRequest",
+                    "exception in batch put request", { message: e.message, stack: e.stack })
+            }
+        } else {
+            const pk_fields = this.noSqlDatamodel!.fields.filter(f => f.fieldParams.isPrimaryKey)
+            for (const row of rows) {
+                const pk_values = pk_fields.map(f => {
+                    const idx = this.noSqlDatamodel!.fields.indexOf(f)
+                    return String(row[idx] ?? "")
+                })
+                try {
+                    await this.noSql.deleteEntry(pk_values)
+                } catch (e: any) {
+                    result.setError(500, "Error batch deleting nosql entry: " + e.message, "DoBatchApiRequest")
+                    OINOLog.exception("@oino-ts/nosql", "OINONoSqlApi", "doBatchApiRequest",
+                        "exception in batch delete request", { message: e.message, stack: e.stack })
+                    OINOBenchmark.endMetric("OINONoSqlApi", "doBatchApiRequest." + request.method, false)
+                    return result
+                }
+            }
+        }
+        OINOBenchmark.endMetric("OINONoSqlApi", "doBatchApiRequest." + request.method, result.success)
         return result
     }
 
