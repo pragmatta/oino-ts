@@ -49,15 +49,6 @@ export abstract class OINONoSql extends OINODataSource {
         this.name = this.nosqlParams.table
     }
 
-    // ── OINODataSource passthrough stubs ──────────────────────────────────
-
-    printTableName(name: string): string {
-        return name
-    }
-
-    printColumnName(name: string): string {
-        return name
-    }
 
     printCellAsValue(cellValue: OINODataCell, nativeType: string): string {
         if (cellValue === null || cellValue === undefined) {
