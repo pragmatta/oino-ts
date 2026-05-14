@@ -89,10 +89,10 @@ export class OINODataField {
     }
 
     /**
-     * Print name of column as SQL.
+     * Print name of the field in datasource specific format.
      * 
      */
-    printColumnName():string {
+    printFieldName():string {
         return this.datasource.printColumnName(this.name)
     }
 }

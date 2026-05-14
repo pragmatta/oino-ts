@@ -76,10 +76,10 @@ export class OINODataField {
         return this.datasource.printCellAsValue(cellVal, this.nativeType);
     }
     /**
-     * Print name of column as SQL.
+     * Print name of the field in datasource specific format.
      *
      */
-    printColumnName() {
+    printFieldName() {
         return this.datasource.printColumnName(this.name);
     }
 }

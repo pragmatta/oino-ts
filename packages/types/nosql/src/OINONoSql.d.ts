@@ -29,8 +29,7 @@ export declare abstract class OINONoSql extends OINODataSource {
      * @param params nosql storage connection parameters
      */
     constructor(params: OINONoSqlParams);
-    printTableName(name: string): string;
-    printColumnName(name: string): string;
+    printColumnName(column: string): string;
     printCellAsValue(cellValue: OINODataCell, nativeType: string): string;
     printStringValue(s: string): string;
     parseValueAsCell(v: OINODataCell, nativeType: string): OINODataCell;

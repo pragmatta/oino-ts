@@ -18,8 +18,7 @@ export declare abstract class OINOBlob extends OINODataSource {
      * @param params blob storage connection parameters
      */
     constructor(params: OINOBlobParams);
-    printTableName(name: string): string;
-    printColumnName(name: string): string;
+    printColumnName(column: string): string;
     printCellAsValue(cellValue: OINODataCell, _sqlType: string): string;
     printStringValue(s: string): string;
     parseValueAsCell(v: OINODataCell, nativeType: string): OINODataCell;

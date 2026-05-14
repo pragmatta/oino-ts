@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@types/node": "^22.0.0",
-    "@types/bun": "^1.0.1",
+    "@types/bun": "^1.0.2",
     "typedoc": "^0.28.0"
   },
   "scripts": {

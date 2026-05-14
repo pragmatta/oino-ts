@@ -29,16 +29,8 @@ export class OINOBlob extends OINODataSource {
         this.blobParams = { ...params };
         this.name = this.blobParams.container;
     }
-    // ── OINODataSource passthrough stubs ──────────────────────────────────
-    // These are required by the abstract base class but are not meaningful
-    // for blob storage.  They return sensible no-op values so that
-    // OINODataField instances created by OINOBlobDataModel can function
-    // correctly for serialisation purposes.
-    printTableName(name) {
-        return name;
-    }
-    printColumnName(name) {
-        return name;
+    printColumnName(column) {
+        return column; // blob storage doesn't have column name formatting like sql (implementations can override if needed)
     }
     printCellAsValue(cellValue, _sqlType) {
         if (cellValue === null || cellValue === undefined) {

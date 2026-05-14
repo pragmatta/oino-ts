@@ -38,6 +38,8 @@ export type OINOApiParams = {
     hashidLength?: number;
     /** Make hashids static per row/table */
     hashidStaticIds?: boolean;
+    /** Defaults to api name but should be set to a domain unique value among those apis that need hashids to be compatible (e.g. hashid of a foreign key works in the main api)  */
+    hashidDomain?: string;
     /** Name of field that has the modified field */
     cacheModifiedField?: string;
     /** Return inserted id values */

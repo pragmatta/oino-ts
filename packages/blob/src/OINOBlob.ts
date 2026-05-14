@@ -37,18 +37,8 @@ export abstract class OINOBlob extends OINODataSource {
         this.name = this.blobParams.container
     }
 
-    // ── OINODataSource passthrough stubs ──────────────────────────────────
-    // These are required by the abstract base class but are not meaningful
-    // for blob storage.  They return sensible no-op values so that
-    // OINODataField instances created by OINOBlobDataModel can function
-    // correctly for serialisation purposes.
-
-    printTableName(name: string): string {
-        return name
-    }
-
-    printColumnName(name: string): string {
-        return name
+    printColumnName(column:string): string {
+        return column // blob storage doesn't have column name formatting like sql (implementations can override if needed)
     }
 
     printCellAsValue(cellValue: OINODataCell, _sqlType: string): string {

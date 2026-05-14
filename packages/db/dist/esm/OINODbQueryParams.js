@@ -52,7 +52,7 @@ export class OINODbQueryFilter extends OINOQueryFilter {
                 OINOLog.error("@oino-ts/db", "OINODbQueryFilter", "toSql", "Invalid field!", { field: filter.leftSide });
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbQueryFilter.toSql - Invalid field '" + filter.leftSide + "'"); // invalid field name could be a security risk, stop processing
             }
-            result += dataModel.api.datasource.printColumnName(field.name);
+            result += dataModel.dbApi.db.printColumnName(field.name);
         }
         result += OINODbQueryFilter.operatorToSql(filter);
         if (filter.rightSide instanceof OINOQueryFilter) {
@@ -100,7 +100,7 @@ export class OINODbQueryOrder extends OINOQueryOrder {
             if (result) {
                 result += ",";
             }
-            result += dataModel.api.datasource.printColumnName(field.name) + " ";
+            result += dataModel.dbApi.db.printColumnName(field.name) + " ";
             if (order.descending[i]) {
                 result += "DESC";
             }
@@ -157,7 +157,7 @@ export class OINODbQueryAggregate extends OINOQueryAggregate {
         for (let i = 0; i < dataModel.fields.length; i++) {
             const f = dataModel.fields[i];
             if ((select?.isSelected(f.name) || (f.fieldParams.isPrimaryKey == true)) && (aggregate.fields.includes(f.name) == false)) {
-                result += f.printColumnName() + ",";
+                result += f.printFieldName() + ",";
             }
         }
         result = result.substring(0, result.length - 1);
@@ -176,11 +176,11 @@ export class OINODbQueryAggregate extends OINOQueryAggregate {
         for (let i = 0; i < dataModel.fields.length; i++) {
             const f = dataModel.fields[i];
             if ((select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) { // if a field is not selected, we include an aggregated constant (min of const string) and correct fieldname instead so that dimensions of the data don't change, it does not need a group by but no unnecessary data is fetched
-                result += OINOQueryAggregateFunctions.min + "(" + f.datasource.printStringValue("") + ") as " + f.printColumnName() + ",";
+                result += OINOQueryAggregateFunctions.min + "(" + f.datasource.printStringValue("") + ") as " + f.printFieldName() + ",";
             }
             else {
                 const aggregate_index = aggregate.fields.indexOf(f.name);
-                const col_name = f.printColumnName();
+                const col_name = f.printFieldName();
                 if (aggregate_index >= 0) {
                     result += aggregate.functions[aggregate_index] + "(" + col_name + ") as " + col_name + ",";
                 }

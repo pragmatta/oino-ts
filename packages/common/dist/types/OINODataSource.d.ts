@@ -25,28 +25,21 @@ export declare abstract class OINODataSource {
      */
     abstract disconnect(): Promise<void>;
     /**
-     * Print a table name using database specific SQL escaping.
+     * Print a column name with correct datasource specific formatting.
      *
-     * @param sqlTable name of the table
-     *
-     */
-    abstract printTableName(sqlTable: string): string;
-    /**
-     * Print a column name with correct SQL escaping.
-     *
-     * @param sqlColumn name of the column
+     * @param column name of the column
      *
      */
-    abstract printColumnName(sqlColumn: string): string;
+    abstract printColumnName(column: string): string;
     /**
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
      *
      * @param cellValue data from sql results
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    abstract printCellAsValue(cellValue: OINODataCell, sqlType: string): string;
+    abstract printCellAsValue(cellValue: OINODataCell, nativeType: string): string;
     /**
      * Print a single string value as valid sql literal
      *
@@ -59,10 +52,10 @@ export declare abstract class OINODataSource {
      * type.
      *
      * @param sqlValue data from serialization
-     * @param sqlType native type name for table column
+     * @param nativeType native type name for table column
      *
      */
-    abstract parseValueAsCell(sqlValue: OINODataCell, sqlType: string): OINODataCell;
+    abstract parseValueAsCell(sqlValue: OINODataCell, nativeType: string): OINODataCell;
     /**
      * Initialize a data model by getting the SQL schema and populating OINODataFields of
      * the model.
