@@ -282,13 +282,21 @@ export class OINOApiHtmlTemplate extends OINOHtmlTemplate {
                 last_modified = Math.max(last_modified, new Date(row[modified_index] as Date).getTime())
             }
             let row_id_seed:string = datamodel.getRowPrimarykeyValues(row).join(' ')
-            let primary_key_values:string[] = []
+            let encoded_primary_key_values:string[] = []
             this.clearVariables()
             this.setVariableFromValue(OINOConfig.OINO_ID_FIELD, "")
             for (let i=0; i<datamodel.fields.length; i++) {
                 const f:OINODataField = datamodel.fields[i]
                 let value:string|null|undefined 
-                if ((f instanceof OINODatetimeDataField) && (this._locale != null)) {
+                if (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) {
+                    value = row[i]
+                    if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
+                        value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
+                    }
+                    if (f.fieldParams.isPrimaryKey) {
+                        encoded_primary_key_values.push(value || "")
+                    }
+                } else if ((f instanceof OINODatetimeDataField) && (this._locale != null)) {
                     value = f.serializeCellWithLocale(row[i], this._locale)
 
                 } else if ((f instanceof OINONumberDataField) && (this._numberDecimals >= 0) && (typeof row[i] === "number")) {
@@ -298,18 +306,10 @@ export class OINOApiHtmlTemplate extends OINOHtmlTemplate {
                 } else {
                     value = f.serializeCell(row[i])
                 }
-                if (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) {
-                    if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
-                        value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
-                    }
-                    if (f.fieldParams.isPrimaryKey) {
-                        primary_key_values.push(value || "")
-                    }
-                }
                 this.setVariableFromValue(f.name, value || "")
             }
             this.setVariableFromProperties(overrideValues)
-            this.setVariableFromValue(OINOConfig.OINO_ID_FIELD, OINOConfig.printOINOId(primary_key_values))
+            this.setVariableFromValue(OINOConfig.OINO_ID_FIELD, OINOConfig.printOINOId(encoded_primary_key_values))
             html += this._renderHtml() + "\r\n"
             await dataset.next()
         }

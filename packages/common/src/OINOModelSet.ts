@@ -48,14 +48,14 @@ export class OINOModelSet {
         this.errors = this.dataset.messages
     }
 
-    private _encodeAndHashFieldValue(field:OINODataField, value:string|null, contentType:OINOContentType, primaryKeyValues:string[], rowIdSeed:string):string {
+    private _encodeAndHashFieldValue(field:OINODataField, value:string|null, contentType:OINOContentType, primaryKeyValuesEncoded:string[], rowIdSeed:string):string {
         let result:string
         if (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) {
             if (value && (field instanceof OINONumberDataField) && (this.datamodel.api.hashid) && ((this.queryParams?.aggregate === undefined) || (this.queryParams.aggregate.isAggregated(field.name) == false))) {
                 value = this.datamodel.api.hashid.encode(value, rowIdSeed)
             }
             if (field.fieldParams.isPrimaryKey) {
-                primaryKeyValues.push(value || "")
+                primaryKeyValuesEncoded.push(value || "")
             }
         }  
         result = OINOStr.encode(value, contentType)
@@ -67,7 +67,7 @@ export class OINOModelSet {
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
-        let primary_key_values:string[] = []
+        let encoded_primary_key_values:string[] = []
         let json_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
@@ -85,14 +85,14 @@ export class OINOModelSet {
 
                 let is_hashed:boolean = (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) && (f instanceof OINONumberDataField) && (this.datamodel.api.hashid != null)
                 let is_value = (f instanceof OINOBooleanDataField) || ((f instanceof OINONumberDataField) && !is_hashed)
-                value = this._encodeAndHashFieldValue(f, value, OINOContentType.json, primary_key_values, f.name + " " + row_id_seed)
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.json, encoded_primary_key_values, f.name + " " + row_id_seed)
                 if (is_value) {
                     value = value.substring(1, value.length-1)
                 }
                 json_row += "," + OINOStr.encode(f.name, OINOContentType.json) + ":" + value
             }
         }
-        json_row = OINOStr.encode(OINOConfig.OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINOConfig.printOINOId(primary_key_values), OINOContentType.json) + json_row
+        json_row = OINOStr.encode(OINOConfig.OINO_ID_FIELD, OINOContentType.json) + ":" + OINOStr.encode(OINOConfig.printOINOId(encoded_primary_key_values), OINOContentType.json) + json_row
         return "{" + json_row + "}"
     }
 
@@ -127,7 +127,7 @@ export class OINOModelSet {
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
-        let primary_key_values:string[] = []
+        let encoded_primary_key_values:string[] = []
         let csv_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
@@ -139,11 +139,11 @@ export class OINOModelSet {
                 csv_row += "," + OINOStr.encode(value, OINOContentType.csv) // either null or undefined
     
             } else {
-                value = this._encodeAndHashFieldValue(f, value, OINOContentType.csv, primary_key_values, f.name + " " + row_id_seed)
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.csv, encoded_primary_key_values, f.name + " " + row_id_seed)
                 csv_row += "," + value        
             }
         }
-        csv_row = OINOStr.encode(OINOConfig.printOINOId(primary_key_values), OINOContentType.csv) + csv_row
+        csv_row = OINOStr.encode(OINOConfig.printOINOId(encoded_primary_key_values), OINOContentType.csv) + csv_row
         return csv_row
     }
 
@@ -177,7 +177,7 @@ export class OINOModelSet {
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
-        let primary_key_values:string[] = []
+        let encoded_primary_key_values:string[] = []
         let result:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
@@ -195,7 +195,7 @@ export class OINOModelSet {
                 formdata_block = this._writeRowFormdataParameterBlock(fields[i].name, null, multipart_boundary)
             
             } else {
-                value = this._encodeAndHashFieldValue(f, value, OINOContentType.formdata, primary_key_values, f.name + " " + row_id_seed)
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.formdata, encoded_primary_key_values, f.name + " " + row_id_seed)
                 if (is_file) {
                     formdata_block = this._writeRowFormdataFileBlock(f.name, value, multipart_boundary)
                 } else {
@@ -205,7 +205,7 @@ export class OINOModelSet {
 
             result += formdata_block
         }
-        result = this._writeRowFormdataParameterBlock(OINOConfig.OINO_ID_FIELD, OINOConfig.printOINOId(primary_key_values), multipart_boundary) + result
+        result = this._writeRowFormdataParameterBlock(OINOConfig.OINO_ID_FIELD, OINOConfig.printOINOId(encoded_primary_key_values), multipart_boundary) + result
         return result
     }
 
@@ -220,7 +220,7 @@ export class OINOModelSet {
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
-        let primary_key_values:string[] = []
+        let encoded_primary_key_values:string[] = []
         let urlencode_row:string = ""
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
@@ -231,14 +231,14 @@ export class OINOModelSet {
             if ((value === undefined)) { // || (value === null)) {
                 // console.log("OINOModelSet._writeRowUrlencode undefined field value:" + fields[i].name)
             } else {
-                value = this._encodeAndHashFieldValue(f, value, OINOContentType.urlencode, primary_key_values, f.name + " " + row_id_seed)
+                value = this._encodeAndHashFieldValue(f, value, OINOContentType.urlencode, encoded_primary_key_values, f.name + " " + row_id_seed)
                 if (urlencode_row != "") {
                     urlencode_row += "&"
                 } 
                 urlencode_row += OINOStr.encode(f.name, OINOContentType.urlencode) + "=" + value
             }
         }
-        urlencode_row = OINOStr.encode(OINOConfig.OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINOConfig.printOINOId(primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row
+        urlencode_row = OINOStr.encode(OINOConfig.OINO_ID_FIELD, OINOContentType.urlencode) + "=" + OINOStr.encode(OINOConfig.printOINOId(encoded_primary_key_values), OINOContentType.urlencode) + "&" + urlencode_row
         return urlencode_row
     }
 
@@ -262,12 +262,12 @@ export class OINOModelSet {
         const model:OINODataModel = this.datamodel
         const fields:OINODataField[] = model.fields
         let row_id_seed:string = model.getRowPrimarykeyValues(row).join(' ')
-        let primary_key_values:string[] = []
+        let encoded_primary_key_values:string[] = []
         let result:any = {}
         for (let i=0; i<fields.length; i++) {
             const f = fields[i]
             if (f.fieldParams.isPrimaryKey) {
-                primary_key_values.push(f.serializeCell(row[i]) || "")
+                encoded_primary_key_values.push(f.serializeCell(row[i]) || "")
             }
             if ((this.queryParams?.select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) {
                 continue
@@ -283,7 +283,7 @@ export class OINOModelSet {
                 result[f.name] = value
             }
         }
-        result[OINOConfig.OINO_ID_FIELD] = OINOConfig.printOINOId(primary_key_values)
+        result[OINOConfig.OINO_ID_FIELD] = OINOConfig.printOINOId(encoded_primary_key_values)
         return result
     }
 
