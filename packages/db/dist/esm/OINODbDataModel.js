@@ -86,8 +86,8 @@ export class OINODbDataModel extends OINODataModel {
                     result += " AND ";
                 }
                 let value = decodeURIComponent(id_parts[i]);
-                if ((f instanceof OINONumberDataField) && (this.api.hashid)) {
-                    value = this.api.hashid.decode(value);
+                if ((f instanceof OINONumberDataField) && (this.dbApi.hashid)) {
+                    value = this.dbApi.hashid.decode(value);
                 }
                 value = f.printCellAsValue(value);
                 if (value == "") { // ids are user input and could be specially crafted to be empty

@@ -71,3 +71,5 @@ samples/nodeApp/update_templates.ps1
 /packages/blob-azure/node_modules
 /packages/nosql-aws/node_modules
 /packages/nosql-azure/node_modules
+*.lock
+packages/publish_packages.ps1

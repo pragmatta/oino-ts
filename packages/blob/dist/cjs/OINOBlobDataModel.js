@@ -1,0 +1,69 @@
+"use strict";
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OINOBlobDataModel = void 0;
+const common_1 = require("@oino-ts/common");
+/**
+ * Static data model for blob listings.
+ *
+ * Fields are added by the blob implementation's `initializeApiDatamodel`
+ * method, so the exact set depends on what the storage backend supports.
+ * The canonical order is:
+ *   1. `name`          – full blob name (primary key, string)
+ *   2. `etag`          – entity tag (string)
+ *   3. `lastModified`  – last modification timestamp (datetime)
+ *   4. `contentLength` – size in bytes (number)
+ *   5. `contentType`   – MIME type (string) – omitted when not supported
+ */
+class OINOBlobDataModel extends common_1.OINODataModel {
+    /** Reference to the owning blob API */
+    blobApi;
+    /**
+     * Constructor.  Fields are added externally by the blob implementation
+     * via `initializeApiDatamodel`.
+     *
+     * @param api the `OINOBlobApi` that owns this data model
+     */
+    constructor(api) {
+        super(api);
+        this.blobApi = api;
+    }
+    /**
+     * Convert an array of blob entries into an in-memory dataset whose
+     * columns match the fields present in this model.
+     *
+     * @param entries blob entries from the storage backend
+     */
+    entriesToDataset(entries) {
+        const fieldNames = this.fields.map(f => f.name);
+        const rows = entries.map(e => {
+            const row = [];
+            for (const name of fieldNames) {
+                switch (name) {
+                    case "name":
+                        row.push(e.name);
+                        break;
+                    case "etag":
+                        row.push(e.etag);
+                        break;
+                    case "lastModified":
+                        row.push(e.lastModified);
+                        break;
+                    case "contentLength":
+                        row.push(e.contentLength);
+                        break;
+                    case "contentType":
+                        row.push(e.contentType);
+                        break;
+                }
+            }
+            return row;
+        });
+        return new common_1.OINOMemoryDataset(rows);
+    }
+}
+exports.OINOBlobDataModel = OINOBlobDataModel;
