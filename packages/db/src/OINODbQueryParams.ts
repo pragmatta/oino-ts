@@ -57,7 +57,7 @@ export class OINODbQueryFilter extends OINOQueryFilter {
                 OINOLog.error("@oino-ts/db", "OINODbQueryFilter", "toSql", "Invalid field!", {field:filter.leftSide})
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbQueryFilter.toSql - Invalid field '" + filter.leftSide + "'") // invalid field name could be a security risk, stop processing
             }
-            result += dataModel.api.datasource.printColumnName(field.name)
+            result += dataModel.dbApi.db.printColumnName(field.name)
         }
         result += OINODbQueryFilter.operatorToSql(filter)
         if (filter.rightSide instanceof OINOQueryFilter) {
@@ -106,7 +106,7 @@ export class OINODbQueryOrder extends OINOQueryOrder {
             if (result) {
                 result += ","
             }
-            result += dataModel.api.datasource.printColumnName(field.name) + " "
+            result += dataModel.dbApi.db.printColumnName(field.name) + " "
             if (order.descending[i]) {
                 result += "DESC"
             } else {
