@@ -37,6 +37,10 @@ export abstract class OINOBlob extends OINODataSource {
         this.name = this.blobParams.container
     }
 
+    printColumnName(column:string): string {
+        return column // blob storage doesn't have column name formatting like sql (implementations can override if needed)
+    }
+
     printCellAsValue(cellValue: OINODataCell, _sqlType: string): string {
         if (cellValue === null || cellValue === undefined) {
             return ""

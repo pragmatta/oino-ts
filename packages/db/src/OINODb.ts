@@ -57,14 +57,6 @@ export abstract class OINODb extends OINODataSource {
     abstract printTableName(sqlTable:string): string
 
     /**
-     * Print a column name with correct SQL escaping.
-     * 
-     * @param sqlColumn name of the column
-     *
-     */
-    abstract printColumnName(sqlColumn:string): string
-
-    /**
      * Print SQL select statement with DB specific formatting.
      * 
      * @param tableName - The name of the table to select from.

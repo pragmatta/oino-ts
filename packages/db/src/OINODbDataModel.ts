@@ -39,9 +39,9 @@ export class OINODbDataModel extends OINODataModel {
         for (let i=0; i < this.fields.length; i++) {
             const f:OINODataField = this.fields[i]
             if ((select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
-                result += f.datasource.printStringValue(OINODB_UNDEFINED) + " as " + f.printColumnName()+","
+                result += f.datasource.printStringValue(OINODB_UNDEFINED) + " as " + f.printFieldName()+","
             } else {
-                result += f.printColumnName()+","
+                result += f.printFieldName()+","
             }
         }
         return result.substring(0, result.length-1)
@@ -59,7 +59,7 @@ export class OINODbDataModel extends OINODataModel {
                     columns += ",";
                     values += ",";
                 }
-                columns += f.printColumnName();
+                columns += f.printFieldName();
                 values += f.printCellAsValue(val);
             }
         }
@@ -76,7 +76,7 @@ export class OINODbDataModel extends OINODataModel {
                 if (result != "") {
                     result += ",";
                 }
-                result += f.printColumnName() + "=" + f.printCellAsValue(val);
+                result += f.printFieldName() + "=" + f.printCellAsValue(val);
             }
         }
         if (result == "") {
@@ -102,7 +102,7 @@ export class OINODbDataModel extends OINODataModel {
                 if (value == "") { // ids are user input and could be specially crafted to be empty
                     throw new Error(OINO_ERROR_PREFIX + ": invalid id value '" + id_value + "' for table " + this.api.params.tableName)
                 }
-                result += f.printColumnName() + "=" + value; 
+                result += f.printFieldName() + "=" + value; 
                 i = i + 1
             }
         }

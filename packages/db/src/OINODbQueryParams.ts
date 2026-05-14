@@ -166,7 +166,7 @@ export class OINODbQueryAggregate extends OINOQueryAggregate {
         for (let i=0; i<dataModel.fields.length; i++) {
             const f = dataModel.fields[i]
             if ((select?.isSelected(f.name) || (f.fieldParams.isPrimaryKey == true)) && (aggregate.fields.includes(f.name) == false)) {
-                result += f.printColumnName() + ","
+                result += f.printFieldName() + ","
             }
         }
         result = result.substring(0, result.length-1)
@@ -186,11 +186,11 @@ export class OINODbQueryAggregate extends OINOQueryAggregate {
         for (let i=0; i<dataModel.fields.length; i++) {
             const f:OINODataField = dataModel.fields[i]
             if ((select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) { // if a field is not selected, we include an aggregated constant (min of const string) and correct fieldname instead so that dimensions of the data don't change, it does not need a group by but no unnecessary data is fetched
-                result += OINOQueryAggregateFunctions.min + "(" + f.datasource.printStringValue("") + ") as " + f.printColumnName()+","
+                result += OINOQueryAggregateFunctions.min + "(" + f.datasource.printStringValue("") + ") as " + f.printFieldName()+","
 
             } else {
                 const aggregate_index = aggregate.fields.indexOf(f.name)
-                const col_name = f.printColumnName()
+                const col_name = f.printFieldName()
                 if (aggregate_index >= 0) {
                     result += aggregate.functions[aggregate_index] + "(" + col_name + ") as " + col_name + ","
                 } else {

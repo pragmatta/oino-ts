@@ -49,6 +49,9 @@ export abstract class OINONoSql extends OINODataSource {
         this.name = this.nosqlParams.table
     }
 
+    printColumnName(column:string): string {
+        return column // nosql storage doesn't have column name formatting like sql (implementations can override if needed)
+    }
 
     printCellAsValue(cellValue: OINODataCell, nativeType: string): string {
         if (cellValue === null || cellValue === undefined) {

@@ -31,6 +31,14 @@ export abstract class OINODataSource {
     abstract disconnect(): Promise<void>    
 
     /**
+     * Print a column name with correct datasource specific formatting.
+     * 
+     * @param column name of the column
+     *
+     */
+    abstract printColumnName(column:string): string
+
+    /**
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
      * 
