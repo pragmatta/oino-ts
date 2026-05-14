@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/db-mssql",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "OINO TS package for using Microsoft Sql databases.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -22,8 +22,8 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/db": "1.0.1",
-    "mssql": "^11.0.1"
+    "@oino-ts/db": "1.0.3",
+    "mssql": "^11.0.3"
   },
   "devDependencies": {
     "@types/bun": "^1.1.14",
