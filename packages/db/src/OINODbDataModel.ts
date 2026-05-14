@@ -100,7 +100,7 @@ export class OINODbDataModel extends OINODataModel {
                 }
                 value = f.printCellAsValue(value)
                 if (value == "") { // ids are user input and could be specially crafted to be empty
-                    throw new Error(OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName)
+                    throw new Error(OINO_ERROR_PREFIX + ": invalid id value '" + id_value + "' for table " + this.api.params.tableName)
                 }
                 result += f.printColumnName() + "=" + value; 
                 i = i + 1

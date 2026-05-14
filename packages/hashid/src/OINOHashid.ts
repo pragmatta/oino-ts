@@ -105,8 +105,12 @@ export class OINOHashid {
         const cryptobytes:Buffer = Buffer.from(hashidEncoder.decode(cryptotext))
         const decipher = createDecipheriv('aes-128-gcm', this._key as Uint8Array, this._iv as Uint8Array)
         const plaintext = decipher.update(cryptobytes as Uint8Array, undefined, 'utf8') 
-        
-        return plaintext.split(" ")[0]
+        const separator_index = plaintext.indexOf(" ")
+        if (separator_index > 0) {
+            return plaintext.substring(0, separator_index)
+        } else {
+            return ""
+        }
     }
 
 
