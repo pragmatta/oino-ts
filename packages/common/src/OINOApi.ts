@@ -289,7 +289,7 @@ export class OINOApiHtmlTemplate extends OINOHtmlTemplate {
                 const f:OINODataField = datamodel.fields[i]
                 let value:string|null|undefined 
                 if (f.fieldParams.isPrimaryKey || f.fieldParams.isForeignKey) {
-                    value = row[i]
+                    value = f.serializeCell(row[i])
                     if (value && (f instanceof OINONumberDataField) && (datamodel.api.hashid)) {
                         value = datamodel.api.hashid.encode(value, f.name + " " + row_id_seed)
                     }
