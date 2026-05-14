@@ -35,10 +35,10 @@ class OINODbDataModel extends common_1.OINODataModel {
         for (let i = 0; i < this.fields.length; i++) {
             const f = this.fields[i];
             if ((select?.isSelected(f.name) === false) && (f.fieldParams.isPrimaryKey == false)) { // if a field is not selected, we include a constant and correct fieldname instead so that dimensions of the data don't change but no unnecessary data is fetched
-                result += f.datasource.printStringValue(OINODbConstants_js_1.OINODB_UNDEFINED) + " as " + f.printColumnName() + ",";
+                result += f.datasource.printStringValue(OINODbConstants_js_1.OINODB_UNDEFINED) + " as " + f.printFieldName() + ",";
             }
             else {
-                result += f.printColumnName() + ",";
+                result += f.printFieldName() + ",";
             }
         }
         return result.substring(0, result.length - 1);
@@ -55,7 +55,7 @@ class OINODbDataModel extends common_1.OINODataModel {
                     columns += ",";
                     values += ",";
                 }
-                columns += f.printColumnName();
+                columns += f.printFieldName();
                 values += f.printCellAsValue(val);
             }
         }
@@ -71,7 +71,7 @@ class OINODbDataModel extends common_1.OINODataModel {
                 if (result != "") {
                     result += ",";
                 }
-                result += f.printColumnName() + "=" + f.printCellAsValue(val);
+                result += f.printFieldName() + "=" + f.printCellAsValue(val);
             }
         }
         if (result == "") {
@@ -94,9 +94,9 @@ class OINODbDataModel extends common_1.OINODataModel {
                 }
                 value = f.printCellAsValue(value);
                 if (value == "") { // ids are user input and could be specially crafted to be empty
-                    throw new Error(common_1.OINO_ERROR_PREFIX + ": empty condition for id '" + id_value + "' for table " + this.api.params.tableName);
+                    throw new Error(common_1.OINO_ERROR_PREFIX + ": invalid id value '" + id_value + "' for table " + this.api.params.tableName);
                 }
-                result += f.printColumnName() + "=" + value;
+                result += f.printFieldName() + "=" + value;
                 i = i + 1;
             }
         }

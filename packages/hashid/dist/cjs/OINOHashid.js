@@ -97,7 +97,13 @@ class OINOHashid {
         const cryptobytes = Buffer.from(hashidEncoder.decode(cryptotext));
         const decipher = (0, node_crypto_1.createDecipheriv)('aes-128-gcm', this._key, this._iv);
         const plaintext = decipher.update(cryptobytes, undefined, 'utf8');
-        return plaintext.split(" ")[0];
+        const separator_index = plaintext.indexOf(" ");
+        if (separator_index > 0) {
+            return plaintext.substring(0, separator_index);
+        }
+        else {
+            return "";
+        }
     }
 }
 exports.OINOHashid = OINOHashid;

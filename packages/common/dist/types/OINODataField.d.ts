@@ -51,10 +51,10 @@ export declare class OINODataField {
      */
     printCellAsValue(cellVal: OINODataCell): string;
     /**
-     * Print name of column as SQL.
+     * Print name of the field in datasource specific format.
      *
      */
-    printColumnName(): string;
+    printFieldName(): string;
 }
 /**
  * Specialised class for a string column.

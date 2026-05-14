@@ -293,7 +293,7 @@ class OINOApi {
         this.datasource = datasource;
         this.params = params;
         if (this.params.hashidKey) {
-            this.hashid = new hashid_1.OINOHashid(this.params.hashidKey, this.params.apiName, this.params.hashidLength, this.params.hashidStaticIds);
+            this.hashid = new hashid_1.OINOHashid(this.params.hashidKey, this.params.hashidDomain || this.params.apiName, this.params.hashidLength, this.params.hashidStaticIds);
         }
         else {
             this.hashid = null;

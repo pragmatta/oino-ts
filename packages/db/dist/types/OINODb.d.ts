@@ -31,6 +31,13 @@ export declare abstract class OINODb extends OINODataSource {
      */
     abstract sqlExec(sql: string): Promise<OINODataSet>;
     /**
+     * Print a table name using database specific SQL escaping.
+     *
+     * @param sqlTable name of the table
+     *
+     */
+    abstract printTableName(sqlTable: string): string;
+    /**
      * Print SQL select statement with DB specific formatting.
      *
      * @param tableName - The name of the table to select from.
