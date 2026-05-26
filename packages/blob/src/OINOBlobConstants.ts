@@ -14,7 +14,7 @@ export type OINOBlobConstructor = new (params: OINOBlobParams) => OINOBlob
 
 /** Blob storage connection parameters */
 export type OINOBlobParams = {
-    /** Name of the blob class (e.g. OINOBlobAzureTable) */
+    /** Name of the blob class (e.g. OINOBlobAzure) */
     type: string
     /** Blob service endpoint URL */
     url: string

@@ -6,7 +6,7 @@
 
 import { expect, test } from "bun:test"
 
-import { OINOBlobAzureTable } from "@oino-ts/blob-azure"
+import { OINOBlobAzure } from "@oino-ts/blob-azure"
 import { OINOBlobAwsS3 } from "@oino-ts/blob-aws"
 import { OINOQueryFilter, OINOQuerySelect, OINOApiRequest, OINOConsoleLog, OINOLogLevel, OINOLog, OINOBenchmark, OINOContentType } from "@oino-ts/common"
 
@@ -41,7 +41,7 @@ type OINOBlobTestParams = {
 const BLOB_STORAGES: OINOBlobStorageParams[] = [
     {
         blobParams: {
-            type: "OINOBlobAzureTable",
+            type: "OINOBlobAzure",
             url: "https://oinocloudtest.blob.core.windows.net",
             container: "northwind",
             connectionStr: OINOCLOUD_TEST_BLOB_AZURE_CONSTR
@@ -112,7 +112,7 @@ OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.warning))
 OINOBenchmark.setEnabled(["doApiRequest"])
 OINOBenchmark.reset()
 
-OINOBlobFactory.registerBlob("OINOBlobAzureTable", OINOBlobAzureTable)
+OINOBlobFactory.registerBlob("OINOBlobAzure", OINOBlobAzure)
 OINOBlobFactory.registerBlob("OINOBlobAwsS3", OINOBlobAwsS3)
 
 function encodeResult(o: unknown): string {

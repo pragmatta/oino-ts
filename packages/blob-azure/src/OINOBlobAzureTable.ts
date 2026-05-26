@@ -26,12 +26,12 @@ import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
  * Register and use via the factory:
  * ```ts
  * import { OINOBlobFactory } from "@oino-ts/blob"
- * import { OINOBlobAzureTable }   from "@oino-ts/blob-azure"
+ * import { OINOBlobAzure }   from "@oino-ts/blob-azure"
  *
- * OINOBlobFactory.registerBlob("OINOBlobAzureTable", OINOBlobAzureTable)
+ * OINOBlobFactory.registerBlob("OINOBlobAzure", OINOBlobAzure)
  *
  * const blob = await OINOBlobFactory.createBlob({
- *     type:          "OINOBlobAzureTable",
+ *     type:          "OINOBlobAzure",
  *     url:           "https://myaccount.blob.core.windows.net",
  *     container:     "my-container",
  *     connectionStr: process.env.AZURE_STORAGE_CONNECTION_STRING
@@ -42,7 +42,7 @@ import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
  * })
  * ```
  */
-export class OINOBlobAzureTable extends OINOBlob {
+export class OINOBlobAzure extends OINOBlob {
     private _containerClient: ContainerClient | null = null
 
     // ── OINODataSource lifecycle ──────────────────────────────────────────
@@ -60,13 +60,13 @@ export class OINOBlobAzureTable extends OINOBlob {
                 return new OINOResult({
                     success: false,
                     status: 400,
-                    statusText: "OINOBlobAzureTable: params.connectionStr is required"
+                    statusText: "OINOBlobAzure: params.connectionStr is required"
                 })
             }
             this._containerClient = serviceClient.getContainerClient(this.blobParams.container)
             this.isConnected = true
         } catch (e: any) {
-            return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzureTable connect failed: " + e.message })
+            return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzure connect failed: " + e.message })
         }
         return result
     }
@@ -76,7 +76,7 @@ export class OINOBlobAzureTable extends OINOBlob {
      */
     async validate(): Promise<OINOResult> {
         if (!this._containerClient) {
-            return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzureTable: not connected" })
+            return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzure: not connected" })
         }
         try {
             const exists = await this._containerClient.exists()
@@ -84,12 +84,12 @@ export class OINOBlobAzureTable extends OINOBlob {
                 return new OINOResult({
                     success: false,
                     status: 404,
-                    statusText: "OINOBlobAzureTable: container '" + this.blobParams.container + "' not found"
+                    statusText: "OINOBlobAzure: container '" + this.blobParams.container + "' not found"
                 })
             }
             this.isValidated = true
         } catch (e: any) {
-            return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzureTable validate failed: " + e.message })
+            return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzure validate failed: " + e.message })
         }
         return new OINOResult()
     }
@@ -120,7 +120,7 @@ export class OINOBlobAzureTable extends OINOBlob {
      */
     async listEntries(filter?: OINOQueryFilter): Promise<OINOBlobEntry[]> {
         if (!this._containerClient) {
-            throw new Error("OINOBlobAzureTable: not connected")
+            throw new Error("OINOBlobAzure: not connected")
         }
 
         const queryPrefix = (filter && !filter.isEmpty())
@@ -153,14 +153,14 @@ export class OINOBlobAzureTable extends OINOBlob {
      */
     async fetchEntry(name: string): Promise<OINOBlobFetchResult> {
         if (!this._containerClient) {
-            throw new Error("OINOBlobAzureTable: not connected")
+            throw new Error("OINOBlobAzure: not connected")
         }
         const blobClient = this._containerClient.getBlobClient(name)
         const downloadResponse = await blobClient.download(0)
         const contentType = downloadResponse.contentType ?? "application/octet-stream"
         const stream = downloadResponse.readableStreamBody
         if (!stream) {
-            throw new Error("OINOBlobAzureTable: no readable stream returned for blob '" + name + "'")
+            throw new Error("OINOBlobAzure: no readable stream returned for blob '" + name + "'")
         }
         const chunks: Buffer[] = []
         for await (const chunk of stream) {
@@ -181,7 +181,7 @@ export class OINOBlobAzureTable extends OINOBlob {
      */
     async uploadEntry(name: string, content: Uint8Array, contentType: string): Promise<void> {
         if (!this._containerClient) {
-            throw new Error("OINOBlobAzureTable: not connected")
+            throw new Error("OINOBlobAzure: not connected")
         }
         const blockBlobClient = this._containerClient.getBlockBlobClient(name)
         const headers:any = { blobDataType: contentType }
@@ -195,7 +195,7 @@ export class OINOBlobAzureTable extends OINOBlob {
      */
     async deleteEntry(name: string): Promise<void> {
         if (!this._containerClient) {
-            throw new Error("OINOBlobAzureTable: not connected")
+            throw new Error("OINOBlobAzure: not connected")
         }
         const blobClient = this._containerClient.getBlobClient(name)
         await blobClient.delete()
