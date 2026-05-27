@@ -83,10 +83,10 @@ export class OINOResult {
         if (this.statusText != "OK") {
             this.messages.push(this.statusText) // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
-        if (statusText.startsWith(OINO_ERROR_PREFIX)) {
+        if (statusText && statusText.startsWith(OINO_ERROR_PREFIX)) {
             this.statusText = statusText
         } else {
-            this.statusText = OINO_ERROR_PREFIX + " (" + operation + "): " + statusText
+            this.statusText = OINO_ERROR_PREFIX + " (" + operation + "): " + (statusText || "(no status text)")
         }
         return this
     }
