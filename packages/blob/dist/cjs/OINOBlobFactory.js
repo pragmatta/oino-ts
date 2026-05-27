@@ -13,8 +13,8 @@ const OINOBlobApi_js_1 = require("./OINOBlobApi.js");
  *
  * Usage:
  * ```ts
- * OINOBlobFactory.registerBlob("OINOBlobAzureTable", OINOBlobAzureTable)
- * const blob = await OINOBlobFactory.createBlob({ type: "OINOBlobAzureTable", ... })
+ * OINOBlobFactory.registerBlob("OINOBlobAzure", OINOBlobAzure)
+ * const blob = await OINOBlobFactory.createBlob({ type: "OINOBlobAzure", ... })
  * const api  = await OINOBlobFactory.createApi(blob, { apiName: "files", tableName: "uploads/" })
  * ```
  */

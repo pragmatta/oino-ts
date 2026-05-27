@@ -1,6 +1,5 @@
 import { OINOApi, OINOResult, OINOQueryFilter } from "@oino-ts/common";
-import { OINOBlob } from "@oino-ts/blob";
-import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob";
+import { OINOBlob, OINOBlobParams, type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob";
 /**
  * AWS S3 (and S3-compatible) implementation of `OINOBlob`.
  *
@@ -32,6 +31,7 @@ import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob";
  */
 export declare class OINOBlobAwsS3 extends OINOBlob {
     private _s3Client;
+    constructor(params: OINOBlobParams);
     /**
      * Initialise the AWS SDK S3 client from the JSON-encoded `connectionStr`.
      * Does not perform any network call.

@@ -1,1 +1,1 @@
-export { OINOBlobAzureTable } from "./OINOBlobAzureTable.js"
+export { OINOBlobAzure } from "./OINOBlobAzure.js"

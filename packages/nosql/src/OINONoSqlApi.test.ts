@@ -44,18 +44,19 @@ const NOSQL_STORAGES: OINONoSqlStorageParams[] = [
     {
         noSqlParams: {
             type: "OINONoSqlAzureTable",
-            url: "https://oinocloudteststor.table.core.windows.net",
             table: "NorthwindOrders",
-            connectionStr: OINOCLOUD_TEST_BLOB_AZURE_CONSTR
+            credentials: {
+                url: "https://oinocloudteststor.table.core.windows.net",
+                connectionStr: OINOCLOUD_TEST_BLOB_AZURE_CONSTR
+            }
         },
         apiName: "azure-northwind-nosql"
     },
     {
         noSqlParams: {
             type: "OINONoSqlAwsDynamo",
-            url: "",
             table: "NorthwindOrders",
-            connectionStr: OINOCLOUD_TEST_BLOB_S3_CONSTR
+            credentials: JSON.parse(OINOCLOUD_TEST_BLOB_S3_CONSTR)
         },
         apiName: "aws-northwind-nosql"
     }
@@ -138,7 +139,7 @@ export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testP
 
     let target_group = "[CONNECTION]"
 
-    const wrong_constr_params: OINONoSqlParams = { ...storageParams.noSqlParams, connectionStr: "WRONG_CONNECTION_STRING" }
+    const wrong_constr_params: OINONoSqlParams = { ...storageParams.noSqlParams, table: "OINONonExistentTable" }
     const wrong_nosql: OINONoSql = await OINONoSqlFactory.createNoSql(wrong_constr_params, false, false)
     const wrong_connect_res = await wrong_nosql.connect()
     // Azure parses the connection string format and may throw during connect;

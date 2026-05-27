@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/nosql-azure",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "OINO TS package for using Azure Table Storage as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -21,11 +21,11 @@
   "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@azure/data-tables": "^13.0.0",
-    "@oino-ts/nosql": "1.0.3",
-    "@oino-ts/common": "1.0.3"
+    "@oino-ts/nosql": "1.0.4",
+    "@oino-ts/common": "1.0.4"
   },
   "devDependencies": {
-    "@oino-ts/types": "1.0.3",
+    "@oino-ts/types": "1.0.4",
     "@types/bun": "^1.1.14",
     "@types/node": "^22.0.00",
     "typescript": "~5.9.0"
