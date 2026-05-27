@@ -70,11 +70,11 @@ class OINOResult {
         if (this.statusText != "OK") {
             this.messages.push(this.statusText); // latest error becomes status, but if there was something non-trivial, add it to the messages
         }
-        if (statusText.startsWith(OINOConstants_js_1.OINO_ERROR_PREFIX)) {
+        if (statusText && statusText.startsWith(OINOConstants_js_1.OINO_ERROR_PREFIX)) {
             this.statusText = statusText;
         }
         else {
-            this.statusText = OINOConstants_js_1.OINO_ERROR_PREFIX + " (" + operation + "): " + statusText;
+            this.statusText = OINOConstants_js_1.OINO_ERROR_PREFIX + " (" + operation + "): " + (statusText || "(no status text)");
         }
         return this;
     }

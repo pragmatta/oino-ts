@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/blob-aws",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "OINO TS package for using AWS S3 (or S3-compatible) storage as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -22,11 +22,11 @@
   "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.0.0",
-    "@oino-ts/blob": "1.0.3",
-    "@oino-ts/common": "1.0.3"
+    "@oino-ts/blob": "1.0.4",
+    "@oino-ts/common": "1.0.4"
   },
   "devDependencies": {
-    "@oino-ts/types": "1.0.3",
+    "@oino-ts/types": "1.0.4",
     "@types/bun": "^1.1.14",
     "@types/node": "^22.0.00",
     "typescript": "~5.9.0"

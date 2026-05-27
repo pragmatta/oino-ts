@@ -8,12 +8,10 @@ export type OINONoSqlConstructor = new (params: OINONoSqlParams) => OINONoSql;
 export type OINONoSqlParams = {
     /** Name of the nosql class (e.g. OINONoSqlAzureTable) */
     type: string;
-    /** Service endpoint URL */
-    url: string;
     /** Table name */
     table: string;
-    /** Provider-specific connection string (e.g. Azure Storage connection string) */
-    connectionStr?: string;
+    /** Provider-specific credentials (e.g. Azure: { url, connectionStr } / AWS: { region, accessKeyId, secretAccessKey, url? }) */
+    credentials?: any;
     /**
      * Optional static partition key.  When set, all read/write operations are
      * automatically scoped to this partition key, allowing multiple logical

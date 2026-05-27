@@ -126,6 +126,12 @@ export class OINONoSqlAwsDynamo extends OINONoSql {
     _hashKeyAttr = "partitionKey";
     /** Actual DynamoDB RANGE key attribute name, discovered during validate(). */
     _rangeKeyAttr = "rowKey";
+    constructor(params) {
+        super(params);
+        if (!this.nosqlParams.credentials?.region || !this.nosqlParams.credentials?.accessKeyId || !this.nosqlParams.credentials?.secretAccessKey) {
+            throw new Error("OINONoSqlAwsDynamo: missing or invalid credentials (provide credentials.region, credentials.accessKeyId, credentials.secretAccessKey)");
+        }
+    }
     // ── FilterExpression translation ──────────────────────────────────────
     /**
      * Walk the `OINOQueryFilter` tree and attempt to build a DynamoDB
@@ -245,41 +251,16 @@ export class OINONoSqlAwsDynamo extends OINONoSql {
      * `connectionStr`.  Does not perform any network call.
      */
     async connect() {
-        if (!this.nosqlParams.connectionStr) {
-            return new OINOResult({
-                success: false,
-                status: 400,
-                statusText: "OINONoSqlAwsDynamoDB: params.connectionStr is required (JSON with region, accessKeyId, secretAccessKey)"
-            });
-        }
-        let creds;
-        try {
-            creds = JSON.parse(this.nosqlParams.connectionStr);
-        }
-        catch {
-            return new OINOResult({
-                success: false,
-                status: 400,
-                statusText: "OINONoSqlAwsDynamoDB: params.connectionStr must be valid JSON"
-            });
-        }
-        if (!creds.region || !creds.accessKeyId || !creds.secretAccessKey) {
-            return new OINOResult({
-                success: false,
-                status: 400,
-                statusText: "OINONoSqlAwsDynamoDB: connectionStr must contain region, accessKeyId, and secretAccessKey"
-            });
-        }
         try {
             const client_config = {
-                region: creds.region,
+                region: this.nosqlParams.credentials.region,
                 credentials: {
-                    accessKeyId: creds.accessKeyId,
-                    secretAccessKey: creds.secretAccessKey
+                    accessKeyId: this.nosqlParams.credentials.accessKeyId,
+                    secretAccessKey: this.nosqlParams.credentials.secretAccessKey
                 }
             };
-            if (this.nosqlParams.url) {
-                client_config.endpoint = this.nosqlParams.url;
+            if (this.nosqlParams.credentials.url) {
+                client_config.endpoint = this.nosqlParams.credentials.url;
             }
             const raw_client = new DynamoDBClient(client_config);
             this._rawClient = raw_client;

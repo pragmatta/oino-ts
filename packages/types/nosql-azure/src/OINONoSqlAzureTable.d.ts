@@ -1,5 +1,5 @@
 import { OINOApi, OINOResult, OINOQueryFilter } from "@oino-ts/common";
-import { OINONoSql } from "@oino-ts/nosql";
+import { OINONoSql, OINONoSqlParams } from "@oino-ts/nosql";
 import { type OINONoSqlEntry } from "@oino-ts/nosql";
 /**
  * Azure Table Storage implementation of `OINONoSql`.
@@ -54,6 +54,7 @@ import { type OINONoSqlEntry } from "@oino-ts/nosql";
  */
 export declare class OINONoSqlAzureTable extends OINONoSql {
     private _tableClient;
+    constructor(params: OINONoSqlParams);
     /**
      * Attempt to translate an `OINOQueryFilter` tree to an Azure Table Storage
      * OData v3 filter expression string.

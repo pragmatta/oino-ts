@@ -1,5 +1,5 @@
 import { OINOApi, OINOResult, OINOQueryFilter } from "@oino-ts/common";
-import { OINONoSql } from "@oino-ts/nosql";
+import { OINONoSql, OINONoSqlParams } from "@oino-ts/nosql";
 import { type OINONoSqlEntry } from "@oino-ts/nosql";
 /**
  * Mutable accumulator used while building a DynamoDB expression string.
@@ -96,6 +96,7 @@ export declare class OINONoSqlAwsDynamo extends OINONoSql {
     private _hashKeyAttr;
     /** Actual DynamoDB RANGE key attribute name, discovered during validate(). */
     private _rangeKeyAttr;
+    constructor(params: OINONoSqlParams);
     /**
      * Walk the `OINOQueryFilter` tree and attempt to build a DynamoDB
      * `FilterExpression` string, accumulating placeholder names and values

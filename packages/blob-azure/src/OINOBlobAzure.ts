@@ -70,7 +70,7 @@ export class OINOBlobAzure extends OINOBlob {
                 )
                 this.isConnected = true
             }
-            this._containerClient = serviceClient.getContainerClient(this.blobParams.container)
+            this._containerClient = serviceClient!.getContainerClient(this.blobParams.container)
             this.isConnected = true
 
         } catch (e: any) {
