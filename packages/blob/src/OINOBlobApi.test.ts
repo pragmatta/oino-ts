@@ -42,9 +42,10 @@ const BLOB_STORAGES: OINOBlobStorageParams[] = [
     {
         blobParams: {
             type: "OINOBlobAzure",
-            url: "https://oinocloudtest.blob.core.windows.net",
             container: "northwind",
-            connectionStr: OINOCLOUD_TEST_BLOB_AZURE_CONSTR
+            credentials: {
+                connectionStr: OINOCLOUD_TEST_BLOB_AZURE_CONSTR
+            }
         },
         apiName: "azure-northwind",
         prefix: "northwind-azure/"
@@ -52,9 +53,8 @@ const BLOB_STORAGES: OINOBlobStorageParams[] = [
     {
         blobParams: {
             type: "OINOBlobAwsS3",
-            url: "",
             container: "oinocloud-test-northwind",
-            connectionStr: OINOCLOUD_TEST_BLOB_S3_CONSTR
+            credentials: JSON.parse(OINOCLOUD_TEST_BLOB_S3_CONSTR)
         },
         apiName: "s3-northwind",
         prefix: "northwind-s3/"
@@ -151,7 +151,7 @@ export async function OINOTestBlob(storageParams: OINOBlobStorageParams, testPar
 
     let target_group = "[CONNECTION]"
 
-    const wrong_constr_params: OINOBlobParams = { ...storageParams.blobParams, connectionStr: "WRONG_CONNECTION_STRING" }
+    const wrong_constr_params: OINOBlobParams = { ...storageParams.blobParams, container: "wrongcontainer" } // azure does not allow uppercase for containers
     const wrong_blob: OINOBlob = await OINOBlobFactory.createBlob(wrong_constr_params, false, false)
     await test(target_name + target_storage + target_group + " connection error", async () => {
         expect(wrong_blob).toBeDefined()

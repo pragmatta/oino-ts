@@ -16,12 +16,10 @@ export type OINOBlobConstructor = new (params: OINOBlobParams) => OINOBlob
 export type OINOBlobParams = {
     /** Name of the blob class (e.g. OINOBlobAzure) */
     type: string
-    /** Blob service endpoint URL */
-    url: string
     /** Container / bucket name */
     container: string
-    /** Provider-specific connection string (e.g. Azure Storage connection string or SAS URL) */
-    connectionStr?: string
+    /** Provider-specific credentials (e.g. Azure Storage connection string or SAS URL) */
+    credentials?: any
 }
 
 /** A single blob entry returned by a listing operation */

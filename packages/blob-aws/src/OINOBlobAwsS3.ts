@@ -14,8 +14,7 @@ import {
 } from "@aws-sdk/client-s3"
 
 import { OINOApi, OINOResult, OINOQueryFilter, OINOStringDataField, OINONumberDataField, OINODatetimeDataField, type OINODataFieldParams } from "@oino-ts/common"
-import { OINOBlob, OINOBlobDataModel, OINOBlobApi } from "@oino-ts/blob"
-import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
+import { OINOBlob, OINOBlobParams, OINOBlobDataModel, OINOBlobApi, type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
 
 /**
  * AWS S3 (and S3-compatible) implementation of `OINOBlob`.
@@ -49,50 +48,29 @@ import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
 export class OINOBlobAwsS3 extends OINOBlob {
     private _s3Client: S3Client | null = null
 
-    // ── OINODataSource lifecycle ──────────────────────────────────────────
+    constructor(params: OINOBlobParams) {
+        super(params)
+        if (!params.credentials || !params.credentials.region || !params.credentials.accessKeyId || !params.credentials.secretAccessKey) {
+            throw new Error("OINOBlobAwsS3: missing or invalid credentials (provide region, accessKeyId, secretAccessKey)")
+        }
+    }
 
     /**
      * Initialise the AWS SDK S3 client from the JSON-encoded `connectionStr`.
      * Does not perform any network call.
      */
     async connect(): Promise<OINOResult> {
-        if (!this.blobParams.connectionStr) {
-            return new OINOResult({
-                success: false,
-                status: 400,
-                statusText: "OINOBlobAwsS3: params.connectionStr is required (JSON with region, accessKeyId, secretAccessKey)"
-            })
-        }
-
-        let creds: { region: string; accessKeyId: string; secretAccessKey: string }
-        try {
-            creds = JSON.parse(this.blobParams.connectionStr)
-        } catch {
-            return new OINOResult({
-                success: false,
-                status: 400,
-                statusText: "OINOBlobAwsS3: params.connectionStr must be a valid JSON string"
-            })
-        }
-
-        if (!creds.region || !creds.accessKeyId || !creds.secretAccessKey) {
-            return new OINOResult({
-                success: false,
-                status: 400,
-                statusText: "OINOBlobAwsS3: connectionStr must include region, accessKeyId and secretAccessKey"
-            })
-        }
 
         try {
             const clientConfig: ConstructorParameters<typeof S3Client>[0] = {
-                region: creds.region,
+                region: this.blobParams.credentials.region,
                 credentials: {
-                    accessKeyId:     creds.accessKeyId,
-                    secretAccessKey: creds.secretAccessKey
+                    accessKeyId:     this.blobParams.credentials.accessKeyId,
+                    secretAccessKey: this.blobParams.credentials.secretAccessKey
                 }
             }
-            if (this.blobParams.url) {
-                clientConfig.endpoint = this.blobParams.url
+            if (this.blobParams.credentials.url) {
+                clientConfig.endpoint = this.blobParams.credentials.url
                 clientConfig.forcePathStyle = true
             }
             this._s3Client = new S3Client(clientConfig)

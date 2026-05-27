@@ -22,7 +22,7 @@ import {
 } from "@aws-sdk/lib-dynamodb"
 
 import { OINOApi, OINOResult, OINOQueryFilter, OINOQueryBooleanOperation, OINOQueryComparison, OINOQueryNullCheck, OINOStringDataField, OINODatetimeDataField, type OINODataFieldParams } from "@oino-ts/common"
-import { OINONoSql, OINONoSqlDataModel, OINONoSqlApi } from "@oino-ts/nosql"
+import { OINONoSql, OINONoSqlDataModel, OINONoSqlApi, OINONoSqlParams } from "@oino-ts/nosql"
 import { type OINONoSqlEntry } from "@oino-ts/nosql"
 
 /**
@@ -159,6 +159,13 @@ export class OINONoSqlAwsDynamo extends OINONoSql {
     /** Actual DynamoDB RANGE key attribute name, discovered during validate(). */
     private _rangeKeyAttr: string = "rowKey"
 
+    constructor(params: OINONoSqlParams) {
+        super(params)
+        if (!this.nosqlParams.credentials?.region || !this.nosqlParams.credentials?.accessKeyId || !this.nosqlParams.credentials?.secretAccessKey) {
+            throw new Error("OINONoSqlAwsDynamo: missing or invalid credentials (provide credentials.region, credentials.accessKeyId, credentials.secretAccessKey)")
+        }
+    }
+
     // ── FilterExpression translation ──────────────────────────────────────
 
     /**
@@ -281,43 +288,16 @@ export class OINONoSqlAwsDynamo extends OINONoSql {
      * `connectionStr`.  Does not perform any network call.
      */
     async connect(): Promise<OINOResult> {
-        if (!this.nosqlParams.connectionStr) {
-            return new OINOResult({
-                success:    false,
-                status:     400,
-                statusText: "OINONoSqlAwsDynamoDB: params.connectionStr is required (JSON with region, accessKeyId, secretAccessKey)"
-            })
-        }
-
-        let creds: { region: string; accessKeyId: string; secretAccessKey: string }
-        try {
-            creds = JSON.parse(this.nosqlParams.connectionStr) as { region: string; accessKeyId: string; secretAccessKey: string }
-        } catch {
-            return new OINOResult({
-                success:    false,
-                status:     400,
-                statusText: "OINONoSqlAwsDynamoDB: params.connectionStr must be valid JSON"
-            })
-        }
-
-        if (!creds.region || !creds.accessKeyId || !creds.secretAccessKey) {
-            return new OINOResult({
-                success:    false,
-                status:     400,
-                statusText: "OINONoSqlAwsDynamoDB: connectionStr must contain region, accessKeyId, and secretAccessKey"
-            })
-        }
-
         try {
             const client_config: ConstructorParameters<typeof DynamoDBClient>[0] = {
-                region:      creds.region,
+                region:      this.nosqlParams.credentials.region,
                 credentials: {
-                    accessKeyId:     creds.accessKeyId,
-                    secretAccessKey: creds.secretAccessKey
+                    accessKeyId:     this.nosqlParams.credentials.accessKeyId,
+                    secretAccessKey: this.nosqlParams.credentials.secretAccessKey
                 }
             }
-            if (this.nosqlParams.url) {
-                client_config.endpoint = this.nosqlParams.url
+            if (this.nosqlParams.credentials.url) {
+                client_config.endpoint = this.nosqlParams.credentials.url
             }
             const raw_client = new DynamoDBClient(client_config)
             this._rawClient = raw_client

@@ -12,7 +12,7 @@ import {
 } from "@azure/data-tables"
 
 import { OINOApi, OINOResult, OINOQueryFilter, OINOQueryBooleanOperation, OINOQueryComparison, OINOQueryNullCheck, OINOStringDataField, OINODatetimeDataField, type OINODataFieldParams } from "@oino-ts/common"
-import { OINONoSql, OINONoSqlDataModel, OINONoSqlApi } from "@oino-ts/nosql"
+import { OINONoSql, OINONoSqlDataModel, OINONoSqlApi, OINONoSqlParams } from "@oino-ts/nosql"
 import { type OINONoSqlEntry } from "@oino-ts/nosql"
 
 /** Azure Table Storage OData field name mapping for system fields */
@@ -78,6 +78,13 @@ const ODATA_FILTERABLE_FIELDS = new Set(["partitionKey", "rowKey", "timestamp"])
  */
 export class OINONoSqlAzureTable extends OINONoSql {
     private _tableClient: TableClient | null = null
+
+    constructor(params: OINONoSqlParams) {
+        super(params)
+        if (!this.nosqlParams.credentials?.connectionStr) {
+            throw new Error("OINONoSqlAzureTable: missing or invalid credentials (provide credentials.connectionStr)")
+        }
+    }
 
     // ── ODataFilter translation ───────────────────────────────────────────
 
@@ -145,18 +152,10 @@ export class OINONoSqlAzureTable extends OINONoSql {
      */
     async connect(): Promise<OINOResult> {
         try {
-            if (this.nosqlParams.connectionStr) {
-                this._tableClient = TableClient.fromConnectionString(
-                    this.nosqlParams.connectionStr,
-                    this.nosqlParams.table
-                )
-            } else {
-                return new OINOResult({
-                    success: false,
-                    status: 400,
-                    statusText: "OINONoSqlAzureTable: params.connectionStr is required"
-                })
-            }
+            this._tableClient = TableClient.fromConnectionString(
+                this.nosqlParams.credentials.connectionStr,
+                this.nosqlParams.table
+            )
             this.isConnected = true
         } catch (e: any) {
             return new OINOResult({ success: false, status: 500, statusText: "OINONoSqlAzureTable connect failed: " + e.message })
@@ -172,21 +171,19 @@ export class OINONoSqlAzureTable extends OINONoSql {
             return new OINOResult({ success: false, status: 500, statusText: "OINONoSqlAzureTable: not connected" })
         }
         try {
-            if (this.nosqlParams.connectionStr) {
-                const service_client = TableServiceClient.fromConnectionString(this.nosqlParams.connectionStr)
-                const tables = service_client.listTables({ queryOptions: { filter: `TableName eq '${this.nosqlParams.table}'` } })
-                let found = false
-                for await (const _t of tables) {
-                    found = true
-                    break
-                }
-                if (!found) {
-                    return new OINOResult({
-                        success: false,
-                        status: 404,
-                        statusText: "OINONoSqlAzureTable: table '" + this.nosqlParams.table + "' not found"
-                    })
-                }
+            const service_client = TableServiceClient.fromConnectionString(this.nosqlParams.credentials.connectionStr)
+            const tables = service_client.listTables({ queryOptions: { filter: `TableName eq '${this.nosqlParams.table}'` } })
+            let found = false
+            for await (const _t of tables) {
+                found = true
+                break
+            }
+            if (!found) {
+                return new OINOResult({
+                    success: false,
+                    status: 404,
+                    statusText: "OINONoSqlAzureTable: table '" + this.nosqlParams.table + "' not found"
+                })
             }
             this.isValidated = true
         } catch (e: any) {

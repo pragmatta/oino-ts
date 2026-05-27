@@ -8,12 +8,13 @@ import { Buffer } from "node:buffer"
 
 import {
     BlobServiceClient,
-    type ContainerClient
+    ContainerClient
 } from "@azure/storage-blob"
+import { DefaultAzureCredential } from "@azure/identity"
 
+import { OINOLog } from "@oino-ts/common"
 import { OINOApi, OINOResult, OINOQueryFilter, OINOStringDataField, OINONumberDataField, OINODatetimeDataField, type OINODataFieldParams } from "@oino-ts/common"
-import { OINOBlob, OINOBlobDataModel, OINOBlobApi } from "@oino-ts/blob"
-import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
+import { OINOBlob, OINOBlobParams, OINOBlobDataModel, OINOBlobApi, type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
 
 /**
  * Azure Blob Storage implementation of `OINOBlob`.
@@ -32,9 +33,8 @@ import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
  *
  * const blob = await OINOBlobFactory.createBlob({
  *     type:          "OINOBlobAzure",
- *     url:           "https://myaccount.blob.core.windows.net",
  *     container:     "my-container",
- *     connectionStr: process.env.AZURE_STORAGE_CONNECTION_STRING
+ *     credentials:   either connectionStr or url and clientId 
  * })
  * const api = await OINOBlobFactory.createApi(blob, {
  *     apiName:   "files",
@@ -45,28 +45,37 @@ import { type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
 export class OINOBlobAzure extends OINOBlob {
     private _containerClient: ContainerClient | null = null
 
-    // ── OINODataSource lifecycle ──────────────────────────────────────────
+    constructor(params: OINOBlobParams) {
+        super(params)
+        if ((!this.blobParams.credentials?.connectionStr) && !(this.blobParams.credentials?.url)) { // && this.blobParams.credentials?.clientId)) {
+            throw new Error("OINOBlobAzure: missing or invalid credentials (provide either connectionStr or url and clientId)")
+        }
+    }
 
     /**
      * Initialise the Azure SDK client.  Does not perform any network call.
      */
     async connect(): Promise<OINOResult> {
         const result = new OINOResult()
+        let serviceClient: BlobServiceClient
         try {
-            let serviceClient: BlobServiceClient
-            if (this.blobParams.connectionStr) {
-                serviceClient = BlobServiceClient.fromConnectionString(this.blobParams.connectionStr)
-            } else {
-                return new OINOResult({
-                    success: false,
-                    status: 400,
-                    statusText: "OINOBlobAzure: params.connectionStr is required"
-                })
+            if (this.blobParams.credentials?.connectionStr) {
+                serviceClient = BlobServiceClient.fromConnectionString(this.blobParams.credentials.connectionStr)
+
+            } else if (this.blobParams.credentials?.url) { // && this.blobParams.credentials?.clientId) {
+                // Use ContainerClient directly to avoid double-container path when combining service URL + container
+                serviceClient = new BlobServiceClient(
+                    this.blobParams.credentials.url,
+                    new DefaultAzureCredential()
+                )
+                this.isConnected = true
             }
             this._containerClient = serviceClient.getContainerClient(this.blobParams.container)
             this.isConnected = true
+
         } catch (e: any) {
-            return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAzure connect failed: " + e.message })
+            result.setError(500, "OINOBlobAzure connect failed: " + e.message, "connect")
+            OINOLog.exception("@oino-ts/blob-azure", "OINOBlobAzure", "connect", "OINOBlobAzure connect failed", { error: e, stack: e.stack })
         }
         return result
     }
