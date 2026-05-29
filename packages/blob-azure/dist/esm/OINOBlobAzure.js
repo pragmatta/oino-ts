@@ -39,7 +39,7 @@ export class OINOBlobAzure extends OINOBlob {
     _containerClient = null;
     constructor(params) {
         super(params);
-        if ((!this.blobParams.credentials?.connectionStr) && !(this.blobParams.credentials?.url)) { // && this.blobParams.credentials?.clientId)) {
+        if ((!this.blobParams.credentials?.connectionStr) && !(this.blobParams.credentials?.url)) {
             throw new Error("OINOBlobAzure: missing or invalid credentials (provide either connectionStr or url and clientId)");
         }
     }
@@ -55,7 +55,7 @@ export class OINOBlobAzure extends OINOBlob {
             }
             else if (this.blobParams.credentials?.url) { // && this.blobParams.credentials?.clientId) {
                 // Use ContainerClient directly to avoid double-container path when combining service URL + container
-                serviceClient = new BlobServiceClient(this.blobParams.credentials.url, new DefaultAzureCredential());
+                serviceClient = new BlobServiceClient(this.blobParams.credentials.url, new DefaultAzureCredential({ managedIdentityClientId: this.blobParams.credentials.clientId }));
                 this.isConnected = true;
             }
             this._containerClient = serviceClient.getContainerClient(this.blobParams.container);

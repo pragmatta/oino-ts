@@ -33,27 +33,27 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org/
       - run: ls -r
-      - run: npm publish ./packages/common --access public
+      - run: npm publish ./packages/common --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm publish ./packages/db --access public
+      - run: npm publish ./packages/db --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm publish ./packages/db-bunsqlite --access public
+      - run: npm publish ./packages/db-bunsqlite --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm publish ./packages/db-postgresql --access public
+      - run: npm publish ./packages/db-postgresql --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm publish ./packages/db-mariadb --access public
+      - run: npm publish ./packages/db-mariadb --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm publish ./packages/db-mssql --access public
+      - run: npm publish ./packages/db-mssql --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm publish ./packages/hashid --access public
+      - run: npm publish ./packages/hashid --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm publish ./packages/types --access public
+      - run: npm publish ./packages/types --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
