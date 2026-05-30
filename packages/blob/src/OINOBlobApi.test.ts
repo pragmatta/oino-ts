@@ -286,6 +286,7 @@ export async function OINOTestBlob(storageParams: OINOBlobStorageParams, testPar
         expect(verify_result.success).toBe(true)
         expect(verify_result.blobData).toBeDefined()
         expect(new TextDecoder().decode(verify_result.blobData)).toBe(new TextDecoder().decode(testParams.uploadContent))
+        expect(verify_result.blobDataType).toBe(testParams.uploadContentType)
     })
 
     // ── UPDATE (PUT) ──────────────────────────────────────────────────────
@@ -326,6 +327,7 @@ export async function OINOTestBlob(storageParams: OINOBlobStorageParams, testPar
         const verify_result: OINOBlobApiResult = await api.doApiRequest(verify_request)
         expect(verify_result.success).toBe(true)
         expect(new TextDecoder().decode(verify_result.blobData)).toBe(new TextDecoder().decode(testParams.updateContent))
+        expect(verify_result.blobDataType).toBe(testParams.uploadContentType)
     })
 
     // ── DELETE ────────────────────────────────────────────────────────────
