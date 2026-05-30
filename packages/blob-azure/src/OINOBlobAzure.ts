@@ -193,8 +193,7 @@ export class OINOBlobAzure extends OINOBlob {
             throw new Error("OINOBlobAzure: not connected")
         }
         const blockBlobClient = this._containerClient.getBlockBlobClient(name)
-        const headers:any = { blobDataType: contentType }
-        await blockBlobClient.upload(content, content.length, { blobHTTPHeaders: headers })
+        await blockBlobClient.upload(content, content.length, { blobHTTPHeaders: { blobContentType: contentType } })
     }
 
     /**
