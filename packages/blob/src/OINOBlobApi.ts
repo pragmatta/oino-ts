@@ -126,7 +126,7 @@ export class OINOBlobApi extends OINOApi {
             } else {
                 // ── Download blob ────────────────────────────────────────────
                 try {
-                    const name = decodeURIComponent(request.rowId)
+                    const name = this.blob.sanitizeName(decodeURIComponent(request.rowId))
                     const fetch_result = await this.blob.fetchEntry(name)
                     result.blobData = fetch_result.content
                     result.blobDataType = fetch_result.contentType
@@ -142,7 +142,7 @@ export class OINOBlobApi extends OINOApi {
                 result.setError(400, "HTTP " + request.method + " method requires an URL ID (blob name)!", "DoRequest")
             } else {
                 try {
-                    const name = decodeURIComponent(request.rowId)
+                    const name = this.blob.sanitizeName(decodeURIComponent(request.rowId))
                     const content_type = request.headers.get("content-type") ?? "application/octet-stream"
                     const data = request.rowData
                     const content: Uint8Array = data instanceof Uint8Array ? data : request.bodyAsBuffer()
@@ -159,7 +159,7 @@ export class OINOBlobApi extends OINOApi {
                 result.setError(400, "HTTP DELETE method requires an URL ID (blob name)!", "DoRequest")
             } else {
                 try {
-                    const name = decodeURIComponent(request.rowId)
+                    const name = this.blob.sanitizeName(decodeURIComponent(request.rowId))
                     await this.blob.deleteEntry(name)
                 } catch (e: any) {
                     result.setError(500, "Error deleting blob: " + e.message, "DoDelete")

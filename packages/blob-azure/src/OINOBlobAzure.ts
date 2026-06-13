@@ -42,6 +42,8 @@ import { OINOBlob, OINOBlobParams, OINOBlobDataModel, OINOBlobApi, type OINOBlob
  * })
  * ```
  */
+const BLOB_AZURE_ILLEGAL_CHARS_REGEX = /[\x00-\x1f\x7f\\]/g
+
 export class OINOBlobAzure extends OINOBlob {
     private _containerClient: ContainerClient | null = null
 
@@ -50,6 +52,14 @@ export class OINOBlobAzure extends OINOBlob {
         if ((!this.blobParams.credentials?.connectionStr) && !(this.blobParams.credentials?.url)) {
             throw new Error("OINOBlobAzure: missing or invalid credentials (provide either connectionStr or url and clientId)")
         }
+    }
+
+    /**
+     * Replace characters that Azure Blob Storage does not permit in blob names
+     * (`\` and ASCII control characters) with `_`.
+     */
+    override sanitizeName(name: string): string {
+        return name.replace(BLOB_AZURE_ILLEGAL_CHARS_REGEX, "_")
     }
 
     /**
