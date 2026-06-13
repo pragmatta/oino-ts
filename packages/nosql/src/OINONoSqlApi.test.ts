@@ -46,8 +46,7 @@ const NOSQL_STORAGES: OINONoSqlStorageParams[] = [
             type: "OINONoSqlAzureTable",
             table: "NorthwindOrders",
             credentials: {
-                url: "https://oinocloudteststor.table.core.windows.net",
-                connectionStr: OINOCLOUD_TEST_BLOB_AZURE_CONSTR
+                url: "https://oinocloudteststor.table.core.windows.net"
             }
         },
         apiName: "azure-northwind-nosql"

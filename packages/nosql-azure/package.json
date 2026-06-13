@@ -21,6 +21,7 @@
   "types": "./dist/types/index.d.ts",
   "dependencies": {
     "@azure/data-tables": "^13.0.0",
+    "@azure/identity": "^3.0.0",
     "@oino-ts/nosql": "1.0.7",
     "@oino-ts/common": "1.0.7"
   },
