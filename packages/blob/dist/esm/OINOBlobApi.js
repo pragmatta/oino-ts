@@ -100,7 +100,7 @@ export class OINOBlobApi extends OINOApi {
             else {
                 // ── Download blob ────────────────────────────────────────────
                 try {
-                    const name = decodeURIComponent(request.rowId);
+                    const name = this.blob.sanitizeName(decodeURIComponent(request.rowId));
                     const fetch_result = await this.blob.fetchEntry(name);
                     result.blobData = fetch_result.content;
                     result.blobDataType = fetch_result.contentType;
@@ -117,7 +117,7 @@ export class OINOBlobApi extends OINOApi {
             }
             else {
                 try {
-                    const name = decodeURIComponent(request.rowId);
+                    const name = this.blob.sanitizeName(decodeURIComponent(request.rowId));
                     const content_type = request.headers.get("content-type") ?? "application/octet-stream";
                     const data = request.rowData;
                     const content = data instanceof Uint8Array ? data : request.bodyAsBuffer();
@@ -135,7 +135,7 @@ export class OINOBlobApi extends OINOApi {
             }
             else {
                 try {
-                    const name = decodeURIComponent(request.rowId);
+                    const name = this.blob.sanitizeName(decodeURIComponent(request.rowId));
                     await this.blob.deleteEntry(name);
                 }
                 catch (e) {

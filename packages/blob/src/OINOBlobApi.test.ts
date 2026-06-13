@@ -15,6 +15,15 @@ import { OINOBlob, OINOBlobApi, OINOBlobApiResult, OINOBlobFactory, type OINOBlo
 const OINOCLOUD_TEST_BLOB_AZURE_CONSTR = process.env.OINOCLOUD_TEST_BLOB_AZURE_CONSTR || console.error("OINOCLOUD_TEST_BLOB_AZURE_CONSTR not set") || ""
 const OINOCLOUD_TEST_BLOB_S3_CONSTR = process.env.OINOCLOUD_TEST_BLOB_S3_CONSTR || console.error("OINOCLOUD_TEST_BLOB_S3_CONSTR not set") || ""
 
+type OINOBlobSanitizeTestCase = {
+    /** Human-readable description of what is being tested */
+    description: string
+    /** Input blob name possibly containing illegal or unsafe characters */
+    input: string
+    /** Expected output after sanitization */
+    expected: string
+}
+
 type OINOBlobStorageParams = {
     /** Connection params passed to OINOBlobFactory.createBlob */
     blobParams: OINOBlobParams
@@ -22,6 +31,8 @@ type OINOBlobStorageParams = {
     apiName: string
     /** Blob name prefix / folder used as tableName in the API */
     prefix: string
+    /** Platform-specific sanitization test cases */
+    sanitizeTests: OINOBlobSanitizeTestCase[]
 }
 
 type OINOBlobTestParams = {
@@ -48,7 +59,16 @@ const BLOB_STORAGES: OINOBlobStorageParams[] = [
             }
         },
         apiName: "azure-northwind",
-        prefix: "northwind-azure/"
+        prefix: "northwind-azure/",
+        sanitizeTests: [
+            { description: "backslash replaced with underscore",                  input: "foo\\bar",          expected: "foo_bar"          },
+            { description: "null byte replaced with underscore",                  input: "foo\x00bar",        expected: "foo_bar"          },
+            { description: "unit-separator control char replaced with underscore", input: "foo\x1fbar",        expected: "foo_bar"          },
+            { description: "DEL char replaced with underscore",                   input: "foo\x7fbar",        expected: "foo_bar"          },
+            { description: "multiple illegal chars replaced",                     input: "foo\\bar\x00baz",   expected: "foo_bar_baz"      },
+            { description: "forward slash preserved",                             input: "path/to/file.txt", expected: "path/to/file.txt" },
+            { description: "valid safe chars unchanged",                          input: "file-name_1.2~3",  expected: "file-name_1.2~3"  }
+        ]
     },
     {
         blobParams: {
@@ -57,7 +77,22 @@ const BLOB_STORAGES: OINOBlobStorageParams[] = [
             credentials: JSON.parse(OINOCLOUD_TEST_BLOB_S3_CONSTR)
         },
         apiName: "s3-northwind",
-        prefix: "northwind-s3/"
+        prefix: "northwind-s3/",
+        sanitizeTests: [
+            { description: "backslash replaced with underscore",         input: "foo\\bar",                        expected: "foo_bar"            },
+            { description: "null byte replaced with underscore",         input: "foo\x00bar",                      expected: "foo_bar"            },
+            { description: "DEL char replaced with underscore",          input: "foo\x7fbar",                      expected: "foo_bar"            },
+            { description: "curly braces replaced with underscores",     input: "foo{bar}baz",                     expected: "foo_bar_baz"        },
+            { description: "square brackets replaced with underscores",  input: "foo[bar]baz",                     expected: "foo_bar_baz"        },
+            { description: "caret replaced with underscore",             input: "foo^bar",                         expected: "foo_bar"            },
+            { description: "backtick replaced with underscore",          input: "foo`bar",                         expected: "foo_bar"            },
+            { description: "pipe replaced with underscore",              input: "foo|bar",                         expected: "foo_bar"            },
+            { description: "angle brackets replaced with underscores",   input: "foo<bar>baz",                     expected: "foo_bar_baz"        },
+            { description: "hash and percent replaced with underscores", input: "foo#bar%baz",                     expected: "foo_bar_baz"        },
+            { description: "forward slash preserved",                    input: "path/to/file.txt",               expected: "path/to/file.txt"   },
+            { description: "valid safe chars unchanged",                 input: "file-name_1.2~3",                expected: "file-name_1.2~3"   },
+            { description: "mixed illegal chars all replaced",           input: "foo\\{bar}[baz]^`|<>#%qux",      expected: "foo__bar__baz________qux" }
+        ]
     }
 ]
 
@@ -114,6 +149,18 @@ OINOBenchmark.reset()
 
 OINOBlobFactory.registerBlob("OINOBlobAzure", OINOBlobAzure)
 OINOBlobFactory.registerBlob("OINOBlobAwsS3", OINOBlobAwsS3)
+
+// ── SANITIZE UNIT TESTS ───────────────────────────────────────────────────────
+// These do not connect to any storage backend.
+
+for (const storage of BLOB_STORAGES) {
+    const blob = await OINOBlobFactory.createBlob(storage.blobParams, false, false)
+    for (const tc of storage.sanitizeTests) {
+        test("[SANITIZE][" + storage.blobParams.type + "] " + tc.description, () => {
+            expect(blob.sanitizeName(tc.input)).toBe(tc.expected)
+        })
+    }
+}
 
 function encodeResult(o: unknown): string {
     return JSON.stringify(o ?? {}, null, 3)

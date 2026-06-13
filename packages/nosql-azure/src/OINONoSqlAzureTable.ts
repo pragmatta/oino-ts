@@ -25,6 +25,13 @@ const ODATA_FIELD_MAP: Record<string, string> = {
 /** Fields that can be translated to OData server-side filter expressions */
 const ODATA_FILTERABLE_FIELDS = new Set(["partitionKey", "rowKey", "timestamp"])
 
+/** Prefix marking property values that were JSON-stringified objects (Azure Table Storage cannot store nested objects) */
+const ENCODED_VALUE_PREFIX = "OINONoSqlAzureTableEncoded:"
+/** Property name holding the chunk count when the serialized properties exceed the per-property size limit */
+const CHUNKED_VALUE_COUNT = "OINONoSqlAzureTableChunked"
+/** Max characters per stored property (Azure Table Storage limit is 32k UTF-16 chars) */
+const MAX_PROPERTY_CHARS = 32000
+
 /**
  * Azure Table Storage implementation of `OINONoSql`.
  *
@@ -272,7 +279,7 @@ export class OINONoSqlAzureTable extends OINONoSql {
         const entity: TableEntity<Record<string, unknown>> = {
             partitionKey: this.nosqlParams.staticPartitionKey ?? entry.primaryKey[0] ?? "",
             rowKey: entry.primaryKey[1] ?? "",
-            ...entry.properties
+            ...OINONoSqlAzureTable.encodeProperties(entry.properties)
         }
         await this._tableClient.upsertEntity(entity, "Replace")
     }
@@ -293,7 +300,7 @@ export class OINONoSqlAzureTable extends OINONoSql {
             const entity: TableEntity<Record<string, unknown>> = {
                 partitionKey: pk,
                 rowKey: entry.primaryKey[1] ?? "",
-                ...entry.properties
+                ...OINONoSqlAzureTable.encodeProperties(entry.properties)
             }
             const bucket = by_partition.get(pk)
             if (bucket) {
@@ -358,15 +365,73 @@ export class OINONoSqlAzureTable extends OINONoSql {
      */
     private static entityToEntry(entity: TableEntity<Record<string, unknown>>): OINONoSqlEntry {
         const { partitionKey, rowKey, timestamp, etag, ...rest } = entity as Record<string, unknown>
-        const properties: Record<string, unknown> = {}
+        const stored: Record<string, unknown> = {}
         for (const key of Object.keys(rest)) {
-            if (!key.startsWith("odata.")) properties[key] = rest[key]
+            if (!key.startsWith("odata.")) stored[key] = rest[key]
         }
         return {
             primaryKey: [String(partitionKey ?? ""), String(rowKey ?? "")],
             timestamp:  timestamp instanceof Date ? timestamp : new Date(String(timestamp ?? "")),
             etag:       String(etag ?? ""),
-            properties
+            properties: OINONoSqlAzureTable.decodeProperties(stored)
         }
+    }
+
+    /**
+     * Encode an entry's `properties` into a flat map storable in Azure Table
+     * Storage.  Nested objects/arrays are JSON-stringified with a marker
+     * prefix (Azure Table Storage stores only primitive property values), and
+     * if the serialized properties exceed the 32k per-property limit the whole
+     * map is JSON-serialized and split across numbered `chunkN` properties.
+     *
+     * @param properties entry properties to encode
+     */
+    private static encodeProperties(properties: Record<string, unknown>): Record<string, unknown> {
+        const result: Record<string, unknown> = {}
+        const props_json = JSON.stringify(properties)
+        if (props_json.length > MAX_PROPERTY_CHARS) { // split oversized JSON across multiple chunk properties
+            const chunk_count = Math.ceil(props_json.length / MAX_PROPERTY_CHARS)
+            for (let i = 1; i <= chunk_count; i++) {
+                result["chunk" + i] = props_json.slice((i - 1) * MAX_PROPERTY_CHARS, i * MAX_PROPERTY_CHARS)
+            }
+            result[CHUNKED_VALUE_COUNT] = chunk_count
+        } else {
+            for (const key in properties) {
+                const value = properties[key]
+                if (typeof value === "object" && value !== null) { // nested objects/arrays are stringified with a marker prefix
+                    result[key] = ENCODED_VALUE_PREFIX + JSON.stringify(value)
+                } else {
+                    result[key] = value
+                }
+            }
+        }
+        return result
+    }
+
+    /**
+     * Decode stored Azure Table Storage properties back into the original
+     * `properties` map, reversing `encodeProperties`.
+     *
+     * @param properties stored properties to decode
+     */
+    private static decodeProperties(properties: Record<string, unknown>): Record<string, unknown> {
+        const chunk_count = (properties[CHUNKED_VALUE_COUNT] as number) || 0
+        if (chunk_count > 0) { // reassemble chunked JSON
+            let props_json = ""
+            for (let i = 1; i <= chunk_count; i++) {
+                props_json += (properties["chunk" + i] as string) || ""
+            }
+            return JSON.parse(props_json)
+        }
+        const result: Record<string, unknown> = {}
+        for (const key in properties) {
+            const value = properties[key]
+            if (typeof value === "string" && value.startsWith(ENCODED_VALUE_PREFIX)) {
+                result[key] = JSON.parse(value.slice(ENCODED_VALUE_PREFIX.length))
+            } else {
+                result[key] = value
+            }
+        }
+        return result
     }
 }
