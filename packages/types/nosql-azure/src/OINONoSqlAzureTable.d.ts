@@ -4,12 +4,15 @@ import { type OINONoSqlEntry } from "@oino-ts/nosql";
 /**
  * Azure Table Storage implementation of `OINONoSql`.
  *
- * Authenticates using an Azure Storage connection string.  Connection parameters map as:
- * - `params.url`           → table service endpoint, e.g. `https://<account>.table.core.windows.net`
- * - `params.table`         → table name
- * - `params.connectionStr` → Azure Storage connection string (e.g. `DefaultEndpointsProtocol=https;AccountName=...`)
+ * Authenticates using either an Azure Storage connection string or a table
+ * service endpoint URL combined with a managed identity client id.  Connection
+ * parameters map as:
+ * - `credentials.url`           → table service endpoint, e.g. `https://<account>.table.core.windows.net`
+ * - `credentials.connectionStr` → Azure Storage connection string (e.g. `DefaultEndpointsProtocol=https;AccountName=...`)
+ * - `credentials.clientId`      → (optional) managed identity client id used with `credentials.url`
+ * - `params.table`             → table name
  *
- * Register and use via the factory:
+ * Register and use via the factory with a connection string:
  * ```ts
  * import { OINONoSqlFactory } from "@oino-ts/nosql"
  * import { OINONoSqlAzureTable } from "@oino-ts/nosql-azure"
@@ -17,14 +20,25 @@ import { type OINONoSqlEntry } from "@oino-ts/nosql";
  * OINONoSqlFactory.registerNoSql("OINONoSqlAzureTable", OINONoSqlAzureTable)
  *
  * const nosql = await OINONoSqlFactory.createNoSql({
- *     type:          "OINONoSqlAzureTable",
- *     url:           "https://myaccount.table.core.windows.net",
- *     table:         "myTable",
- *     connectionStr: process.env.AZURE_STORAGE_CONNECTION_STRING
+ *     type:        "OINONoSqlAzureTable",
+ *     table:       "myTable",
+ *     credentials: { connectionStr: process.env.AZURE_STORAGE_CONNECTION_STRING }
  * })
  * const api = await OINONoSqlFactory.createApi(nosql, {
  *     apiName:   "entities",
  *     tableName: "myTable"
+ * })
+ * ```
+ *
+ * Or with a service endpoint URL and a managed identity client id:
+ * ```ts
+ * const nosql = await OINONoSqlFactory.createNoSql({
+ *     type:        "OINONoSqlAzureTable",
+ *     table:       "myTable",
+ *     credentials: {
+ *         url:      "https://myaccount.table.core.windows.net",
+ *         clientId: process.env.AZURE_MANAGED_IDENTITY_CLIENT_ID
+ *     }
  * })
  * ```
  *

@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/nosql",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "OINO TS library package for publishing NoSQL storage as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -19,13 +19,13 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "dependencies": {
-    "@oino-ts/common": "1.0.7",
+    "@oino-ts/common": "1.0.8",
     "oino-ts": "file:.."
   },
   "devDependencies": {
-    "@oino-ts/types": "1.0.7",
+    "@oino-ts/types": "1.0.8",
     "@types/bun": "^1.1.14",
-    "@types/node": "^21.0.70",
+    "@types/node": "^21.0.80",
     "typescript": "~5.9.0"
   },
   "files": [
