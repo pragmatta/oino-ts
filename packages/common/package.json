@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/common",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "OINO TS package for common classes.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -19,7 +19,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@oino-ts/types": "1.0.7",
+    "@oino-ts/types": "1.0.8",
     "@types/node": "^22.0.0",
     "typescript": "~5.9.0"
   },

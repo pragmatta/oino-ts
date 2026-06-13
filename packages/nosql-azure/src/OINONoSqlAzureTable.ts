@@ -10,6 +10,7 @@ import {
     type TableEntity,
     type TransactionAction
 } from "@azure/data-tables"
+import { DefaultAzureCredential } from "@azure/identity"
 
 import { OINOApi, OINOResult, OINOQueryFilter, OINOQueryBooleanOperation, OINOQueryComparison, OINOQueryNullCheck, OINOStringDataField, OINODatetimeDataField, type OINODataFieldParams } from "@oino-ts/common"
 import { OINONoSql, OINONoSqlDataModel, OINONoSqlApi, OINONoSqlParams } from "@oino-ts/nosql"
@@ -35,12 +36,15 @@ const MAX_PROPERTY_CHARS = 32000
 /**
  * Azure Table Storage implementation of `OINONoSql`.
  *
- * Authenticates using an Azure Storage connection string.  Connection parameters map as:
- * - `params.url`           → table service endpoint, e.g. `https://<account>.table.core.windows.net`
- * - `params.table`         → table name
- * - `params.connectionStr` → Azure Storage connection string (e.g. `DefaultEndpointsProtocol=https;AccountName=...`)
+ * Authenticates using either an Azure Storage connection string or a table
+ * service endpoint URL combined with a managed identity client id.  Connection
+ * parameters map as:
+ * - `credentials.url`           → table service endpoint, e.g. `https://<account>.table.core.windows.net`
+ * - `credentials.connectionStr` → Azure Storage connection string (e.g. `DefaultEndpointsProtocol=https;AccountName=...`)
+ * - `credentials.clientId`      → (optional) managed identity client id used with `credentials.url`
+ * - `params.table`             → table name
  *
- * Register and use via the factory:
+ * Register and use via the factory with a connection string:
  * ```ts
  * import { OINONoSqlFactory } from "@oino-ts/nosql"
  * import { OINONoSqlAzureTable } from "@oino-ts/nosql-azure"
@@ -48,14 +52,25 @@ const MAX_PROPERTY_CHARS = 32000
  * OINONoSqlFactory.registerNoSql("OINONoSqlAzureTable", OINONoSqlAzureTable)
  *
  * const nosql = await OINONoSqlFactory.createNoSql({
- *     type:          "OINONoSqlAzureTable",
- *     url:           "https://myaccount.table.core.windows.net",
- *     table:         "myTable",
- *     connectionStr: process.env.AZURE_STORAGE_CONNECTION_STRING
+ *     type:        "OINONoSqlAzureTable",
+ *     table:       "myTable",
+ *     credentials: { connectionStr: process.env.AZURE_STORAGE_CONNECTION_STRING }
  * })
  * const api = await OINONoSqlFactory.createApi(nosql, {
  *     apiName:   "entities",
  *     tableName: "myTable"
+ * })
+ * ```
+ *
+ * Or with a service endpoint URL and a managed identity client id:
+ * ```ts
+ * const nosql = await OINONoSqlFactory.createNoSql({
+ *     type:        "OINONoSqlAzureTable",
+ *     table:       "myTable",
+ *     credentials: {
+ *         url:      "https://myaccount.table.core.windows.net",
+ *         clientId: process.env.AZURE_MANAGED_IDENTITY_CLIENT_ID
+ *     }
  * })
  * ```
  *
@@ -88,8 +103,8 @@ export class OINONoSqlAzureTable extends OINONoSql {
 
     constructor(params: OINONoSqlParams) {
         super(params)
-        if (!this.nosqlParams.credentials?.connectionStr) {
-            throw new Error("OINONoSqlAzureTable: missing or invalid credentials (provide credentials.connectionStr)")
+        if (!this.nosqlParams.credentials?.connectionStr && !this.nosqlParams.credentials?.url) {
+            throw new Error("OINONoSqlAzureTable: missing or invalid credentials (provide either credentials.connectionStr or credentials.url and credentials.clientId)")
         }
     }
 
@@ -159,10 +174,18 @@ export class OINONoSqlAzureTable extends OINONoSql {
      */
     async connect(): Promise<OINOResult> {
         try {
-            this._tableClient = TableClient.fromConnectionString(
-                this.nosqlParams.credentials.connectionStr,
-                this.nosqlParams.table
-            )
+            if (this.nosqlParams.credentials.connectionStr) {
+                this._tableClient = TableClient.fromConnectionString(
+                    this.nosqlParams.credentials.connectionStr,
+                    this.nosqlParams.table
+                )
+            } else {
+                this._tableClient = new TableClient(
+                    this.nosqlParams.credentials.url,
+                    this.nosqlParams.table,
+                    new DefaultAzureCredential({ managedIdentityClientId: this.nosqlParams.credentials.clientId })
+                )
+            }
             this.isConnected = true
         } catch (e: any) {
             return new OINOResult({ success: false, status: 500, statusText: "OINONoSqlAzureTable connect failed: " + e.message })
@@ -178,7 +201,12 @@ export class OINONoSqlAzureTable extends OINONoSql {
             return new OINOResult({ success: false, status: 500, statusText: "OINONoSqlAzureTable: not connected" })
         }
         try {
-            const service_client = TableServiceClient.fromConnectionString(this.nosqlParams.credentials.connectionStr)
+            const service_client = this.nosqlParams.credentials.connectionStr
+                ? TableServiceClient.fromConnectionString(this.nosqlParams.credentials.connectionStr)
+                : new TableServiceClient(
+                    this.nosqlParams.credentials.url,
+                    new DefaultAzureCredential({ managedIdentityClientId: this.nosqlParams.credentials.clientId })
+                )
             const tables = service_client.listTables({ queryOptions: { filter: `TableName eq '${this.nosqlParams.table}'` } })
             let found = false
             for await (const _t of tables) {
