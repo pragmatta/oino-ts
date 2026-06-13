@@ -1,37 +1,14 @@
 import { OINOApi, OINOResult, OINOQueryFilter } from "@oino-ts/common";
 import { OINOBlob, OINOBlobParams, type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob";
-/**
- * AWS S3 (and S3-compatible) implementation of `OINOBlob`.
- *
- * Authenticates using static access key credentials supplied via a JSON-encoded
- * connection string.  Connection parameters map as:
- * - `params.url`           → optional custom endpoint, e.g. `https://s3.eu-west-1.amazonaws.com`
- *                            or a compatible service such as MinIO / Cloudflare R2
- * - `params.container`     → S3 bucket name
- * - `params.connectionStr` → JSON string: `{"region":"…","accessKeyId":"…","secretAccessKey":"…"}`
- *
- * Register and use via the factory:
- * ```ts
- * import { OINOBlobFactory } from "@oino-ts/blob"
- * import { OINOBlobAwsS3 }      from "@oino-ts/blob-aws"
- *
- * OINOBlobFactory.registerBlob("OINOBlobAwsS3", OINOBlobAwsS3)
- *
- * const blob = await OINOBlobFactory.createBlob({
- *     type:          "OINOBlobAwsS3",
- *     url:           "",                             // leave empty for default AWS endpoint
- *     container:     "my-bucket",
- *     connectionStr: JSON.stringify({
- *         region:          "us-east-1",
- *         accessKeyId:     process.env.AWS_ACCESS_KEY_ID,
- *         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
- *     })
- * })
- * ```
- */
 export declare class OINOBlobAwsS3 extends OINOBlob {
     private _s3Client;
     constructor(params: OINOBlobParams);
+    /**
+     * Replace characters that are unsafe in S3 object key names
+     * (`\`, control characters, and shell/URL-special characters
+     * `{`, `}`, `[`, `]`, `^`, `` ` ``, `|`, `<`, `>`, `#`, `%`) with `_`.
+     */
+    sanitizeName(name: string): string;
     /**
      * Initialise the AWS SDK S3 client from the JSON-encoded `connectionStr`.
      * Does not perform any network call.

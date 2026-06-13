@@ -10,6 +10,7 @@ const common_1 = require("@oino-ts/common");
 const BLOB_LIKE_ESCAPE_REGEX = /[.*+?^${}()|[\]\\]/g;
 const BLOB_LIKE_PERCENT_REGEX = /%/g;
 const BLOB_LIKE_UNDERSCORE_REGEX = /_/g;
+const BLOB_SANITIZE_DEFAULT_REGEX = /[\x00-\x1f\x7f]/g;
 /**
  * Abstract base class for blob storage backends.  Subclasses implement
  * the two core operations (`listEntries` and `fetchEntry`) for a specific
@@ -52,6 +53,20 @@ class OINOBlob extends common_1.OINODataSource {
             return new Date(v);
         }
         return v;
+    }
+    // ── Blob name sanitization ──────────────────────────────────────────────
+    /**
+     * Sanitize a blob name by replacing characters that are illegal or unsafe
+     * on this storage backend with `_`.
+     *
+     * The base implementation strips ASCII control characters (U+0000–U+001F
+     * and U+007F).  Subclasses should override to apply additional
+     * platform-specific rules.
+     *
+     * @param name raw blob name (path within the container)
+     */
+    sanitizeName(name) {
+        return name.replace(BLOB_SANITIZE_DEFAULT_REGEX, "_");
     }
     // ── Blob-specific filter helper ───────────────────────────────────────
     /**

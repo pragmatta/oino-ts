@@ -128,4 +128,21 @@ export declare class OINONoSqlAzureTable extends OINONoSql {
      * @param entity raw entity from the Azure SDK
      */
     private static entityToEntry;
+    /**
+     * Encode an entry's `properties` into a flat map storable in Azure Table
+     * Storage.  Nested objects/arrays are JSON-stringified with a marker
+     * prefix (Azure Table Storage stores only primitive property values), and
+     * if the serialized properties exceed the 32k per-property limit the whole
+     * map is JSON-serialized and split across numbered `chunkN` properties.
+     *
+     * @param properties entry properties to encode
+     */
+    private static encodeProperties;
+    /**
+     * Decode stored Azure Table Storage properties back into the original
+     * `properties` map, reversing `encodeProperties`.
+     *
+     * @param properties stored properties to decode
+     */
+    private static decodeProperties;
 }

@@ -38,6 +38,7 @@ const blob_1 = require("@oino-ts/blob");
  * })
  * ```
  */
+const BLOB_S3_UNSAFE_CHARS_REGEX = /[\x00-\x1f\x7f\\{}[\]^`|<>#%]/g;
 class OINOBlobAwsS3 extends blob_1.OINOBlob {
     _s3Client = null;
     constructor(params) {
@@ -45,6 +46,14 @@ class OINOBlobAwsS3 extends blob_1.OINOBlob {
         if (!params.credentials || !params.credentials.region || !params.credentials.accessKeyId || !params.credentials.secretAccessKey) {
             throw new Error("OINOBlobAwsS3: missing or invalid credentials (provide region, accessKeyId, secretAccessKey)");
         }
+    }
+    /**
+     * Replace characters that are unsafe in S3 object key names
+     * (`\`, control characters, and shell/URL-special characters
+     * `{`, `}`, `[`, `]`, `^`, `` ` ``, `|`, `<`, `>`, `#`, `%`) with `_`.
+     */
+    sanitizeName(name) {
+        return name.replace(BLOB_S3_UNSAFE_CHARS_REGEX, "_");
     }
     /**
      * Initialise the AWS SDK S3 client from the JSON-encoded `connectionStr`.

@@ -23,6 +23,17 @@ export declare abstract class OINOBlob extends OINODataSource {
     printStringValue(s: string): string;
     parseValueAsCell(v: OINODataCell, nativeType: string): OINODataCell;
     /**
+     * Sanitize a blob name by replacing characters that are illegal or unsafe
+     * on this storage backend with `_`.
+     *
+     * The base implementation strips ASCII control characters (U+0000–U+001F
+     * and U+007F).  Subclasses should override to apply additional
+     * platform-specific rules.
+     *
+     * @param name raw blob name (path within the container)
+     */
+    sanitizeName(name: string): string;
+    /**
      * Test whether a blob entry matches an `OINOQueryFilter` predicate.
      * Used for in-memory (result) filtering when the storage backend cannot
      * translate the predicate to a native query.

@@ -1,34 +1,13 @@
 import { OINOApi, OINOResult, OINOQueryFilter } from "@oino-ts/common";
 import { OINOBlob, OINOBlobParams, type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob";
-/**
- * Azure Blob Storage implementation of `OINOBlob`.
- *
- * Authenticates using an Azure Storage connection string.  Connection parameters map as:
- * - `params.url`           → blob service endpoint, e.g. `https://<account>.blob.core.windows.net`
- * - `params.container`     → container name
- * - `params.connectionStr` → Azure Storage connection string (e.g. `DefaultEndpointsProtocol=https;AccountName=...`)
- *
- * Register and use via the factory:
- * ```ts
- * import { OINOBlobFactory } from "@oino-ts/blob"
- * import { OINOBlobAzure }   from "@oino-ts/blob-azure"
- *
- * OINOBlobFactory.registerBlob("OINOBlobAzure", OINOBlobAzure)
- *
- * const blob = await OINOBlobFactory.createBlob({
- *     type:          "OINOBlobAzure",
- *     container:     "my-container",
- *     credentials:   either connectionStr or url and clientId
- * })
- * const api = await OINOBlobFactory.createApi(blob, {
- *     apiName:   "files",
- *     tableName: "uploads/"   // blob prefix / folder
- * })
- * ```
- */
 export declare class OINOBlobAzure extends OINOBlob {
     private _containerClient;
     constructor(params: OINOBlobParams);
+    /**
+     * Replace characters that Azure Blob Storage does not permit in blob names
+     * (`\` and ASCII control characters) with `_`.
+     */
+    sanitizeName(name: string): string;
     /**
      * Initialise the Azure SDK client.  Does not perform any network call.
      */
