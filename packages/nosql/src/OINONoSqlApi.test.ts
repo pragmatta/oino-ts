@@ -298,6 +298,41 @@ export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testP
         expect(json).toContain(testParams.updateVerifyValue)
     }, 30_000)
 
+    // Large property value: a single string property exceeds the per-property limit
+    // of NoSQL backends (e.g. Azure Table Storage caps a string property at 32K chars),
+    // so the backend must transparently split/store and reassemble it on read.
+    await test(target_name + target_storage + target_group + " update with large property", async () => {
+        // Build a >32000 char value with a non-repeating-per-chunk pattern so that any
+        // truncation, reordering or chunk-boundary corruption is detectable.
+        let large_value = ""
+        let chunk = 0
+        while (large_value.length <= 32_000) {
+            large_value += "[chunk" + chunk + ":" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".repeat(8) + "]"
+            chunk++
+        }
+        expect(large_value.length).toBeGreaterThan(32_000)
+
+        const large_props = { ...testParams.updateProperties, LargeNote: large_value }
+        const large_put_request = new OINOApiRequest({
+            url: base_url,
+            method: "PUT",
+            rowId: testParams.testRowId,
+            body: JSON.stringify({ properties: large_props }),
+            headers: { "content-type": "application/json" }
+        })
+        const result: OINOApiResult = await api.doApiRequest(large_put_request)
+        expect(result.success).toBe(true)
+
+        // Read back and verify the large value round-trips exactly.
+        const verify_request = new OINOApiRequest({ url: base_url, method: "GET", rowId: testParams.testRowId })
+        const verify_result: OINOApiResult = await api.doApiRequest(verify_request)
+        expect(verify_result.success).toBe(true)
+        const json = await verify_result.data!.writeString(OINOContentType.json)
+        const parsed = JSON.parse(json) as Array<{ properties: string }>
+        const props = JSON.parse(parsed[0].properties) as Record<string, unknown>
+        expect(props.LargeNote).toBe(large_value)
+    }, 30_000)
+
     // ── BATCH UPDATE ──────────────────────────────────────────────────────
     // NoSQL backends reject duplicate keys within a single batch, so use
     // 3 *distinct* row IDs (derived from testRowId with -b1/-b2/-b3 suffixes)
