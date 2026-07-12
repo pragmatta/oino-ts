@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OINODB_UNDEFINED = exports.OINODbQueryAggregate = exports.OINODbQueryLimit = exports.OINODbQueryOrder = exports.OINODbQueryFilter = exports.OINODbApi = exports.OINODbFactory = exports.OINODbDataModel = exports.OINODb = void 0;
+exports.OINODB_UNDEFINED = exports.OINODbQueryAggregate = exports.OINODbQueryLimit = exports.OINODbQueryOrder = exports.OINODbQueryFilter = exports.OINODbApi = exports.OINODbFactory = exports.OINODbDataModel = exports.OINODbSchemaResult = exports.OINODb = void 0;
 var OINODb_js_1 = require("./OINODb.js");
 Object.defineProperty(exports, "OINODb", { enumerable: true, get: function () { return OINODb_js_1.OINODb; } });
+Object.defineProperty(exports, "OINODbSchemaResult", { enumerable: true, get: function () { return OINODb_js_1.OINODbSchemaResult; } });
 var OINODbDataModel_js_1 = require("./OINODbDataModel.js");
 Object.defineProperty(exports, "OINODbDataModel", { enumerable: true, get: function () { return OINODbDataModel_js_1.OINODbDataModel; } });
 var OINODbFactory_js_1 = require("./OINODbFactory.js");

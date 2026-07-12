@@ -473,7 +473,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
     getNativeDataType(schema:OINODataFieldSchema): string {
         switch (schema.type) {
             case "string":
-                return schema.maxLength > 0 ? "varchar(" + schema.maxLength + ")" : "longtext"
+                return (schema.maxLength || 0) > 0 ? "varchar(" + schema.maxLength + ")" : "longtext"
             case "number":
                 return "double"
             case "boolean":

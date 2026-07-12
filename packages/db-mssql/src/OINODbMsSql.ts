@@ -522,7 +522,7 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
     getNativeDataType(schema:OINODataFieldSchema): string {
         switch (schema.type) {
             case "string":
-                return schema.maxLength > 0 ? "nvarchar(" + schema.maxLength + ")" : "nvarchar(max)"
+                return (schema.maxLength || 0) > 0 ? "nvarchar(" + schema.maxLength + ")" : "nvarchar(max)"
             case "number":
                 return "float"
             case "boolean":

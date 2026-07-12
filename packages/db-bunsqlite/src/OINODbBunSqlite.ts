@@ -377,7 +377,7 @@ export class OINODbBunSqlite extends OINODb {
     getNativeDataType(schema:OINODataFieldSchema): string {
         switch (schema.type) {
             case "string":
-                return schema.maxLength > 0 ? "VARCHAR(" + schema.maxLength + ")" : "TEXT"
+                return (schema.maxLength || 0) > 0 ? "VARCHAR(" + schema.maxLength + ")" : "TEXT"
             case "number":
                 return "NUMERIC"
             case "boolean":

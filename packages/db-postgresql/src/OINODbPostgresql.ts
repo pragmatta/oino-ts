@@ -475,7 +475,7 @@ WHERE col.table_catalog = '${dbName}'`
     getNativeDataType(schema:OINODataFieldSchema): string {
         switch (schema.type) {
             case "string":
-                return schema.maxLength > 0 ? "varchar(" + schema.maxLength + ")" : "text"
+                return (schema.maxLength || 0) > 0 ? "varchar(" + schema.maxLength + ")" : "text"
             case "number":
                 return "double precision"
             case "boolean":

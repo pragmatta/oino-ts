@@ -82,6 +82,49 @@ export class OINODataField {
     printFieldName() {
         return this.datasource.printColumnName(this.name);
     }
+    /**
+     * Serialize the field schema as a plain object without the datasource reference.
+     *
+     */
+    serializeSchema() {
+        return {
+            name: this.name,
+            type: this.type,
+            maxLength: this.maxLength > 0 ? this.maxLength : undefined,
+            fieldParams: {
+                isPrimaryKey: this.fieldParams.isPrimaryKey,
+                isForeignKey: this.fieldParams.isForeignKey,
+                isAutoInc: this.fieldParams.isAutoInc,
+                isNotNull: this.fieldParams.isNotNull
+            }
+        };
+    }
+    /**
+     * Construct the appropriate `OINODataField` subclass from a serialized schema. The native type
+     * is supplied by the datasource (it is not taken from the schema, since a created field's native
+     * type is chosen by the database implementation).
+     *
+     * @param datasource OINO data source reference
+     * @param schema serialized field schema
+     * @param nativeType native (SQL) type chosen by the datasource
+     *
+     */
+    static fromSchema(datasource, schema, nativeType) {
+        switch (schema.type) {
+            case "string":
+                return new OINOStringDataField(datasource, schema.name, nativeType, { ...schema.fieldParams }, schema.maxLength || 0);
+            case "boolean":
+                return new OINOBooleanDataField(datasource, schema.name, nativeType, { ...schema.fieldParams });
+            case "number":
+                return new OINONumberDataField(datasource, schema.name, nativeType, { ...schema.fieldParams });
+            case "blob":
+                return new OINOBlobDataField(datasource, schema.name, nativeType, { ...schema.fieldParams }, schema.maxLength || 0);
+            case "datetime":
+                return new OINODatetimeDataField(datasource, schema.name, nativeType, { ...schema.fieldParams });
+            default:
+                throw new Error(OINO_ERROR_PREFIX + ": OINODataField.fromSchema - unsupported field type '" + schema.type + "'");
+        }
+    }
 }
 /**
  * Specialised class for a string column.

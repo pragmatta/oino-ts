@@ -1,5 +1,5 @@
-import { OINOResult, OINODataSet, OINODataCell } from "@oino-ts/common";
-import { OINODb, OINODbApi, OINODbParams } from "@oino-ts/db";
+import { OINOResult, OINODataSet, OINODataField, OINODataFieldSchema, OINODataCell } from "@oino-ts/common";
+import { OINODb, OINODbParams } from "@oino-ts/db";
 /**
  * Implementation of Postgresql-database.
  *
@@ -85,11 +85,17 @@ export declare class OINODbPostgresql extends OINODb {
     private _getSchemaSql;
     private _getValidateSql;
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of
-     * the model.
+     * Get the schema fields of a table as `OINODataField`s (without any API-level field filtering).
      *
-     * @param api api which data model to initialize.
+     * @param tableName name of the table
      *
      */
-    initializeApiDatamodel(api: OINODbApi): Promise<void>;
+    getSchemaFields(tableName: string): Promise<OINODataField[]>;
+    /**
+     * Resolve the optimal native (SQL) type for a serialized field schema.
+     *
+     * @param schema serialized field schema
+     *
+     */
+    getNativeDataType(schema: OINODataFieldSchema): string;
 }

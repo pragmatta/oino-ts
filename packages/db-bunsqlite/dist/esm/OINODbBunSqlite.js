@@ -5,7 +5,7 @@
  */
 import { Buffer } from "node:buffer";
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINOStr, OINOLog, OINOResult, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINOMemoryDataset, OINOBlobDataField, OINODatetimeDataField, OINO_EMPTY_ROWS } from "@oino-ts/common";
-import { OINODb, OINODbDataModel } from "@oino-ts/db";
+import { OINODb } from "@oino-ts/db";
 import { Database as BunSqliteDb } from "bun:sqlite";
 /**
  * Implmentation of OINODataSet for BunSqlite.
@@ -98,6 +98,14 @@ export class OINODbBunSqlite extends OINODb {
         }
         else if (((nativeType == "DATETIME") || (nativeType == "DATE")) && (cellValue instanceof Date)) {
             return "\'" + cellValue.toISOString() + "\'";
+        }
+        else if (nativeType == "BOOLEAN") {
+            if ((cellValue === null) || (cellValue === "") || (cellValue.toString().toLowerCase() == "false") || (cellValue == "0")) {
+                return "0";
+            }
+            else {
+                return "1";
+            }
         }
         else {
             return this.printStringValue(cellValue.toString());
@@ -281,98 +289,93 @@ export class OINODbBunSqlite extends OINODb {
         return sql;
     }
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of
-     * the model.
+     * Get the schema fields of a table as `OINODataField`s (without any API-level field filtering).
      *
-     * @param api api which data model to initialize.
+     * @param tableName name of the table
      *
      */
-    async initializeApiDatamodel(api) {
-        api.initializeDatamodel(new OINODbDataModel(api));
-        const schema_sql = this._getSchemaSql(this.dbParams.database, api.params.tableName);
+    async getSchemaFields(tableName) {
+        const schema_sql = this._getSchemaSql(this.dbParams.database, tableName);
         const res = await this._query(schema_sql);
         const sql_desc = (res?.getRow()[0]);
-        const excluded_fields = [];
-        let table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc);
+        const table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc);
         if (!table_matches || table_matches?.length < 2) {
-            throw new Error("Table " + api.params.tableName + " not recognized as a valid Sqlite table!");
+            throw new Error(OINO_ERROR_PREFIX + ": Table " + tableName + " not recognized as a valid Sqlite table!");
         }
-        else {
-            let field_strings = OINOStr.splitExcludingBrackets(table_matches[1], ',', '(', ')');
-            for (let field_str of field_strings) {
-                field_str = field_str.trim();
-                let field_params = this._parseDbFieldParams(field_str);
-                let field_match = OINODbBunSqlite._tableFieldTypeRegex.exec(field_str);
-                // console.log("OINODbBunSqlite.initializeApiDatamodel: field_match", field_match)
-                if ((!field_match) || (field_match.length < 3)) {
-                    let primarykey_match = OINODbBunSqlite._tablePrimarykeyRegex.exec(field_str);
-                    let foreignkey_match = OINODbBunSqlite._tableForeignkeyRegex.exec(field_str);
-                    if (primarykey_match && primarykey_match.length >= 2) {
-                        const primary_keys = primarykey_match[1].replaceAll("\"", "").split(','); // not sure if will have space or not so split by comma and trim later
-                        for (let i = 0; i < primary_keys.length; i++) {
-                            const pk = primary_keys[i].trim(); //..the trim
-                            if (excluded_fields.indexOf(pk) >= 0) {
-                                throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + pk);
-                            }
-                            for (let j = 0; j < api.datamodel.fields.length; j++) {
-                                if (api.datamodel.fields[j].name == pk) {
-                                    api.datamodel.fields[j].fieldParams.isPrimaryKey = true;
-                                }
-                            }
-                        }
-                    }
-                    else if (foreignkey_match && foreignkey_match.length >= 2) {
-                        const fk = foreignkey_match[1].trim();
-                        for (let j = 0; j < api.datamodel.fields.length; j++) {
-                            if (api.datamodel.fields[j].name == fk) {
-                                api.datamodel.fields[j].fieldParams.isForeignKey = true;
-                            }
-                        }
-                    }
-                    else {
-                        OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Unsupported field definition skipped.", { field: field_str });
+        const fields = [];
+        const primary_keys = [];
+        const foreign_keys = [];
+        const field_strings = OINOStr.splitExcludingBrackets(table_matches[1], ',', '(', ')');
+        for (let field_str of field_strings) {
+            field_str = field_str.trim();
+            const field_params = this._parseDbFieldParams(field_str);
+            const field_match = OINODbBunSqlite._tableFieldTypeRegex.exec(field_str);
+            if ((!field_match) || (field_match.length < 3)) {
+                const primarykey_match = OINODbBunSqlite._tablePrimarykeyRegex.exec(field_str);
+                const foreignkey_match = OINODbBunSqlite._tableForeignkeyRegex.exec(field_str);
+                if (primarykey_match && primarykey_match.length >= 2) {
+                    for (const pk of primarykey_match[1].replaceAll("\"", "").split(',')) {
+                        primary_keys.push(pk.trim());
                     }
                 }
-                else {
-                    // field_str = "NAME TYPE (M, N)" -> 1:NAME, 2:TYPE, 4:M, 5:N
-                    const field_name = field_match[1];
-                    const sql_type = field_match[2];
-                    const field_length = parseInt(field_match[4]) || 0;
-                    if (api.isFieldIncluded(field_name) == false) {
-                        excluded_fields.push(field_name);
-                        OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
-                    }
-                    else {
-                        if ((sql_type == "INTEGER") || (sql_type == "REAL") || (sql_type == "DOUBLE") || (sql_type == "NUMERIC") || (sql_type == "DECIMAL")) {
-                            api.datamodel.addField(new OINONumberDataField(this, field_name, sql_type, field_params));
-                        }
-                        else if ((sql_type == "BLOB")) {
-                            api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length));
-                        }
-                        else if ((sql_type == "TEXT")) {
-                            api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length));
-                        }
-                        else if ((sql_type == "DATETIME") || (sql_type == "DATE")) {
-                            if (api.params.useDatesAsString) {
-                                api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                            }
-                            else {
-                                api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params));
-                            }
-                        }
-                        else if ((sql_type == "BOOLEAN")) {
-                            api.datamodel.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params));
-                        }
-                        else {
-                            OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length: field_length, field_params: field_params });
-                            api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                        }
-                    }
+                else if (foreignkey_match && foreignkey_match.length >= 2) {
+                    foreign_keys.push(foreignkey_match[1].trim());
                 }
             }
-            ;
-            OINOLog.info("@oino-ts/db-bunsqlite", "OINODbBunSqlite", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
-            return Promise.resolve();
+            else {
+                const field_name = field_match[1];
+                const sql_type = field_match[2];
+                const field_length = parseInt(field_match[4]) || 0;
+                if ((sql_type == "INTEGER") || (sql_type == "REAL") || (sql_type == "DOUBLE") || (sql_type == "NUMERIC") || (sql_type == "DECIMAL")) {
+                    fields.push(new OINONumberDataField(this, field_name, sql_type, field_params));
+                }
+                else if (sql_type == "BLOB") {
+                    fields.push(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length));
+                }
+                else if ((sql_type == "TEXT") || (sql_type == "VARCHAR")) {
+                    fields.push(new OINOStringDataField(this, field_name, sql_type, field_params, field_length));
+                }
+                else if ((sql_type == "DATETIME") || (sql_type == "DATE")) {
+                    fields.push(new OINODatetimeDataField(this, field_name, sql_type, field_params));
+                }
+                else if (sql_type == "BOOLEAN") {
+                    fields.push(new OINOBooleanDataField(this, field_name, sql_type, field_params));
+                }
+                else {
+                    fields.push(new OINOStringDataField(this, field_name, sql_type, field_params, 0));
+                }
+            }
+        }
+        for (const f of fields) {
+            if (primary_keys.indexOf(f.name) >= 0) {
+                f.fieldParams.isPrimaryKey = true;
+            }
+            if (foreign_keys.indexOf(f.name) >= 0) {
+                f.fieldParams.isForeignKey = true;
+            }
+        }
+        return fields;
+    }
+    /**
+     * Resolve the optimal native (SQL) type for a serialized field schema.
+     *
+     * @param schema serialized field schema
+     *
+     */
+    getNativeDataType(schema) {
+        switch (schema.type) {
+            case "string":
+                return (schema.maxLength || 0) > 0 ? "VARCHAR(" + schema.maxLength + ")" : "TEXT";
+            case "number":
+                return "NUMERIC";
+            case "boolean":
+                return "BOOLEAN";
+            case "datetime":
+                return "DATETIME";
+            case "blob":
+                return "BLOB";
+            default:
+                throw new Error(OINO_ERROR_PREFIX + ": OINODbBunSqlite.getNativeDataType - unsupported field type '" + schema.type + "'");
         }
     }
 }

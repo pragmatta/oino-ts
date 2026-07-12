@@ -1,6 +1,21 @@
 import { OINODataFieldParams, OINODataCell } from "./OINOConstants.js";
 import { OINODataSource } from "./OINODataSource.js";
 /**
+ * Serialized schema of a data field without any datasource reference. Used for schema
+ * (table/column) requests where fields need to be transferred as plain JSON.
+ *
+ */
+export type OINODataFieldSchema = {
+    /** Name of the field */
+    name: string;
+    /** Internal type of the field (string, boolean, number, blob, datetime) */
+    type: string;
+    /** Maximum length of the field or undefined if not applicable */
+    maxLength?: number;
+    /** Parameters for the field */
+    fieldParams: OINODataFieldParams;
+};
+/**
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
  *
  */
@@ -55,6 +70,22 @@ export declare class OINODataField {
      *
      */
     printFieldName(): string;
+    /**
+     * Serialize the field schema as a plain object without the datasource reference.
+     *
+     */
+    serializeSchema(): OINODataFieldSchema;
+    /**
+     * Construct the appropriate `OINODataField` subclass from a serialized schema. The native type
+     * is supplied by the datasource (it is not taken from the schema, since a created field's native
+     * type is chosen by the database implementation).
+     *
+     * @param datasource OINO data source reference
+     * @param schema serialized field schema
+     * @param nativeType native (SQL) type chosen by the datasource
+     *
+     */
+    static fromSchema(datasource: OINODataSource, schema: OINODataFieldSchema, nativeType: string): OINODataField;
 }
 /**
  * Specialised class for a string column.

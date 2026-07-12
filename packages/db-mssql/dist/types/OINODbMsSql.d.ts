@@ -1,5 +1,5 @@
-import { OINOResult, OINODataSet, OINODataCell } from "@oino-ts/common";
-import { OINODb, OINODbApi, OINODbParams } from "@oino-ts/db";
+import { OINOResult, OINODataSet, OINODataField, OINODataFieldSchema, OINODataCell } from "@oino-ts/common";
+import { OINODb, OINODbParams } from "@oino-ts/db";
 /**
  * Implementation of MsSql-database.
  *
@@ -106,11 +106,48 @@ export declare class OINODbMsSql extends OINODb {
     private _getSchemaSql;
     private _getValidateSql;
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of
-     * the model.
+     * Get the schema fields of a table as `OINODataField`s (without any API-level field filtering).
      *
-     * @param api api which data model to initialize.
+     * @param tableName name of the table
      *
      */
-    initializeApiDatamodel(api: OINODbApi): Promise<void>;
+    getSchemaFields(tableName: string): Promise<OINODataField[]>;
+    /**
+     * Resolve the optimal native (SQL) type for a serialized field schema.
+     *
+     * @param schema serialized field schema
+     *
+     */
+    getNativeDataType(schema: OINODataFieldSchema): string;
+    /**
+     * Print SQL CREATE TABLE statement.
+     *
+     * @param tableName name of the table
+     * @param fields fields of the table
+     *
+     */
+    printSqlCreateTable(tableName: string, fields: OINODataField[]): string;
+    /**
+     * Print SQL ADD COLUMN statement.
+     *
+     * @param tableName name of the table
+     * @param field field to add
+     *
+     */
+    printSqlCreateColumn(tableName: string, field: OINODataField): string;
+    /**
+     * Print SQL DROP TABLE statement.
+     *
+     * @param tableName name of the table
+     *
+     */
+    printSqlDropTable(tableName: string): string;
+    /**
+     * Print SQL DROP COLUMN statement.
+     *
+     * @param tableName name of the table
+     * @param columnName name of the column
+     *
+     */
+    printSqlDropColumn(tableName: string, columnName: string): string;
 }

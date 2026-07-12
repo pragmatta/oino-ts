@@ -198,7 +198,7 @@ class OINODbPostgresql extends db_1.OINODb {
         else if (cellValue === undefined) {
             return "UNDEFINED";
         }
-        else if ((nativeType == "integer") || (nativeType == "smallint") || (nativeType == "real")) {
+        else if ((nativeType == "integer") || (nativeType == "smallint") || (nativeType == "bigint") || (nativeType == "real") || (nativeType == "double precision")) {
             return cellValue.toString();
         }
         else if (nativeType == "bytea") {
@@ -220,7 +220,7 @@ class OINODbPostgresql extends db_1.OINODb {
                 return "true";
             }
         }
-        else if ((nativeType == "date") && (cellValue instanceof Date)) {
+        else if (((nativeType == "date") || (nativeType == "timestamp") || (nativeType == "timestamp without time zone") || (nativeType == "timestamp with time zone")) && (cellValue instanceof Date)) {
             return "\'" + cellValue.toISOString() + "\'";
         }
         else {
@@ -251,7 +251,7 @@ class OINODbPostgresql extends db_1.OINODb {
         else if (sqlValue === undefined) {
             return undefined;
         }
-        else if (((nativeType == "date")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
+        else if (((nativeType == "date") || (nativeType == "timestamp") || (nativeType == "timestamp without time zone") || (nativeType == "timestamp with time zone")) && (typeof (sqlValue) == "string") && (sqlValue != "")) {
             return new Date(sqlValue);
         }
         else {
@@ -403,15 +403,14 @@ WHERE col.table_catalog = '${dbName}'`;
         return sql;
     }
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of
-     * the model.
+     * Get the schema fields of a table as `OINODataField`s (without any API-level field filtering).
      *
-     * @param api api which data model to initialize.
+     * @param tableName name of the table
      *
      */
-    async initializeApiDatamodel(api) {
-        api.initializeDatamodel(new db_1.OINODbDataModel(api));
-        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, api.params.tableName.toLowerCase()));
+    async getSchemaFields(tableName) {
+        const fields = [];
+        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, tableName.toLowerCase()));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";
@@ -427,45 +426,52 @@ WHERE col.table_catalog = '${dbName}'`;
                 isNotNull: row[3] == "NO",
                 isAutoInc: default_val.startsWith("nextval(")
             };
-            if (api.isFieldIncluded(field_name) == false) {
-                common_1.OINOLog.info("@oino-ts/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
-                if (field_params.isPrimaryKey) {
-                    throw new Error(common_1.OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name);
-                }
+            if ((sql_type == "integer") || (sql_type == "smallint") || (sql_type == "bigint") || (sql_type == "real") || (sql_type == "double precision")) {
+                fields.push(new common_1.OINONumberDataField(this, field_name, sql_type, field_params));
+            }
+            else if ((sql_type == "date") || (sql_type == "timestamp") || (sql_type == "timestamp without time zone") || (sql_type == "timestamp with time zone")) {
+                fields.push(new common_1.OINODatetimeDataField(this, field_name, sql_type, field_params));
+            }
+            else if ((sql_type == "character") || (sql_type == "character varying") || (sql_type == "varchar") || (sql_type == "text")) {
+                fields.push(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, field_length));
+            }
+            else if (sql_type == "bytea") {
+                fields.push(new common_1.OINOBlobDataField(this, field_name, sql_type, field_params, field_length));
+            }
+            else if (sql_type == "boolean") {
+                fields.push(new common_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
+            }
+            else if ((sql_type == "decimal") || (sql_type == "numeric")) {
+                fields.push(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1));
             }
             else {
-                if ((sql_type == "integer") || (sql_type == "smallint") || (sql_type == "real")) {
-                    api.datamodel.addField(new common_1.OINONumberDataField(this, field_name, sql_type, field_params));
-                }
-                else if ((sql_type == "date")) {
-                    if (api.params.useDatesAsString) {
-                        api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                    }
-                    else {
-                        api.datamodel.addField(new common_1.OINODatetimeDataField(this, field_name, sql_type, field_params));
-                    }
-                }
-                else if ((sql_type == "character") || (sql_type == "character varying") || (sql_type == "varchar") || (sql_type == "text")) {
-                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, field_length));
-                }
-                else if ((sql_type == "bytea")) {
-                    api.datamodel.addField(new common_1.OINOBlobDataField(this, field_name, sql_type, field_params, field_length));
-                }
-                else if ((sql_type == "boolean")) {
-                    api.datamodel.addField(new common_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
-                }
-                else if ((sql_type == "decimal") || (sql_type == "numeric")) {
-                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, numeric_precision + numeric_scale + 1));
-                }
-                else {
-                    common_1.OINOLog.info("@oino-ts/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length: field_length, field_params: field_params });
-                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                }
+                fields.push(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
             }
             await schema_res.next();
         }
-        common_1.OINOLog.info("@oino-ts/db-postgresql", "OINODbPostgresql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
-        return Promise.resolve();
+        return fields;
+    }
+    /**
+     * Resolve the optimal native (SQL) type for a serialized field schema.
+     *
+     * @param schema serialized field schema
+     *
+     */
+    getNativeDataType(schema) {
+        switch (schema.type) {
+            case "string":
+                return (schema.maxLength || 0) > 0 ? "varchar(" + schema.maxLength + ")" : "text";
+            case "number":
+                return "double precision";
+            case "boolean":
+                return "boolean";
+            case "datetime":
+                return "timestamp";
+            case "blob":
+                return "bytea";
+            default:
+                throw new Error(common_1.OINO_ERROR_PREFIX + ": OINODbPostgresql.getNativeDataType - unsupported field type '" + schema.type + "'");
+        }
     }
 }
 exports.OINODbPostgresql = OINODbPostgresql;
