@@ -1,4 +1,4 @@
-export { OINODb } from "./OINODb.js"
+export { OINODb, OINODbSchemaResult } from "./OINODb.js"
 export { OINODbDataModel } from "./OINODbDataModel.js"
 export { OINODbFactory } from "./OINODbFactory.js"
 export { OINODbApi } from "./OINODbApi.js"

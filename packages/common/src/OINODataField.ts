@@ -10,6 +10,22 @@ import { OINOLog } from "./OINOLog.js"
 import { OINODataSource } from "./OINODataSource.js"
 
 /**
+ * Serialized schema of a data field without any datasource reference. Used for schema
+ * (table/column) requests where fields need to be transferred as plain JSON.
+ *
+ */
+export type OINODataFieldSchema = {
+    /** Name of the field */
+    name: string
+    /** Internal type of the field (string, boolean, number, blob, datetime) */
+    type: string
+    /** Maximum length of the field or undefined if not applicable */
+    maxLength?: number
+    /** Parameters for the field */
+    fieldParams: OINODataFieldParams
+}
+
+/**
  * Base class for a column of data responsible for appropriatelly serializing/deserializing the data.
  *
  */
@@ -94,6 +110,51 @@ export class OINODataField {
      */
     printFieldName():string {
         return this.datasource.printColumnName(this.name)
+    }
+
+    /**
+     * Serialize the field schema as a plain object without the datasource reference.
+     *
+     */
+    serializeSchema():OINODataFieldSchema {
+        return {
+            name: this.name,
+            type: this.type,
+            maxLength: this.maxLength > 0 ? this.maxLength : undefined,
+            fieldParams: {
+                isPrimaryKey: this.fieldParams.isPrimaryKey,
+                isForeignKey: this.fieldParams.isForeignKey,
+                isAutoInc: this.fieldParams.isAutoInc,
+                isNotNull: this.fieldParams.isNotNull
+            }
+        }
+    }
+
+    /**
+     * Construct the appropriate `OINODataField` subclass from a serialized schema. The native type
+     * is supplied by the datasource (it is not taken from the schema, since a created field's native
+     * type is chosen by the database implementation).
+     * 
+     * @param datasource OINO data source reference
+     * @param schema serialized field schema
+     * @param nativeType native (SQL) type chosen by the datasource
+     *
+     */
+    static fromSchema(datasource:OINODataSource, schema:OINODataFieldSchema, nativeType:string):OINODataField {
+        switch (schema.type) {
+            case "string":
+                return new OINOStringDataField(datasource, schema.name, nativeType, { ...schema.fieldParams }, schema.maxLength || 0)
+            case "boolean":
+                return new OINOBooleanDataField(datasource, schema.name, nativeType, { ...schema.fieldParams })
+            case "number":
+                return new OINONumberDataField(datasource, schema.name, nativeType, { ...schema.fieldParams })
+            case "blob":
+                return new OINOBlobDataField(datasource, schema.name, nativeType, { ...schema.fieldParams }, schema.maxLength || 0)
+            case "datetime":
+                return new OINODatetimeDataField(datasource, schema.name, nativeType, { ...schema.fieldParams })
+            default:
+                throw new Error(OINO_ERROR_PREFIX + ": OINODataField.fromSchema - unsupported field type '" + schema.type + "'")
+        }
     }
 }
 

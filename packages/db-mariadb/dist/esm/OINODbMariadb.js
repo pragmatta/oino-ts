@@ -5,7 +5,7 @@
  */
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult } from "@oino-ts/common";
 import { OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
-import { OINODb, OINODbDataModel } from "@oino-ts/db";
+import { OINODb } from "@oino-ts/db";
 import mariadb from "mariadb";
 /**
  * Implmentation of OINODataSet for MariaDb.
@@ -388,18 +388,16 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
         return sql;
     }
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of
-     * the model.
+     * Get the schema fields of a table as `OINODataField`s (without any API-level field filtering).
      *
-     * @param api api which data model to initialize.
+     * @param tableName name of the table
      *
      */
-    async initializeApiDatamodel(api) {
-        api.initializeDatamodel(new OINODbDataModel(api));
-        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, api.params.tableName));
+    async getSchemaFields(tableName) {
+        const fields = [];
+        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, tableName));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
-            // console.log("OINODbMariadb.initializeApiDatamodel row", row)
             const field_name = row[0]?.toString() || "";
             const field_matches = OINODbMariadb._fieldLengthRegex.exec(row[1]?.toString() || "") || [];
             const sql_type = field_matches[1] || "";
@@ -412,49 +410,56 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
                 isAutoInc: extra.indexOf('auto_increment') >= 0,
                 isNotNull: row[2] == "NO"
             };
-            if (api.isFieldIncluded(field_name) == false) {
-                OINOLog.info("@oino-ts/db-mariadb", "OINODbMariadb", ".initializeApiDatamodel", "Field excluded in API parameters", { field: field_name });
-                if (field_params.isPrimaryKey) {
-                    throw new Error(OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name);
+            if ((sql_type == "int") || (sql_type == "smallint") || (sql_type == "float") || (sql_type == "double")) {
+                fields.push(new OINONumberDataField(this, field_name, sql_type, field_params));
+            }
+            else if ((sql_type == "date") || (sql_type == "datetime") || (sql_type == "timestamp")) {
+                fields.push(new OINODatetimeDataField(this, field_name, sql_type, field_params));
+            }
+            else if ((sql_type == "char") || (sql_type == "varchar") || (sql_type == "tinytext") || (sql_type == "mediumtext") || (sql_type == "longtext")) {
+                fields.push(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1));
+            }
+            else if ((sql_type == "longblob") || (sql_type == "binary") || (sql_type == "varbinary")) {
+                fields.push(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length1));
+            }
+            else if (sql_type == "decimal") {
+                fields.push(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1 + field_length2 + 1));
+            }
+            else if (sql_type == "bit") {
+                if (field_length1 == 1) {
+                    fields.push(new OINOBooleanDataField(this, field_name, sql_type, field_params));
+                }
+                else {
+                    fields.push(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1 * 8));
                 }
             }
             else {
-                if ((sql_type == "int") || (sql_type == "smallint") || (sql_type == "float") || (sql_type == "double")) {
-                    api.datamodel.addField(new OINONumberDataField(this, field_name, sql_type, field_params));
-                }
-                else if ((sql_type == "date") || (sql_type == "datetime") || (sql_type == "timestamp")) {
-                    if (api.params.useDatesAsString) {
-                        api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                    }
-                    else {
-                        api.datamodel.addField(new OINODatetimeDataField(this, field_name, sql_type, field_params));
-                    }
-                }
-                else if ((sql_type == "char") || (sql_type == "varchar") || (sql_type == "tinytext") || (sql_type == "tinytext") || (sql_type == "mediumtext") || (sql_type == "longtext")) {
-                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1));
-                }
-                else if ((sql_type == "longblob") || (sql_type == "binary") || (sql_type == "varbinary")) {
-                    api.datamodel.addField(new OINOBlobDataField(this, field_name, sql_type, field_params, field_length1));
-                }
-                else if ((sql_type == "decimal")) {
-                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1 + field_length2 + 1));
-                }
-                else if ((sql_type == "bit")) {
-                    if (field_length1 == 1) {
-                        api.datamodel.addField(new OINOBooleanDataField(this, field_name, sql_type, field_params));
-                    }
-                    else {
-                        api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, field_length1 * 8));
-                    }
-                }
-                else {
-                    OINOLog.info("@oino-ts/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, field_length1: field_length1, field_length2: field_length2, field_params: field_params });
-                    api.datamodel.addField(new OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                }
+                fields.push(new OINOStringDataField(this, field_name, sql_type, field_params, 0));
             }
             await schema_res.next();
         }
-        OINOLog.info("@oino-ts/db-mariadb", "OINODbMariadb", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
-        return Promise.resolve();
+        return fields;
+    }
+    /**
+     * Resolve the optimal native (SQL) type for a serialized field schema.
+     *
+     * @param schema serialized field schema
+     *
+     */
+    getNativeDataType(schema) {
+        switch (schema.type) {
+            case "string":
+                return (schema.maxLength || 0) > 0 ? "varchar(" + schema.maxLength + ")" : "longtext";
+            case "number":
+                return "double";
+            case "boolean":
+                return "bit(1)";
+            case "datetime":
+                return "datetime";
+            case "blob":
+                return "longblob";
+            default:
+                throw new Error(OINO_ERROR_PREFIX + ": OINODbMariadb.getNativeDataType - unsupported field type '" + schema.type + "'");
+        }
     }
 }

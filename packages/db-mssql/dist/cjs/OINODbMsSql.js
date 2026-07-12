@@ -443,16 +443,14 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
         return sql;
     }
     /**
-     * Initialize a data model by getting the SQL schema and populating OINODataFields of
-     * the model.
+     * Get the schema fields of a table as `OINODataField`s (without any API-level field filtering).
      *
-     * @param api api which data model to initialize.
+     * @param tableName name of the table
      *
      */
-    async initializeApiDatamodel(api) {
-        api.initializeDatamodel(new db_1.OINODbDataModel(api));
-        //"SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX 
-        const schema_res = await this.sqlSelect(this._getSchemaSql(this.dbParams.database, api.params.tableName));
+    async getSchemaFields(tableName) {
+        const fields = [];
+        const schema_res = await this.sqlSelect(this._getSchemaSql(this.dbParams.database, tableName));
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";
@@ -467,45 +465,104 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
                 isAutoInc: row[7] == 1,
                 isNotNull: row[1] == "NO"
             };
-            if (api.isFieldIncluded(field_name) == false) {
-                common_1.OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "Field excluded in API parameters.", { field: field_name });
-                if (field_params.isPrimaryKey) {
-                    throw new Error(common_1.OINO_ERROR_PREFIX + "Primary key field excluded in API parameters: " + field_name);
-                }
+            if ((sql_type == "tinyint") || (sql_type == "smallint") || (sql_type == "int") || (sql_type == "bigint") || (sql_type == "float") || (sql_type == "real")) {
+                fields.push(new common_1.OINONumberDataField(this, field_name, sql_type, field_params));
+            }
+            else if ((sql_type == "date") || (sql_type == "datetime") || (sql_type == "datetime2")) {
+                fields.push(new common_1.OINODatetimeDataField(this, field_name, sql_type, field_params));
+            }
+            else if ((sql_type == "ntext") || (sql_type == "nchar") || (sql_type == "nvarchar") || (sql_type == "text") || (sql_type == "char") || (sql_type == "varchar")) {
+                fields.push(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, char_field_length));
+            }
+            else if ((sql_type == "binary") || (sql_type == "varbinary") || (sql_type == "image")) {
+                fields.push(new common_1.OINOBlobDataField(this, field_name, sql_type, field_params, char_field_length));
+            }
+            else if ((sql_type == "numeric") || (sql_type == "decimal") || (sql_type == "money")) {
+                fields.push(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, numeric_field_length1 + numeric_field_length2 + 1));
+            }
+            else if (sql_type == "bit") {
+                fields.push(new common_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
             }
             else {
-                if ((sql_type == "tinyint") || (sql_type == "smallint") || (sql_type == "int") || (sql_type == "bigint") || (sql_type == "float") || (sql_type == "real")) {
-                    api.datamodel.addField(new common_1.OINONumberDataField(this, field_name, sql_type, field_params));
-                }
-                else if ((sql_type == "date") || (sql_type == "datetime") || (sql_type == "datetime2")) {
-                    if (api.params.useDatesAsString) {
-                        api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                    }
-                    else {
-                        api.datamodel.addField(new common_1.OINODatetimeDataField(this, field_name, sql_type, field_params));
-                    }
-                }
-                else if ((sql_type == "ntext") || (sql_type == "nchar") || (sql_type == "nvarchar") || (sql_type == "text") || (sql_type == "char") || (sql_type == "varchar")) {
-                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, char_field_length));
-                }
-                else if ((sql_type == "binary") || (sql_type == "varbinary") || (sql_type == "image")) {
-                    api.datamodel.addField(new common_1.OINOBlobDataField(this, field_name, sql_type, field_params, char_field_length));
-                }
-                else if ((sql_type == "numeric") || (sql_type == "decimal") || (sql_type == "money")) {
-                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, numeric_field_length1 + numeric_field_length2 + 1));
-                }
-                else if ((sql_type == "bit")) {
-                    api.datamodel.addField(new common_1.OINOBooleanDataField(this, field_name, sql_type, field_params));
-                }
-                else {
-                    common_1.OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "Unrecognized field type treated as string", { field_name: field_name, sql_type: sql_type, char_length: char_field_length, numeric_field_length1: numeric_field_length1, numeric_field_length2: numeric_field_length2, field_params: field_params });
-                    api.datamodel.addField(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
-                }
+                fields.push(new common_1.OINOStringDataField(this, field_name, sql_type, field_params, 0));
             }
             await schema_res.next();
         }
-        common_1.OINOLog.info("@oino-ts/db-mssql", "OINODbMsSql", "initializeApiDatamodel", "\n" + api.datamodel.printDebug("\n"));
-        return Promise.resolve();
+        return fields;
+    }
+    /**
+     * Resolve the optimal native (SQL) type for a serialized field schema.
+     *
+     * @param schema serialized field schema
+     *
+     */
+    getNativeDataType(schema) {
+        switch (schema.type) {
+            case "string":
+                return (schema.maxLength || 0) > 0 ? "nvarchar(" + schema.maxLength + ")" : "nvarchar(max)";
+            case "number":
+                return "float";
+            case "boolean":
+                return "bit";
+            case "datetime":
+                return "datetime2";
+            case "blob":
+                return "varbinary(max)";
+            default:
+                throw new Error(common_1.OINO_ERROR_PREFIX + ": OINODbMsSql.getNativeDataType - unsupported field type '" + schema.type + "'");
+        }
+    }
+    /**
+     * Print SQL CREATE TABLE statement.
+     *
+     * @param tableName name of the table
+     * @param fields fields of the table
+     *
+     */
+    printSqlCreateTable(tableName, fields) {
+        const columns = [];
+        const primary_keys = [];
+        for (const field of fields) {
+            columns.push(this._printColumnDefinition(field));
+            if (field.fieldParams.isPrimaryKey) {
+                primary_keys.push(this.printColumnName(field.name));
+            }
+        }
+        let result = "CREATE TABLE dbo." + this.printTableName(tableName) + " (" + columns.join(", ");
+        if (primary_keys.length > 0) {
+            result += ", PRIMARY KEY (" + primary_keys.join(", ") + ")";
+        }
+        result += ");";
+        return result;
+    }
+    /**
+     * Print SQL ADD COLUMN statement.
+     *
+     * @param tableName name of the table
+     * @param field field to add
+     *
+     */
+    printSqlCreateColumn(tableName, field) {
+        return "ALTER TABLE dbo." + this.printTableName(tableName) + " ADD " + this._printColumnDefinition(field) + ";";
+    }
+    /**
+     * Print SQL DROP TABLE statement.
+     *
+     * @param tableName name of the table
+     *
+     */
+    printSqlDropTable(tableName) {
+        return "DROP TABLE dbo." + this.printTableName(tableName) + ";";
+    }
+    /**
+     * Print SQL DROP COLUMN statement.
+     *
+     * @param tableName name of the table
+     * @param columnName name of the column
+     *
+     */
+    printSqlDropColumn(tableName, columnName) {
+        return "ALTER TABLE dbo." + this.printTableName(tableName) + " DROP COLUMN " + this.printColumnName(columnName) + ";";
     }
 }
 exports.OINODbMsSql = OINODbMsSql;

@@ -4,7 +4,7 @@ export { OINOConfig } from "./OINOConfig.js";
 export { OINO_ERROR_PREFIX, OINO_WARNING_PREFIX, OINO_INFO_PREFIX, OINO_DEBUG_PREFIX, OINO_REQUEST_TYPE_PARAM, OINO_RESPONSE_TYPE_PARAM, OINOContentType, type OINODataFieldParams, type OINODataCell, type OINODataRow, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "./OINOConstants.js";
 export { OINODataModel } from "./OINODataModel.js";
 export { OINODataSource, OINODataSet, OINOMemoryDataset } from "./OINODataSource.js";
-export { OINODataField, OINOStringDataField, OINONumberDataField, OINOBooleanDataField, OINODatetimeDataField, OINOBlobDataField, type OINODataFieldFilter } from "./OINODataField.js";
+export { OINODataField, OINOStringDataField, OINONumberDataField, OINOBooleanDataField, OINODatetimeDataField, OINOBlobDataField, type OINODataFieldFilter, type OINODataFieldSchema } from "./OINODataField.js";
 export { OINOFormatter, OINO_EMPTY_FORMATTER } from "./OINOFormatter.js";
 export { OINOHeaders, type OINOHeadersInit } from "./OINOHeaders.js";
 export { OINOHtmlTemplate } from "./OINOHtmlTemplate.js";
