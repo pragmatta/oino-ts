@@ -31,6 +31,7 @@ for (let pkg of packages) {
     await $`mkdir -p types/${pkg}`
     await $`mkdir -p types/${pkg}/src`
     
+    await $`cp ../readme.md ${pkg}/`
     await $`cp ${DIST_ROOT}/cjs/${pkg}/src/* ${pkg}/dist/cjs/`
     await $`cp ${DIST_ROOT}/esm/${pkg}/src/* ${pkg}/dist/esm/`
     await $`cp ${DIST_ROOT}/types/${pkg}/src/* ${pkg}/dist/types/`
