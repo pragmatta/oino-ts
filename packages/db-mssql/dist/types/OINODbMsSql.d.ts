@@ -113,6 +113,11 @@ export declare class OINODbMsSql extends OINODb {
      */
     getSchemaFields(tableName: string): Promise<OINODataField[]>;
     /**
+     * Get the names of all user (base) tables in the database schema, excluding system tables and views.
+     *
+     */
+    getSchemaTables(): Promise<string[]>;
+    /**
      * Resolve the optimal native (SQL) type for a serialized field schema.
      *
      * @param schema serialized field schema
