@@ -6,7 +6,7 @@
 
 import { Buffer } from "node:buffer"
 
-import { OINO_ERROR_PREFIX, OINOBenchmark, OINOStr, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataField, OINODataFieldSchema, OINODataFieldParams, OINOMemoryDataset, OINODataCell, OINOBlobDataField, OINODatetimeDataField, OINO_EMPTY_ROWS } from "@oino-ts/common";
+import { OINO_ERROR_PREFIX, OINOBenchmark, OINOStr, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataField, OINODataFieldSchema, OINODataFieldParams, OINOMemoryDataset, OINODataCell, OINODataRow, OINOBlobDataField, OINODatetimeDataField, OINO_EMPTY_ROWS } from "@oino-ts/common";
 
 import { OINODb, OINODbParams } from "@oino-ts/db";
 
@@ -366,6 +366,25 @@ export class OINODbBunSqlite extends OINODb {
             }
         }
         return fields
+    }
+
+    /**
+     * Get the names of all user (base) tables in the database schema, excluding system tables and views.
+     *
+     */
+    async getSchemaTables(): Promise<string[]> {
+        const tables:string[] = []
+        const sql:string = "SELECT name FROM sqlite_schema WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
+        const tables_res:OINODataSet = await this._query(sql)
+        while (!tables_res.isEof()) {
+            const row:OINODataRow = tables_res.getRow()
+            const table_name:string = row[0]?.toString() || ""
+            if (table_name) {
+                tables.push(table_name)
+            }
+            await tables_res.next()
+        }
+        return tables
     }
 
     /**

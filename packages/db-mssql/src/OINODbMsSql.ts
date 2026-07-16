@@ -514,6 +514,25 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
     }
 
     /**
+     * Get the names of all user (base) tables in the database schema, excluding system tables and views.
+     *
+     */
+    async getSchemaTables(): Promise<string[]> {
+        const tables:string[] = []
+        const sql:string = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = '" + this.dbParams.database + "' AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
+        const tables_res:OINODataSet = await this.sqlSelect(sql)
+        while (!tables_res.isEof()) {
+            const row:OINODataRow = tables_res.getRow()
+            const table_name:string = row[0]?.toString() || ""
+            if (table_name) {
+                tables.push(table_name)
+            }
+            await tables_res.next()
+        }
+        return tables
+    }
+
+    /**
      * Resolve the optimal native (SQL) type for a serialized field schema.
      * 
      * @param schema serialized field schema

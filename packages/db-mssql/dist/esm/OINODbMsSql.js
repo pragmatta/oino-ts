@@ -488,6 +488,24 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
         return fields;
     }
     /**
+     * Get the names of all user (base) tables in the database schema, excluding system tables and views.
+     *
+     */
+    async getSchemaTables() {
+        const tables = [];
+        const sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = '" + this.dbParams.database + "' AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;";
+        const tables_res = await this.sqlSelect(sql);
+        while (!tables_res.isEof()) {
+            const row = tables_res.getRow();
+            const table_name = row[0]?.toString() || "";
+            if (table_name) {
+                tables.push(table_name);
+            }
+            await tables_res.next();
+        }
+        return tables;
+    }
+    /**
      * Resolve the optimal native (SQL) type for a serialized field schema.
      *
      * @param schema serialized field schema

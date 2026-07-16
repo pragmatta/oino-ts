@@ -467,6 +467,25 @@ WHERE col.table_catalog = '${dbName}'`
     }
 
     /**
+     * Get the names of all user (base) tables in the database schema, excluding system tables and views.
+     *
+     */
+    async getSchemaTables(): Promise<string[]> {
+        const tables:string[] = []
+        const sql:string = "SELECT table_name FROM information_schema.tables WHERE table_catalog = '" + this.dbParams.database + "' AND table_schema NOT IN ('pg_catalog', 'information_schema') AND table_type = 'BASE TABLE' ORDER BY table_name;"
+        const tables_res:OINODataSet = await this._query(sql)
+        while (!tables_res.isEof()) {
+            const row:OINODataRow = tables_res.getRow()
+            const table_name:string = row[0]?.toString() || ""
+            if (table_name) {
+                tables.push(table_name)
+            }
+            await tables_res.next()
+        }
+        return tables
+    }
+
+    /**
      * Resolve the optimal native (SQL) type for a serialized field schema.
      * 
      * @param schema serialized field schema
