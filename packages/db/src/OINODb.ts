@@ -153,6 +153,12 @@ export abstract class OINODb extends OINODataSource {
     abstract getSchemaFields(tableName:string): Promise<OINODataField[]>
 
     /**
+     * Get the names of all user (base) tables in the database schema, excluding system tables and views.
+     *
+     */
+    abstract getSchemaTables(): Promise<string[]>
+
+    /**
      * Resolve the optimal native (SQL) type for a serialized field schema. Must throw if the
      * requested internal type / parameter combination is not supported by the database.
      * 
