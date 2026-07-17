@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/nosql-aws",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "OINO TS package for using AWS DynamoDB as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -23,12 +23,12 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.0.0",
     "@aws-sdk/lib-dynamodb": "^3.0.0",
-    "@oino-ts/nosql": "1.1.1",
-    "@oino-ts/common": "1.1.1"
+    "@oino-ts/nosql": "1.1.2",
+    "@oino-ts/common": "1.1.2"
   },
   "devDependencies": {
-    "@oino-ts/types": "1.1.1",
-    "@types/bun": "^1.1.14",
+    "@oino-ts/types": "1.1.2",
+    "@types/bun": "^1.1.24",
     "@types/node": "^22.0.00",
     "typescript": "~5.9.0"
   },
