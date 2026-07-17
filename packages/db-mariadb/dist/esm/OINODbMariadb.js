@@ -304,13 +304,7 @@ export class OINODbMariadb extends OINODb {
             const sql = this._getValidateSql(this.dbParams.database);
             const sql_res = await this._query(sql);
             if (sql_res.isEmpty()) {
-                result.setError(400, "DB returned no rows for select!", "OINODbMariadb.validate");
-            }
-            else if (sql_res.getRow().length == 0) {
-                result.setError(400, "DB returned no values for database!", "OINODbMariadb.validate");
-            }
-            else if (sql_res.getRow()[0] == "0") {
-                result.setError(400, "DB returned no schema for database!", "OINODbMariadb.validate");
+                result.setError(400, "DB returned no rows for schema!", "OINODbMariadb.validate");
             }
             else {
                 this.isValidated = true;
@@ -366,12 +360,12 @@ export class OINODbMariadb extends OINODb {
     }
     _getSchemaSql(dbName, tableName) {
         const sql = `SELECT
-    c.COLUMN_NAME,
-    c.COLUMN_TYPE,
-    c.IS_NULLABLE,
-    c.COLUMN_KEY,
-    c.COLUMN_DEFAULT,
-    c.EXTRA,
+    C.COLUMN_NAME,
+    C.COLUMN_TYPE,
+    C.IS_NULLABLE,
+    C.COLUMN_KEY,
+    C.COLUMN_DEFAULT,
+    C.EXTRA,
     KCU.CONSTRAINT_NAME AS ForeignKeyName 
 FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
@@ -381,7 +375,7 @@ ORDER BY C.ORDINAL_POSITION;`;
     }
     _getValidateSql(dbName) {
         const sql = `SELECT
-    Count(c.COLUMN_NAME) AS COLUMN_COUNT
+    Count(C.COLUMN_NAME) AS COLUMN_COUNT
 FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
 WHERE C.TABLE_SCHEMA = '${dbName}';`;
