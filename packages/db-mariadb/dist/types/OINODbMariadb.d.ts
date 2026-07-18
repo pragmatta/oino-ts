@@ -107,4 +107,5 @@ export declare class OINODbMariadb extends OINODb {
      *
      */
     getNativeDataType(schema: OINODataFieldSchema): string;
+    protected _printColumnAutoInc(): string;
 }

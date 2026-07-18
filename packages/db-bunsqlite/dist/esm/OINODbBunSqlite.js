@@ -385,7 +385,7 @@ export class OINODbBunSqlite extends OINODb {
             case "string":
                 return (schema.maxLength || 0) > 0 ? "VARCHAR(" + schema.maxLength + ")" : "TEXT";
             case "number":
-                return "NUMERIC";
+                return schema.fieldParams?.isAutoInc ? "INTEGER" : "NUMERIC";
             case "boolean":
                 return "BOOLEAN";
             case "datetime":
@@ -395,5 +395,33 @@ export class OINODbBunSqlite extends OINODb {
             default:
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbBunSqlite.getNativeDataType - unsupported field type '" + schema.type + "'");
         }
+    }
+    /**
+     * Print SQL CREATE TABLE statement. In SQLite `AUTOINCREMENT` is only valid as part of an inline
+     * `INTEGER PRIMARY KEY AUTOINCREMENT` single-column declaration, so an auto-increment primary key
+     * is emitted inline instead of via a separate `PRIMARY KEY (...)` table constraint.
+     *
+     * @param tableName name of the table
+     * @param fields fields of the table
+     *
+     */
+    printSqlCreateTable(tableName, fields) {
+        const primary_keys = fields.filter((f) => f.fieldParams.isPrimaryKey);
+        const autoinc_pk = ((primary_keys.length == 1) && primary_keys[0].fieldParams.isAutoInc && (primary_keys[0] instanceof OINONumberDataField)) ? primary_keys[0] : null;
+        const columns = [];
+        for (const field of fields) {
+            if (field == autoinc_pk) {
+                columns.push(this.printColumnName(field.name) + " INTEGER PRIMARY KEY AUTOINCREMENT");
+            }
+            else {
+                columns.push(this._printColumnDefinition(field));
+            }
+        }
+        let result = "CREATE TABLE " + this.printTableName(tableName) + " (" + columns.join(", ");
+        if (!autoinc_pk && (primary_keys.length > 0)) {
+            result += ", PRIMARY KEY (" + primary_keys.map((f) => this.printColumnName(f.name)).join(", ") + ")";
+        }
+        result += ");";
+        return result;
     }
 }

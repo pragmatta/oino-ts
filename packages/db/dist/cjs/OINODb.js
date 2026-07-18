@@ -106,7 +106,21 @@ class OINODb extends common_1.OINODataSource {
         if (field.fieldParams.isNotNull) {
             result += " NOT NULL";
         }
+        if (field.fieldParams.isAutoInc && (field instanceof common_1.OINONumberDataField)) {
+            const auto_inc = this._printColumnAutoInc();
+            if (auto_inc != "") {
+                result += " " + auto_inc;
+            }
+        }
         return result;
+    }
+    /**
+     * Print the database-specific auto-increment clause appended to a numeric column definition.
+     * Returns an empty string when the database does not support auto-increment via a column clause.
+     *
+     */
+    _printColumnAutoInc() {
+        return "";
     }
     /**
      * Print SQL CREATE TABLE statement.

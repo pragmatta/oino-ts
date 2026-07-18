@@ -434,7 +434,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
                 isAutoInc: extra.indexOf('auto_increment') >= 0,
                 isNotNull: row[2] == "NO"
             }
-            if ((sql_type == "int") || (sql_type == "smallint") || (sql_type == "float") || (sql_type == "double")) {
+            if ((sql_type == "int") || (sql_type == "smallint")  || (sql_type == "mediumint") || (sql_type == "bigint")  || (sql_type == "float") || (sql_type == "double")) {
                 fields.push(new OINONumberDataField(this, field_name, sql_type, field_params))
             } else if ((sql_type == "date") || (sql_type == "datetime") || (sql_type == "timestamp")) {
                 fields.push(new OINODatetimeDataField(this, field_name, sql_type, field_params))
@@ -488,7 +488,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
             case "string":
                 return (schema.maxLength || 0) > 0 ? "varchar(" + schema.maxLength + ")" : "longtext"
             case "number":
-                return "double"
+                return schema.fieldParams?.isAutoInc ? "bigint" : "double"
             case "boolean":
                 return "bit(1)"
             case "datetime":
@@ -498,6 +498,10 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
             default:
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbMariadb.getNativeDataType - unsupported field type '" + schema.type + "'")
         }
+    }
+
+    protected _printColumnAutoInc(): string {
+        return "AUTO_INCREMENT"
     }
 }
 

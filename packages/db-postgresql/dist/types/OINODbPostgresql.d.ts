@@ -103,4 +103,5 @@ export declare class OINODbPostgresql extends OINODb {
      *
      */
     getNativeDataType(schema: OINODataFieldSchema): string;
+    protected _printColumnAutoInc(): string;
 }

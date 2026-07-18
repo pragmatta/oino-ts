@@ -111,6 +111,12 @@ export declare abstract class OINODb extends OINODataSource {
     abstract getNativeDataType(schema: OINODataFieldSchema): string;
     protected _printColumnDefinition(field: OINODataField): string;
     /**
+     * Print the database-specific auto-increment clause appended to a numeric column definition.
+     * Returns an empty string when the database does not support auto-increment via a column clause.
+     *
+     */
+    protected _printColumnAutoInc(): string;
+    /**
      * Print SQL CREATE TABLE statement.
      *
      * @param tableName name of the table

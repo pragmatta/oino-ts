@@ -40,7 +40,8 @@ const SCHEMA_CROSSCHECKS:string[] = [
     "[OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREATE COLUMN DATETIME 1",
     "[OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE COLUMN BLOB 1",
     "[OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE COLUMNS TABLE SCHEMA 1",
-    "[OINOSchemaTest][SCHEMA ROW ROUNDTRIP] insert and read: ROW ROUNDTRIP 1"
+    "[OINOSchemaTest][SCHEMA ROW ROUNDTRIP] insert and read: ROW ROUNDTRIP 1",
+    "[OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: AUTOINC ROW GENERATE 1"
 ]
 
 
@@ -72,7 +73,7 @@ const SCHEMA_COLUMN_TYPES:OINOTestSchemaColumn[] = [
     { name: "col_blob", type: "blob", maxLength: 128 }
 ]
 
-function makeSchemaField(name:string, type:string, opts:{ maxLength?:number, isPrimaryKey?:boolean, isNotNull?:boolean } = {}):OINODataFieldSchema {
+function makeSchemaField(name:string, type:string, opts:{ maxLength?:number, isPrimaryKey?:boolean, isNotNull?:boolean, isAutoInc?:boolean } = {}):OINODataFieldSchema {
     return {
         name: name,
         type: type,
@@ -81,7 +82,7 @@ function makeSchemaField(name:string, type:string, opts:{ maxLength?:number, isP
         fieldParams: {
             isPrimaryKey: opts.isPrimaryKey === true,
             isForeignKey: false,
-            isAutoInc: false,
+            isAutoInc: opts.isAutoInc === true,
             isNotNull: opts.isNotNull === true
         }
     }
@@ -190,6 +191,40 @@ export async function OINOTestSchema(dbParams:OINODbParams) {
         const get_res = await api.doApiRequest(new OINOApiRequest({ url: request_url, method: "GET", rowId: row_id }))
         expect(get_res.success).toBe(true)
         expect(encodeData(await get_res.data?.writeString())).toMatchSnapshot("ROW ROUNDTRIP")
+    })
+
+    target_group = "[SCHEMA CREATE AUTOINC]"
+    const autoinc_table:string = "OINOAutoIncTest"
+    // defensive cleanup in case a previous run was interrupted before dropping the autoinc test table
+    await db.doTableSchemaRequest("DELETE", autoinc_table)
+    await test(target_db + "[" + autoinc_table + "]" + target_group + " create and generate", async () => {
+        // create a table with an auto-increment primary key
+        const create = await db.doTableSchemaRequest("POST", autoinc_table, JSON.stringify([
+            makeSchemaField("id", "number", { isPrimaryKey: true, isNotNull: true, isAutoInc: true }),
+            makeSchemaField("name", "string", { maxLength: 64 })
+        ]))
+        expect(create.success).toBe(true)
+
+        const schema = await db.doTableSchemaRequest("GET", autoinc_table)
+        expect(schema.success).toBe(true)
+        expect(encodeResult(schema.schema)).toMatchSnapshot("CREATE AUTOINC TABLE SCHEMA")
+
+        // insert two rows WITHOUT specifying the id; the database must auto-generate sequential keys
+        const api:OINODbApi = await OINODbFactory.createApi(db, { apiName: autoinc_table, tableName: autoinc_table })
+        const request_url = new URL("http://localhost/" + api.params.apiName)
+        const post_body_json:string = JSON.stringify([ { name: "first" }, { name: "second" } ])
+        const post_res = await api.doApiRequest(new OINOApiRequest({ url: request_url, method: "POST", rowData: post_body_json }))
+        expect(post_res.success).toBe(true)
+
+        // reading the first generated key back must return a row (proving the key was auto-assigned)
+        const first = await api.doApiRequest(new OINOApiRequest({ url: request_url, method: "GET", rowId: "1" }))
+        expect(first.success).toBe(true)
+        expect(encodeData(await first.data?.writeString())).toMatchSnapshot("AUTOINC ROW GENERATE")
+    })
+
+    await test(target_db + "[" + autoinc_table + "]" + target_group + " drop", async () => {
+        const res = await db.doTableSchemaRequest("DELETE", autoinc_table)
+        expect(res.success).toBe(true)
     })
 
     target_group = "[SCHEMA DELETE COLUMN]"
