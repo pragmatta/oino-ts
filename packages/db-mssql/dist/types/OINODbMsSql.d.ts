@@ -124,6 +124,7 @@ export declare class OINODbMsSql extends OINODb {
      *
      */
     getNativeDataType(schema: OINODataFieldSchema): string;
+    protected _printColumnAutoInc(): string;
     /**
      * Print SQL CREATE TABLE statement.
      *

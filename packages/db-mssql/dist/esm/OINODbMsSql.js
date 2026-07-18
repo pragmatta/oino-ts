@@ -516,7 +516,7 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
             case "string":
                 return (schema.maxLength || 0) > 0 ? "nvarchar(" + schema.maxLength + ")" : "nvarchar(max)";
             case "number":
-                return "float";
+                return schema.fieldParams?.isAutoInc ? "bigint" : "float";
             case "boolean":
                 return "bit";
             case "datetime":
@@ -526,6 +526,9 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
             default:
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbMsSql.getNativeDataType - unsupported field type '" + schema.type + "'");
         }
+    }
+    _printColumnAutoInc() {
+        return "IDENTITY(1,1)";
     }
     /**
      * Print SQL CREATE TABLE statement.

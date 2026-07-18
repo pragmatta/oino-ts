@@ -107,4 +107,14 @@ export declare class OINODbBunSqlite extends OINODb {
      *
      */
     getNativeDataType(schema: OINODataFieldSchema): string;
+    /**
+     * Print SQL CREATE TABLE statement. In SQLite `AUTOINCREMENT` is only valid as part of an inline
+     * `INTEGER PRIMARY KEY AUTOINCREMENT` single-column declaration, so an auto-increment primary key
+     * is emitted inline instead of via a separate `PRIMARY KEY (...)` table constraint.
+     *
+     * @param tableName name of the table
+     * @param fields fields of the table
+     *
+     */
+    printSqlCreateTable(tableName: string, fields: OINODataField[]): string;
 }

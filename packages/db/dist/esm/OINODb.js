@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINODataSource, OINODataField, OINOStringDataField, OINODatetimeDataField, OINOResult, OINOLog, OINO_ERROR_PREFIX } from "@oino-ts/common";
+import { OINODataSource, OINODataField, OINOStringDataField, OINONumberDataField, OINODatetimeDataField, OINOResult, OINOLog, OINO_ERROR_PREFIX } from "@oino-ts/common";
 import { OINODbDataModel } from "./OINODbDataModel.js";
 /**
  * Result of a schema (table/column) request. For GET requests the serialized field schema(s)
@@ -102,7 +102,21 @@ export class OINODb extends OINODataSource {
         if (field.fieldParams.isNotNull) {
             result += " NOT NULL";
         }
+        if (field.fieldParams.isAutoInc && (field instanceof OINONumberDataField)) {
+            const auto_inc = this._printColumnAutoInc();
+            if (auto_inc != "") {
+                result += " " + auto_inc;
+            }
+        }
         return result;
+    }
+    /**
+     * Print the database-specific auto-increment clause appended to a numeric column definition.
+     * Returns an empty string when the database does not support auto-increment via a column clause.
+     *
+     */
+    _printColumnAutoInc() {
+        return "";
     }
     /**
      * Print SQL CREATE TABLE statement.
