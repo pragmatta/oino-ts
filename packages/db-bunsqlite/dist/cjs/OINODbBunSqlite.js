@@ -59,7 +59,7 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     printTableName(sqlTable) {
-        return "[" + sqlTable + "]";
+        return "[" + sqlTable.replaceAll("]", "]]") + "]";
     }
     /**
      * Print a column name with correct SQL escaping.
@@ -68,7 +68,37 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     printColumnName(sqlColumn) {
-        return "\"" + sqlColumn + "\"";
+        return "\"" + sqlColumn.replaceAll("\"", "\"\"") + "\"";
+    }
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (SQLite `?`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index) {
+        return "?";
+    }
+    /**
+     * Coerce a data value into a bun:sqlite bind-parameter value. bun:sqlite only accepts
+     * number, bigint, string, `Buffer`/`Uint8Array` and null, so `Date` is converted to an ISO
+     * string and `boolean` to 1/0.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue, nativeType) {
+        if ((cellValue === undefined) || (cellValue === null)) {
+            return null;
+        }
+        if (typeof cellValue === "boolean") {
+            return cellValue ? 1 : 0;
+        }
+        if (cellValue instanceof Date) {
+            return cellValue.toISOString();
+        }
+        return cellValue;
     }
     /**
      * Print a single data value from serialization using the context of the native data
@@ -121,7 +151,7 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     printStringValue(sqlString) {
-        return "\"" + sqlString.replaceAll("\"", "\"\"") + "\"";
+        return "'" + sqlString.replaceAll("'", "''") + "'"; // SQLite string literals use single quotes; double quotes denote identifiers
     }
     /**
      * Parse a single SQL result value for serialization using the context of the native data
@@ -219,10 +249,11 @@ class OINODbBunSqlite extends db_1.OINODb {
         this.isConnected = false;
         this.isValidated = false;
     }
-    async _query(sql) {
+    async _query(sql, params) {
         let result;
         try {
-            const sql_res = this._db?.query(sql).values();
+            const statement = this._db?.query(sql);
+            const sql_res = (params && params.length > 0) ? statement?.values(...params) : statement?.values();
             if (sql_res) {
                 // console.log("OINODbBunSqlite._query: res", sql_res)
                 result = new OINOBunSqliteDataset(sql_res, []);
@@ -236,10 +267,11 @@ class OINODbBunSqlite extends db_1.OINODb {
         }
         return result;
     }
-    async _exec(sql) {
+    async _exec(sql, params) {
         let result;
         try {
-            const sql_res = this._db?.query(sql).values();
+            const statement = this._db?.query(sql);
+            const sql_res = (params && params.length > 0) ? statement?.values(...params) : statement?.values();
             if (sql_res) {
                 // console.log("OINODbBunSqlite._exec: res", sql_res)
                 result = new OINOBunSqliteDataset(sql_res, []);
@@ -283,8 +315,23 @@ class OINODbBunSqlite extends db_1.OINODb {
         common_1.OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
-    _getSchemaSql(dbName, tableName) {
-        const sql = "SELECT sql from sqlite_schema WHERE name='" + tableName + "'";
+    /**
+     * Execute a parameterized statement, binding its values as positional `?` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement) {
+        if (!this.isValidated) {
+            return new OINOBunSqliteDataset(common_1.OINO_EMPTY_ROWS, [common_1.OINO_ERROR_PREFIX + " (OINODbBunSqlite.runStatement): Database connection not validated!"]);
+        }
+        common_1.OINOBenchmark.startMetric("OINODb", "runStatement");
+        let result = await this._exec(statement.sql, statement.values);
+        common_1.OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500);
+        return result;
+    }
+    _getSchemaSql() {
+        const sql = "SELECT sql from sqlite_schema WHERE name=?";
         return sql;
     }
     _getValidateSql(dbName) {
@@ -298,8 +345,8 @@ class OINODbBunSqlite extends db_1.OINODb {
      *
      */
     async getSchemaFields(tableName) {
-        const schema_sql = this._getSchemaSql(this.dbParams.database, tableName);
-        const res = await this._query(schema_sql);
+        const schema_sql = this._getSchemaSql();
+        const res = await this._query(schema_sql, [tableName]);
         const sql_desc = (res?.getRow()[0]);
         const table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc);
         if (!table_matches || table_matches?.length < 2) {

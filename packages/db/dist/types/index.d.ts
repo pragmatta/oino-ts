@@ -4,3 +4,4 @@ export { OINODbFactory } from "./OINODbFactory.js";
 export { OINODbApi } from "./OINODbApi.js";
 export { OINODbQueryFilter, OINODbQueryOrder, OINODbQueryLimit, OINODbQueryAggregate } from "./OINODbQueryParams.js";
 export { type OINODbConstructor, type OINODbParams, OINODB_UNDEFINED } from "./OINODbConstants.js";
+export { OINODbSqlStatement } from "./OINODbSqlStatement.js";

@@ -1,5 +1,5 @@
 import { OINOResult, OINODataSet, OINODataField, OINODataFieldSchema, OINODataCell } from "@oino-ts/common";
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 /**
  * Implementation of MsSql-database.
  *
@@ -27,6 +27,22 @@ export declare class OINODbMsSql extends OINODb {
      *
      */
     printColumnName(sqlColumn: string): string;
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (MSSQL `@p0`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index: number): string;
+    /**
+     * Coerce a data value into a MSSQL bind-parameter value. node-mssql infers the SQL type
+     * from the JS value (number, string, boolean, `Date`, `Buffer`), so values pass through.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue: OINODataCell, nativeType: string): OINODataCell;
     /**
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
@@ -103,6 +119,13 @@ export declare class OINODbMsSql extends OINODb {
      *
      */
     sqlExec(sql: string): Promise<OINODataSet>;
+    /**
+     * Execute a parameterized statement, binding its values as `@p0`, `@p1`, … named parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    runStatement(statement: OINODbSqlStatement): Promise<OINODataSet>;
     private _getSchemaSql;
     private _getValidateSql;
     /**

@@ -1,5 +1,5 @@
 import { OINOResult, OINODataSet, OINODataField, OINODataFieldSchema, OINODataCell } from "@oino-ts/common";
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 /**
  * Implementation of Postgresql-database.
  *
@@ -28,6 +28,22 @@ export declare class OINODbPostgresql extends OINODb {
      *
      */
     printColumnName(sqlColumn: string): string;
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (Postgres `$n`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index: number): string;
+    /**
+     * Coerce a data value into a Postgres bind-parameter value. The `pg` driver binds
+     * numbers, strings, booleans, `Date` and `Buffer` to their native Postgres types directly.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue: OINODataCell, nativeType: string): OINODataCell;
     /**
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
@@ -82,6 +98,13 @@ export declare class OINODbPostgresql extends OINODb {
      *
      */
     sqlExec(sql: string): Promise<OINODataSet>;
+    /**
+     * Execute a parameterized statement, binding its values as `$n` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    runStatement(statement: OINODbSqlStatement): Promise<OINODataSet>;
     private _getSchemaSql;
     private _getValidateSql;
     /**

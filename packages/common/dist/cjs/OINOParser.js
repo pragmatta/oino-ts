@@ -87,7 +87,10 @@ class OINOParser {
     }
     /**
      * Create one data row from javascript object based on the datamodel.
-     * NOTE! Data assumed to be unserialized i.e. of the native type (string, number, boolean, Buffer)
+     * Values are assumed to be of the native type (string, number, boolean, Buffer), but string
+     * values are still decoded and deserialized (and hashid-decoded for numeric primary/foreign keys)
+     * so that this path applies the same type validation as the JSON/CSV/urlencoded/formdata paths
+     * rather than passing untrusted strings through unchecked.
      *
      * @param datamodel datamodel of the api
      * @param data data as javascript object
@@ -97,7 +100,24 @@ class OINOParser {
         const fields = datamodel.fields;
         let result = new Array(fields.length);
         for (let i = 0; i < fields.length; i++) {
-            result[i] = data[fields[i].name];
+            const field = fields[i];
+            let value = data[field.name];
+            if ((value === null) || (value === undefined)) { // must be checked first as null is an object
+                result[i] = value;
+            }
+            else if (Array.isArray(value) || typeof value === "object") {
+                result[i] = JSON.stringify(value); // store as proper JSON string so JSON.parse can recover it
+            }
+            else if (typeof value === "string") {
+                value = OINOStr_js_1.OINOStr.decode(value, OINOConstants_js_1.OINOContentType.json);
+                if (value && (field.fieldParams.isPrimaryKey || field.fieldParams.isForeignKey) && (field instanceof OINODataField_js_1.OINONumberDataField) && (datamodel.api.hashid)) {
+                    value = datamodel.api.hashid.decode(value);
+                }
+                result[i] = field.deserializeCell(value); // validates/normalizes against the field type
+            }
+            else {
+                result[i] = value; // native value types (number/boolean/bigint) passed as-is
+            }
         }
         return result;
     }

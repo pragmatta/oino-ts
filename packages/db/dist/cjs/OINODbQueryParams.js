@@ -7,6 +7,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbQueryAggregate = exports.OINODbQueryLimit = exports.OINODbQueryOrder = exports.OINODbQueryFilter = void 0;
 const common_1 = require("@oino-ts/common");
+const OINODbSqlStatement_js_1 = require("./OINODbSqlStatement.js");
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions.
  * Supports three types of statements
@@ -35,19 +36,25 @@ class OINODbQueryFilter extends common_1.OINOQueryFilter {
         return " ";
     }
     /**
-     * Print filter as SQL condition based on the datamodel of the API.
+     * Build filter as SQL condition based on the datamodel of the API, appending any values to the
+     * given statement.
      *
+     * Column names are validated against the datamodel and values are added to `statement`
+     * (bound as parameters, or inlined as escaped literals when the statement is in legacy mode).
+     *
+     * @param filter filter to build
      * @param dataModel data model (and database) to use for formatting of values
+     * @param statement statement being assembled (collects bind values / provides placeholders)
      *
      */
-    static printSql(filter, dataModel) {
+    static buildSql(filter, dataModel, statement) {
         if (filter.isEmpty()) {
             return "";
         }
         let result = "";
         let field = null;
         if (filter.leftSide instanceof common_1.OINOQueryFilter) {
-            result += OINODbQueryFilter.printSql(filter.leftSide, dataModel);
+            result += OINODbQueryFilter.buildSql(filter.leftSide, dataModel, statement);
         }
         else {
             field = dataModel.findFieldByName(filter.leftSide);
@@ -59,7 +66,7 @@ class OINODbQueryFilter extends common_1.OINOQueryFilter {
         }
         result += OINODbQueryFilter.operatorToSql(filter);
         if (filter.rightSide instanceof common_1.OINOQueryFilter) {
-            result += OINODbQueryFilter.printSql(filter.rightSide, dataModel);
+            result += OINODbQueryFilter.buildSql(filter.rightSide, dataModel, statement);
         }
         else if (filter.operator == common_1.OINOQueryNullCheck.isnull || filter.operator == common_1.OINOQueryNullCheck.isNotNull) {
             // nothing to do, IS NULL and IS NOT NULL do not have a right side
@@ -70,11 +77,23 @@ class OINODbQueryFilter extends common_1.OINOQueryFilter {
                 common_1.OINOLog.error("@oino-ts/db", "OINODbQueryFilter", "toSql", "Invalid value!", { value: value });
                 throw new Error(common_1.OINO_ERROR_PREFIX + ": OINODbQueryFilter.toSql - Invalid value '" + value + "'"); // invalid value could be a security risk, stop processing
             }
-            result += field.printCellAsValue(value);
+            result += statement.addFieldValue(field, value); // bind value as parameter (or inline in legacy mode)
         }
         result = "(" + result + ")";
         common_1.OINOLog.debug("@oino-ts/db", "OINODbQueryFilter", "toSql", "Result", { sql: result });
         return result;
+    }
+    /**
+     * Print filter as an inline (non-parameterized) SQL condition string.
+     *
+     * @deprecated Prefer `buildSql` with a parameterized `OINODbSqlStatement`.
+     *
+     * @param filter filter to print
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    static printSql(filter, dataModel) {
+        return OINODbQueryFilter.buildSql(filter, dataModel, new OINODbSqlStatement_js_1.OINODbSqlStatement(dataModel.dbApi.db, false));
     }
 }
 exports.OINODbQueryFilter = OINODbQueryFilter;

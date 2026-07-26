@@ -104,7 +104,7 @@ class OINODbMariadb extends db_1.OINODb {
         if (this.dbParams.type !== "OINODbMariadb") {
             throw new Error(common_1.OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this.dbParams.type);
         }
-        this._pool = mariadb_1.default.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug: false, rowsAsArray: true, multipleStatements: true });
+        this._pool = mariadb_1.default.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug: false, rowsAsArray: true, multipleStatements: false }); // statements are now executed individually with bind parameters, so stacked/multi-statement execution is disabled
         delete this.dbParams.password; // do not store password in db object
     }
     _parseFieldLength(fieldLengthStr) {
@@ -114,12 +114,12 @@ class OINODbMariadb extends db_1.OINODb {
         }
         return result;
     }
-    async _query(sql) {
+    async _query(sql, params) {
         let connection = null;
         let rows = common_2.OINO_EMPTY_ROWS;
         try {
             connection = await this._pool.getConnection();
-            const sql_res = await connection.query(sql);
+            const sql_res = (params && params.length > 0) ? await connection.query(sql, params) : await connection.query(sql);
             // console.log("_query: sql=", sql, " result=", result)
             if (Array.isArray(sql_res)) {
                 rows = sql_res.filter((r) => Array.isArray(r)); // filter out OkPacket results from multiple statements
@@ -136,12 +136,12 @@ class OINODbMariadb extends db_1.OINODb {
         }
         return new OINOMariadbData(rows, []);
     }
-    async _exec(sql) {
+    async _exec(sql, params) {
         let connection = null;
         let rows = common_2.OINO_EMPTY_ROWS;
         try {
             connection = await this._pool.getConnection();
-            const sql_res = await connection.query(sql);
+            const sql_res = (params && params.length > 0) ? await connection.query(sql, params) : await connection.query(sql);
             // console.log("OINODbMariadb._exec: result=", result)
             if (Array.isArray(sql_res)) {
                 rows = sql_res.filter((r) => Array.isArray(r)); // filter out OkPacket results from multiple statements
@@ -166,7 +166,7 @@ class OINODbMariadb extends db_1.OINODb {
      *
      */
     printTableName(sqlTable) {
-        return "`" + sqlTable + "`";
+        return "`" + sqlTable.replaceAll("`", "``") + "`";
     }
     /**
      * Print a column name with correct SQL escaping.
@@ -175,7 +175,33 @@ class OINODbMariadb extends db_1.OINODb {
      *
      */
     printColumnName(sqlColumn) {
-        return "`" + sqlColumn + "`";
+        return "`" + sqlColumn.replaceAll("`", "``") + "`";
+    }
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (MySQL/MariaDB `?`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index) {
+        return "?";
+    }
+    /**
+     * Coerce a data value into a MariaDB bind-parameter value. The connector binds numbers,
+     * strings, `Date` and `Buffer` natively; booleans are mapped to 1/0 for `bit`/numeric columns.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue, nativeType) {
+        if (cellValue === undefined) {
+            return null;
+        }
+        if (typeof cellValue === "boolean") {
+            return cellValue ? 1 : 0;
+        }
+        return cellValue;
     }
     /**
      * Print a single data value from serialization using the context of the native data
@@ -304,8 +330,8 @@ class OINODbMariadb extends db_1.OINODb {
         common_1.OINOBenchmark.startMetric("OINODb", "validate");
         let result = new common_1.OINOResult();
         try {
-            const sql = this._getValidateSql(this.dbParams.database);
-            const sql_res = await this._query(sql);
+            const sql = this._getValidateSql();
+            const sql_res = await this._query(sql, [this.dbParams.database]);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for schema!", "OINODbMariadb.validate");
             }
@@ -361,7 +387,22 @@ class OINODbMariadb extends db_1.OINODb {
         common_1.OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
-    _getSchemaSql(dbName, tableName) {
+    /**
+     * Execute a parameterized statement, binding its values as positional `?` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement) {
+        if (!this.isValidated) {
+            throw new Error(common_1.OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
+        common_1.OINOBenchmark.startMetric("OINODb", "runStatement");
+        let result = await this._exec(statement.sql, statement.values);
+        common_1.OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500);
+        return result;
+    }
+    _getSchemaSql() {
         const sql = `SELECT
     C.COLUMN_NAME,
     C.COLUMN_TYPE,
@@ -369,19 +410,19 @@ class OINODbMariadb extends db_1.OINODb {
     C.COLUMN_KEY,
     C.COLUMN_DEFAULT,
     C.EXTRA,
-    KCU.CONSTRAINT_NAME AS ForeignKeyName 
+    KCU.CONSTRAINT_NAME AS ForeignKeyName
 FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
-WHERE C.TABLE_SCHEMA = '${dbName}' AND C.TABLE_NAME = '${tableName}'
+WHERE C.TABLE_SCHEMA = ? AND C.TABLE_NAME = ?
 ORDER BY C.ORDINAL_POSITION;`;
         return sql;
     }
-    _getValidateSql(dbName) {
+    _getValidateSql() {
         const sql = `SELECT
     Count(C.COLUMN_NAME) AS COLUMN_COUNT
 FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
-WHERE C.TABLE_SCHEMA = '${dbName}';`;
+WHERE C.TABLE_SCHEMA = ?;`;
         return sql;
     }
     /**
@@ -392,7 +433,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
      */
     async getSchemaFields(tableName) {
         const fields = [];
-        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, tableName));
+        const schema_res = await this._query(this._getSchemaSql(), [this.dbParams.database, tableName]);
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";
@@ -443,8 +484,8 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`;
      */
     async getSchemaTables() {
         const tables = [];
-        const sql = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = '" + this.dbParams.database + "' AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;";
-        const tables_res = await this._query(sql);
+        const sql = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;";
+        const tables_res = await this._query(sql, [this.dbParams.database]);
         while (!tables_res.isEof()) {
             const row = tables_res.getRow();
             const table_name = row[0]?.toString() || "";
