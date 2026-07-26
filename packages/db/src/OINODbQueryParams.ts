@@ -7,9 +7,10 @@
 import { OINO_ERROR_PREFIX, OINOLog, OINODataField, OINOQueryNullCheck, OINOQueryFilter, OINOQueryOrder, OINOQueryLimit, OINOQueryAggregate, OINOQueryAggregateFunctions, OINOQuerySelect, OINODataModel } from "@oino-ts/common"
 
 import { OINODbDataModel } from "./OINODbDataModel.js"
+import { OINODbSqlStatement } from "./OINODbSqlStatement.js"
 
 /**
- * Class for recursively parsing of filters and printing them as SQL conditions. 
+ * Class for recursively parsing of filters and printing them as SQL conditions.
  * Supports three types of statements
  * - comparison: (field)-lt|le|eq|ge|gt|like(value)
  * - negation: -not(filter)
@@ -38,19 +39,25 @@ export class OINODbQueryFilter extends OINOQueryFilter {
     }
 
     /**
-     * Print filter as SQL condition based on the datamodel of the API.
-     * 
+     * Build filter as SQL condition based on the datamodel of the API, appending any values to the
+     * given statement.
+     *
+     * Column names are validated against the datamodel and values are added to `statement`
+     * (bound as parameters, or inlined as escaped literals when the statement is in legacy mode).
+     *
+     * @param filter filter to build
      * @param dataModel data model (and database) to use for formatting of values
+     * @param statement statement being assembled (collects bind values / provides placeholders)
      *
      */
-    static printSql(filter: OINOQueryFilter, dataModel:OINODbDataModel):string {
+    static buildSql(filter: OINOQueryFilter, dataModel:OINODbDataModel, statement:OINODbSqlStatement):string {
         if (filter.isEmpty()) {
             return ""
         }
         let result:string = ""
         let field:OINODataField|null = null
         if (filter.leftSide instanceof OINOQueryFilter) {
-            result += OINODbQueryFilter.printSql(filter.leftSide, dataModel)
+            result += OINODbQueryFilter.buildSql(filter.leftSide, dataModel, statement)
         } else {
             field = dataModel.findFieldByName(filter.leftSide as string)
             if (!field) {
@@ -61,7 +68,7 @@ export class OINODbQueryFilter extends OINOQueryFilter {
         }
         result += OINODbQueryFilter.operatorToSql(filter)
         if (filter.rightSide instanceof OINOQueryFilter) {
-            result += OINODbQueryFilter.printSql(filter.rightSide, dataModel)
+            result += OINODbQueryFilter.buildSql(filter.rightSide, dataModel, statement)
 
         } else if (filter.operator == OINOQueryNullCheck.isnull || filter.operator == OINOQueryNullCheck.isNotNull) {
             // nothing to do, IS NULL and IS NOT NULL do not have a right side
@@ -71,11 +78,24 @@ export class OINODbQueryFilter extends OINOQueryFilter {
                 OINOLog.error("@oino-ts/db", "OINODbQueryFilter", "toSql", "Invalid value!", {value:value})
                 throw new Error(OINO_ERROR_PREFIX + ": OINODbQueryFilter.toSql - Invalid value '" + value + "'") // invalid value could be a security risk, stop processing
             }
-            result += field!.printCellAsValue(value)
+            result += statement.addFieldValue(field!, value) // bind value as parameter (or inline in legacy mode)
         }
         result = "(" + result + ")"
         OINOLog.debug("@oino-ts/db", "OINODbQueryFilter", "toSql", "Result", {sql:result})
         return result
+    }
+
+    /**
+     * Print filter as an inline (non-parameterized) SQL condition string.
+     *
+     * @deprecated Prefer `buildSql` with a parameterized `OINODbSqlStatement`.
+     *
+     * @param filter filter to print
+     * @param dataModel data model (and database) to use for formatting of values
+     *
+     */
+    static printSql(filter: OINOQueryFilter, dataModel:OINODbDataModel):string {
+        return OINODbQueryFilter.buildSql(filter, dataModel, new OINODbSqlStatement(dataModel.dbApi.db, false))
     }
 }
 

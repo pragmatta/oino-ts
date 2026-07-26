@@ -6,7 +6,7 @@
 
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataField, OINODataFieldSchema, OINODataFieldParams, OINODataRow, OINODataCell, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
 
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 
 import { ConnectionPool } from "mssql";
 
@@ -145,9 +145,14 @@ export class OINODbMsSql extends OINODb {
         })
     }
 
-    private async _query(sql:string):Promise<OINOMsSqlData> {
+    private async _query(sql:string, params?:OINODataCell[]):Promise<OINOMsSqlData> {
         try {
             const request = this._pool.request() // this does not need to be released but the pool will handle it
+            if (params) {
+                for (let i=0; i<params.length; i++) {
+                    request.input("p" + i, params[i]) // bind @p0, @p1, … named parameters
+                }
+            }
             const sql_res = await request.query(sql)
             // console.log("_query: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
             return new OINOMsSqlData(sql_res.recordsets, [])
@@ -157,9 +162,14 @@ export class OINODbMsSql extends OINODb {
         }
     }
 
-    private async _exec(sql:string):Promise<OINOMsSqlData> {
+    private async _exec(sql:string, params?:OINODataCell[]):Promise<OINOMsSqlData> {
         try {
             const request = this._pool.request() // this does not need to be released but the pool will handle it
+            if (params) {
+                for (let i=0; i<params.length; i++) {
+                    request.input("p" + i, params[i]) // bind @p0, @p1, … named parameters
+                }
+            }
             const sql_res = await request.query(sql)
             // console.log("_exec: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
             return new OINOMsSqlData(sql_res.recordsets, [])
@@ -171,22 +181,47 @@ export class OINODbMsSql extends OINODb {
 
     /**
      * Print a table name using database specific SQL escaping.
-     * 
+     *
      * @param sqlTable name of the table
      *
      */
     printTableName(sqlTable:string): string {
-        return "["+sqlTable+"]"
+        return "["+sqlTable.replaceAll("]", "]]")+"]"
     }
 
     /**
      * Print a column name with correct SQL escaping.
-     * 
+     *
      * @param sqlColumn name of the column
      *
      */
     printColumnName(sqlColumn:string): string {
-        return "["+sqlColumn+"]"
+        return "["+sqlColumn.replaceAll("]", "]]")+"]"
+    }
+
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (MSSQL `@p0`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index:number): string {
+        return "@p" + index
+    }
+
+    /**
+     * Coerce a data value into a MSSQL bind-parameter value. node-mssql infers the SQL type
+     * from the JS value (number, string, boolean, `Date`, `Buffer`), so values pass through.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue:OINODataCell, nativeType: string): OINODataCell {
+        if (cellValue === undefined) {
+            return null
+        }
+        return cellValue
     }
 
 
@@ -355,8 +390,8 @@ export class OINODbMsSql extends OINODb {
         }
         OINOBenchmark.startMetric("OINODb", "validate")
         try {
-            const sql = this._getValidateSql(this.dbParams.database)
-            const sql_res:OINODataSet = await this._query(sql)
+            const sql = this._getValidateSql()
+            const sql_res:OINODataSet = await this._query(sql, [this.dbParams.database])
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMsSql.validate")
 
@@ -413,7 +448,7 @@ export class OINODbMsSql extends OINODb {
 
     /**
      * Execute other sql operations.
-     * 
+     *
      * @param sql SQL statement.
      *
      */
@@ -427,9 +462,25 @@ export class OINODbMsSql extends OINODb {
         return result
     }
 
-    private _getSchemaSql(dbName:string, tableName:string):string {
+    /**
+     * Execute a parameterized statement, binding its values as `@p0`, `@p1`, … named parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement:OINODbSqlStatement): Promise<OINODataSet> {
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
+        }
+        OINOBenchmark.startMetric("OINODb", "runStatement")
+        let result:OINODataSet = await this._exec(statement.sql, statement.values)
+        OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500)
+        return result
+    }
+
+    private _getSchemaSql():string {
         const sql =
-`SELECT 
+`SELECT
     C.COLUMN_NAME, 
     C.IS_NULLABLE, 
     C.DATA_TYPE, 
@@ -448,12 +499,12 @@ FROM
     GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
     ) as CONST
     ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
-WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}'
+WHERE C.TABLE_CATALOG = @p0 AND C.TABLE_NAME = @p1
 ORDER BY C.ORDINAL_POSITION;`
         return sql
     }
 
-    private _getValidateSql(dbName:string):string {
+    private _getValidateSql():string {
         const sql =
 `SELECT 
     count(C.COLUMN_NAME) AS COLUMN_COUNT
@@ -466,7 +517,7 @@ FROM
     GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
     ) as CONST
     ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
-WHERE C.TABLE_CATALOG = '${dbName}';`
+WHERE C.TABLE_CATALOG = @p0;`
         return sql
     }
 
@@ -478,7 +529,7 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
      */
     async getSchemaFields(tableName:string): Promise<OINODataField[]> {
         const fields:OINODataField[] = []
-        const schema_res:OINODataSet = await this.sqlSelect(this._getSchemaSql(this.dbParams.database, tableName))
+        const schema_res:OINODataSet = await this._query(this._getSchemaSql(), [this.dbParams.database, tableName])
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""
@@ -519,8 +570,8 @@ WHERE C.TABLE_CATALOG = '${dbName}';`
      */
     async getSchemaTables(): Promise<string[]> {
         const tables:string[] = []
-        const sql:string = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = '" + this.dbParams.database + "' AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
-        const tables_res:OINODataSet = await this.sqlSelect(sql)
+        const sql:string = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = @p0 AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
+        const tables_res:OINODataSet = await this._query(sql, [this.dbParams.database])
         while (!tables_res.isEof()) {
             const row:OINODataRow = tables_res.getRow()
             const table_name:string = row[0]?.toString() || ""
