@@ -7,6 +7,7 @@
 import { OINODataSet, OINODataSource, OINODataField, OINODataFieldSchema, OINOStringDataField, OINONumberDataField, OINODatetimeDataField, OINOResult, OINOLog, OINO_ERROR_PREFIX } from "@oino-ts/common"
 import { OINODbParams } from "./OINODbConstants.js"
 import { OINODbDataModel } from "./OINODbDataModel.js"
+import type { OINODbSqlStatement } from "./OINODbSqlStatement.js"
 import type { OINODbApi } from "./OINODbApi.js"
 
 /**
@@ -66,24 +67,49 @@ export abstract class OINODb extends OINODataSource {
     }
     
     /**
-     * Execute a select operation.
-     * 
+     * Execute a select operation from a raw SQL string.
+     *
+     * NOTE: prefer `runStatement` with a `build*Statement`-produced `OINODbSqlStatement` so that
+     * user values are bound as parameters. This raw-string form is kept for schema/DDL and other
+     * internally-constructed SQL.
+     *
      * @param sql SQL statement.
      *
      */
     abstract sqlSelect(sql:string): Promise<OINODataSet>
 
     /**
-     * Execute other sql operations.
-     * 
+     * Execute other sql operations from a raw SQL string.
+     *
+     * NOTE: prefer `runStatement` (see `sqlSelect`).
+     *
      * @param sql SQL statement.
      *
      */
     abstract sqlExec(sql:string): Promise<OINODataSet>
 
     /**
+     * Execute a parameterized statement produced by one of the `OINODbDataModel.build*Statement`
+     * methods, binding `statement.values` as database parameters. This is the safe execution path
+     * for statements that contain user-supplied values.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    abstract runStatement(statement:OINODbSqlStatement): Promise<OINODataSet>
+
+    /**
+     * Print a database-specific bind-parameter placeholder for the given zero-based parameter index
+     * (e.g. Postgres `$1`, MySQL/SQLite `?`, MSSQL `@p0`).
+     *
+     * @param index zero-based index of the parameter in the statement's ordered value list
+     *
+     */
+    abstract printParameterName(index:number): string
+
+    /**
      * Print a table name using database specific SQL escaping.
-     * 
+     *
      * @param sqlTable name of the table
      *
      */

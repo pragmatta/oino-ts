@@ -6,7 +6,7 @@
 
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataField, OINODataFieldSchema, OINODataFieldParams, OINODataRow, OINODataCell, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
 
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 
 import { Pool, PoolClient, QueryResult } from "pg";
 
@@ -125,11 +125,11 @@ export class OINODbPostgresql extends OINODb {
         return result
     }
 
-    private async _query(sql:string):Promise<OINODataSet> {
+    private async _query(sql:string, params?:OINODataCell[]):Promise<OINODataSet> {
         let connection:PoolClient|null = null
         try {
             connection = await this._pool.connect()
-            const query_result = await connection.query({rowMode: "array", text: sql})
+            const query_result = await connection.query((params && params.length > 0) ? {rowMode: "array", text: sql, values: params as any[]} : {rowMode: "array", text: sql})
             let rows:OINODataRow[]
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows)
@@ -148,11 +148,11 @@ export class OINODbPostgresql extends OINODb {
         }
     }
 
-    private async _exec(sql:string):Promise<OINODataSet> {
+    private async _exec(sql:string, params?:OINODataCell[]):Promise<OINODataSet> {
         let connection:PoolClient|null = null
         try {
             connection = await this._pool.connect()
-            const query_result:QueryResult = await connection.query({rowMode: "array", text: sql})
+            const query_result:QueryResult = await connection.query((params && params.length > 0) ? {rowMode: "array", text: sql, values: params as any[]} : {rowMode: "array", text: sql})
             let rows:OINODataRow[]
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows)
@@ -179,17 +179,42 @@ export class OINODbPostgresql extends OINODb {
      *
      */
     printTableName(sqlTable:string): string {
-        return "\""+sqlTable.toLowerCase()+"\""
+        return "\""+sqlTable.toLowerCase().replaceAll("\"", "\"\"")+"\""
     }
 
     /**
      * Print a column name with correct SQL escaping.
-     * 
+     *
      * @param sqlColumn name of the column
      *
      */
     printColumnName(sqlColumn:string): string {
-        return "\""+sqlColumn+"\""
+        return "\""+sqlColumn.replaceAll("\"", "\"\"")+"\""
+    }
+
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (Postgres `$n`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index:number): string {
+        return "$" + (index + 1)
+    }
+
+    /**
+     * Coerce a data value into a Postgres bind-parameter value. The `pg` driver binds
+     * numbers, strings, booleans, `Date` and `Buffer` to their native Postgres types directly.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue:OINODataCell, nativeType: string): OINODataCell {
+        if (cellValue === undefined) {
+            return null
+        }
+        return cellValue
     }
 
     /**
@@ -304,8 +329,8 @@ export class OINODbPostgresql extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate")
         let result:OINOResult = new OINOResult()
         try {
-            const sql = this._getValidateSql(this.dbParams.database)
-            const sql_res:OINODataSet = await this._query(sql)
+            const sql = this._getValidateSql()
+            const sql_res:OINODataSet = await this._query(sql, [this.dbParams.database])
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate")
 
@@ -359,7 +384,7 @@ export class OINODbPostgresql extends OINODb {
 
     /**
      * Execute other sql operations.
-     * 
+     *
      * @param sql SQL statement.
      *
      */
@@ -373,9 +398,25 @@ export class OINODbPostgresql extends OINODb {
         return result
     }
 
-    private _getSchemaSql(dbName:string, tableName:string):string {
-        const sql = 
-`SELECT 
+    /**
+     * Execute a parameterized statement, binding its values as `$n` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement:OINODbSqlStatement): Promise<OINODataSet> {
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
+        }
+        OINOBenchmark.startMetric("OINODb", "runStatement")
+        let result:OINODataSet = await this._query(statement.sql, statement.values)
+        OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500)
+        return result
+    }
+
+    private _getSchemaSql():string {
+        const sql =
+`SELECT
     col.column_name, 
     col.data_type, 
     col.character_maximum_length, 
@@ -397,13 +438,13 @@ LEFT JOIN LATERAL
 		and tco.table_name = col.table_name
         and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
 	group by kcu.column_name) con on col.column_name = con.column_name
-WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`
+WHERE col.table_catalog = $1 AND col.table_name = $2`
         return sql
     }
 
-    private _getValidateSql(dbName:string):string {
-        const sql = 
-`SELECT 
+    private _getValidateSql():string {
+        const sql =
+`SELECT
     count(col.column_name) AS column_count
 FROM information_schema.columns col
 LEFT JOIN LATERAL
@@ -418,7 +459,7 @@ LEFT JOIN LATERAL
 		and tco.table_name = col.table_name
         and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
 	group by kcu.column_name) con on col.column_name = con.column_name
-WHERE col.table_catalog = '${dbName}'`
+WHERE col.table_catalog = $1`
         return sql
     }
 
@@ -430,7 +471,7 @@ WHERE col.table_catalog = '${dbName}'`
      */
     async getSchemaFields(tableName:string): Promise<OINODataField[]> {
         const fields:OINODataField[] = []
-        const schema_res:OINODataSet = await this._query(this._getSchemaSql(this.dbParams.database, tableName.toLowerCase()))
+        const schema_res:OINODataSet = await this._query(this._getSchemaSql(), [this.dbParams.database, tableName.toLowerCase()])
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""
@@ -472,8 +513,8 @@ WHERE col.table_catalog = '${dbName}'`
      */
     async getSchemaTables(): Promise<string[]> {
         const tables:string[] = []
-        const sql:string = "SELECT table_name FROM information_schema.tables WHERE table_catalog = '" + this.dbParams.database + "' AND table_schema NOT IN ('pg_catalog', 'information_schema') AND table_type = 'BASE TABLE' ORDER BY table_name;"
-        const tables_res:OINODataSet = await this._query(sql)
+        const sql:string = "SELECT table_name FROM information_schema.tables WHERE table_catalog = $1 AND table_schema NOT IN ('pg_catalog', 'information_schema') AND table_type = 'BASE TABLE' ORDER BY table_name;"
+        const tables_res:OINODataSet = await this._query(sql, [this.dbParams.database])
         while (!tables_res.isEof()) {
             const row:OINODataRow = tables_res.getRow()
             const table_name:string = row[0]?.toString() || ""

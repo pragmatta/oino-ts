@@ -4,9 +4,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINOApi, OINOApiParams, OINOLog, OINOBenchmark, OINOHttpRequest, OINOHttpResult, OINOApiRequest, OINOApiResult, OINOHtmlTemplate, OINOContentType, OINODataRow, OINODataCell, OINODataSet, OINODataField, OINOStringDataField, OINOConfig, OINONumberDataField, OINODatetimeDataField, OINOQueryParams, OINOApiData, OINOModelSet, OINOParser, OINO_ERROR_PREFIX } from "@oino-ts/common";
+import { OINOApi, OINOApiParams, OINOLog, OINOBenchmark, OINOHttpRequest, OINOHttpResult, OINOApiRequest, OINOApiResult, OINOHtmlTemplate, OINOContentType, OINODataRow, OINODataCell, OINODataSet, OINODataField, OINOStringDataField, OINOConfig, OINONumberDataField, OINODatetimeDataField, OINOQueryParams, OINOApiData, OINOModelSet, OINOMemoryDataset, OINOParser, OINO_ERROR_PREFIX } from "@oino-ts/common";
 import { OINODb } from "./OINODb.js"
 import { OINODbDataModel } from "./OINODbDataModel.js"
+import { OINODbSqlStatement } from "./OINODbSqlStatement.js"
 
 
 /**
@@ -97,13 +98,15 @@ export class OINODbApi extends OINOApi {
     private async _doGet(result:OINOApiResult, rowId:string, request:OINOApiRequest):Promise<void> {
         let sql:string = ""
         try {
-            sql = this.dbDatamodel!.printSqlSelect(rowId, request.queryParams || {})
-            OINOLog.debug("@oino-ts/db", "OINODbApi", "_doGet", "Print SQL", {sql:sql})
-            const sql_res:OINODataSet = await this.db.sqlSelect(sql)
+            const stmt:OINODbSqlStatement = this.dbDatamodel!.buildSelectStatement(rowId, request.queryParams || {})
+            sql = stmt.sql
+            OINOLog.debug("@oino-ts/db", "OINODbApi", "_doGet", "Print SQL", {sql:sql, values:stmt.values})
+            const sql_res:OINODataSet = await this.db.runStatement(stmt)
             if (sql_res.success == false) {
                 result.setError(500, sql_res.statusText, "DoGet")
                 if (this._debugOnError) {
-                    result.addDebug("OINO GET SQL [" + sql + "]", "DoPut")
+                    result.addDebug("OINO GET SQL [" + sql + "]", "DoGet")
+                    result.addDebug("OINO GET VALUES [" + JSON.stringify(stmt.values) + "]", "DoGet")
                 }
             } else {
                 result.data = new OINOModelSet(this.datamodel!, sql_res, request.queryParams)
@@ -118,31 +121,46 @@ export class OINODbApi extends OINOApi {
     }
     
     private async _doPost(result:OINOApiResult, rows:OINODataRow[], request:OINOApiRequest):Promise<void> {
-        let sql:string = "" 
+        const statements:OINODbSqlStatement[] = []
+        let sql:string = ""
         try {
             for (let i=0; i<rows.length; i++) {
                 this._validateRow(result, rows[i], this.dbParams.failOnInsertWithoutKey||false)
                 if (result.success) {
-                    sql += this.dbDatamodel!.printSqlInsert(rows[i]) 
+                    statements.push(this.dbDatamodel!.buildInsertStatement(rows[i]))
 
                 } else if (this.dbParams.failOnAnyInvalidRows == false) {
                     result.setOk() // individual rows may fail and will just be messages in response similar to executing multiple sql statements
                 }
             }
-            if ((sql == "") && result.success) {
+            if ((statements.length == 0) && result.success) {
                 result.setError(405, "No valid rows for POST!", "DoPost")
 
             } else if (result.success) {
-                OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPost", "Print SQL", {sql:sql})
-                const sql_res:OINODataSet = await this.db.sqlExec(sql)
-                if (sql_res.success == false) {
-                    result.setError(500, sql_res.statusText, "DoPost")
-                    if (this._debugOnError) {
-                        result.addDebug("OINO POST MESSAGES [" + sql_res.statusText + "]", "DoPost")
-                        result.addDebug("OINO POST SQL [" + sql + "]", "DoPost")                
+                // Each row is executed as its own parameterized statement (statements can no longer be
+                // concatenated because bind placeholders are per-statement and multi-statement extended
+                // queries are not portable across drivers). Inserted-id result rows are aggregated.
+                const inserted_rows:OINODataRow[] = []
+                for (const stmt of statements) {
+                    sql = stmt.sql
+                    OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPost", "Print SQL", {sql:sql, values:stmt.values})
+                    const sql_res:OINODataSet = await this.db.runStatement(stmt)
+                    if (sql_res.success == false) {
+                        result.setError(500, sql_res.statusText, "DoPost")
+                        if (this._debugOnError) {
+                            result.addDebug("OINO POST MESSAGES [" + sql_res.statusText + "]", "DoPost")
+                            result.addDebug("OINO POST SQL [" + sql + "]", "DoPost")
+                            result.addDebug("OINO POST VALUES [" + JSON.stringify(stmt.values) + "]", "DoPost")
+                        }
+                        break
+                    } else if (this.dbParams.returnInsertedIds) {
+                        for (const row of await sql_res.getAllRows()) {
+                            inserted_rows.push(row)
+                        }
                     }
-                } else if (this.dbParams.returnInsertedIds) {
-                    result.data = new OINOModelSet(this.datamodel!, sql_res, request.queryParams) // return the inserted ids as data
+                }
+                if (result.success && this.dbParams.returnInsertedIds) {
+                    result.data = new OINOModelSet(this.datamodel!, new OINOMemoryDataset(inserted_rows), request.queryParams) // return the inserted ids as data
                 }
             }
         } catch (e:any) {
@@ -155,6 +173,7 @@ export class OINODbApi extends OINOApi {
     }
 
     private async _doPut(result:OINOApiResult, id:string|null, rows:OINODataRow[]):Promise<void> {
+        const statements:OINODbSqlStatement[] = []
         let sql:string = ""
         try {
             // this._validateRowValues(result, row, false)
@@ -162,23 +181,28 @@ export class OINODbApi extends OINOApi {
                 const row_id = id || OINOConfig.printOINOId(this.dbDatamodel!.getRowPrimarykeyValues(rows[i], this.hashid != null))
                 this._validateRow(result, rows[i], this.dbParams.failOnInsertWithoutKey||false)
                 if (result.success) {
-                    sql += this.dbDatamodel!.printSqlUpdate(row_id, rows[i]) 
+                    statements.push(this.dbDatamodel!.buildUpdateStatement(row_id, rows[i]))
 
                 } else if (this.dbParams.failOnAnyInvalidRows == false) {
                     result.setOk() // individual rows may fail and will just be messages in response similar to executing multiple sql statements
                 }
             }
-            if ((sql == "") && result.success) {
+            if ((statements.length == 0) && result.success) {
                 result.setError(405, "No valid rows for PUT!", "DoPut") // only set error if there are multiple rows and no valid sql was created
 
             } else if (result.success) {
-                OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPut", "Print SQL", {sql:sql})
-                const sql_res:OINODataSet = await this.db.sqlExec(sql)
-                if (sql_res.success == false) {
-                    result.setError(500, sql_res.statusText, "DoPut")
-                    if (this._debugOnError) {
-                        result.addDebug("OINO PUT MESSAGES [" + sql_res.statusText + "]", "DoPut")
-                        result.addDebug("OINO PUT SQL [" + sql + "]", "DoPut")
+                for (const stmt of statements) {
+                    sql = stmt.sql
+                    OINOLog.debug("@oino-ts/db", "OINODbApi", "_doPut", "Print SQL", {sql:sql, values:stmt.values})
+                    const sql_res:OINODataSet = await this.db.runStatement(stmt)
+                    if (sql_res.success == false) {
+                        result.setError(500, sql_res.statusText, "DoPut")
+                        if (this._debugOnError) {
+                            result.addDebug("OINO PUT MESSAGES [" + sql_res.statusText + "]", "DoPut")
+                            result.addDebug("OINO PUT SQL [" + sql + "]", "DoPut")
+                            result.addDebug("OINO PUT VALUES [" + JSON.stringify(stmt.values) + "]", "DoPut")
+                        }
+                        break
                     }
                 }
             }
@@ -192,32 +216,37 @@ export class OINODbApi extends OINOApi {
     }
 
     private async _doDelete(result:OINOApiResult, id:string|null, rows:OINODataRow[]|null):Promise<void> {
+        const statements:OINODbSqlStatement[] = []
         let sql:string = ""
         try {
             if (rows != null) {
                 for (let i=0; i<rows.length; i++) {
                     const row_id = OINOConfig.printOINOId(this.dbDatamodel!.getRowPrimarykeyValues(rows[i], this.hashid != null))
                     if (row_id) {
-                        sql += this.dbDatamodel!.printSqlDelete(row_id) 
+                        statements.push(this.dbDatamodel!.buildDeleteStatement(row_id))
                     } else if (this.dbParams.failOnAnyInvalidRows == false) {
                         result.setOk() // individual rows may fail and will just be messages in response similar to executing multiple sql statements
                     }
                 }
             } else if (id) {
-                sql = this.dbDatamodel!.printSqlDelete(id)
+                statements.push(this.dbDatamodel!.buildDeleteStatement(id))
             }
-            if ((sql == "") && result.success) {
+            if ((statements.length == 0) && result.success) {
                 result.setError(405, "No valid rows for DELETE!", "DoDelete") // only set error if there are multiple rows and no valid sql was created
 
             } else if (result.success) {
-            
-                OINOLog.debug("@oino-ts/db", "OINODbApi", "_doDelete", "Print SQL", {sql:sql})
-                const sql_res:OINODataSet = await this.db.sqlExec(sql)
-                if (sql_res.success == false) {
-                    result.setError(500, sql_res.statusText, "DoDelete")
-                    if (this._debugOnError) {
-                        result.addDebug("OINO DELETE MESSAGES [" + sql_res.statusText + "]", "DoDelete")
-                        result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete")                    
+                for (const stmt of statements) {
+                    sql = stmt.sql
+                    OINOLog.debug("@oino-ts/db", "OINODbApi", "_doDelete", "Print SQL", {sql:sql, values:stmt.values})
+                    const sql_res:OINODataSet = await this.db.runStatement(stmt)
+                    if (sql_res.success == false) {
+                        result.setError(500, sql_res.statusText, "DoDelete")
+                        if (this._debugOnError) {
+                            result.addDebug("OINO DELETE MESSAGES [" + sql_res.statusText + "]", "DoDelete")
+                            result.addDebug("OINO DELETE SQL [" + sql + "]", "DoDelete")
+                            result.addDebug("OINO DELETE VALUES [" + JSON.stringify(stmt.values) + "]", "DoDelete")
+                        }
+                        break
                     }
                 }
             }

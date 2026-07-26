@@ -8,7 +8,7 @@ import { Buffer } from "node:buffer"
 
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINOStr, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataField, OINODataFieldSchema, OINODataFieldParams, OINOMemoryDataset, OINODataCell, OINODataRow, OINOBlobDataField, OINODatetimeDataField, OINO_EMPTY_ROWS } from "@oino-ts/common";
 
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 
 import { Database as BunSqliteDb } from "bun:sqlite";
 
@@ -67,17 +67,49 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     printTableName(sqlTable:string): string {
-        return "["+sqlTable+"]"
+        return "["+sqlTable.replaceAll("]", "]]")+"]"
     }
 
     /**
      * Print a column name with correct SQL escaping.
-     * 
+     *
      * @param sqlColumn name of the column
      *
      */
     printColumnName(sqlColumn:string): string {
-        return "\""+sqlColumn+"\""
+        return "\""+sqlColumn.replaceAll("\"", "\"\"")+"\""
+    }
+
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (SQLite `?`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index:number): string {
+        return "?"
+    }
+
+    /**
+     * Coerce a data value into a bun:sqlite bind-parameter value. bun:sqlite only accepts
+     * number, bigint, string, `Buffer`/`Uint8Array` and null, so `Date` is converted to an ISO
+     * string and `boolean` to 1/0.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue:OINODataCell, nativeType: string): OINODataCell {
+        if ((cellValue === undefined) || (cellValue === null)) {
+            return null
+        }
+        if (typeof cellValue === "boolean") {
+            return cellValue ? 1 : 0
+        }
+        if (cellValue instanceof Date) {
+            return cellValue.toISOString()
+        }
+        return cellValue
     }
 
     /**
@@ -129,7 +161,7 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     printStringValue(sqlString:string): string {
-        return "\"" + sqlString.replaceAll("\"", "\"\"") + "\""
+        return "'" + sqlString.replaceAll("'", "''") + "'" // SQLite string literals use single quotes; double quotes denote identifiers
     }
 
     /**
@@ -231,32 +263,34 @@ export class OINODbBunSqlite extends OINODb {
     }
 
 
-    private async _query(sql:string): Promise<OINODataSet> {
+    private async _query(sql:string, params?:OINODataCell[]): Promise<OINODataSet> {
         let result:OINODataSet
         try {
-            const sql_res = this._db?.query(sql).values()
+            const statement = this._db?.query(sql)
+            const sql_res = (params && params.length > 0) ? statement?.values(...(params as any[])) : statement?.values()
             if (sql_res) {
                 // console.log("OINODbBunSqlite._query: res", sql_res)
                 result = new OINOBunSqliteDataset(sql_res, [])
             } else {
                 result = new OINOBunSqliteDataset(OINO_EMPTY_ROWS, [])
-            }            
+            }
 
         } catch (e:any) {
             result = new OINOBunSqliteDataset(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + " (OINODbBunSqlite._query): Exception in db query: " + e.message, "OINODbBunSqlite._query") as OINOBunSqliteDataset
         }
         return result
     }
-    private async _exec(sql:string): Promise<OINODataSet> {
+    private async _exec(sql:string, params?:OINODataCell[]): Promise<OINODataSet> {
         let result:OINODataSet
         try {
-            const sql_res = this._db?.query(sql).values()
+            const statement = this._db?.query(sql)
+            const sql_res = (params && params.length > 0) ? statement?.values(...(params as any[])) : statement?.values()
             if (sql_res) {
                 // console.log("OINODbBunSqlite._exec: res", sql_res)
                 result = new OINOBunSqliteDataset(sql_res, [])
             } else {
                 result = new OINOBunSqliteDataset(OINO_EMPTY_ROWS, [])
-            }            
+            }
 
         } catch (e:any) {
             result = new OINOBunSqliteDataset(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db exec: " + e.message, "OINODbBunSqlite._exec") as OINOBunSqliteDataset
@@ -282,7 +316,7 @@ export class OINODbBunSqlite extends OINODb {
 
     /**
      * Execute other sql operations.
-     * 
+     *
      * @param sql SQL statement.
      *
      */
@@ -295,9 +329,25 @@ export class OINODbBunSqlite extends OINODb {
         OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500)
         return result
     }
-    
-    private _getSchemaSql(dbName:string, tableName:string):string {
-        const sql = "SELECT sql from sqlite_schema WHERE name='" + tableName + "'"
+
+    /**
+     * Execute a parameterized statement, binding its values as positional `?` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement:OINODbSqlStatement): Promise<OINODataSet> {
+        if (!this.isValidated) {
+            return new OINOBunSqliteDataset(OINO_EMPTY_ROWS, [OINO_ERROR_PREFIX + " (OINODbBunSqlite.runStatement): Database connection not validated!"])
+        }
+        OINOBenchmark.startMetric("OINODb", "runStatement")
+        let result:OINODataSet = await this._exec(statement.sql, statement.values)
+        OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500)
+        return result
+    }
+
+    private _getSchemaSql():string {
+        const sql = "SELECT sql from sqlite_schema WHERE name=?"
         return sql
     }
 
@@ -313,8 +363,8 @@ export class OINODbBunSqlite extends OINODb {
      *
      */
     async getSchemaFields(tableName:string): Promise<OINODataField[]> {
-        const schema_sql:string = this._getSchemaSql(this.dbParams.database, tableName)
-        const res:OINODataSet|null = await this._query(schema_sql)
+        const schema_sql:string = this._getSchemaSql()
+        const res:OINODataSet|null = await this._query(schema_sql, [tableName])
         const sql_desc:string = (res?.getRow()[0]) as string
         const table_matches = OINODbBunSqlite._tableDescriptionRegex.exec(sql_desc)
         if (!table_matches || table_matches?.length < 2) {

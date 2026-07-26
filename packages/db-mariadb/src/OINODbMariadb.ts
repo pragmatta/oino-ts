@@ -8,7 +8,7 @@ import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult
 
 import { OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODataField, OINODataFieldSchema, OINODataFieldParams, OINODataRow, OINODataCell, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
 
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 
 import mariadb from "mariadb";
 
@@ -116,7 +116,7 @@ export class OINODbMariadb extends OINODb {
         if (this.dbParams.type !== "OINODbMariadb") {
             throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this.dbParams.type)
         } 
-        this._pool = mariadb.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug:false, rowsAsArray: true, multipleStatements: true })
+        this._pool = mariadb.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug:false, rowsAsArray: true, multipleStatements: false }) // statements are now executed individually with bind parameters, so stacked/multi-statement execution is disabled
         delete this.dbParams.password // do not store password in db object
     }
 
@@ -128,12 +128,12 @@ export class OINODbMariadb extends OINODb {
         return result
     }
 
-    private async _query(sql:string):Promise<OINODataSet> {
+    private async _query(sql:string, params?:OINODataCell[]):Promise<OINODataSet> {
         let connection:mariadb.PoolConnection|null = null
         let rows:OINODataRow[] = OINO_EMPTY_ROWS
         try {
             connection = await this._pool.getConnection()
-            const sql_res = await connection.query(sql)
+            const sql_res = (params && params.length > 0) ? await connection.query(sql, params) : await connection.query(sql)
             // console.log("_query: sql=", sql, " result=", result)
             if (Array.isArray(sql_res)) {
                 rows = sql_res.filter((r) => Array.isArray(r)) as OINODataRow[] // filter out OkPacket results from multiple statements
@@ -150,12 +150,12 @@ export class OINODbMariadb extends OINODb {
         return new OINOMariadbData(rows, [])
     }
 
-    private async _exec(sql:string):Promise<OINODataSet> {
+    private async _exec(sql:string, params?:OINODataCell[]):Promise<OINODataSet> {
         let connection:mariadb.PoolConnection|null = null
         let rows:OINODataRow[] = OINO_EMPTY_ROWS
         try {
             connection = await this._pool.getConnection()
-            const sql_res = await connection.query(sql)
+            const sql_res = (params && params.length > 0) ? await connection.query(sql, params) : await connection.query(sql)
             // console.log("OINODbMariadb._exec: result=", result)
             if (Array.isArray(sql_res)) {
                 rows = sql_res.filter((r) => Array.isArray(r)) // filter out OkPacket results from multiple statements
@@ -181,17 +181,45 @@ export class OINODbMariadb extends OINODb {
      *
      */
     printTableName(sqlTable:string): string {
-        return "`"+sqlTable+"`"
+        return "`"+sqlTable.replaceAll("`", "``")+"`"
     }
 
     /**
      * Print a column name with correct SQL escaping.
-     * 
+     *
      * @param sqlColumn name of the column
      *
      */
     printColumnName(sqlColumn:string): string {
-        return "`"+sqlColumn+"`"
+        return "`"+sqlColumn.replaceAll("`", "``")+"`"
+    }
+
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (MySQL/MariaDB `?`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index:number): string {
+        return "?"
+    }
+
+    /**
+     * Coerce a data value into a MariaDB bind-parameter value. The connector binds numbers,
+     * strings, `Date` and `Buffer` natively; booleans are mapped to 1/0 for `bit`/numeric columns.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue:OINODataCell, nativeType: string): OINODataCell {
+        if (cellValue === undefined) {
+            return null
+        }
+        if (typeof cellValue === "boolean") {
+            return cellValue ? 1 : 0
+        }
+        return cellValue
     }
 
 
@@ -323,8 +351,8 @@ export class OINODbMariadb extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate")
         let result:OINOResult = new OINOResult()
         try {
-            const sql = this._getValidateSql(this.dbParams.database)
-            const sql_res:OINODataSet = await this._query(sql)
+            const sql = this._getValidateSql()
+            const sql_res:OINODataSet = await this._query(sql, [this.dbParams.database])
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for schema!", "OINODbMariadb.validate")
 
@@ -369,7 +397,7 @@ export class OINODbMariadb extends OINODb {
 
     /**
      * Execute other sql operations.
-     * 
+     *
      * @param sql SQL statement.
      *
      */
@@ -383,8 +411,24 @@ export class OINODbMariadb extends OINODb {
         return result
     }
 
-    private _getSchemaSql(dbName:string, tableName:string):string {
-        const sql = 
+    /**
+     * Execute a parameterized statement, binding its values as positional `?` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement:OINODbSqlStatement): Promise<OINODataSet> {
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!")
+        }
+        OINOBenchmark.startMetric("OINODb", "runStatement")
+        let result:OINODataSet = await this._exec(statement.sql, statement.values)
+        OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500)
+        return result
+    }
+
+    private _getSchemaSql():string {
+        const sql =
 `SELECT
     C.COLUMN_NAME,
     C.COLUMN_TYPE,
@@ -392,21 +436,21 @@ export class OINODbMariadb extends OINODb {
     C.COLUMN_KEY,
     C.COLUMN_DEFAULT,
     C.EXTRA,
-    KCU.CONSTRAINT_NAME AS ForeignKeyName 
+    KCU.CONSTRAINT_NAME AS ForeignKeyName
 FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
-WHERE C.TABLE_SCHEMA = '${dbName}' AND C.TABLE_NAME = '${tableName}'
+WHERE C.TABLE_SCHEMA = ? AND C.TABLE_NAME = ?
 ORDER BY C.ORDINAL_POSITION;`
         return sql
     }
 
-    private _getValidateSql(dbName:string):string {
-        const sql = 
+    private _getValidateSql():string {
+        const sql =
 `SELECT
     Count(C.COLUMN_NAME) AS COLUMN_COUNT
 FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
-WHERE C.TABLE_SCHEMA = '${dbName}';`
+WHERE C.TABLE_SCHEMA = ?;`
         return sql
     }
 
@@ -419,7 +463,7 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
      */
     async getSchemaFields(tableName:string): Promise<OINODataField[]> {
         const fields:OINODataField[] = []
-        const schema_res:OINODataSet = await this._query(this._getSchemaSql(this.dbParams.database, tableName))
+        const schema_res:OINODataSet = await this._query(this._getSchemaSql(), [this.dbParams.database, tableName])
         while (!schema_res.isEof()) {
             const row:OINODataRow = schema_res.getRow()
             const field_name:string = row[0]?.toString() || ""
@@ -464,8 +508,8 @@ WHERE C.TABLE_SCHEMA = '${dbName}';`
      */
     async getSchemaTables(): Promise<string[]> {
         const tables:string[] = []
-        const sql:string = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = '" + this.dbParams.database + "' AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
-        const tables_res:OINODataSet = await this._query(sql)
+        const sql:string = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;"
+        const tables_res:OINODataSet = await this._query(sql, [this.dbParams.database])
         while (!tables_res.isEof()) {
             const row:OINODataRow = tables_res.getRow()
             const table_name:string = row[0]?.toString() || ""
