@@ -36,7 +36,11 @@ export declare class OINODbMsSql extends OINODb {
     printParameterName(index: number): string;
     /**
      * Coerce a data value into a MSSQL bind-parameter value. node-mssql infers the SQL type
-     * from the JS value (number, string, boolean, `Date`, `Buffer`), so values pass through.
+     * from the JS value (number, string, boolean, `Date`, `Buffer`), so most values pass through.
+     * Binary columns are the exception: only a `Buffer` is inferred as `VarBinary`, so
+     * `Uint8Array` and (base64-encoded) string values are converted to `Buffer` — otherwise they
+     * would be bound as `NVarChar` and fail with "Implicit conversion from data type nvarchar to
+     * binary is not allowed".
      *
      * @param cellValue data value to bind
      * @param nativeType native type name for the table column

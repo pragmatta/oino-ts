@@ -8,6 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OINODbMsSql = void 0;
 const common_1 = require("@oino-ts/common");
 const db_1 = require("@oino-ts/db");
+const node_buffer_1 = require("node:buffer");
 const mssql_1 = require("mssql");
 /**
  * Implmentation of OINODataSet for MsSql.
@@ -195,7 +196,11 @@ class OINODbMsSql extends db_1.OINODb {
     }
     /**
      * Coerce a data value into a MSSQL bind-parameter value. node-mssql infers the SQL type
-     * from the JS value (number, string, boolean, `Date`, `Buffer`), so values pass through.
+     * from the JS value (number, string, boolean, `Date`, `Buffer`), so most values pass through.
+     * Binary columns are the exception: only a `Buffer` is inferred as `VarBinary`, so
+     * `Uint8Array` and (base64-encoded) string values are converted to `Buffer` — otherwise they
+     * would be bound as `NVarChar` and fail with "Implicit conversion from data type nvarchar to
+     * binary is not allowed".
      *
      * @param cellValue data value to bind
      * @param nativeType native type name for the table column
@@ -204,6 +209,17 @@ class OINODbMsSql extends db_1.OINODb {
     bindCellValue(cellValue, nativeType) {
         if (cellValue === undefined) {
             return null;
+        }
+        if ((nativeType == "binary") || (nativeType == "varbinary") || (nativeType == "image")) {
+            if (cellValue instanceof node_buffer_1.Buffer) {
+                return cellValue;
+            }
+            else if (cellValue instanceof Uint8Array) {
+                return node_buffer_1.Buffer.from(cellValue);
+            }
+            else if (typeof cellValue === "string") {
+                return node_buffer_1.Buffer.from(cellValue, "base64"); // blob-field data is base64 encoded (cf. OINOBlobDataField.deserializeCell)
+            }
         }
         return cellValue;
     }
@@ -225,12 +241,12 @@ class OINODbMsSql extends db_1.OINODb {
         else if ((nativeType == "int") || (nativeType == "smallint") || (nativeType == "float")) {
             return cellValue.toString();
         }
-        else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary")) {
-            if (cellValue instanceof Buffer) {
+        else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary") || (nativeType == "image")) {
+            if (cellValue instanceof node_buffer_1.Buffer) {
                 return "0x" + cellValue.toString("hex") + "";
             }
             else if (cellValue instanceof Uint8Array) {
-                return "0x" + Buffer.from(cellValue).toString("hex") + "";
+                return "0x" + node_buffer_1.Buffer.from(cellValue).toString("hex") + "";
             }
             else {
                 return "'" + cellValue?.toString() + "'";
