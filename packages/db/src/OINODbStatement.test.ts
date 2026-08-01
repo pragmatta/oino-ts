@@ -139,3 +139,71 @@ test("[bindCellValue] bun:sqlite coerces Date and boolean to primitives it can b
     const buf = Buffer.from("0102", "hex")
     expect(db.bindCellValue(buf, "BLOB")).toBe(buf) // buffers pass through unchanged
 })
+
+// ── Blob / binary bind edge cases ────────────────────────────────────────────────────────────────
+// Regression tests for two stacked bugs in the parameterized blob path (found via a password-hash
+// update against MSSQL):
+// 1. OINOParser object-input rows JSON.stringify'd *any* object value, so Buffer properties became
+//    the literal string '{"type":"Buffer","data":[...]}' instead of binary bind values (and Date
+//    properties became quoted JSON strings).
+// 2. OINODbMsSql.bindCellValue passed all values through unchanged, but node-mssql only infers
+//    VarBinary from an actual Buffer - a Uint8Array or base64 string bound as NVarChar and failed
+//    server-side with "Implicit conversion from data type nvarchar to binary is not allowed".
+// These never met the integration tests because the JSON-body path deserializes base64 to a Buffer
+// before binding - the one shape that always worked.
+
+const categoriesApi:OINODbApi = await OINODbFactory.createApi(db, { apiName: "Categories", tableName: "Categories" }) // Categories.Picture is a BLOB column
+const ordersApi:OINODbApi = await OINODbFactory.createApi(db, { apiName: "Orders", tableName: "Orders" }) // Orders.OrderDate is a DATETIME column
+
+const PICTURE_BYTES:Buffer = Buffer.from("00ff102030405060", "hex") // includes null (0x00) and high (0xff) bytes
+
+function fieldIndex(api:OINODbApi, fieldName:string):number {
+    return api.datamodel!.fields.findIndex((f) => f.name == fieldName)
+}
+
+test("[OINOParser object input] Buffer and Uint8Array blob values pass through, not JSON.stringify'd", () => {
+    const pic_idx = fieldIndex(categoriesApi, "Picture")
+    const from_buffer = OINOParser.createRows(categoriesApi.datamodel!, { CategoryID: 99, CategoryName: "x", Picture: PICTURE_BYTES }, OINOContentType.json)
+    expect(from_buffer[0][pic_idx]).toBe(PICTURE_BYTES) // the exact Buffer, not '{"type":"Buffer","data":[...]}'
+
+    const u8 = new Uint8Array(PICTURE_BYTES)
+    const from_u8 = OINOParser.createRows(categoriesApi.datamodel!, { CategoryID: 99, CategoryName: "x", Picture: u8 }, OINOContentType.json)
+    expect(from_u8[0][pic_idx]).toBe(u8)
+})
+
+test("[OINOParser object input] Date values pass through, not JSON.stringify'd into quoted strings", () => {
+    const when = new Date("2024-02-29T13:45:30.000Z")
+    const rows = OINOParser.createRows(ordersApi.datamodel!, { OrderID: 1, OrderDate: when }, OINOContentType.json)
+    expect(rows[0][fieldIndex(ordersApi, "OrderDate")]).toBe(when)
+})
+
+test("[OINOParser object input] plain objects and arrays still stringify to recoverable JSON", () => {
+    const rows = OINOParser.createRows(categoriesApi.datamodel!, { CategoryID: 99, Description: { a: 1, b: [2, 3] } }, OINOContentType.json)
+    expect(rows[0][fieldIndex(categoriesApi, "Description")]).toBe('{"a":1,"b":[2,3]}')
+})
+
+test("[buildUpdateStatement] a Buffer from an object body survives to the bind values (accountApp password-update shape)", () => {
+    const rows = OINOParser.createRows(categoriesApi.datamodel!, { CategoryID: 99, Picture: PICTURE_BYTES }, OINOContentType.json)
+    const statement:OINODbSqlStatement = categoriesApi.dbDatamodel!.buildUpdateStatement("99", rows[0])
+    expect(statement.values).toContain(PICTURE_BYTES) // bound as the binary value itself
+    expect(statement.values.some((v) => (typeof v === "string") && v.includes("Buffer"))).toBe(false) // never as stringified JSON
+})
+
+test("[bindCellValue] MSSQL binds Buffer unchanged and coerces Uint8Array / base64 string to Buffer for binary columns", () => {
+    const mssql:OINODb = new OINODbMsSql({ type: "OINODbMsSql", url: "localhost", database: "Northwind" })
+    // a Buffer is the one type node-mssql maps to VarBinary by itself - it must pass through unchanged
+    expect(mssql.bindCellValue(PICTURE_BYTES, "varbinary")).toBe(PICTURE_BYTES)
+    // Uint8Array (e.g. hash bytes from crypto APIs, multipart binary file parts) must become a Buffer
+    const u8 = new Uint8Array(PICTURE_BYTES)
+    for (const native_type of ["binary", "varbinary", "image"]) {
+        const bound = mssql.bindCellValue(u8, native_type)
+        expect(Buffer.isBuffer(bound)).toBe(true)
+        expect(bound).toEqual(PICTURE_BYTES)
+    }
+    // a string bound to a binary column is base64 (the OINOBlobDataField serialization convention)
+    const from_b64 = mssql.bindCellValue(PICTURE_BYTES.toString("base64"), "varbinary")
+    expect(Buffer.isBuffer(from_b64)).toBe(true)
+    expect(from_b64).toEqual(PICTURE_BYTES)
+    // non-binary columns are unaffected
+    expect(mssql.bindCellValue("hello", "nvarchar")).toBe("hello")
+})
