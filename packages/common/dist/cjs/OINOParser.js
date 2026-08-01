@@ -105,6 +105,9 @@ class OINOParser {
             if ((value === null) || (value === undefined)) { // must be checked first as null is an object
                 result[i] = value;
             }
+            else if ((value instanceof node_buffer_1.Buffer) || (value instanceof Uint8Array) || (value instanceof Date)) {
+                result[i] = value; // binary (blob) and Date (datetime) values pass through as-is; JSON.stringify would corrupt them (e.g. Buffer -> '{"type":"Buffer","data":[...]}')
+            }
             else if (Array.isArray(value) || typeof value === "object") {
                 result[i] = JSON.stringify(value); // store as proper JSON string so JSON.parse can recover it
             }
@@ -273,6 +276,9 @@ class OINOParser {
             // console.log("createRowFromJsonObj: key=" + field.name + ", val=" + val)
             if ((value === null) || (value === undefined)) { // must be checed first as null is an object
                 result[i] = value;
+            }
+            else if ((value instanceof node_buffer_1.Buffer) || (value instanceof Uint8Array) || (value instanceof Date)) {
+                result[i] = value; // binary (blob) and Date (datetime) values pass through as-is; JSON.stringify would corrupt them (e.g. Buffer -> '{"type":"Buffer","data":[...]}')
             }
             else if (Array.isArray(value) || typeof value === "object") {
                 result[i] = JSON.stringify(value); // store as proper JSON string so JSON.parse can recover it
