@@ -1,6 +1,6 @@
 import { OINOResult } from "@oino-ts/common";
 import { OINODataSet, OINODataField, OINODataFieldSchema, OINODataCell } from "@oino-ts/common";
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 /**
  * Implementation of MariaDb/MySql-database.
  *
@@ -32,6 +32,22 @@ export declare class OINODbMariadb extends OINODb {
      *
      */
     printColumnName(sqlColumn: string): string;
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (MySQL/MariaDB `?`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index: number): string;
+    /**
+     * Coerce a data value into a MariaDB bind-parameter value. The connector binds numbers,
+     * strings, `Date` and `Buffer` natively; booleans are mapped to 1/0 for `bit`/numeric columns.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue: OINODataCell, nativeType: string): OINODataCell;
     /**
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
@@ -86,6 +102,13 @@ export declare class OINODbMariadb extends OINODb {
      *
      */
     sqlExec(sql: string): Promise<OINODataSet>;
+    /**
+     * Execute a parameterized statement, binding its values as positional `?` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    runStatement(statement: OINODbSqlStatement): Promise<OINODataSet>;
     private _getSchemaSql;
     private _getValidateSql;
     /**

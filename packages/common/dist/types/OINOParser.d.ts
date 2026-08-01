@@ -22,7 +22,10 @@ export declare class OINOParser {
     private static _createRowsFromBlob;
     /**
      * Create one data row from javascript object based on the datamodel.
-     * NOTE! Data assumed to be unserialized i.e. of the native type (string, number, boolean, Buffer)
+     * Values are assumed to be of the native type (string, number, boolean, Buffer), but string
+     * values are still decoded and deserialized (and hashid-decoded for numeric primary/foreign keys)
+     * so that this path applies the same type validation as the JSON/CSV/urlencoded/formdata paths
+     * rather than passing untrusted strings through unchecked.
      *
      * @param datamodel datamodel of the api
      * @param data data as javascript object

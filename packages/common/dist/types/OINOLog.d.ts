@@ -147,6 +147,8 @@ export declare abstract class OINOLog {
      *
      */
     static importLogLevels(logLevels: any[]): void;
+    /** Redact a token value before logging: it's the actual data-API bearer secret, not an internal id. */
+    static redact(value: unknown, maxVisibleChars?: number): string;
 }
 /**
  * Logging implementation based on console.log.

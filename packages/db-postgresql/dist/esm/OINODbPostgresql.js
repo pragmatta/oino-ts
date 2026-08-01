@@ -109,11 +109,11 @@ export class OINODbPostgresql extends OINODb {
         }
         return result;
     }
-    async _query(sql) {
+    async _query(sql, params) {
         let connection = null;
         try {
             connection = await this._pool.connect();
-            const query_result = await connection.query({ rowMode: "array", text: sql });
+            const query_result = await connection.query((params && params.length > 0) ? { rowMode: "array", text: sql, values: params } : { rowMode: "array", text: sql });
             let rows;
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows);
@@ -135,11 +135,11 @@ export class OINODbPostgresql extends OINODb {
             }
         }
     }
-    async _exec(sql) {
+    async _exec(sql, params) {
         let connection = null;
         try {
             connection = await this._pool.connect();
-            const query_result = await connection.query({ rowMode: "array", text: sql });
+            const query_result = await connection.query((params && params.length > 0) ? { rowMode: "array", text: sql, values: params } : { rowMode: "array", text: sql });
             let rows;
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows);
@@ -169,7 +169,7 @@ export class OINODbPostgresql extends OINODb {
      *
      */
     printTableName(sqlTable) {
-        return "\"" + sqlTable.toLowerCase() + "\"";
+        return "\"" + sqlTable.toLowerCase().replaceAll("\"", "\"\"") + "\"";
     }
     /**
      * Print a column name with correct SQL escaping.
@@ -178,7 +178,30 @@ export class OINODbPostgresql extends OINODb {
      *
      */
     printColumnName(sqlColumn) {
-        return "\"" + sqlColumn + "\"";
+        return "\"" + sqlColumn.replaceAll("\"", "\"\"") + "\"";
+    }
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (Postgres `$n`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index) {
+        return "$" + (index + 1);
+    }
+    /**
+     * Coerce a data value into a Postgres bind-parameter value. The `pg` driver binds
+     * numbers, strings, booleans, `Date` and `Buffer` to their native Postgres types directly.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue, nativeType) {
+        if (cellValue === undefined) {
+            return null;
+        }
+        return cellValue;
     }
     /**
      * Print a single data value from serialization using the context of the native data
@@ -289,8 +312,8 @@ export class OINODbPostgresql extends OINODb {
         OINOBenchmark.startMetric("OINODb", "validate");
         let result = new OINOResult();
         try {
-            const sql = this._getValidateSql(this.dbParams.database);
-            const sql_res = await this._query(sql);
+            const sql = this._getValidateSql();
+            const sql_res = await this._query(sql, [this.dbParams.database]);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbPostgresql.validate");
             }
@@ -354,8 +377,23 @@ export class OINODbPostgresql extends OINODb {
         OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
-    _getSchemaSql(dbName, tableName) {
-        const sql = `SELECT 
+    /**
+     * Execute a parameterized statement, binding its values as `$n` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement) {
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
+        OINOBenchmark.startMetric("OINODb", "runStatement");
+        let result = await this._query(statement.sql, statement.values);
+        OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500);
+        return result;
+    }
+    _getSchemaSql() {
+        const sql = `SELECT
     col.column_name, 
     col.data_type, 
     col.character_maximum_length, 
@@ -377,11 +415,11 @@ LEFT JOIN LATERAL
 		and tco.table_name = col.table_name
         and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
 	group by kcu.column_name) con on col.column_name = con.column_name
-WHERE col.table_catalog = '${dbName}' AND col.table_name = '${tableName}'`;
+WHERE col.table_catalog = $1 AND col.table_name = $2`;
         return sql;
     }
-    _getValidateSql(dbName) {
-        const sql = `SELECT 
+    _getValidateSql() {
+        const sql = `SELECT
     count(col.column_name) AS column_count
 FROM information_schema.columns col
 LEFT JOIN LATERAL
@@ -396,7 +434,7 @@ LEFT JOIN LATERAL
 		and tco.table_name = col.table_name
         and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
 	group by kcu.column_name) con on col.column_name = con.column_name
-WHERE col.table_catalog = '${dbName}'`;
+WHERE col.table_catalog = $1`;
         return sql;
     }
     /**
@@ -407,7 +445,7 @@ WHERE col.table_catalog = '${dbName}'`;
      */
     async getSchemaFields(tableName) {
         const fields = [];
-        const schema_res = await this._query(this._getSchemaSql(this.dbParams.database, tableName.toLowerCase()));
+        const schema_res = await this._query(this._getSchemaSql(), [this.dbParams.database, tableName.toLowerCase()]);
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";
@@ -454,8 +492,8 @@ WHERE col.table_catalog = '${dbName}'`;
      */
     async getSchemaTables() {
         const tables = [];
-        const sql = "SELECT table_name FROM information_schema.tables WHERE table_catalog = '" + this.dbParams.database + "' AND table_schema NOT IN ('pg_catalog', 'information_schema') AND table_type = 'BASE TABLE' ORDER BY table_name;";
-        const tables_res = await this._query(sql);
+        const sql = "SELECT table_name FROM information_schema.tables WHERE table_catalog = $1 AND table_schema NOT IN ('pg_catalog', 'information_schema') AND table_type = 'BASE TABLE' ORDER BY table_name;";
+        const tables_res = await this._query(sql, [this.dbParams.database]);
         while (!tables_res.isEof()) {
             const row = tables_res.getRow();
             const table_name = row[0]?.toString() || "";

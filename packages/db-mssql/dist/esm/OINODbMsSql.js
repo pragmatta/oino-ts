@@ -5,6 +5,7 @@
  */
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
 import { OINODb } from "@oino-ts/db";
+import { Buffer } from "node:buffer";
 import { ConnectionPool } from "mssql";
 /**
  * Implmentation of OINODataSet for MsSql.
@@ -129,9 +130,14 @@ export class OINODbMsSql extends OINODb {
             OINOLog.error("@oino-ts/db-mssql", "OINODbMsSql", "constructor", "OINODbMsSql error event", conn);
         });
     }
-    async _query(sql) {
+    async _query(sql, params) {
         try {
             const request = this._pool.request(); // this does not need to be released but the pool will handle it
+            if (params) {
+                for (let i = 0; i < params.length; i++) {
+                    request.input("p" + i, params[i]); // bind @p0, @p1, … named parameters
+                }
+            }
             const sql_res = await request.query(sql);
             // console.log("_query: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
             return new OINOMsSqlData(sql_res.recordsets, []);
@@ -141,9 +147,14 @@ export class OINODbMsSql extends OINODb {
             return new OINOMsSqlData(OINO_EMPTY_ROWS, []).setError(500, OINO_ERROR_PREFIX + ": Exception in db query: " + e.message, "OINODbMsSql._query");
         }
     }
-    async _exec(sql) {
+    async _exec(sql, params) {
         try {
             const request = this._pool.request(); // this does not need to be released but the pool will handle it
+            if (params) {
+                for (let i = 0; i < params.length; i++) {
+                    request.input("p" + i, params[i]); // bind @p0, @p1, … named parameters
+                }
+            }
             const sql_res = await request.query(sql);
             // console.log("_exec: result=", sql_res.recordsets, sql_res.recordsets?.length) // TODO: remove
             return new OINOMsSqlData(sql_res.recordsets, []);
@@ -160,7 +171,7 @@ export class OINODbMsSql extends OINODb {
      *
      */
     printTableName(sqlTable) {
-        return "[" + sqlTable + "]";
+        return "[" + sqlTable.replaceAll("]", "]]") + "]";
     }
     /**
      * Print a column name with correct SQL escaping.
@@ -169,7 +180,45 @@ export class OINODbMsSql extends OINODb {
      *
      */
     printColumnName(sqlColumn) {
-        return "[" + sqlColumn + "]";
+        return "[" + sqlColumn.replaceAll("]", "]]") + "]";
+    }
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (MSSQL `@p0`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index) {
+        return "@p" + index;
+    }
+    /**
+     * Coerce a data value into a MSSQL bind-parameter value. node-mssql infers the SQL type
+     * from the JS value (number, string, boolean, `Date`, `Buffer`), so most values pass through.
+     * Binary columns are the exception: only a `Buffer` is inferred as `VarBinary`, so
+     * `Uint8Array` and (base64-encoded) string values are converted to `Buffer` — otherwise they
+     * would be bound as `NVarChar` and fail with "Implicit conversion from data type nvarchar to
+     * binary is not allowed".
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue, nativeType) {
+        if (cellValue === undefined) {
+            return null;
+        }
+        if ((nativeType == "binary") || (nativeType == "varbinary") || (nativeType == "image")) {
+            if (cellValue instanceof Buffer) {
+                return cellValue;
+            }
+            else if (cellValue instanceof Uint8Array) {
+                return Buffer.from(cellValue);
+            }
+            else if (typeof cellValue === "string") {
+                return Buffer.from(cellValue, "base64"); // blob-field data is base64 encoded (cf. OINOBlobDataField.deserializeCell)
+            }
+        }
+        return cellValue;
     }
     /**
      * Print a single data value from serialization using the context of the native data
@@ -189,7 +238,7 @@ export class OINODbMsSql extends OINODb {
         else if ((nativeType == "int") || (nativeType == "smallint") || (nativeType == "float")) {
             return cellValue.toString();
         }
-        else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary")) {
+        else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary") || (nativeType == "image")) {
             if (cellValue instanceof Buffer) {
                 return "0x" + cellValue.toString("hex") + "";
             }
@@ -331,8 +380,8 @@ export class OINODbMsSql extends OINODb {
         }
         OINOBenchmark.startMetric("OINODb", "validate");
         try {
-            const sql = this._getValidateSql(this.dbParams.database);
-            const sql_res = await this._query(sql);
+            const sql = this._getValidateSql();
+            const sql_res = await this._query(sql, [this.dbParams.database]);
             if (sql_res.isEmpty()) {
                 result.setError(400, "DB returned no rows for select!", "OINODbMsSql.validate");
             }
@@ -400,8 +449,23 @@ export class OINODbMsSql extends OINODb {
         OINOBenchmark.endMetric("OINODb", "sqlExec", result.status != 500);
         return result;
     }
-    _getSchemaSql(dbName, tableName) {
-        const sql = `SELECT 
+    /**
+     * Execute a parameterized statement, binding its values as `@p0`, `@p1`, … named parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    async runStatement(statement) {
+        if (!this.isValidated) {
+            throw new Error(OINO_ERROR_PREFIX + ": Database connection not validated!");
+        }
+        OINOBenchmark.startMetric("OINODb", "runStatement");
+        let result = await this._exec(statement.sql, statement.values);
+        OINOBenchmark.endMetric("OINODb", "runStatement", result.status != 500);
+        return result;
+    }
+    _getSchemaSql() {
+        const sql = `SELECT
     C.COLUMN_NAME, 
     C.IS_NULLABLE, 
     C.DATA_TYPE, 
@@ -420,11 +484,11 @@ FROM
     GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
     ) as CONST
     ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
-WHERE C.TABLE_CATALOG = '${dbName}' AND C.TABLE_NAME = '${tableName}'
+WHERE C.TABLE_CATALOG = @p0 AND C.TABLE_NAME = @p1
 ORDER BY C.ORDINAL_POSITION;`;
         return sql;
     }
-    _getValidateSql(dbName) {
+    _getValidateSql() {
         const sql = `SELECT 
     count(C.COLUMN_NAME) AS COLUMN_COUNT
 FROM 
@@ -436,7 +500,7 @@ FROM
     GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
     ) as CONST
     ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
-WHERE C.TABLE_CATALOG = '${dbName}';`;
+WHERE C.TABLE_CATALOG = @p0;`;
         return sql;
     }
     /**
@@ -447,7 +511,7 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
      */
     async getSchemaFields(tableName) {
         const fields = [];
-        const schema_res = await this.sqlSelect(this._getSchemaSql(this.dbParams.database, tableName));
+        const schema_res = await this._query(this._getSchemaSql(), [this.dbParams.database, tableName]);
         while (!schema_res.isEof()) {
             const row = schema_res.getRow();
             const field_name = row[0]?.toString() || "";
@@ -493,8 +557,8 @@ WHERE C.TABLE_CATALOG = '${dbName}';`;
      */
     async getSchemaTables() {
         const tables = [];
-        const sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = '" + this.dbParams.database + "' AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;";
-        const tables_res = await this.sqlSelect(sql);
+        const sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = @p0 AND TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;";
+        const tables_res = await this._query(sql, [this.dbParams.database]);
         while (!tables_res.isEof()) {
             const row = tables_res.getRow();
             const table_name = row[0]?.toString() || "";

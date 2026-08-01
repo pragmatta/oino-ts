@@ -1,5 +1,5 @@
 import { OINOResult, OINODataSet, OINODataField, OINODataFieldSchema, OINODataCell } from "@oino-ts/common";
-import { OINODb, OINODbParams } from "@oino-ts/db";
+import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 /**
  * Implementation of BunSqlite-database.
  *
@@ -30,6 +30,23 @@ export declare class OINODbBunSqlite extends OINODb {
      *
      */
     printColumnName(sqlColumn: string): string;
+    /**
+     * Print a bind-parameter placeholder for the given zero-based parameter index (SQLite `?`).
+     *
+     * @param index zero-based parameter index
+     *
+     */
+    printParameterName(index: number): string;
+    /**
+     * Coerce a data value into a bun:sqlite bind-parameter value. bun:sqlite only accepts
+     * number, bigint, string, `Buffer`/`Uint8Array` and null, so `Date` is converted to an ISO
+     * string and `boolean` to 1/0.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue: OINODataCell, nativeType: string): OINODataCell;
     /**
      * Print a single data value from serialization using the context of the native data
      * type with the correct SQL escaping.
@@ -86,6 +103,13 @@ export declare class OINODbBunSqlite extends OINODb {
      *
      */
     sqlExec(sql: string): Promise<OINODataSet>;
+    /**
+     * Execute a parameterized statement, binding its values as positional `?` parameters.
+     *
+     * @param statement statement (SQL text + ordered bind values) to execute
+     *
+     */
+    runStatement(statement: OINODbSqlStatement): Promise<OINODataSet>;
     private _getSchemaSql;
     private _getValidateSql;
     /**

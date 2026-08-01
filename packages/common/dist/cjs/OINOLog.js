@@ -219,6 +219,15 @@ class OINOLog {
             this.setLogLevels(logLevels);
         }
     }
+    /** Redact a token value before logging: it's the actual data-API bearer secret, not an internal id. */
+    static redact(value, maxVisibleChars = 8) {
+        const str = typeof value == "string" ? value : (value == null ? "" : String(value));
+        if (!str) {
+            return "";
+        }
+        const len = Math.min(Math.floor(str.length / 2), maxVisibleChars);
+        return str.slice(0, len) + "*".repeat(str.length - len);
+    }
 }
 exports.OINOLog = OINOLog;
 /**

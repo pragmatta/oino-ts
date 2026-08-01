@@ -66,6 +66,14 @@ export declare class OINODataField {
      */
     printCellAsValue(cellVal: OINODataCell): string;
     /**
+     * Coerce a data cell (from deserialization) into a datasource bind-parameter value.
+     * Used by parameterized-query building instead of `printCellAsValue`.
+     *
+     * @param cellVal cell value
+     *
+     */
+    bindCellValue(cellVal: OINODataCell): OINODataCell;
+    /**
      * Print name of the field in datasource specific format.
      *
      */

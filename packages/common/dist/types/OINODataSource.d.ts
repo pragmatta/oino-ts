@@ -48,6 +48,19 @@ export declare abstract class OINODataSource {
      */
     abstract printStringValue(sqlString: string): string;
     /**
+     * Coerce a single data value into a form that can safely be passed to the datasource as a
+     * *bind parameter* (as opposed to `printCellAsValue`, which formats it as an inline SQL literal).
+     *
+     * The default implementation returns the value unchanged. SQL datasources override this to
+     * apply driver-specific coercions (e.g. converting `Date`/`boolean` for drivers that only
+     * accept primitive bind types). Non-SQL datasources (blob, nosql) can ignore it.
+     *
+     * @param cellValue data value to bind
+     * @param nativeType native type name for the table column
+     *
+     */
+    bindCellValue(cellValue: OINODataCell, nativeType: string): OINODataCell;
+    /**
      * Parse a single SQL result value for serialization using the context of the native data
      * type.
      *

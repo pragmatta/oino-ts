@@ -8,6 +8,8 @@ import { OINO_ERROR_PREFIX, OINOBenchmark, OINO_INFO_PREFIX, OINOLog, OINOResult
 
 import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 
+import { Buffer } from "node:buffer";
+
 import { ConnectionPool } from "mssql";
 
 /**
@@ -211,7 +213,11 @@ export class OINODbMsSql extends OINODb {
 
     /**
      * Coerce a data value into a MSSQL bind-parameter value. node-mssql infers the SQL type
-     * from the JS value (number, string, boolean, `Date`, `Buffer`), so values pass through.
+     * from the JS value (number, string, boolean, `Date`, `Buffer`), so most values pass through.
+     * Binary columns are the exception: only a `Buffer` is inferred as `VarBinary`, so
+     * `Uint8Array` and (base64-encoded) string values are converted to `Buffer` — otherwise they
+     * would be bound as `NVarChar` and fail with "Implicit conversion from data type nvarchar to
+     * binary is not allowed".
      *
      * @param cellValue data value to bind
      * @param nativeType native type name for the table column
@@ -220,6 +226,15 @@ export class OINODbMsSql extends OINODb {
     bindCellValue(cellValue:OINODataCell, nativeType: string): OINODataCell {
         if (cellValue === undefined) {
             return null
+        }
+        if ((nativeType == "binary") || (nativeType == "varbinary") || (nativeType == "image")) {
+            if (cellValue instanceof Buffer) {
+                return cellValue
+            } else if (cellValue instanceof Uint8Array) {
+                return Buffer.from(cellValue)
+            } else if (typeof cellValue === "string") {
+                return Buffer.from(cellValue, "base64") // blob-field data is base64 encoded (cf. OINOBlobDataField.deserializeCell)
+            }
         }
         return cellValue
     }
@@ -243,7 +258,7 @@ export class OINODbMsSql extends OINODb {
         } else if ((nativeType == "int") || (nativeType == "smallint") || (nativeType == "float")) {
             return cellValue.toString()
 
-        } else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary")) {
+        } else if ((nativeType == "longblob") || (nativeType == "binary") || (nativeType == "varbinary") || (nativeType == "image")) {
             if (cellValue instanceof Buffer) {
                 return "0x" + (cellValue as Buffer).toString("hex") + ""
             } else if (cellValue instanceof Uint8Array) {
