@@ -13,7 +13,7 @@ const OINOLog_js_1 = require("./OINOLog.js");
  *
  */
 class OINOFormatter {
-    static OINO_FORMATTER_REGEXP = /\s?(trim(\(\))?|trimLeft(\(\))?|trimRight(\(\))?|toUpper(\(\))?|toLower(\(\))?|cropLeft\((\d+)\)|cropRight\((\d+)\)|cropToDelimiter\(([^\(\),]+),(\d+)\)|cropFromDelimiter\(([^\(\),]+),(\d+)\)|substring\((\d+),(\d+)\)|replace\(([^\(\),]+),([^\(\),]+)\)|isEmpty\(([^\(\),]+)\)|isNotEmpty\(([^\(\),]+)\))\s?$/i;
+    static OINO_FORMATTER_REGEXP = /\s?(trim(\(\))?|trimLeft(\(\))?|trimRight(\(\))?|toUpper(\(\))?|toLower(\(\))?|cropLeft\((\d+)\)|cropRight\((\d+)\)|cropToDelimiter\(([^\(\),]+),(\d+)\)|cropFromDelimiter\(([^\(\),]+),(\d+)\)|substring\((\d+),(\d+)\)|replace\(([^\(\),]+),([^\(\),]+)\)|isEmpty\(([^\(\),]+)(?:,([^\(\),]+))?\)|isNotEmpty\(([^\(\),]+)(?:,([^\(\),]+))?\))\s?$/i;
     _types;
     _params;
     /**
@@ -40,8 +40,8 @@ class OINOFormatter {
      * - cropFromDelimiter(delimiter,offsetChars)
      * - substring(start,end)
      * - replace(search,replace)
-     * - isEmpty(value)
-     * - isNotEmpty(value)
+     * - isEmpty(value[,else])
+     * - isNotEmpty(value[,else])
      */
     static parse(formatters) {
         if (typeof formatters === "string") {
@@ -85,9 +85,15 @@ class OINOFormatter {
                     }
                     else if (formatter_type === "isempty") {
                         formatter_params.push(decodeURIComponent(match[17]));
+                        if (match[18] !== undefined) {
+                            formatter_params.push(decodeURIComponent(match[18]));
+                        }
                     }
                     else if (formatter_type === "isnotempty") {
-                        formatter_params.push(decodeURIComponent(match[18]));
+                        formatter_params.push(decodeURIComponent(match[19]));
+                        if (match[20] !== undefined) {
+                            formatter_params.push(decodeURIComponent(match[20]));
+                        }
                     }
                     else {
                         OINOLog_js_1.OINOLog.error("@oino-ts/common", "OINOFormatter", "parse", "Unknown formatter type", { formatter: formatters[i] });
@@ -165,10 +171,16 @@ class OINOFormatter {
                 if (!formatted) { // empty string, null or undefined
                     formatted = formatter_params[0];
                 }
+                else if (formatter_params.length > 1) { // optional else-value
+                    formatted = formatter_params[1];
+                }
             }
             else if (formatter_type === "isnotempty") {
                 if (formatted) { // not empty string, null or undefined
                     formatted = formatter_params[0];
+                }
+                else if (formatter_params.length > 1) { // optional else-value
+                    formatted = formatter_params[1];
                 }
             }
             // console.log("formatter:", formatter_type, "params:", formatter_params, "formatted:", formatted)
