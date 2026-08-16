@@ -4,15 +4,23 @@
     "tsc": "./db/node_modules/.bin/tsc.cmd"
   },
   "dependencies": {
+    "@azure/msal-node": "^5.5.0",
+    "@types/bun": "^1.3.2",
     "@types/node": "^22.0.0",
-    "@types/bun": "^1.3.0",
     "typedoc": "^0.28.0"
   },
   "scripts": {
+    "test_schema": "bun test ./db/src/OINODb.test.ts",
+    "test_db": "bun test ./db/src/OINODbStatement.test.ts && bun test ./db/src/OINODb.test.ts && bun test ./db/src/OINODbApi.test.ts",
+    "test_blob": "bun test ./blob/src/*.test.ts",
+    "test_nosql": "bun test ./nosql/src/*.test.ts",
+    "test_common": "bun test ./common/src/*.test.ts",
+    "test_hashid": "bun test ./hashid/src/*.test.ts",
+    "test": "bun run test_schema && bun run test_db && bun run test_blob && bun run test_nosql && bun run test_common && bun run test_hashid",
     "build:js": "bunx tsc -p ./tsconfig.cjs.json && bunx tsc -p ./tsconfig.esm.json",
     "build:types": "bunx tsc -p ./tsconfig.types.json",
     "build:docs": "bunx typedoc --options ./typedoc.json",
-    "build:all": "bun run build:js && bun run build:types && bun run build:docs && bun run packages:update",
+    "build:all": "bun run test && bun run build:js && bun run build:types && bun run build:docs && bun run packages:update",
     "snapshots:update": "../packages/update_snapshots.cmd",
     "packages:update": "bun run bunsh_update_packages.ts"
   }

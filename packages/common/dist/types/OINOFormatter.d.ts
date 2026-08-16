@@ -27,8 +27,8 @@ export declare class OINOFormatter {
      * - cropFromDelimiter(delimiter,offsetChars)
      * - substring(start,end)
      * - replace(search,replace)
-     * - isEmpty(value)
-     * - isNotEmpty(value)
+     * - isEmpty(value[,else])
+     * - isNotEmpty(value[,else])
      */
     static parse(formatters: string | string[]): OINOFormatter;
     /**

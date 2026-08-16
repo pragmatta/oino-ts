@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { expect, test } from "bun:test"
+import { afterAll, expect, test } from "bun:test"
 
 import { OINONoSqlAzureTable } from "@oino-ts/nosql-azure"
 import { OINONoSqlAwsDynamo } from "@oino-ts/nosql-aws"
@@ -97,11 +97,15 @@ const NOSQL_CROSSCHECKS: string[] = [
 ]
 
 OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.warning))
+OINOLog.setLogLevel(OINOLogLevel.debug, "OINOTest", "timing") // enable the per-provider timing summary logged at the end of the run
 OINOBenchmark.setEnabled(["doApiRequest"])
 OINOBenchmark.reset()
 
 OINONoSqlFactory.registerNoSql("OINONoSqlAzureTable", OINONoSqlAzureTable)
 OINONoSqlFactory.registerNoSql("OINONoSqlAwsDynamo", OINONoSqlAwsDynamo)
+
+/** Accumulated wall-clock duration (ms) of each storage implementation's tests, summarised once at the end of the run. */
+const OINO_PROVIDER_TIMINGS = new Map<string, number>()
 
 function encodeResult(o: unknown): string {
     return JSON.stringify(o ?? {}, null, 3)
@@ -118,14 +122,83 @@ function encodeResultStable(o: unknown): string {
 }
 
 /**
+ * Recursively sort object keys so that serialization is independent of the
+ * key order the backend happened to return.
+ */
+function sortObjectKeysDeep(value: unknown): unknown {
+    if (Array.isArray(value)) return value.map(sortObjectKeysDeep)
+    if (value !== null && typeof value === "object") {
+        const sorted: Record<string, unknown> = {}
+        for (const key of Object.keys(value as Record<string, unknown>).sort()) {
+            sorted[key] = sortObjectKeysDeep((value as Record<string, unknown>)[key])
+        }
+        return sorted
+    }
+    return value
+}
+
+/**
  * Strip volatile fields (timestamp, etag) from a JSON nosql listing so that
  * snapshot comparisons are stable across runs.
+ *
+ * The `properties` field is a serialized JSON object whose key order is not
+ * significant and is NOT preserved by every backend (e.g. DynamoDB returns
+ * item attributes in an unspecified order), so its keys are normalized here by
+ * sorting them, keeping snapshots stable across implementations and runs.
  */
 function stableNoSqlListing(json: string | undefined): string {
     if (!json) return ""
     return json
+        // Normalize CRLF (and lone CR) to LF. OINOModelSet writes JSON listings with
+        // "\r\n" separators, but Bun stores snapshot values with "\n", so without this
+        // every line mismatches on a "\r" vs "\r\n" basis.
+        .replaceAll(/\r\n?/g, "\n")
         .replaceAll(/"timestamp":\s*"[^"]*"/g, '"timestamp": "TIMESTAMP"')
         .replaceAll(/"etag":\s*"(?:[^"\\]|\\.)*"/g, '"etag": "ETAG"')
+        .replaceAll(/"properties":"((?:[^"\\]|\\.)*)"/g, (match, escaped: string) => {
+            try {
+                const props_json = JSON.parse('"' + escaped + '"') as string // unescape the inner JSON string
+                const sorted = sortObjectKeysDeep(JSON.parse(props_json))
+                return '"properties":' + JSON.stringify(JSON.stringify(sorted)) // re-serialize with sorted keys and re-escape
+            } catch {
+                return match // leave non-JSON / unparsable property values untouched
+            }
+        })
+}
+
+/** Partition key that all scratch/fixture rows created by these tests live under. */
+const TEST_FIXTURE_PARTITION = "OINOTest"
+
+/**
+ * Remove transient test-fixture rows (partition `OINOTest`) from a broad
+ * listing before snapshotting.
+ *
+ * The scratch entries created by the POST/PUT/BATCH tests share a partition
+ * key and are created and deleted within a run, but `LIST ALL` / `LIST FILTER`
+ * run at the START of a run – so whether those rows appear depends purely on
+ * whether an earlier run cleaned up (a failed run leaks them). Stripping them
+ * makes the broad-listing snapshots depend only on the stable backing data,
+ * independent of fixture state, so they can't flake or require a pristine
+ * table to regenerate. Targeted GET snapshots (single/batch rows) are NOT run
+ * through this and still assert on the fixture rows they expect.
+ */
+function stripTestFixtureRows(json: string | undefined): string {
+    if (!json) return ""
+    // Normalize line endings, then split on the exact row separator OINOModelSet
+    // uses ("[\n" + rows.join(",\n") + "\n]") so we can drop whole rows while
+    // preserving the original per-row formatting (each row is one compact line).
+    const normalized = json.replaceAll(/\r\n?/g, "\n")
+    if (!normalized.startsWith("[\n") || !normalized.endsWith("\n]")) return normalized
+    const inner = normalized.slice(2, -2)
+    if (inner === "") return normalized
+    const kept = inner.split(",\n").filter(row => {
+        try {
+            return (JSON.parse(row) as { partitionKey?: unknown })?.partitionKey !== TEST_FIXTURE_PARTITION
+        } catch {
+            return true // keep any row we cannot parse rather than dropping data
+        }
+    })
+    return "[\n" + kept.join(",\n") + "\n]"
 }
 
 export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testParams: OINONoSqlTestParams): Promise<void> {
@@ -178,7 +251,7 @@ export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testP
         expect(result.success).toBe(true)
         expect(result.data).toBeDefined()
         const json = await result.data!.writeString(OINOContentType.json)
-        expect(stableNoSqlListing(json)).toMatchSnapshot("LIST JSON")
+        expect(stableNoSqlListing(stripTestFixtureRows(json))).toMatchSnapshot("LIST JSON")
     }, 30_000)
 
     // ── LIST WITH FILTER ──────────────────────────────────────────────────
@@ -195,7 +268,7 @@ export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testP
         expect(result.success).toBe(true)
         expect(result.data).toBeDefined()
         const json = await result.data!.writeString(OINOContentType.json)
-        expect(stableNoSqlListing(json)).toMatchSnapshot("LIST FILTERED JSON")
+        expect(stableNoSqlListing(stripTestFixtureRows(json))).toMatchSnapshot("LIST FILTERED JSON")
     }, 30_000)
 
     // ── GET SINGLE ────────────────────────────────────────────────────────
@@ -359,39 +432,42 @@ export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testP
     }
 
     await test(target_name + target_storage + target_group + " reversed values", async () => {
-        // Write updateProperties to all 3 distinct batch entries
-        const batch_rows_update = batch_ids.map(bid => makeBatchRow(bid, testParams.updateProperties))
-        const batch_update_result = await api.doBatchApiRequest(
-            new OINOApiRequest({ url: base_url, method: "PUT", rowData: batch_rows_update })
-        )
-        expect(batch_update_result.success).toBe(true)
-        expect(encodeResult(batch_update_result)).toMatchSnapshot("PUT reversed data")
+        try {
+            // Write updateProperties to all 3 distinct batch entries
+            const batch_rows_update = batch_ids.map(bid => makeBatchRow(bid, testParams.updateProperties))
+            const batch_update_result = await api.doBatchApiRequest(
+                new OINOApiRequest({ url: base_url, method: "PUT", rowData: batch_rows_update })
+            )
+            expect(batch_update_result.success).toBe(true)
+            expect(encodeResult(batch_update_result)).toMatchSnapshot("PUT reversed data")
 
-        // Verify the last entry has the update value
-        const batch_get_request = new OINOApiRequest({ url: base_url, method: "GET", rowId: batch_ids[2] })
-        const reversed_result: OINOApiResult = await api.doApiRequest(batch_get_request)
-        expect(reversed_result.success).toBe(true)
-        const reversed_json = await reversed_result.data!.writeString(OINOContentType.json)
-        expect(reversed_json).toContain(testParams.updateVerifyValue)
-        expect(stableNoSqlListing(reversed_json)).toMatchSnapshot("GET reversed data")
+            // Verify the last entry has the update value
+            const batch_get_request = new OINOApiRequest({ url: base_url, method: "GET", rowId: batch_ids[2] })
+            const reversed_result: OINOApiResult = await api.doApiRequest(batch_get_request)
+            expect(reversed_result.success).toBe(true)
+            const reversed_json = await reversed_result.data!.writeString(OINOContentType.json)
+            expect(reversed_json).toContain(testParams.updateVerifyValue)
+            expect(stableNoSqlListing(reversed_json)).toMatchSnapshot("GET reversed data")
 
-        // Restore all 3 entries to insertProperties
-        const batch_rows_restore = batch_ids.map(bid => makeBatchRow(bid, testParams.insertProperties))
-        const batch_restore_result = await api.doBatchApiRequest(
-            new OINOApiRequest({ url: base_url, method: "PUT", rowData: batch_rows_restore })
-        )
-        expect(batch_restore_result.success).toBe(true)
-        expect(encodeResult(batch_restore_result)).toMatchSnapshot("PUT restored data")
+            // Restore all 3 entries to insertProperties
+            const batch_rows_restore = batch_ids.map(bid => makeBatchRow(bid, testParams.insertProperties))
+            const batch_restore_result = await api.doBatchApiRequest(
+                new OINOApiRequest({ url: base_url, method: "PUT", rowData: batch_rows_restore })
+            )
+            expect(batch_restore_result.success).toBe(true)
+            expect(encodeResult(batch_restore_result)).toMatchSnapshot("PUT restored data")
 
-        const restored_result: OINOApiResult = await api.doApiRequest(batch_get_request)
-        expect(restored_result.success).toBe(true)
-        const restored_json = await restored_result.data!.writeString(OINOContentType.json)
-        expect(restored_json).toContain(testParams.insertVerifyValue)
-        expect(stableNoSqlListing(restored_json)).toMatchSnapshot("GET restored data")
-
-        // Clean up batch entries
-        for (const bid of batch_ids) {
-            await api.doApiRequest(new OINOApiRequest({ url: base_url, method: "DELETE", rowId: bid }))
+            const restored_result: OINOApiResult = await api.doApiRequest(batch_get_request)
+            expect(restored_result.success).toBe(true)
+            const restored_json = await restored_result.data!.writeString(OINOContentType.json)
+            expect(restored_json).toContain(testParams.insertVerifyValue)
+            expect(stableNoSqlListing(restored_json)).toMatchSnapshot("GET restored data")
+        } finally {
+            // Always clean up the scratch batch entries, even if an assertion above
+            // threw – otherwise they leak into the table and pollute later LIST runs.
+            for (const bid of batch_ids) {
+                await api.doApiRequest(new OINOApiRequest({ url: base_url, method: "DELETE", rowId: bid }))
+            }
         }
     }, 60_000)
 
@@ -424,9 +500,18 @@ export async function OINOTestNoSql(storageParams: OINONoSqlStorageParams, testP
 }
 
 for (const storage of NOSQL_STORAGES) {
+    const provider = storage.noSqlParams.type
+    let provider_start = 0
+    // Marker tests run in the test-execution phase (unlike the surrounding
+    // registration-phase loop), so they bracket the provider's actual test
+    // runtime; accumulated per provider and summarised in the afterAll below.
+    test("[TIMING][" + provider + "] start", () => { provider_start = performance.now() })
     for (const nosql_test of NOSQL_TESTS) {
         await OINOTestNoSql(storage, nosql_test)
     }
+    test("[TIMING][" + provider + "] end", () => {
+        OINO_PROVIDER_TIMINGS.set(provider, (OINO_PROVIDER_TIMINGS.get(provider) ?? 0) + (performance.now() - provider_start))
+    })
 }
 
 // ── CROSS-CHECK snapshots between adjacent storages ───────────────────────────
@@ -490,12 +575,27 @@ function deepDiff(a: unknown, b: unknown, path = ""): string[] {
     return diffs
 }
 
-const snapshot_file = Bun.file("./node_modules/@oino-ts/nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap")
-const snap_exists = await snapshot_file.exists()
-if (snap_exists) {
-    await Bun.write("./node_modules/@oino-ts/nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+async function loadSnapshots(): Promise<Record<string, string> | null> {
+    let result: Record<string, string> | null = null
+    const snapshot_file = Bun.file("./nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap")
+    if (!await snapshot_file.exists()) {
+        console.warn("Snapshot file does not exist, skipping cross-checks")
+    } else {
+        await Bun.write("./nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+        result = require("./__snapshots__/OINONoSqlApi.test.ts.snap.js") as Record<string, string>
+        console.log("Loaded " + Object.keys(result).length + " snapshots for cross-checking")
+        const snapshot_copy = Bun.file("./nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap.js")
+        await snapshot_copy.unlink()
+    }
+    return result
 }
-const snapshots = snap_exists ? require("./__snapshots__/OINONoSqlApi.test.ts.snap.js") : {}
+
+let snapshotsPromise: Promise<Record<string, string> | null> | undefined
+
+function getSnapshots(): Promise<Record<string, string> | null> {
+    snapshotsPromise ??= loadSnapshots()
+    return snapshotsPromise
+}
 
 for (let i = 0; i < NOSQL_STORAGES.length - 1; i++) {
     const storage1 = NOSQL_STORAGES[i]
@@ -504,15 +604,29 @@ for (let i = 0; i < NOSQL_STORAGES.length - 1; i++) {
         for (const crosscheck of NOSQL_CROSSCHECKS) {
             test(
                 "cross check {" + storage1.noSqlParams.type + "} and {" + storage2.noSqlParams.type + "} test {" + nosql_test.name + "} snapshots on {" + crosscheck + "}",
-                () => {
+                async () => {
+                    const snapshots = await getSnapshots()
+                    if (!snapshots) return
                     const key1 = "[" + nosql_test.name + "][" + storage1.noSqlParams.type + "]" + crosscheck
                     const key2 = "[" + nosql_test.name + "][" + storage2.noSqlParams.type + "]" + crosscheck
-                    const parsed1 = parseSnapshotValue(snapshots[key1] as string | undefined)
-                    const parsed2 = parseSnapshotValue(snapshots[key2] as string | undefined)
-                    const diffs = deepDiff(parsed1, parsed2)
+                const parsed1 = parseSnapshotValue(snapshots[key1])
+                const parsed2 = parseSnapshotValue(snapshots[key2])
+                const diffs = deepDiff(parsed1, parsed2)
                     expect(diffs).toEqual([])
                 }
             )
         }
     }
 }
+
+// ── TIMING SUMMARY ────────────────────────────────────────────────────────────
+// Single combined debug line at the very end comparing total test duration per
+// storage implementation (e.g. OINONoSqlAzureTable vs OINONoSqlAwsDynamo).
+
+afterAll(() => {
+    const durations: Record<string, string> = {}
+    for (const [provider, ms] of OINO_PROVIDER_TIMINGS) {
+        durations[provider] = Math.round(ms) + " ms"
+    }
+    OINOLog.debug("OINOTest", "timing", "summary", "NoSql total test duration per provider", durations)
+})
