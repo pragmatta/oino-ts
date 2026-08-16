@@ -314,31 +314,39 @@ export class OINONoSqlAzureTable extends OINONoSql {
 
     /**
      * Batch-upsert using Azure Table Storage transactions.  Each transaction
-     * is limited to 100 entities that share the same partition key.  Entries
-     * are grouped by partition key first, then chunked to satisfy the limit.
+     * is limited to 100 entities that share the same partition key, and Azure
+     * additionally requires every entity in a transaction to have a distinct
+     * row key ("An entity can appear only once in a batch request").  Entries
+     * are therefore grouped by partition key and deduplicated by row key —
+     * later entries replace earlier ones (last-write-wins, matching the
+     * upsert-Replace semantics) — before being chunked to satisfy the limit.
      */
     override async upsertEntries(entries: OINONoSqlEntry[]): Promise<void> {
         if (!this._tableClient) {
             throw new Error("OINONoSqlAzureTable: not connected")
         }
-        // Group by resolved partition key
-        const by_partition = new Map<string, TableEntity<Record<string, unknown>>[]>()
+        // Group by resolved partition key, deduplicating by row key within each
+        // partition (Azure rejects a transaction that references the same
+        // (partitionKey, rowKey) more than once).
+        const by_partition = new Map<string, Map<string, TableEntity<Record<string, unknown>>>>()
         for (const entry of entries) {
             const pk = this.nosqlParams.staticPartitionKey ?? entry.primaryKey[0] ?? ""
+            const rk = entry.primaryKey[1] ?? ""
             const entity: TableEntity<Record<string, unknown>> = {
                 partitionKey: pk,
-                rowKey: entry.primaryKey[1] ?? "",
+                rowKey: rk,
                 ...OINONoSqlAzureTable.encodeProperties(entry.properties)
             }
-            const bucket = by_partition.get(pk)
-            if (bucket) {
-                bucket.push(entity)
-            } else {
-                by_partition.set(pk, [entity])
+            let bucket = by_partition.get(pk)
+            if (!bucket) {
+                bucket = new Map<string, TableEntity<Record<string, unknown>>>()
+                by_partition.set(pk, bucket)
             }
+            bucket.set(rk, entity) // last write wins for duplicate row keys
         }
         // Submit one transaction per partition key, chunked to 100
-        for (const [, entities] of by_partition) {
+        for (const [, bucket] of by_partition) {
+            const entities = Array.from(bucket.values())
             for (let i = 0; i < entities.length; i += 100) {
                 const chunk = entities.slice(i, i + 100)
                 const actions: TransactionAction[] = chunk.map(e => ["upsert", e, "Replace"] as TransactionAction)
