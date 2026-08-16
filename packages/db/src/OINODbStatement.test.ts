@@ -29,7 +29,7 @@ import { OINODb, OINODbApi, OINODbFactory, OINODbParams, OINODbSqlStatement } fr
 OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.error))
 OINODbFactory.registerDb("OINODbBunSqlite", OINODbBunSqlite)
 
-const BUNSQLITE_PARAMS:OINODbParams = { type: "OINODbBunSqlite", url:"file://./localDb/northwind.sqlite", database: "Northwind" }
+const BUNSQLITE_PARAMS:OINODbParams = { type: "OINODbBunSqlite", url:"file://../sqlite/northwind.sqlite", database: "Northwind" }
 
 // Products has a single numeric primary key (ProductID). Row is in datamodel field order:
 // [ProductID, ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued]

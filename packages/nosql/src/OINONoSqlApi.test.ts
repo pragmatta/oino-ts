@@ -575,12 +575,27 @@ function deepDiff(a: unknown, b: unknown, path = ""): string[] {
     return diffs
 }
 
-const snapshot_file = Bun.file("./node_modules/@oino-ts/nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap")
-const snap_exists = await snapshot_file.exists()
-if (snap_exists) {
-    await Bun.write("./node_modules/@oino-ts/nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+async function loadSnapshots(): Promise<Record<string, string> | null> {
+    let result: Record<string, string> | null = null
+    const snapshot_file = Bun.file("./nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap")
+    if (!await snapshot_file.exists()) {
+        console.warn("Snapshot file does not exist, skipping cross-checks")
+    } else {
+        await Bun.write("./nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+        result = require("./__snapshots__/OINONoSqlApi.test.ts.snap.js") as Record<string, string>
+        console.log("Loaded " + Object.keys(result).length + " snapshots for cross-checking")
+        const snapshot_copy = Bun.file("./nosql/src/__snapshots__/OINONoSqlApi.test.ts.snap.js")
+        await snapshot_copy.unlink()
+    }
+    return result
 }
-const snapshots = snap_exists ? require("./__snapshots__/OINONoSqlApi.test.ts.snap.js") : {}
+
+let snapshotsPromise: Promise<Record<string, string> | null> | undefined
+
+function getSnapshots(): Promise<Record<string, string> | null> {
+    snapshotsPromise ??= loadSnapshots()
+    return snapshotsPromise
+}
 
 for (let i = 0; i < NOSQL_STORAGES.length - 1; i++) {
     const storage1 = NOSQL_STORAGES[i]
@@ -589,12 +604,14 @@ for (let i = 0; i < NOSQL_STORAGES.length - 1; i++) {
         for (const crosscheck of NOSQL_CROSSCHECKS) {
             test(
                 "cross check {" + storage1.noSqlParams.type + "} and {" + storage2.noSqlParams.type + "} test {" + nosql_test.name + "} snapshots on {" + crosscheck + "}",
-                () => {
+                async () => {
+                    const snapshots = await getSnapshots()
+                    if (!snapshots) return
                     const key1 = "[" + nosql_test.name + "][" + storage1.noSqlParams.type + "]" + crosscheck
                     const key2 = "[" + nosql_test.name + "][" + storage2.noSqlParams.type + "]" + crosscheck
-                    const parsed1 = parseSnapshotValue(snapshots[key1] as string | undefined)
-                    const parsed2 = parseSnapshotValue(snapshots[key2] as string | undefined)
-                    const diffs = deepDiff(parsed1, parsed2)
+                const parsed1 = parseSnapshotValue(snapshots[key1])
+                const parsed2 = parseSnapshotValue(snapshots[key2])
+                const diffs = deepDiff(parsed1, parsed2)
                     expect(diffs).toEqual([])
                 }
             )

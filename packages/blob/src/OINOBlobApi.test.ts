@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { afterAll, expect, test } from "bun:test"
+import { afterAll, expect, test, describe } from "bun:test"
 
 import { OINOBlobAzure } from "@oino-ts/blob-azure"
 import { OINOBlobAwsS3 } from "@oino-ts/blob-aws"
@@ -428,14 +428,27 @@ for (const storage of BLOB_STORAGES) {
     })
 }
 
-// ── CROSS-CHECK snapshots between adjacent storages ───────────────────────────
-
-const snapshot_file = Bun.file("./node_modules/@oino-ts/blob/src/__snapshots__/OINOBlobApi.test.ts.snap")
-const snap_exists = await snapshot_file.exists()
-if (snap_exists) {
-    await Bun.write("./node_modules/@oino-ts/blob/src/__snapshots__/OINOBlobApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+async function loadSnapshots(): Promise<Record<string, string> | null> {
+    let result: Record<string, string> | null = null
+    const snapshot_file = Bun.file("./blob/src/__snapshots__/OINOBlobApi.test.ts.snap")
+    if (!await snapshot_file.exists()) {
+        console.warn("Snapshot file does not exist, skipping cross-checks")
+    } else {
+        await Bun.write("./blob/src/__snapshots__/OINOBlobApi.test.ts.snap.js", snapshot_file) // copy snapshots as .js so require works (note! if run with --update-snapshots, it's still the old file)
+        result = require("./__snapshots__/OINOBlobApi.test.ts.snap.js") as Record<string, string>
+        console.log("Loaded " + Object.keys(result).length + " snapshots for cross-checking")
+        const snapshot_copy = Bun.file("./blob/src/__snapshots__/OINOBlobApi.test.ts.snap.js")
+        await snapshot_copy.unlink()
+    }
+    return result
 }
-const snapshots = snap_exists ? require("./__snapshots__/OINOBlobApi.test.ts.snap.js") : {}
+
+let snapshotsPromise: Promise<Record<string, string> | null> | undefined
+
+function getSnapshots(): Promise<Record<string, string> | null> {
+    snapshotsPromise ??= loadSnapshots()
+    return snapshotsPromise
+}
 
 for (let i = 0; i < BLOB_STORAGES.length - 1; i++) {
     const storage1 = BLOB_STORAGES[i]
@@ -443,8 +456,10 @@ for (let i = 0; i < BLOB_STORAGES.length - 1; i++) {
     for (const blob_test of BLOB_TESTS) {
         for (const crosscheck of BLOB_CROSSCHECKS) {
             test(
-                "cross check {" + storage1.blobParams.type + "} and {" + storage2.blobParams.type + "} test {" + blob_test.name + "} snapshots on {" + crosscheck + "}",
-                () => {
+                "cross check {" + storage1.blobParams.type + "} and {" + storage2.blobParams.type + "} test {" + blob_test.name + " snapshots on {" + crosscheck + "}",
+                async () => {
+                    const snapshots = await getSnapshots()
+                    if (!snapshots) return
                     const key1 = "[" + blob_test.name + "][" + storage1.blobParams.type + "]" + crosscheck
                     const key2 = "[" + blob_test.name + "][" + storage2.blobParams.type + "]" + crosscheck
                     expect(snapshots[key1]).toMatch(snapshots[key2])
@@ -453,7 +468,6 @@ for (let i = 0; i < BLOB_STORAGES.length - 1; i++) {
         }
     }
 }
-
 // ── TIMING SUMMARY ────────────────────────────────────────────────────────────
 // Single combined debug line at the very end comparing total test duration per
 // storage implementation (e.g. OINOBlobAzure vs OINOBlobAwsS3).

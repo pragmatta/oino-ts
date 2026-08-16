@@ -1,0 +1,1358 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": true,
+         "isAutoInc": true,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "ProductName",
+      "type": "string",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "SupplierID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": true,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "CategoryID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "QuantityPerUnit",
+      "type": "string",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitPrice",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsInStock",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsOnOrder",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "ReorderLevel",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "Discontinued",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] column schema: FETCH COLUMN SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductName",
+      "type": "string",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE COLUMN STRING 1`] = `
+"[
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE COLUMN NUMBER 1`] = `
+"[
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREATE COLUMN BOOLEAN 1`] = `
+"[
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREATE COLUMN DATETIME 1`] = `
+"[
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE COLUMN BLOB 1`] = `
+"[
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE COLUMNS TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA ROW ROUNDTRIP] insert and read: ROW ROUNDTRIP 1`] = `
+"[
+{"_OINOID_":"42","id":42,"name":"O'Brien %5C%22Zürich%5C%22","col_string":"a%5Ctb%5Cnc%5C%5Cd'e%5C%22f","col_number":-1234.5678,"col_boolean":true,"col_datetime":"2024-02-29T13:45:30.000Z","col_blob":"AP8QIDBAUGBwgJCgsMDQ4P8="}
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: CREATE AUTOINC TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": true,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbBunSqlite][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: AUTOINC ROW GENERATE 1`] = `
+"[
+{"_OINOID_":"1","id":1,"name":"first"}
+]"
+`;
+
+exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "ProductName",
+      "type": "string",
+      "maxLength": 40,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "SupplierID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": true,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "CategoryID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "QuantityPerUnit",
+      "type": "string",
+      "maxLength": 20,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitPrice",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsInStock",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsOnOrder",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "ReorderLevel",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "Discontinued",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][Products][SCHEMA FETCH] column schema: FETCH COLUMN SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductName",
+      "type": "string",
+      "maxLength": 40,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE COLUMN STRING 1`] = `
+"[
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE COLUMN NUMBER 1`] = `
+"[
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREATE COLUMN BOOLEAN 1`] = `
+"[
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREATE COLUMN DATETIME 1`] = `
+"[
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE COLUMN BLOB 1`] = `
+"[
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE COLUMNS TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA ROW ROUNDTRIP] insert and read: ROW ROUNDTRIP 1`] = `
+"[
+{"_OINOID_":"42","id":42,"name":"O'Brien %5C%22Zürich%5C%22","col_string":"a%5Ctb%5Cnc%5C%5Cd'e%5C%22f","col_number":-1234.5678,"col_boolean":true,"col_datetime":"2024-02-29T13:45:30.000Z","col_blob":"AP8QIDBAUGBwgJCgsMDQ4P8="}
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: CREATE AUTOINC TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbPostgresql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: AUTOINC ROW GENERATE 1`] = `
+"[
+{"_OINOID_":"1","id":1,"name":"first"}
+]"
+`;
+
+exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": true,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "ProductName",
+      "type": "string",
+      "maxLength": 40,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "SupplierID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": true,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "CategoryID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "QuantityPerUnit",
+      "type": "string",
+      "maxLength": 20,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitPrice",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsInStock",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsOnOrder",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "ReorderLevel",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "Discontinued",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][Products][SCHEMA FETCH] column schema: FETCH COLUMN SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductName",
+      "type": "string",
+      "maxLength": 40,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE COLUMN STRING 1`] = `
+"[
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE COLUMN NUMBER 1`] = `
+"[
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREATE COLUMN BOOLEAN 1`] = `
+"[
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREATE COLUMN DATETIME 1`] = `
+"[
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE COLUMN BLOB 1`] = `
+"[
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE COLUMNS TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA ROW ROUNDTRIP] insert and read: ROW ROUNDTRIP 1`] = `
+"[
+{"_OINOID_":"42","id":42,"name":"O'Brien %5C%22Zürich%5C%22","col_string":"a%5Ctb%5Cnc%5C%5Cd'e%5C%22f","col_number":-1234.5678,"col_boolean":true,"col_datetime":"2024-02-29T13:45:30.000Z","col_blob":"AP8QIDBAUGBwgJCgsMDQ4P8="}
+]"
+`;
+
+exports[`[OINODbMariadb][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: CREATE AUTOINC TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": true,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMariadb][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: AUTOINC ROW GENERATE 1`] = `
+"[
+{"_OINOID_":"1","id":1,"name":"first"}
+]"
+`;
+
+exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "ProductName",
+      "type": "string",
+      "maxLength": 40,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "SupplierID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": true,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "CategoryID",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "QuantityPerUnit",
+      "type": "string",
+      "maxLength": 20,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitPrice",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsInStock",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "UnitsOnOrder",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "ReorderLevel",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "Discontinued",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][Products][SCHEMA FETCH] column schema: FETCH COLUMN SCHEMA 1`] = `
+"[
+   {
+      "name": "ProductName",
+      "type": "string",
+      "maxLength": 40,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE COLUMN STRING 1`] = `
+"[
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE COLUMN NUMBER 1`] = `
+"[
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREATE COLUMN BOOLEAN 1`] = `
+"[
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREATE COLUMN DATETIME 1`] = `
+"[
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE COLUMN BLOB 1`] = `
+"[
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE COLUMNS TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA ROW ROUNDTRIP] insert and read: ROW ROUNDTRIP 1`] = `
+"[
+{"_OINOID_":"42","id":42,"name":"O'Brien %5C%22Zürich%5C%22","col_string":"a%5Ctb%5Cnc%5C%5Cd'e%5C%22f","col_number":-1234.5678,"col_boolean":true,"col_datetime":"2024-02-29T13:45:30.000Z","col_blob":"AP8QIDBAUGBwgJCgsMDQ4P8="}
+]"
+`;
+
+exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: CREATE AUTOINC TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": true,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: AUTOINC ROW GENERATE 1`] = `
+"[
+{"_OINOID_":"1","id":1,"name":"first"}
+]"
+`;
