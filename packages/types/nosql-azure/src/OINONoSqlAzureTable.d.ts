@@ -117,8 +117,12 @@ export declare class OINONoSqlAzureTable extends OINONoSql {
     upsertEntry(entry: OINONoSqlEntry): Promise<void>;
     /**
      * Batch-upsert using Azure Table Storage transactions.  Each transaction
-     * is limited to 100 entities that share the same partition key.  Entries
-     * are grouped by partition key first, then chunked to satisfy the limit.
+     * is limited to 100 entities that share the same partition key, and Azure
+     * additionally requires every entity in a transaction to have a distinct
+     * row key ("An entity can appear only once in a batch request").  Entries
+     * are therefore grouped by partition key and deduplicated by row key —
+     * later entries replace earlier ones (last-write-wins, matching the
+     * upsert-Replace semantics) — before being chunked to satisfy the limit.
      */
     upsertEntries(entries: OINONoSqlEntry[]): Promise<void>;
     /**

@@ -128,7 +128,15 @@ class OINODbDataModel extends common_1.OINODataModel {
         else {
             column_names = this._printColumnNames(params.select);
         }
-        const order_sql = params.order ? OINODbQueryParams_js_1.OINODbQueryOrder.printSql(params.order, this) : "";
+        let order_sql = params.order ? OINODbQueryParams_js_1.OINODbQueryOrder.printSql(params.order, this) : "";
+        if ((order_sql == "") && (!params.aggregate)) {
+            // When the query does not specify an order, default to ordering by the primary key(s)
+            // ascending so that result sets (and paged/limited queries) are deterministic. Without
+            // an explicit ORDER BY most databases return rows in an implementation-defined order
+            // that can vary between calls. Skipped for aggregate queries, whose grouping determines
+            // the row shape (and where a primary key may itself be an aggregated column).
+            order_sql = this._printSqlPrimaryKeyColumns().map((col) => col + " ASC").join(",");
+        }
         const limit_sql = params.limit ? OINODbQueryParams_js_1.OINODbQueryLimit.printSql(params.limit, this) : "";
         const groupby_sql = params.aggregate ? OINODbQueryParams_js_1.OINODbQueryAggregate.printSql(params.aggregate, this, params.select) : "";
         // NOTE: the WHERE-clause fragments must be built in the same order the placeholders appear in

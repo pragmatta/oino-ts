@@ -1,0 +1,21 @@
+{
+  "//": "Dev-only config so `bun test` (and VS Code) resolve @oino-ts/* to live source in place. Not used by the build (build uses tsconfig.cjs/esm/types.json via `tsc -p`) and not published (each package's files[] lists only src + dist).",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@oino-ts/common": ["./common/src/index.ts"],
+      "@oino-ts/hashid": ["./hashid/src/index.ts"],
+      "@oino-ts/db": ["./db/src/index.ts"],
+      "@oino-ts/db-bunsqlite": ["./db-bunsqlite/src/index.ts"],
+      "@oino-ts/db-mariadb": ["./db-mariadb/src/index.ts"],
+      "@oino-ts/db-mssql": ["./db-mssql/src/index.ts"],
+      "@oino-ts/db-postgresql": ["./db-postgresql/src/index.ts"],
+      "@oino-ts/blob": ["./blob/src/index.ts"],
+      "@oino-ts/blob-aws": ["./blob-aws/src/index.ts"],
+      "@oino-ts/blob-azure": ["./blob-azure/src/index.ts"],
+      "@oino-ts/nosql": ["./nosql/src/index.ts"],
+      "@oino-ts/nosql-aws": ["./nosql-aws/src/index.ts"],
+      "@oino-ts/nosql-azure": ["./nosql-azure/src/index.ts"]
+    }
+  }
+}
