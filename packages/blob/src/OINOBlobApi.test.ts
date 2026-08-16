@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { expect, test } from "bun:test"
+import { afterAll, expect, test } from "bun:test"
 
 import { OINOBlobAzure } from "@oino-ts/blob-azure"
 import { OINOBlobAwsS3 } from "@oino-ts/blob-aws"
@@ -144,11 +144,15 @@ const BLOB_CROSSCHECKS: string[] = [
 ]
 
 OINOLog.setInstance(new OINOConsoleLog(OINOLogLevel.warning))
+OINOLog.setLogLevel(OINOLogLevel.debug, "OINOTest", "timing") // enable the per-provider timing summary logged at the end of the run
 OINOBenchmark.setEnabled(["doApiRequest"])
 OINOBenchmark.reset()
 
 OINOBlobFactory.registerBlob("OINOBlobAzure", OINOBlobAzure)
 OINOBlobFactory.registerBlob("OINOBlobAwsS3", OINOBlobAwsS3)
+
+/** Accumulated wall-clock duration (ms) of each storage implementation's tests, summarised once at the end of the run. */
+const OINO_PROVIDER_TIMINGS = new Map<string, number>()
 
 // ── SANITIZE UNIT TESTS ───────────────────────────────────────────────────────
 // These do not connect to any storage backend.
@@ -410,9 +414,18 @@ export async function OINOTestBlob(storageParams: OINOBlobStorageParams, testPar
 }
 
 for (const storage of BLOB_STORAGES) {
+    const provider = storage.blobParams.type
+    let provider_start = 0
+    // Marker tests run in the test-execution phase (unlike the surrounding
+    // registration-phase loop), so they bracket the provider's actual test
+    // runtime; accumulated per provider and summarised in the afterAll below.
+    test("[TIMING][" + provider + "] start", () => { provider_start = performance.now() })
     for (const blob_test of BLOB_TESTS) {
         await OINOTestBlob(storage, blob_test)
     }
+    test("[TIMING][" + provider + "] end", () => {
+        OINO_PROVIDER_TIMINGS.set(provider, (OINO_PROVIDER_TIMINGS.get(provider) ?? 0) + (performance.now() - provider_start))
+    })
 }
 
 // ── CROSS-CHECK snapshots between adjacent storages ───────────────────────────
@@ -440,3 +453,15 @@ for (let i = 0; i < BLOB_STORAGES.length - 1; i++) {
         }
     }
 }
+
+// ── TIMING SUMMARY ────────────────────────────────────────────────────────────
+// Single combined debug line at the very end comparing total test duration per
+// storage implementation (e.g. OINOBlobAzure vs OINOBlobAwsS3).
+
+afterAll(() => {
+    const durations: Record<string, string> = {}
+    for (const [provider, ms] of OINO_PROVIDER_TIMINGS) {
+        durations[provider] = Math.round(ms) + " ms"
+    }
+    OINOLog.debug("OINOTest", "timing", "summary", "Blob total test duration per provider", durations)
+})

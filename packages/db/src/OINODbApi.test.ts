@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { expect, test } from "bun:test";
+import { afterAll, expect, test } from "bun:test";
 import { Buffer } from "node:buffer"
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
@@ -139,6 +139,11 @@ OINODbFactory.registerDb("OINODbMsSql", OINODbMsSql)
 
 OINOBenchmark.setEnabled(["doApiRequest"])
 OINOBenchmark.reset()
+
+OINOLog.setLogLevel(OINOLogLevel.debug, "OINOTest", "timing") // enable the per-provider timing summary logged at the end of the run
+
+/** Accumulated wall-clock duration (ms) of each database implementation's tests, summarised once at the end of the run. */
+const OINO_PROVIDER_TIMINGS = new Map<string, number>()
 
 function encodeData(s:string|undefined):string {
     return s?.replaceAll(/(\\[nrt\"\`\\]?)/g, (match, p1) => {
@@ -468,16 +473,32 @@ export async function OINOTestOwasp(dbParams:OINODbParams, testParams: OINOTestP
 }
 
 
+// Marker tests run in the test-execution phase (unlike the surrounding
+// registration-phase loops), so they bracket each database's actual test
+// runtime; accumulated per provider (across both the API and OWASP loops) and
+// summarised in the afterAll below.
 for (let db of DATABASES) {
+    const provider = db.type
+    let provider_start = 0
+    test("[TIMING][" + provider + "][API] start", () => { provider_start = performance.now() })
     for (let api_test of API_TESTS) {
         await OINOTestApi(db, api_test)
     }
+    test("[TIMING][" + provider + "][API] end", () => {
+        OINO_PROVIDER_TIMINGS.set(provider, (OINO_PROVIDER_TIMINGS.get(provider) ?? 0) + (performance.now() - provider_start))
+    })
 }
 
 for (let db of DATABASES) {
+    const provider = db.type
+    let provider_start = 0
+    test("[TIMING][" + provider + "][OWASP] start", () => { provider_start = performance.now() })
     for (let owasp_test of OWASP_TESTS) {
         await OINOTestOwasp(db, owasp_test)
     }
+    test("[TIMING][" + provider + "][OWASP] end", () => {
+        OINO_PROVIDER_TIMINGS.set(provider, (OINO_PROVIDER_TIMINGS.get(provider) ?? 0) + (performance.now() - provider_start))
+    })
 }
 
 
@@ -502,6 +523,18 @@ for (let i=0; i<DATABASES.length-1; i++) {
             test("cross check {" + db1 + "} and {" + db2 + "} table {" + table_name + "} snapshots on {" + crosscheck + "}", () => {
                 expect(snapshots["[" + owasp_test.name + "][" + db1 + "][" + table_name + "]" + crosscheck]).toMatch(snapshots["[" + owasp_test.name + "][" + db2 + "][" + table_name + "]" + crosscheck])
             })
-        }        
+        }
     }
 }
+
+// ── TIMING SUMMARY ────────────────────────────────────────────────────────────
+// Single combined debug line at the very end comparing total test duration per
+// database implementation (BunSqlite vs Postgresql vs Mariadb vs MsSql).
+
+afterAll(() => {
+    const durations:Record<string, string> = {}
+    for (const [provider, ms] of OINO_PROVIDER_TIMINGS) {
+        durations[provider] = Math.round(ms) + " ms"
+    }
+    OINOLog.debug("OINOTest", "timing", "summary", "Db total test duration per provider", durations)
+})
