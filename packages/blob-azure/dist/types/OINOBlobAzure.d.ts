@@ -49,6 +49,16 @@ export declare class OINOBlobAzure extends OINOBlob {
      */
     uploadEntry(name: string, content: Uint8Array, contentType: string): Promise<void>;
     /**
+     * Create a blob only if one does not already exist (atomic claim).
+     * Returns true if this call created the blob, false if it already existed.
+     * Never overwrites — unlike uploadEntry. Real I/O errors are rethrown.
+     *
+     * @param name full blob name (path within the container)
+     * @param content binary content to store
+     * @param contentType MIME type of the content (e.g. `"image/jpeg"`)
+     */
+    uploadEntryIfAbsent(name: string, content: Uint8Array, contentType: string): Promise<boolean>;
+    /**
      * Delete a named blob.
      *
      * @param name full blob name (path within the container)

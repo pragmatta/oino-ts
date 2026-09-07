@@ -80,6 +80,16 @@ export declare abstract class OINOBlob extends OINODataSource {
      */
     abstract uploadEntry(name: string, content: Uint8Array, contentType: string): Promise<void>;
     /**
+     * Create a blob ONLY if no blob with this name exists yet. Atomic claim primitive:
+     * returns true if THIS call created it, false if one already existed (you lost the race).
+     * Never overwrites — unlike uploadEntry (create-or-replace). Real I/O errors still throw.
+     *
+     * @param name full blob name (path within the container)
+     * @param content binary content to store
+     * @param contentType MIME type of the content (e.g. `"image/jpeg"`)
+     */
+    abstract uploadEntryIfAbsent(name: string, content: Uint8Array, contentType: string): Promise<boolean>;
+    /**
      * Delete a named blob.
      *
      * @param name full blob name (path within the container)

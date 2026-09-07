@@ -51,6 +51,18 @@ export declare class OINOBlobAwsS3 extends OINOBlob {
      */
     uploadEntry(name: string, content: Uint8Array, contentType: string): Promise<void>;
     /**
+     * Create an object only if one does not already exist (atomic claim).
+     * Returns true if this call created the object, false if it already existed.
+     * Never overwrites — unlike uploadEntry. Real I/O errors are rethrown.
+     *
+     * Relies on S3 conditional writes (`If-None-Match: *`), supported since late 2024.
+     *
+     * @param name full object key (path within the bucket)
+     * @param content binary content to store
+     * @param contentType MIME type of the content (e.g. `"image/jpeg"`)
+     */
+    uploadEntryIfAbsent(name: string, content: Uint8Array, contentType: string): Promise<boolean>;
+    /**
      * Delete a named object.
      *
      * @param name full object key (path within the bucket)
