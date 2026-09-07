@@ -207,6 +207,42 @@ class OINOBlobAwsS3 extends blob_1.OINOBlob {
         }));
     }
     /**
+     * Create an object only if one does not already exist (atomic claim).
+     * Returns true if this call created the object, false if it already existed.
+     * Never overwrites — unlike uploadEntry. Real I/O errors are rethrown.
+     *
+     * Relies on S3 conditional writes (`If-None-Match: *`), supported since late 2024.
+     *
+     * @param name full object key (path within the bucket)
+     * @param content binary content to store
+     * @param contentType MIME type of the content (e.g. `"image/jpeg"`)
+     */
+    async uploadEntryIfAbsent(name, content, contentType) {
+        if (!this._s3Client) {
+            throw new Error("OINOBlobAwsS3: not connected");
+        }
+        try {
+            await this._s3Client.send(new client_s3_1.PutObjectCommand({
+                Bucket: this.blobParams.container,
+                Key: name,
+                Body: content,
+                ContentType: contentType,
+                IfNoneMatch: "*" // succeed only if the object does not exist
+            }));
+            return true;
+        }
+        catch (e) {
+            // Object already existed -> we lost the claim. S3 returns 412 (PreconditionFailed)
+            // for a failed If-None-Match; 409 guards against SDK/version variance. The AWS SDK
+            // surfaces the HTTP status on `$metadata`, matching the rest of this class.
+            const status = e?.$metadata?.httpStatusCode;
+            if (status === 412 || status === 409) {
+                return false;
+            }
+            throw e;
+        }
+    }
+    /**
      * Delete a named object.
      *
      * @param name full object key (path within the bucket)

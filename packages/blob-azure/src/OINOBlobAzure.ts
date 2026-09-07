@@ -207,6 +207,36 @@ export class OINOBlobAzure extends OINOBlob {
     }
 
     /**
+     * Create a blob only if one does not already exist (atomic claim).
+     * Returns true if this call created the blob, false if it already existed.
+     * Never overwrites — unlike uploadEntry. Real I/O errors are rethrown.
+     *
+     * @param name full blob name (path within the container)
+     * @param content binary content to store
+     * @param contentType MIME type of the content (e.g. `"image/jpeg"`)
+     */
+    async uploadEntryIfAbsent(name: string, content: Uint8Array, contentType: string): Promise<boolean> {
+        if (!this._containerClient) {
+            throw new Error("OINOBlobAzure: not connected")
+        }
+        const blockBlobClient = this._containerClient.getBlockBlobClient(name)
+        try {
+            await blockBlobClient.upload(content, content.length, {
+                blobHTTPHeaders: { blobContentType: contentType },
+                conditions: { ifNoneMatch: "*" } // succeed only if the blob does not exist
+            })
+            return true
+        } catch (e: any) {
+            // Blob already existed -> we lost the claim. Azure returns 409 (BlobAlreadyExists);
+            // 412 guards against SDK/version variance. Anything else is a real failure -> rethrow.
+            if (e && (e.statusCode === 409 || e.statusCode === 412)) {
+                return false
+            }
+            throw e
+        }
+    }
+
+    /**
      * Delete a named blob.
      *
      * @param name full blob name (path within the container)
