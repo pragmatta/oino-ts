@@ -59,7 +59,7 @@ class OINODb extends common_1.OINODataSource {
     /**
      * Print SQL select statement with DB specific formatting.
      *
-     * @param tableName - The name of the table to select from.
+     * @param tableName - The name of the table to select from, already escaped with `printTableName`.
      * @param columnNames - The columns to be selected.
      * @param whereCondition - The WHERE clause to filter the results.
      * @param orderCondition - The ORDER BY clause to sort the results.
@@ -87,7 +87,7 @@ class OINODb extends common_1.OINODataSource {
     /**
      * Print SQL select statement with DB specific formatting.
      *
-     * @param tableName - The name of the table to select from.
+     * @param tableName - The name of the table to insert into, already escaped with `printTableName`.
      * @param columns - The columns to be selected.
      * @param values - The values to be inserted.
      * @param returnIdFields - the id fields to return if returnIds is true (if supported by the database)

@@ -1356,3 +1356,80 @@ exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and genera
 {"_OINOID_":"1","id":1,"name":"first"}
 ]"
 `;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_number",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_boolean",
+      "type": "boolean",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_datetime",
+      "type": "datetime",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_blob",
+      "type": "blob",
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
