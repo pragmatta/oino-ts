@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import { S3Client, HeadBucketCommand, ListObjectsV2Command, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { OINOResult, OINOStringDataField, OINONumberDataField, OINODatetimeDataField } from "@oino-ts/common";
+import { OINOResult, OINOLog, OINOStringDataField, OINONumberDataField, OINODatetimeDataField } from "@oino-ts/common";
 import { OINOBlob, OINOBlobDataModel } from "@oino-ts/blob";
 /**
  * AWS S3 (and S3-compatible) implementation of `OINOBlob`.
@@ -89,7 +89,6 @@ export class OINOBlobAwsS3 extends OINOBlob {
             this.isValidated = true;
         }
         catch (e) {
-            console.error("OINOBlobAwsS3 validate error:", e);
             const status = e.$metadata?.httpStatusCode ?? 500;
             if (status === 404) {
                 return new OINOResult({
@@ -106,6 +105,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
                 });
             }
             else {
+                OINOLog.exception("@oino-ts/blob-aws", "OINOBlobAwsS3", "validate", "OINOBlobAwsS3 validate failed", { error: e, stack: e.stack });
                 return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAwsS3 validate failed: " + e.message });
             }
         }

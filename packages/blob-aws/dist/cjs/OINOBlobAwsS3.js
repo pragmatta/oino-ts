@@ -92,7 +92,6 @@ class OINOBlobAwsS3 extends blob_1.OINOBlob {
             this.isValidated = true;
         }
         catch (e) {
-            console.error("OINOBlobAwsS3 validate error:", e);
             const status = e.$metadata?.httpStatusCode ?? 500;
             if (status === 404) {
                 return new common_1.OINOResult({
@@ -109,6 +108,7 @@ class OINOBlobAwsS3 extends blob_1.OINOBlob {
                 });
             }
             else {
+                common_1.OINOLog.exception("@oino-ts/blob-aws", "OINOBlobAwsS3", "validate", "OINOBlobAwsS3 validate failed", { error: e, stack: e.stack });
                 return new common_1.OINOResult({ success: false, status: 500, statusText: "OINOBlobAwsS3 validate failed: " + e.message });
             }
         }
