@@ -161,7 +161,11 @@ export class OINODbDataModel extends OINODataModel {
         } else if (filter_sql != "") {
             where_sql = filter_sql
         }
-        statement.sql = this.dbApi.db.printSqlSelect(this.api.params.tableName, column_names, where_sql, order_sql, limit_sql, groupby_sql)
+        // NOTE: the table name must be escaped with the database specific quoting (like INSERT/UPDATE/DELETE
+        // below do) or tables whose name is a reserved word (order, user, group, ...) or needs case/character
+        // quoting produce a syntax error.
+        const table_name = this.dbApi.db.printTableName(this.api.params.tableName)
+        statement.sql = this.dbApi.db.printSqlSelect(table_name, column_names, where_sql, order_sql, limit_sql, groupby_sql)
         return statement
     }
 
