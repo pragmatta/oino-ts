@@ -13,7 +13,7 @@ import {
     DeleteObjectCommand
 } from "@aws-sdk/client-s3"
 
-import { OINOApi, OINOResult, OINOQueryFilter, OINOStringDataField, OINONumberDataField, OINODatetimeDataField, type OINODataFieldParams } from "@oino-ts/common"
+import { OINOApi, OINOResult, OINOLog, OINOQueryFilter, OINOStringDataField, OINONumberDataField, OINODatetimeDataField, type OINODataFieldParams } from "@oino-ts/common"
 import { OINOBlob, OINOBlobParams, OINOBlobDataModel, OINOBlobApi, type OINOBlobEntry, type OINOBlobFetchResult } from "@oino-ts/blob"
 
 /**
@@ -103,7 +103,6 @@ export class OINOBlobAwsS3 extends OINOBlob {
             await this._s3Client.send(new HeadBucketCommand({ Bucket: this.blobParams.container }))
             this.isValidated = true
         } catch (e: any) {
-            console.error("OINOBlobAwsS3 validate error:", e)
             const status = e.$metadata?.httpStatusCode ?? 500
             if (status === 404) {
                 return new OINOResult({
@@ -118,6 +117,7 @@ export class OINOBlobAwsS3 extends OINOBlob {
                     statusText: "OINOBlobAwsS3: access to bucket '" + this.blobParams.container + "' forbidden (check credentials and permissions)"
                 })
             } else {
+                OINOLog.exception("@oino-ts/blob-aws", "OINOBlobAwsS3", "validate", "OINOBlobAwsS3 validate failed", { error: e, stack: e.stack })
                 return new OINOResult({ success: false, status: 500, statusText: "OINOBlobAwsS3 validate failed: " + e.message })
             }
         }
