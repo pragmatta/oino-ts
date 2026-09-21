@@ -415,6 +415,42 @@ export class OINODbBunSqlite extends OINODb {
                 f.fieldParams.isForeignKey = true
             }
         }
+        // Augment identity/FK detection from the live catalog via PRAGMA, which is authoritative and
+        // catches what CREATE TABLE text parsing misses: the single-column INTEGER PRIMARY KEY rowid
+        // alias (engine-assigned when omitted) and foreign-key targets. See SPEC_schema_identity_detection.
+        const quoted_table:string = "\"" + tableName.replaceAll("\"", "\"\"") + "\""
+        const table_info:OINODataSet = await this._query("PRAGMA table_info(" + quoted_table + ")")
+        const pk_cols:{ name:string, type:string }[] = []
+        while (!table_info.isEof()) {
+            const ti_row:OINODataRow = table_info.getRow()
+            if (Number(ti_row[5]) > 0) {
+                pk_cols.push({ name: ti_row[1]?.toString() || "", type: (ti_row[2]?.toString() || "").toUpperCase() })
+            }
+            await table_info.next()
+        }
+        if ((pk_cols.length == 1) && (pk_cols[0].type == "INTEGER")) {
+            for (const f of fields) {
+                if (f.name == pk_cols[0].name) {
+                    f.fieldParams.isAutoInc = true
+                }
+            }
+        }
+        const fk_list:OINODataSet = await this._query("PRAGMA foreign_key_list(" + quoted_table + ")")
+        while (!fk_list.isEof()) {
+            const fk_row:OINODataRow = fk_list.getRow()
+            const ref_table:string = fk_row[2]?.toString() || ""
+            const from_col:string = fk_row[3]?.toString() || ""
+            const to_col:string = fk_row[4]?.toString() || ""
+            if (ref_table) {
+                for (const f of fields) {
+                    if (f.name == from_col) {
+                        f.fieldParams.isForeignKey = true
+                        f.fieldParams.foreignKey = { table: ref_table, column: to_col }
+                    }
+                }
+            }
+            await fk_list.next()
+        }
         return fields
     }
 

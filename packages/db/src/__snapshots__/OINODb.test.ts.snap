@@ -8,6 +8,10 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": true,
+         "foreignKey": {
+            "table": "Categories",
+            "column": "CategoryID"
+         },
          "isAutoInc": true,
          "isNotNull": true
       }
@@ -18,6 +22,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -28,6 +33,10 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": true,
+         "foreignKey": {
+            "table": "Suppliers",
+            "column": "SupplierID"
+         },
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -38,6 +47,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -48,6 +58,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -58,6 +69,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -68,6 +80,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -78,6 +91,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -88,6 +102,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -98,6 +113,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] table schema: FETCH TABLE SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -113,6 +129,7 @@ exports[`[OINODbBunSqlite][Products][SCHEMA FETCH] column schema: FETCH COLUMN S
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -128,6 +145,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE T
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -139,6 +157,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE T
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -155,6 +174,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -170,6 +190,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -185,6 +206,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -200,6 +222,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREAT
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -215,6 +238,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE CO
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -230,6 +254,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CR
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -241,6 +266,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CR
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -252,6 +278,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CR
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -262,6 +289,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CR
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -272,6 +300,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CR
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -282,6 +311,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CR
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -292,6 +322,7 @@ exports[`[OINODbBunSqlite][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CR
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -313,6 +344,7 @@ exports[`[OINODbBunSqlite][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and ge
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": true,
          "isNotNull": false
       }
@@ -324,6 +356,7 @@ exports[`[OINODbBunSqlite][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and ge
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -345,6 +378,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -356,6 +390,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -366,6 +401,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": true,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -376,6 +412,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -387,6 +424,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -397,6 +435,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -407,6 +446,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -417,6 +457,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -427,6 +468,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -437,6 +479,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] table schema: FETCH TABLE SC
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -453,6 +496,7 @@ exports[`[OINODbPostgresql][Products][SCHEMA FETCH] column schema: FETCH COLUMN 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -468,6 +512,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE 
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -479,6 +524,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -495,6 +541,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -510,6 +557,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -525,6 +573,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREAT
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -540,6 +589,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREA
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -555,6 +605,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -570,6 +621,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: C
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -581,6 +633,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -592,6 +645,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -602,6 +656,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -612,6 +667,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -622,6 +678,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -632,6 +689,7 @@ exports[`[OINODbPostgresql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -653,7 +711,8 @@ exports[`[OINODbPostgresql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and g
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
-         "isAutoInc": false,
+         "foreignKey": null,
+         "isAutoInc": true,
          "isNotNull": true
       }
    },
@@ -664,6 +723,7 @@ exports[`[OINODbPostgresql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and g
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -685,6 +745,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": true,
          "isNotNull": true
       }
@@ -696,6 +757,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -706,6 +768,10 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": true,
+         "foreignKey": {
+            "table": "suppliers",
+            "column": "SupplierID"
+         },
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -716,6 +782,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -727,6 +794,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -737,6 +805,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -747,6 +816,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -757,6 +827,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -767,6 +838,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -777,6 +849,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -793,6 +866,7 @@ exports[`[OINODbMariadb][Products][SCHEMA FETCH] column schema: FETCH COLUMN SCH
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -808,6 +882,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TAB
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -819,6 +894,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TAB
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -835,6 +911,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE CO
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -850,6 +927,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE CO
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -865,6 +943,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREATE C
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -880,6 +959,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREATE 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -895,6 +975,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE COLU
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -910,6 +991,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREA
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -921,6 +1003,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREA
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -932,6 +1015,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREA
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -942,6 +1026,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREA
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -952,6 +1037,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREA
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -962,6 +1048,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREA
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -972,6 +1059,7 @@ exports[`[OINODbMariadb][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREA
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -993,6 +1081,7 @@ exports[`[OINODbMariadb][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and gene
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": true,
          "isNotNull": true
       }
@@ -1004,6 +1093,7 @@ exports[`[OINODbMariadb][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and gene
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1025,6 +1115,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -1036,6 +1127,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -1046,6 +1138,10 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": true,
+         "foreignKey": {
+            "table": "Suppliers",
+            "column": "SupplierID"
+         },
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1056,6 +1152,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1067,6 +1164,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1077,6 +1175,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1087,6 +1186,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1097,6 +1197,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1107,6 +1208,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1117,6 +1219,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] table schema: FETCH TABLE SCHEMA 
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -1133,6 +1236,7 @@ exports[`[OINODbMsSql][Products][SCHEMA FETCH] column schema: FETCH COLUMN SCHEM
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -1148,6 +1252,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TABLE
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -1159,6 +1264,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE TABLE] create: CREATE TABLE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1175,6 +1281,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE COLU
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1190,6 +1297,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] number: CREATE COLU
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1205,6 +1313,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] boolean: CREATE COL
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1220,6 +1329,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] datetime: CREATE CO
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1235,6 +1345,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE COLUMN
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1250,6 +1361,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": true
       }
@@ -1261,6 +1373,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1272,6 +1385,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1282,6 +1396,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1292,6 +1407,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1302,6 +1418,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1312,6 +1429,7 @@ exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] full schema: CREATE
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1333,6 +1451,7 @@ exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and genera
       "fieldParams": {
          "isPrimaryKey": true,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": true,
          "isNotNull": true
       }
@@ -1344,6 +1463,7 @@ exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and genera
       "fieldParams": {
          "isPrimaryKey": false,
          "isForeignKey": false,
+         "foreignKey": null,
          "isAutoInc": false,
          "isNotNull": false
       }
@@ -1354,82 +1474,5 @@ exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and genera
 exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: AUTOINC ROW GENERATE 1`] = `
 "[
 {"_OINOID_":"1","id":1,"name":"first"}
-]"
-`;
-
-exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] blob: CREATE TABLE SCHEMA 1`] = `
-"[
-   {
-      "name": "id",
-      "type": "number",
-      "fieldParams": {
-         "isPrimaryKey": true,
-         "isForeignKey": false,
-         "isAutoInc": false,
-         "isNotNull": true
-      }
-   },
-   {
-      "name": "name",
-      "type": "string",
-      "maxLength": 64,
-      "fieldParams": {
-         "isPrimaryKey": false,
-         "isForeignKey": false,
-         "isAutoInc": false,
-         "isNotNull": false
-      }
-   },
-   {
-      "name": "col_string",
-      "type": "string",
-      "maxLength": 32,
-      "fieldParams": {
-         "isPrimaryKey": false,
-         "isForeignKey": false,
-         "isAutoInc": false,
-         "isNotNull": false
-      }
-   },
-   {
-      "name": "col_number",
-      "type": "number",
-      "fieldParams": {
-         "isPrimaryKey": false,
-         "isForeignKey": false,
-         "isAutoInc": false,
-         "isNotNull": false
-      }
-   },
-   {
-      "name": "col_boolean",
-      "type": "boolean",
-      "fieldParams": {
-         "isPrimaryKey": false,
-         "isForeignKey": false,
-         "isAutoInc": false,
-         "isNotNull": false
-      }
-   },
-   {
-      "name": "col_datetime",
-      "type": "datetime",
-      "fieldParams": {
-         "isPrimaryKey": false,
-         "isForeignKey": false,
-         "isAutoInc": false,
-         "isNotNull": false
-      }
-   },
-   {
-      "name": "col_blob",
-      "type": "blob",
-      "fieldParams": {
-         "isPrimaryKey": false,
-         "isForeignKey": false,
-         "isAutoInc": false,
-         "isNotNull": false
-      }
-   }
 ]"
 `;

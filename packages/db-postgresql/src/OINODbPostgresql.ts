@@ -424,7 +424,10 @@ export class OINODbPostgresql extends OINODb {
     con.constraint_type,
     col.numeric_precision,
     col.numeric_scale,
-    col.column_default
+    col.column_default,
+    col.is_identity,
+    fk.ref_table,
+    fk.ref_column
 FROM information_schema.columns col
 LEFT JOIN LATERAL
     (select kcu.column_name, STRING_AGG(tco.constraint_type,',') as constraint_type
@@ -438,6 +441,13 @@ LEFT JOIN LATERAL
 		and tco.table_name = col.table_name
         and (tco.constraint_type = 'PRIMARY KEY' OR tco.constraint_type = 'FOREIGN KEY')
 	group by kcu.column_name) con on col.column_name = con.column_name
+LEFT JOIN LATERAL
+    (select ccu.table_name as ref_table, ccu.column_name as ref_column
+    from information_schema.table_constraints tco
+        join information_schema.key_column_usage kcu on kcu.constraint_name = tco.constraint_name and kcu.constraint_schema = tco.constraint_schema
+        join information_schema.constraint_column_usage ccu on ccu.constraint_name = tco.constraint_name and ccu.constraint_schema = tco.constraint_schema
+    where tco.constraint_type = 'FOREIGN KEY' and tco.table_catalog = col.table_catalog and tco.table_name = col.table_name and kcu.column_name = col.column_name
+    limit 1) fk on true
 WHERE col.table_catalog = $1 AND col.table_name = $2`
         return sql
     }
@@ -481,11 +491,16 @@ WHERE col.table_catalog = $1`
             const numeric_precision:number = this._parseFieldLength(row[5])
             const numeric_scale:number = this._parseFieldLength(row[6])
             const default_val:string = row[7]?.toString() || ""
+            const is_identity:boolean = (row[8]?.toString() || "").toUpperCase() == "YES"
+            const fk_table:string = row[9]?.toString() || ""
+            const fk_column:string = row[10]?.toString() || ""
+            const foreign_key = fk_table ? { table: fk_table, column: fk_column } : null
             const field_params:OINODataFieldParams = {
                 isPrimaryKey: constraints.indexOf('PRIMARY KEY') >= 0 || false,
-                isForeignKey: constraints.indexOf('FOREIGN KEY') >= 0 || false,
+                isForeignKey: (constraints.indexOf('FOREIGN KEY') >= 0) || (foreign_key != null),
+                foreignKey: foreign_key,
                 isNotNull: row[3] == "NO",
-                isAutoInc: default_val.startsWith("nextval(")
+                isAutoInc: default_val.startsWith("nextval(") || is_identity
             }
             if ((sql_type == "integer") || (sql_type == "smallint") || (sql_type == "bigint") || (sql_type == "real") || (sql_type == "double precision")) {
                 fields.push(new OINONumberDataField(this, field_name, sql_type, field_params))

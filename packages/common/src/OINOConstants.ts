@@ -41,8 +41,10 @@ export enum OINOContentType {
 export type OINODataFieldParams = {
     /** Is the field a primary key */
     isPrimaryKey: boolean
-    /** Is the field a primary key */
+    /** Is the field a foreign key */
     isForeignKey: boolean
+    /** Referenced table and column when a foreign-key constraint exists, otherwise null. Kept in sync with `isForeignKey` (`isForeignKey === (foreignKey != null)`). */
+    foreignKey?: { table: string, column: string } | null
     /** Is the field an auto inc type */
     isAutoInc: boolean
     /** Is the field allowed to have null values */

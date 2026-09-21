@@ -107,6 +107,7 @@ class OINODataField {
             fieldParams: {
                 isPrimaryKey: this.fieldParams.isPrimaryKey,
                 isForeignKey: this.fieldParams.isForeignKey,
+                foreignKey: this.fieldParams.foreignKey ?? null,
                 isAutoInc: this.fieldParams.isAutoInc,
                 isNotNull: this.fieldParams.isNotNull
             }
