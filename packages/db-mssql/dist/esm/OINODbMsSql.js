@@ -474,7 +474,9 @@ export class OINODbMsSql extends OINODb {
     C.NUMERIC_PRECISION_RADIX, 
     CONST.CONSTRAINT_TYPES, 
     COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsIdentity') AS IS_AUTO_INCREMENT, 
-    COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsComputed') AS IS_COMPUTED
+    COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'IsComputed') AS IS_COMPUTED,
+    FK.REF_TABLE,
+    FK.REF_COLUMN
 FROM 
     INFORMATION_SCHEMA.COLUMNS as C LEFT JOIN 
     (
@@ -484,6 +486,14 @@ FROM
     GROUP BY TC.TABLE_NAME, KU.COLUMN_NAME
     ) as CONST
     ON C.TABLE_NAME = CONST.TABLE_NAME AND C.COLUMN_NAME = CONST.COLUMN_NAME
+    OUTER APPLY
+    (
+    SELECT TOP 1 OBJECT_NAME(fkc.referenced_object_id) AS REF_TABLE, ref_col.name AS REF_COLUMN
+    FROM sys.foreign_key_columns fkc
+    INNER JOIN sys.columns ref_col ON ref_col.object_id = fkc.referenced_object_id AND ref_col.column_id = fkc.referenced_column_id
+    WHERE fkc.parent_object_id = OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME)
+        AND fkc.parent_column_id = COLUMNPROPERTY(OBJECT_ID(C.TABLE_SCHEMA + '.' + C.TABLE_NAME), C.COLUMN_NAME, 'ColumnId')
+    ) as FK
 WHERE C.TABLE_CATALOG = @p0 AND C.TABLE_NAME = @p1
 ORDER BY C.ORDINAL_POSITION;`;
         return sql;
@@ -520,9 +530,13 @@ WHERE C.TABLE_CATALOG = @p0;`;
             const numeric_field_length1 = row[4] || 0;
             const numeric_field_length2 = row[5] || 0;
             const constraint_types = row[6] || "";
+            const fk_table = row[9]?.toString() || "";
+            const fk_column = row[10]?.toString() || "";
+            const foreign_key = fk_table ? { table: fk_table, column: fk_column } : null;
             const field_params = {
                 isPrimaryKey: constraint_types.indexOf("PRIMARY KEY") >= 0,
-                isForeignKey: constraint_types.indexOf("FOREIGN KEY") >= 0,
+                isForeignKey: (constraint_types.indexOf("FOREIGN KEY") >= 0) || (foreign_key != null),
+                foreignKey: foreign_key,
                 isAutoInc: row[7] == 1,
                 isNotNull: row[1] == "NO"
             };

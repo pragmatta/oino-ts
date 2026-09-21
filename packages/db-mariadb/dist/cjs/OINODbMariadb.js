@@ -410,7 +410,9 @@ class OINODbMariadb extends db_1.OINODb {
     C.COLUMN_KEY,
     C.COLUMN_DEFAULT,
     C.EXTRA,
-    KCU.CONSTRAINT_NAME AS ForeignKeyName
+    KCU.CONSTRAINT_NAME AS ForeignKeyName,
+    KCU.REFERENCED_TABLE_NAME,
+    KCU.REFERENCED_COLUMN_NAME
 FROM information_schema.COLUMNS C
 	LEFT JOIN information_schema.KEY_COLUMN_USAGE KCU ON KCU.TABLE_SCHEMA = C.TABLE_SCHEMA AND KCU.TABLE_NAME = C.TABLE_NAME AND C.COLUMN_NAME = KCU.COLUMN_NAME and KCU.REFERENCED_TABLE_NAME IS NOT NULL
 WHERE C.TABLE_SCHEMA = ? AND C.TABLE_NAME = ?
@@ -442,9 +444,13 @@ WHERE C.TABLE_SCHEMA = ?;`;
             const field_length1 = this._parseFieldLength(field_matches[3] || "0");
             const field_length2 = this._parseFieldLength(field_matches[4] || "0");
             const extra = row[5]?.toString() || "";
+            const fk_table = row[7]?.toString() || "";
+            const fk_column = row[8]?.toString() || "";
+            const foreign_key = fk_table ? { table: fk_table, column: fk_column } : null;
             const field_params = {
                 isPrimaryKey: row[3] == "PRI",
-                isForeignKey: row[6] != null,
+                isForeignKey: (row[6] != null) || (foreign_key != null),
+                foreignKey: foreign_key,
                 isAutoInc: extra.indexOf('auto_increment') >= 0,
                 isNotNull: row[2] == "NO"
             };
