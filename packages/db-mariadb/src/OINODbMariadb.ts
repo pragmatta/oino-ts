@@ -10,7 +10,7 @@ import { OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataF
 
 import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 
-import mariadb from "mariadb";
+import mariadb, { type Pool, type PoolConnection } from "mariadb";
 
 /**
  * Implmentation of OINODataSet for MariaDb.
@@ -104,7 +104,7 @@ export class OINODbMariadb extends OINODb {
     private static _connectionExceptionMessageRegex = /\(([^\)]*)\) (.*)/i
     private static _sqlExceptionMessageRegex = /\(([^\)]*)\) (.*)\nsql\:(.*)?/i
     
-    private _pool:mariadb.Pool
+    private _pool:Pool
 
     /**
      * Constructor of `OINODbMariadb` 
@@ -129,7 +129,7 @@ export class OINODbMariadb extends OINODb {
     }
 
     private async _query(sql:string, params?:OINODataCell[]):Promise<OINODataSet> {
-        let connection:mariadb.PoolConnection|null = null
+        let connection:PoolConnection|null = null
         let rows:OINODataRow[] = OINO_EMPTY_ROWS
         try {
             connection = await this._pool.getConnection()
@@ -151,7 +151,7 @@ export class OINODbMariadb extends OINODb {
     }
 
     private async _exec(sql:string, params?:OINODataCell[]):Promise<OINODataSet> {
-        let connection:mariadb.PoolConnection|null = null
+        let connection:PoolConnection|null = null
         let rows:OINODataRow[] = OINO_EMPTY_ROWS
         try {
             connection = await this._pool.getConnection()
@@ -323,7 +323,7 @@ export class OINODbMariadb extends OINODb {
         if (this.isConnected) {
             return result
         }
-        let connection:mariadb.PoolConnection|null = null
+        let connection:PoolConnection|null = null
         try {
             // make sure that any items are correctly URL encoded in the connection string
             connection = await this._pool.getConnection()
