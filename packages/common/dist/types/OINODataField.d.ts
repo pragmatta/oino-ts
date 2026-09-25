@@ -52,6 +52,16 @@ export declare class OINODataField {
      */
     serializeCell(cellVal: OINODataCell): string | null | undefined;
     /**
+     * Convert a (non-null) cell value to a string. Primitives use `toString()`, but drivers can return
+     * structured values for native types without a dedicated field class (e.g. parsed JSON objects/arrays,
+     * geometry objects), which would otherwise become "[object Object]". Those are printed as JSON,
+     * dates as ISO strings and binary data as base64.
+     *
+     * @param cellVal cell value
+     *
+     */
+    static printCellAsString(cellVal: NonNullable<OINODataCell> | object): string;
+    /**
      * Parce cell value from string using field type specific formatting rules.
      *
      * @param value string value

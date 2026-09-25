@@ -30,7 +30,7 @@ export class OINODbBunSqlite extends OINODb {
     private static _tableDescriptionRegex = /^CREATE TABLE\s*[\"\[]?\w+[\"\]]?\s*\(\s*(.*)\s*\)\s*(WITHOUT ROWID)?$/msi
     private static _tablePrimarykeyRegex = /PRIMARY KEY \(([^\)]+)\)/i
     private static _tableForeignkeyRegex = /FOREIGN KEY \(\[([^\)]+)\]\)/i
-    private static _tableFieldTypeRegex = /[\"\[\s]?(\w+)[\"\]\s]\s?(INTEGER|REAL|DOUBLE|NUMERIC|DECIMAL|TEXT|BLOB|VARCHAR|DATETIME|DATE|BOOLEAN)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
+    private static _tableFieldTypeRegex = /[\"\[\s]?(\w+)[\"\]\s]\s?(INTEGER|REAL|DOUBLE|NUMERIC|DECIMAL|TEXT|BLOB|VARCHAR|DATETIME|DATE|BOOLEAN|JSON)(\s?\((\d+)\s?\,?\s?(\d*)?\))?/i
 
     private _db:BunSqliteDb|null
 

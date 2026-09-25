@@ -57,6 +57,32 @@ class OINODataField {
             return cellVal; // let content type encoder worry what to do with the value (so not force it to string)
         }
         else {
+            return OINODataField.printCellAsString(cellVal);
+        }
+    }
+    /**
+     * Convert a (non-null) cell value to a string. Primitives use `toString()`, but drivers can return
+     * structured values for native types without a dedicated field class (e.g. parsed JSON objects/arrays,
+     * geometry objects), which would otherwise become "[object Object]". Those are printed as JSON,
+     * dates as ISO strings and binary data as base64.
+     *
+     * @param cellVal cell value
+     *
+     */
+    static printCellAsString(cellVal) {
+        if (cellVal instanceof Date) {
+            return cellVal.toISOString();
+        }
+        else if (cellVal instanceof node_buffer_1.Buffer) {
+            return cellVal.toString('base64');
+        }
+        else if (cellVal instanceof Uint8Array) {
+            return node_buffer_1.Buffer.from(cellVal).toString('base64');
+        }
+        else if (typeof (cellVal) == "object") {
+            return JSON.stringify(cellVal, (_key, value) => (typeof (value) == "bigint") ? value.toString() : value);
+        }
+        else {
             return cellVal.toString();
         }
     }

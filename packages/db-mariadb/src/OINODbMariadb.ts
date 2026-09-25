@@ -116,7 +116,7 @@ export class OINODbMariadb extends OINODb {
         if (this.dbParams.type !== "OINODbMariadb") {
             throw new Error(OINO_ERROR_PREFIX + ": Not OINODbMariadb-type: " + this.dbParams.type)
         } 
-        this._pool = mariadb.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug:false, rowsAsArray: true, multipleStatements: false }) // statements are now executed individually with bind parameters, so stacked/multi-statement execution is disabled
+        this._pool = mariadb.createPool({ host: this.dbParams.url, database: this.dbParams.database, port: this.dbParams.port, user: this.dbParams.user, password: this.dbParams.password, acquireTimeout: 2000, debug:false, rowsAsArray: true, autoJsonMap: false, multipleStatements: false }) // autoJsonMap=false: return JSON columns as their original text instead of parsed objects (which would serialize as "[object Object]"); statements are now executed individually with bind parameters, so stacked/multi-statement execution is disabled
         delete this.dbParams.password // do not store password in db object
     }
 
