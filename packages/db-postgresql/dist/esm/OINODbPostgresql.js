@@ -5,7 +5,36 @@
  */
 import { OINO_ERROR_PREFIX, OINOBenchmark, OINOLog, OINOResult, OINODataSet, OINOBooleanDataField, OINONumberDataField, OINOStringDataField, OINODatetimeDataField, OINOBlobDataField, OINO_EMPTY_ROW, OINO_EMPTY_ROWS } from "@oino-ts/common";
 import { OINODb } from "@oino-ts/db";
-import { Pool } from "pg";
+import { Pool, types } from "pg";
+/**
+ * Postgres type OIDs whose default `pg` text parser is kept (booleans, bytea, integers, floats, dates).
+ * Every other type is returned as the raw Postgres text representation, since the default `pg`
+ * parsers turn e.g. json/jsonb, arrays, interval, point and circle into JS objects/arrays that are
+ * not valid `OINODataCell` values (serializing as "[object Object]") and could not be written back.
+ * The raw text is also the literal Postgres accepts on write, so values round-trip unchanged.
+ */
+const OINO_PG_PARSED_OIDS = new Set([
+    16, // bool
+    17, // bytea
+    20, // int8
+    21, // int2
+    23, // int4
+    26, // oid
+    700, // float4
+    701, // float8
+    1082, // date
+    1114, // timestamp
+    1184 // timestamptz
+]);
+const OINO_PG_RAW_TEXT_PARSER = (value) => value;
+const OINO_PG_TYPES = {
+    getTypeParser: (oid, format) => {
+        if ((format !== "binary") && !OINO_PG_PARSED_OIDS.has(oid)) {
+            return OINO_PG_RAW_TEXT_PARSER;
+        }
+        return types.getTypeParser(oid, format);
+    }
+};
 /**
  * Implmentation of OINODataSet for Postgresql.
  *
@@ -113,7 +142,7 @@ export class OINODbPostgresql extends OINODb {
         let connection = null;
         try {
             connection = await this._pool.connect();
-            const query_result = await connection.query((params && params.length > 0) ? { rowMode: "array", text: sql, values: params } : { rowMode: "array", text: sql });
+            const query_result = await connection.query((params && params.length > 0) ? { rowMode: "array", types: OINO_PG_TYPES, text: sql, values: params } : { rowMode: "array", types: OINO_PG_TYPES, text: sql });
             let rows;
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows);
@@ -139,7 +168,7 @@ export class OINODbPostgresql extends OINODb {
         let connection = null;
         try {
             connection = await this._pool.connect();
-            const query_result = await connection.query((params && params.length > 0) ? { rowMode: "array", text: sql, values: params } : { rowMode: "array", text: sql });
+            const query_result = await connection.query((params && params.length > 0) ? { rowMode: "array", types: OINO_PG_TYPES, text: sql, values: params } : { rowMode: "array", types: OINO_PG_TYPES, text: sql });
             let rows;
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows);

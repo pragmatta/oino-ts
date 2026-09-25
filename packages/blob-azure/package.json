@@ -1,6 +1,6 @@
 {
   "name": "@oino-ts/blob-azure",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "description": "OINO TS package for using Azure Blob Storage as a REST API.",
   "author": "Matias Kiviniemi (pragmatta)",
   "license": "MPL-2.0",
@@ -22,11 +22,11 @@
   "dependencies": {
     "@azure/storage-blob": "^12.33.0",
     "@azure/identity": "^4.13.3",
-    "@oino-ts/blob": "1.6.0",
-    "@oino-ts/common": "1.6.0"
+    "@oino-ts/blob": "1.6.2",
+    "@oino-ts/common": "1.6.2"
   },
   "devDependencies": {
-    "@oino-ts/types": "1.6.0",
+    "@oino-ts/types": "1.6.2",
     "@types/bun": "^1.4.2",
     "@types/node": "^22.20.4",
     "typescript": "~5.9.3"

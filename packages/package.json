@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test_schema": "bun test ./db/src/OINODb.test.ts",
-    "test_db": "bun test ./db/src/OINODbStatement.test.ts && bun test ./db/src/OINODbApi.test.ts",
+    "test_db": "bun test ./db/src/OINODbStatement.test.ts && bun test ./db/src/OINODbApi.test.ts && bun test ./db/src/OINODbNativeTypes.test.ts",
     "test_blob": "bun test ./blob/src/*.test.ts",
     "test_nosql": "bun test ./nosql/src/*.test.ts",
     "test_common": "bun test ./common/src/*.test.ts",
