@@ -8,7 +8,37 @@ import { OINO_ERROR_PREFIX, OINOBenchmark, OINOLog, OINOResult, OINODataSet, OIN
 
 import { OINODb, OINODbParams, OINODbSqlStatement } from "@oino-ts/db";
 
-import { Pool, PoolClient, QueryResult } from "pg";
+import { Pool, PoolClient, QueryResult, types } from "pg";
+
+/**
+ * Postgres type OIDs whose default `pg` text parser is kept (booleans, bytea, integers, floats, dates).
+ * Every other type is returned as the raw Postgres text representation, since the default `pg`
+ * parsers turn e.g. json/jsonb, arrays, interval, point and circle into JS objects/arrays that are
+ * not valid `OINODataCell` values (serializing as "[object Object]") and could not be written back.
+ * The raw text is also the literal Postgres accepts on write, so values round-trip unchanged.
+ */
+const OINO_PG_PARSED_OIDS:Set<number> = new Set([
+    16,     // bool
+    17,     // bytea
+    20,     // int8
+    21,     // int2
+    23,     // int4
+    26,     // oid
+    700,    // float4
+    701,    // float8
+    1082,   // date
+    1114,   // timestamp
+    1184    // timestamptz
+])
+const OINO_PG_RAW_TEXT_PARSER = (value:string) => value
+const OINO_PG_TYPES = {
+    getTypeParser: (oid:number, format?:any):any => {
+        if ((format !== "binary") && !OINO_PG_PARSED_OIDS.has(oid)) {
+            return OINO_PG_RAW_TEXT_PARSER
+        }
+        return types.getTypeParser(oid, format)
+    }
+}
 
 
 /**
@@ -129,7 +159,7 @@ export class OINODbPostgresql extends OINODb {
         let connection:PoolClient|null = null
         try {
             connection = await this._pool.connect()
-            const query_result = await connection.query((params && params.length > 0) ? {rowMode: "array", text: sql, values: params as any[]} : {rowMode: "array", text: sql})
+            const query_result = await connection.query((params && params.length > 0) ? {rowMode: "array", types: OINO_PG_TYPES, text: sql, values: params as any[]} : {rowMode: "array", types: OINO_PG_TYPES, text: sql})
             let rows:OINODataRow[]
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows)
@@ -152,7 +182,7 @@ export class OINODbPostgresql extends OINODb {
         let connection:PoolClient|null = null
         try {
             connection = await this._pool.connect()
-            const query_result:QueryResult = await connection.query((params && params.length > 0) ? {rowMode: "array", text: sql, values: params as any[]} : {rowMode: "array", text: sql})
+            const query_result:QueryResult = await connection.query((params && params.length > 0) ? {rowMode: "array", types: OINO_PG_TYPES, text: sql, values: params as any[]} : {rowMode: "array", types: OINO_PG_TYPES, text: sql})
             let rows:OINODataRow[]
             if (Array.isArray(query_result) == true) {
                 rows = query_result.flatMap((q) => q.rows)
