@@ -99,7 +99,7 @@ export class OINOQueryFilter {
             } else {
                 let match = OINOQueryFilter._negationRegex.exec(filterString)
                 if (match != null) {
-                    return new OINOQueryFilter("", OINOQueryBooleanOperation.not, OINOQueryFilter.parse(match[3]))
+                    return new OINOQueryFilter("", OINOQueryBooleanOperation.not, OINOQueryFilter.parse(match[2]))
 
                 } else {
                     let boolean_parts = OINOStr.splitByBrackets(filterString, true, false, '(', ')')
@@ -184,7 +184,7 @@ export class OINOQueryFilter {
      */
     static not(leftSide:OINOQueryFilter):OINOQueryFilter|undefined {
         if ((leftSide) && (!leftSide.isEmpty())) {
-            return new OINOQueryFilter(leftSide, OINOQueryBooleanOperation.not, "")
+            return new OINOQueryFilter("", OINOQueryBooleanOperation.not, leftSide)
 
         } else {
             return undefined
