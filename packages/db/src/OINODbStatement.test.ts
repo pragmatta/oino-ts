@@ -22,7 +22,7 @@ import { OINODbPostgresql } from "@oino-ts/db-postgresql"
 import { OINODbMariadb } from "@oino-ts/db-mariadb"
 import { OINODbMsSql } from "@oino-ts/db-mssql"
 
-import { OINOParser, OINOContentType, OINODataRow, OINOConsoleLog, OINOLogLevel, OINOLog } from "@oino-ts/common";
+import { OINOParser, OINOContentType, OINODataRow, OINOConsoleLog, OINOLogLevel, OINOLog, OINOQueryFilter } from "@oino-ts/common";
 
 import { OINODb, OINODbApi, OINODbFactory, OINODbParams, OINODbSqlStatement } from "./index.js";
 
@@ -206,4 +206,41 @@ test("[bindCellValue] MSSQL binds Buffer unchanged and coerces Uint8Array / base
     expect(from_b64).toEqual(PICTURE_BYTES)
     // non-binary columns are unaffected
     expect(mssql.bindCellValue("hello", "nvarchar")).toBe("hello")
+})
+
+// ── Negation filter: -not(...) must negate the inner filter, not drop it ─────────────────────────
+
+async function countProducts(filter?:OINOQueryFilter):Promise<number> {
+    const statement:OINODbSqlStatement = productsApi.dbDatamodel!.buildSelectStatement("", { filter: filter })
+    const rows:OINODataRow[] = await (await db.runStatement(statement)).getAllRows()
+    return rows.length
+}
+
+test("[buildSelectStatement] -not(...) filter emits NOT with the inner condition bound", () => {
+    const statement:OINODbSqlStatement = productsApi.dbDatamodel!.buildSelectStatement("", { filter: OINOQueryFilter.parse("-not((ProductName)-like(A%))") })
+    expect(statement.sql).toContain("NOT ")
+    expect(statement.sql).toContain(" LIKE ")
+    expect(statement.values).toEqual(["A%"])
+})
+
+test("[buildSelectStatement] OINOQueryFilter.not() builds the same SQL as the parsed -not(...)", () => {
+    const parsed:OINODbSqlStatement = productsApi.dbDatamodel!.buildSelectStatement("", { filter: OINOQueryFilter.parse("-not((ProductName)-like(A%))") })
+    const built:OINODbSqlStatement = productsApi.dbDatamodel!.buildSelectStatement("", { filter: OINOQueryFilter.not(OINOQueryFilter.parse("(ProductName)-like(A%)")) })
+    expect(built.sql).toBe(parsed.sql)
+    expect(built.values).toEqual(parsed.values)
+})
+
+test("[runStatement] -not(...) returns exactly the complement of the inner filter", async () => {
+    const total:number = await countProducts()
+    const matching:number = await countProducts(OINOQueryFilter.parse("(ProductName)-like(A%)"))
+    const negated:number = await countProducts(OINOQueryFilter.parse("-not((ProductName)-like(A%))"))
+    expect(matching).toBeGreaterThan(0)
+    expect(negated).toBeLessThan(total)
+    expect(matching + negated).toBe(total)
+})
+
+test("[runStatement] double negation equals the original filter", async () => {
+    const matching:number = await countProducts(OINOQueryFilter.parse("(ProductName)-like(A%)"))
+    const double:number = await countProducts(OINOQueryFilter.parse("-not(-not((ProductName)-like(A%)))"))
+    expect(double).toBe(matching)
 })

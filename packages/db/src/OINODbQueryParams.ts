@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { OINO_ERROR_PREFIX, OINOLog, OINODataField, OINOQueryNullCheck, OINOQueryFilter, OINOQueryOrder, OINOQueryLimit, OINOQueryAggregate, OINOQueryAggregateFunctions, OINOQuerySelect, OINODataModel } from "@oino-ts/common"
+import { OINO_ERROR_PREFIX, OINOLog, OINODataField, OINOQueryNullCheck, OINOQueryBooleanOperation, OINOQueryFilter, OINOQueryOrder, OINOQueryLimit, OINOQueryAggregate, OINOQueryAggregateFunctions, OINOQuerySelect, OINODataModel } from "@oino-ts/common"
 
 import { OINODbDataModel } from "./OINODbDataModel.js"
 import { OINODbSqlStatement } from "./OINODbSqlStatement.js"
@@ -58,6 +58,8 @@ export class OINODbQueryFilter extends OINOQueryFilter {
         let field:OINODataField|null = null
         if (filter.leftSide instanceof OINOQueryFilter) {
             result += OINODbQueryFilter.buildSql(filter.leftSide, dataModel, statement)
+        } else if (filter.operator == OINOQueryBooleanOperation.not) {
+            // negation has no left side, only the negated filter on the right side
         } else {
             field = dataModel.findFieldByName(filter.leftSide as string)
             if (!field) {

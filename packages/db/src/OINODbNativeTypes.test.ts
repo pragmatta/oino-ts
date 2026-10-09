@@ -17,7 +17,7 @@
  * returns as non-primitive values (the "coverage" test fails until you do).
  */
 
-import { expect, test } from "bun:test";
+import { expect, test, setDefaultTimeout } from "bun:test";
 
 import { OINODbBunSqlite } from "@oino-ts/db-bunsqlite"
 import { OINODbPostgresql } from "@oino-ts/db-postgresql"
@@ -27,6 +27,9 @@ import { OINODbMsSql } from "@oino-ts/db-mssql"
 import { OINOConsoleLog, OINOLogLevel, OINOLog, OINOContentType, OINOApiRequest } from "@oino-ts/common";
 
 import { OINODb, OINODbApi, OINODbFactory, OINODbParams } from "./index.js";
+
+// remote test databases (Postgres / MariaDB / MSSQL) can be slow to respond, so the bun default 5s is too tight
+setDefaultTimeout(10000)
 
 const OINODB_POSTGRESQL_TOKEN = process.env.OINODB_POSTGRESQL_TOKEN || console.error("OINODB_POSTGRESQL_TOKEN not set") || ""
 const OINODB_MARIADB_TOKEN = process.env.OINODB_MARIADB_TOKEN || console.error("OINODB_MARIADB_TOKEN not set") || ""

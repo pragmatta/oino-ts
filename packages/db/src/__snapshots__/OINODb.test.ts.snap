@@ -1476,3 +1476,62 @@ exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and genera
 {"_OINOID_":"1","id":1,"name":"first"}
 ]"
 `;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA CREATE COLUMN] string: CREATE TABLE SCHEMA 1`] = `
+"[
+   {
+      "name": "id",
+      "type": "number",
+      "fieldParams": {
+         "isPrimaryKey": true,
+         "isForeignKey": false,
+         "foreignKey": null,
+         "isAutoInc": false,
+         "isNotNull": true
+      }
+   },
+   {
+      "name": "name",
+      "type": "string",
+      "maxLength": 64,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "foreignKey": null,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   },
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "foreignKey": null,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOAutoIncTest][SCHEMA CREATE AUTOINC] create and generate: CREATE COLUMN STRING 1`] = `
+"[
+   {
+      "name": "col_string",
+      "type": "string",
+      "maxLength": 32,
+      "fieldParams": {
+         "isPrimaryKey": false,
+         "isForeignKey": false,
+         "foreignKey": null,
+         "isAutoInc": false,
+         "isNotNull": false
+      }
+   }
+]"
+`;
+
+exports[`[OINODbMsSql][OINOSchemaTest][SCHEMA DELETE COLUMN] boolean: CREATE AUTOINC TABLE SCHEMA 1`] = `"[]"`;
