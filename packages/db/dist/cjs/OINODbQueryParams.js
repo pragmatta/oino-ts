@@ -56,6 +56,9 @@ class OINODbQueryFilter extends common_1.OINOQueryFilter {
         if (filter.leftSide instanceof common_1.OINOQueryFilter) {
             result += OINODbQueryFilter.buildSql(filter.leftSide, dataModel, statement);
         }
+        else if (filter.operator == common_1.OINOQueryBooleanOperation.not) {
+            // negation has no left side, only the negated filter on the right side
+        }
         else {
             field = dataModel.findFieldByName(filter.leftSide);
             if (!field) {

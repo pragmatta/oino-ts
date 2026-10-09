@@ -115,7 +115,7 @@ class OINOQueryFilter {
             else {
                 let match = OINOQueryFilter._negationRegex.exec(filterString);
                 if (match != null) {
-                    return new OINOQueryFilter("", OINOQueryBooleanOperation.not, OINOQueryFilter.parse(match[3]));
+                    return new OINOQueryFilter("", OINOQueryBooleanOperation.not, OINOQueryFilter.parse(match[2]));
                 }
                 else {
                     let boolean_parts = OINOStr_js_1.OINOStr.splitByBrackets(filterString, true, false, '(', ')');
@@ -196,7 +196,7 @@ class OINOQueryFilter {
      */
     static not(leftSide) {
         if ((leftSide) && (!leftSide.isEmpty())) {
-            return new OINOQueryFilter(leftSide, OINOQueryBooleanOperation.not, "");
+            return new OINOQueryFilter("", OINOQueryBooleanOperation.not, leftSide);
         }
         else {
             return undefined;

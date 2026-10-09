@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-import { OINO_ERROR_PREFIX, OINOLog, OINOQueryNullCheck, OINOQueryFilter, OINOQueryOrder, OINOQueryLimit, OINOQueryAggregate, OINOQueryAggregateFunctions } from "@oino-ts/common";
+import { OINO_ERROR_PREFIX, OINOLog, OINOQueryNullCheck, OINOQueryBooleanOperation, OINOQueryFilter, OINOQueryOrder, OINOQueryLimit, OINOQueryAggregate, OINOQueryAggregateFunctions } from "@oino-ts/common";
 import { OINODbSqlStatement } from "./OINODbSqlStatement.js";
 /**
  * Class for recursively parsing of filters and printing them as SQL conditions.
@@ -52,6 +52,9 @@ export class OINODbQueryFilter extends OINOQueryFilter {
         let field = null;
         if (filter.leftSide instanceof OINOQueryFilter) {
             result += OINODbQueryFilter.buildSql(filter.leftSide, dataModel, statement);
+        }
+        else if (filter.operator == OINOQueryBooleanOperation.not) {
+            // negation has no left side, only the negated filter on the right side
         }
         else {
             field = dataModel.findFieldByName(filter.leftSide);
