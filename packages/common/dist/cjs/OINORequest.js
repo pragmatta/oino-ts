@@ -48,6 +48,39 @@ class OINOHttpRequest extends OINORequest {
      * @param init initialization values
      *
      */
+    /**
+     * Get the media type of a Content-Type style value, i.e. the part before any parameters
+     * (`text/csv; charset=utf-8` => `text/csv`), trimmed and lowercased.
+     *
+     * @param value header or query parameter value
+     */
+    static _parseMediaType(value) {
+        return (value ?? "").split(';')[0].trim().toLowerCase();
+    }
+    /**
+     * Get the first supported content type from an Accept style value. Accepts the comma separated
+     * list with or without whitespace (browsers send `text/html,application/xhtml+xml,...`), ignores
+     * media type parameters and skips types explicitly marked not acceptable with `q=0`.
+     *
+     * @param value header or query parameter value
+     */
+    static _parseAcceptType(value) {
+        if (!value) {
+            return undefined;
+        }
+        const supported_types = Object.values(OINOConstants_js_1.OINOContentType);
+        for (const accept_type of value.split(',')) {
+            const params = accept_type.split(';').slice(1).map((p) => p.trim().toLowerCase().replace(/\s+/g, ""));
+            if (params.some((p) => /^q=0(\.0*)?$/.test(p))) {
+                continue;
+            }
+            const media_type = OINOHttpRequest._parseMediaType(accept_type);
+            if (supported_types.includes(media_type)) {
+                return media_type;
+            }
+        }
+        return undefined;
+    }
     constructor(init) {
         super(init);
         this.url = typeof init.url === "string" ? new URL(init.url) : init.url;
@@ -64,13 +97,14 @@ class OINOHttpRequest extends OINORequest {
         }
         else {
             const request_type_param = this.url?.searchParams.get(OINOConstants_js_1.OINO_REQUEST_TYPE_PARAM) || this.headers.get("content-type"); // content-type header can be overridden by query parameter
-            if (request_type_param == OINOConstants_js_1.OINOContentType.csv) {
+            const request_media_type = OINOHttpRequest._parseMediaType(request_type_param);
+            if (request_media_type == OINOConstants_js_1.OINOContentType.csv) {
                 this.requestType = OINOConstants_js_1.OINOContentType.csv;
             }
-            else if (request_type_param == OINOConstants_js_1.OINOContentType.urlencode) {
+            else if (request_media_type == OINOConstants_js_1.OINOContentType.urlencode) {
                 this.requestType = OINOConstants_js_1.OINOContentType.urlencode;
             }
-            else if (request_type_param?.startsWith(OINOConstants_js_1.OINOContentType.formdata)) {
+            else if ((request_media_type == OINOConstants_js_1.OINOContentType.formdata) && request_type_param) {
                 this.requestType = OINOConstants_js_1.OINOContentType.formdata;
                 if (!this.multipartBoundary) {
                     this.multipartBoundary = request_type_param.split('boundary=')[1] || "";
@@ -85,15 +119,7 @@ class OINOHttpRequest extends OINORequest {
         }
         else {
             const response_type_param = this.url?.searchParams.get(OINOConstants_js_1.OINO_RESPONSE_TYPE_PARAM) || this.headers.get("accept"); // accept header can be overridden by query parameter
-            const accept_types = response_type_param?.split(', ') || [];
-            let response_type = undefined;
-            for (let i = 0; i < accept_types.length; i++) {
-                if (Object.values(OINOConstants_js_1.OINOContentType).includes(accept_types[i])) {
-                    response_type = accept_types[i];
-                    break;
-                }
-            }
-            this.responseType = response_type ?? OINOConstants_js_1.OINOContentType.json;
+            this.responseType = OINOHttpRequest._parseAcceptType(response_type_param) ?? OINOConstants_js_1.OINOContentType.json;
         }
         if (init.responseDownload) {
             this.responseDownload = init.responseDownload;
